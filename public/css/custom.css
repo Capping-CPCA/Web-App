@@ -1,0 +1,192 @@
+html, body {
+    overflow-x: hidden;
+}
+
+/* Nav Bar */
+
+.navbar {
+    box-shadow: 0 2px 7px 0 rgba(0,0,0,0.5);
+    padding: 0;
+}
+
+.navbar-toggler {
+    border: none;
+    transition: background-color 0.2s;
+}
+.navbar-toggler:hover {
+    cursor: pointer;
+    background-color: rgba(255,255,255,0.1);
+}
+.navbar-toggler:focus,
+.navbar-toggler:active {
+    outline: none;
+}
+
+.navbar-brand {
+    font-weight: 300;
+    padding: 0 0 0 10px;
+    font-size: 25px;
+    margin-top: -3px;
+}
+
+.navbar-left,
+.navbar-center,
+.navbar-right {
+    padding: .5rem 1rem;
+}
+
+.navbar-left {
+    z-index: 2;
+    background-color: #5C629C;
+    box-shadow: 6px 0 3px -3px rgba(0,0,0,0.1);
+}
+
+.navbar-center {
+    z-index: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: .5rem 1rem;
+    max-height: 100%;
+    height: 100%;
+}
+.navbar-right {
+    z-index: 2;
+}
+
+#page-title {
+    font-size: 30px;
+    margin-bottom: 0;
+    color: rgba(255,255,255,0.8);
+}
+
+@media (max-width: 768px) {
+    .navbar-center {
+        position: relative;
+        height: auto;
+        background-color: rgba(255,255,255,0.2);
+        box-shadow: 0 5px 8px -3px inset;
+    }
+    .navbar-center #page-title {
+        font-size: 20px;
+    }
+}
+
+/* End Nav Bar */
+
+/* Button */
+
+.cpca {
+    background-color: #5C629C;
+    color: rgba(255,255,255,0.8);
+    transition: all 0.2s;
+}
+.cpca:hover {
+    cursor: pointer;
+    background-color: #898EBB;
+}
+.cpca:active, .cpca:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* End Button
+
+/* Footer */
+
+footer {
+    text-align: center;
+    color: rgba(255,255,255,.5);
+    width: 100%;
+    font-size: 12px;
+    padding: 5px;
+}
+
+/* End Footer */
+
+/* Menu */
+
+.side-menu {
+    position: absolute;
+    background-color: #343A40;
+    z-index: 1000;
+    height: 100%;
+    box-shadow: 0 5px 8px 2px rgba(0,0,0,0.6);
+    transition: all 0.3s;
+}
+.side-menu.hidden {
+    transform: translateX(-100%);
+    box-shadow: none;
+}
+
+.side-menu .close {
+    margin-right: 10px;
+    color: white;
+    text-shadow: 0 2px 3px rgba(0,0,0,0.7);
+}
+.side-menu .close:hover {
+    cursor: pointer;
+}
+.side-menu .close:focus,
+.side-menu .close:active
+{
+    box-shadow: none;
+    outline: none;
+}
+
+.side-menu .active {
+    color: #898EBB!important;
+    font-weight: bold;
+}
+
+.side-menu nav {
+    padding: 20px 60px 20px 20px;
+    height: 100%;
+}
+
+.side-menu .fill-spacer {
+    flex: 1;
+}
+
+#menu-title {
+    font-size: 30px;
+    color: rgba(255,255,255,0.8);
+}
+
+.non-menu-content {
+    height: 100%;
+    transition: transform 0.3s;
+}
+.non-menu-content.blur {
+    transform: translateX(3%);
+}
+
+.menu-cover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255,255,255,0.4);
+    z-index: -1;
+    opacity: 0;
+    display: block;
+    transition: all 0.3s;
+}
+.menu-cover.show {
+    z-index: 50;
+    opacity: 1;
+}
+
+/* End Menu */
+
+/* Main Content */
+
+#main-content {
+    flex: 1;
+    width: 100%;
+    padding: 10px;
+    overflow-y: auto;
+}
