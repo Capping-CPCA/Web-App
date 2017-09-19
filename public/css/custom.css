@@ -7,11 +7,13 @@ html, body {
 .navbar {
     box-shadow: 0 2px 7px 0 rgba(0,0,0,0.5);
     padding: 0;
+    z-index: 1;
 }
 
 .navbar-toggler {
     border: none;
     transition: background-color 0.2s;
+    transform: skew(45deg);
 }
 .navbar-toggler:hover {
     cursor: pointer;
@@ -25,8 +27,9 @@ html, body {
 .navbar-brand {
     font-weight: 300;
     padding: 0 0 0 10px;
-    font-size: 25px;
+    font-size: 27px;
     margin-top: -3px;
+    transform: skew(45deg);
 }
 
 .navbar-left,
@@ -39,6 +42,10 @@ html, body {
     z-index: 2;
     background-color: #5C629C;
     box-shadow: 6px 0 3px -3px rgba(0,0,0,0.1);
+    transform: skew(-45deg);
+    padding-left: 2rem;
+    padding-right: 3rem;
+    margin-left: -1.6rem;
 }
 
 .navbar-center {
@@ -109,12 +116,11 @@ footer {
 /* Menu */
 
 .side-menu {
-    position: absolute;
-    background-color: #343A40;
-    z-index: 1000;
-    height: 100%;
-    box-shadow: 0 5px 8px 2px rgba(0,0,0,0.6);
+    position: relative;
+    background-color: #eee;
+    z-index: 0;
     transition: all 0.3s;
+    overflow-y: auto;
 }
 .side-menu.hidden {
     transform: translateX(-100%);
@@ -142,12 +148,45 @@ footer {
 }
 
 .side-menu nav {
-    padding: 20px 60px 20px 20px;
-    height: 100%;
+    padding: 20px;
+    height: auto;
+}
+
+.side-menu nav a {
+    flex: 1;
+    padding: 0.5rem 1rem 0.5rem 0;
+    color: rgba(0,0,0,0.75);
+}
+
+.side-menu nav a:hover {
+    color: #898EBB!important;
+    color: rgba(0,0,0,0.8);		 
 }
 
 .side-menu .fill-spacer {
     flex: 1;
+}
+
+.side-menu .nav-link[data-toggle="collapse"]:not(.collapsed) {
+    color: #343a40!important;
+}
+.side-menu .nav-link[data-toggle="collapse"]:after {
+    content: '▸';
+    padding-left: 5px;
+    font-weight: bold;
+    transform-origin: 50% 50%;
+    transform: rotate(0deg);
+    display: inline-block;
+    transition: transform 0.2s;
+    font-size: 20px;
+    line-height: 20px;
+}
+.side-menu .nav-link[data-toggle="collapse"]:not(.collapsed):after {
+     transform: rotate(90deg);
+}
+.side-menu ul a {
+    padding-left: 1.5rem;
+    font-weight: 300;
 }
 
 #menu-title {
@@ -179,6 +218,11 @@ footer {
     z-index: 50;
     opacity: 1;
 }
+.menu-cover.tutorial-cover {
+    z-index: 50;
+    opacity: 1;
+    background-color: rgba(0,0,0,0.5);
+}
 
 /* End Menu */
 
@@ -187,6 +231,105 @@ footer {
 #main-content {
     flex: 1;
     width: 100%;
-    padding: 10px;
+    padding: 15px;
     overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.tutorial {
+    z-index: 51;
+}
+
+#content-wrapper {
+    flex: 1;
+    width: 100%;
+}
+
+/* Popover */
+
+.popover-footer {
+    padding: 5px;
+    text-align: right;
+}
+
+/* Dashboard */
+
+#dashboard-wrapper {
+    flex: 1;
+    flex-basis: 280px;
+}
+
+.dashboard-panel {
+    text-align: center;
+    flex: 1;
+    min-width: 280px;
+    padding: 10px;
+    transition: background-color 0.2s;
+    text-decoration: none;
+}
+.dashboard-panel:hover {
+    cursor: pointer;
+    background-color: rgba(0,0,0, 0.1);
+    text-decoration: none!important;
+}
+
+.button-main-title {
+    padding-top: 5px;
+    font-size:20px;
+    text-decoration: none;
+    color: rgba(0,0,0,0.9)!important;
+}
+.button-sub-title{
+    color:grey!important;
+    text-decoration: none;
+}
+
+.icon-img{
+    height:100px;
+    width: auto;
+}
+
+/*Form Stuff*/
+.search-participants{
+    width:70%;
+}
+.top-search-row{
+    margin-top: 5%;
+    z-index: 10000;
+}
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+    z-index: 9000;
+}
+.userLoggedIn{
+    color:white;
+}
+.body-main{
+    margin-top:5%;
+}
+.title-main{
+    margin-top:2%;
+}
+.delete-show{
+    display: none;
+}
+
+.page-wrapper {
+    flex: 1;
+}
+
+/*Login*/
+.form-footer.submit {
+    text-align: center;
+    margin-top: 20px;
 }
