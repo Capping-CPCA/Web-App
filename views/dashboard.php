@@ -8,30 +8,24 @@ if (isset($_GET['role'])) {
 }
 
 $roleViews = [
-    "default" => [
-        new DashboardPanel(BASEURL."/agency-requests", "Agency Requests", "Participants", "img/004-magnifier.png"),
-        new DashboardPanel(BASEURL."/test-page", "Option 2", "Group", "img/003-multiple-users-silhouette.png"),
-        new DashboardPanel("#", "Option 3", "Group", "img/002-notepad.png"),
-        new DashboardPanel("#", "Option 4", "Group", "img/001-line-chart.png"),
+    Role::Facilitator => [
+        new DashboardPanel("#", "Participant Referrals", "Participants", "file-text-o"),
+        new DashboardPanel("#", "Class Activity", "Classes", "book"),
+        new DashboardPanel(BASEURL."/agency-requests", "Agency Requests", "Participants", "search"),
+        new DashboardPanel("#", "Participant Intake", "Participants", "file-text-o"),
     ],
-    "facilitator" => [
-        new DashboardPanel("#", "Participant Referrals", "Participants", "img/002-notepad.png"),
-        new DashboardPanel("#", "Class Activity", "Classes", "img/003-multiple-users-silhouette.png"),
-        new DashboardPanel(BASEURL."/agency-requests", "Agency Requests", "Participants", "img/004-magnifier.png"),
-        new DashboardPanel("#", "Participant Intake", "Participants", "img/002-notepad.png"),
+    Role::Admin => [
+        new DashboardPanel("/curricula", "Manage Curricula and Classes", "Classes", "university"),
+        new DashboardPanel("/locations", "Manage Locations", "Classes", "map-marker"),
+        new DashboardPanel("#", "Reports", "Reporting", "bar-chart"),
+        new DashboardPanel("#", "User Management", "Participants", "users"),
     ],
-    "admin" => [
-        new DashboardPanel("#", "Manage Curricula and Classes", "Classes", "img/002-notepad.png"),
-        new DashboardPanel("#", "Manage Locations", "Classes", "img/002-notepad.png"),
-        new DashboardPanel("#", "Reports", "Reporting", "img/001-line-chart.png"),
-        new DashboardPanel("#", "User Management", "Participants", "img/003-multiple-users-silhouette.png"),
-    ],
-    "super admin" => [
-        new DashboardPanel("#", "Manage Curricula and Classes", "Classes", "img/002-notepad.png"),
-        new DashboardPanel("#", "Manage Locations", "Classes", "img/002-notepad.png"),
-        new DashboardPanel("#", "Manage Courses", "Participants", "img/002-notepad.png"),
-        new DashboardPanel("#", "Manage Participants", "Users", "img/003-multiple-users-silhouette.png"),
-        new DashboardPanel("#", "User Management", "Users", "img/003-multiple-users-silhouette.png"),
+    Role::SuperAdmin => [
+        new DashboardPanel("/curricula", "Manage Curricula and Classes", "Classes", "university"),
+        new DashboardPanel("/locations", "Manage Locations", "Classes", "map-marker"),
+        new DashboardPanel("/classes", "Manage Classes", "Participants", "book"),
+        new DashboardPanel("#", "Manage Participants", "Users", "users"),
+        new DashboardPanel("#", "User Management", "Users", "users"),
     ]
 ];
 

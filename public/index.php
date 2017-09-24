@@ -1,14 +1,16 @@
 <?php
 
+session_start();
+
 require('../bootstrap.php');
 require('../routes.php');
 
-session_start();
+global $router, $view, $db;
 
 $route = $router->dispatch();
 
-function active($route, $file) {
-    return $route['file'] == $file ? 'active' : '';
+function active($route, $url) {
+    return $route['url'] == $url ? 'active' : '';
 }
 
 try {
@@ -20,3 +22,5 @@ try {
     echo $e;
     include('footer.php');
 }
+
+$db->close();

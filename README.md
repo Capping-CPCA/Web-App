@@ -72,7 +72,6 @@ Then you need to copy PHP's `libpq.dll` into Apache's `bin/` directory.
 * `core/` - Contains key components of the PHP web app
 * `models/` - Any sort of model that is reused
 * `public/` - Where the application is run from
-* `shared/` - Files that are shared between views
 * `views/` - Location of all the application's pages
 
 **Files**
@@ -96,6 +95,8 @@ Each page should follow the format below and placed in the `view/` directory.
 <?php include('footer.php'); ?>
 ```
 
+**Require Login**
+
 If you want to make a page one that requires a user to log in, put `authorizedPage();` above the header include. Ex:
 
 ```php
@@ -106,6 +107,38 @@ include('header.php');
 
 ...
 
+```
+
+**Page Authorization**
+
+If you would like to be more specific in the user roles that can view the page, use the `requireRole()` function.
+This example only will allow `Admin` and `SuperAdmin`:
+
+```php
+<?php 
+requireRole(Role::Admin | Role::SuperAdmin);
+include('header.php'); 
+?>
+
+...
+
+```
+
+Use the bitwise OR operator (`|`) to allow more roles to a page.
+
+Similarly, you can use `preventRole()` to prevent the specified roles. (Helpful when `requireRole()` becomes long).
+
+**Check for Role**
+
+If you want to only display a chunk of HTML if the user has a specific role, use the `hasRole()` function.
+This example will only allow `User` and `Admin`:
+
+```php
+<?php
+if (hasRole(Role::User | Role::Admin)) {
+    echo '<p>Has proper roles!</p>';
+}
+?>
 ```
 
 **Routes**

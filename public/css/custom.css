@@ -2,6 +2,10 @@ html, body {
     overflow-x: hidden;
 }
 
+.btn:not(:disabled):hover {
+    cursor: pointer;
+}
+
 /* Nav Bar */
 
 .navbar {
@@ -90,7 +94,7 @@ html, body {
     color: rgba(255,255,255,0.8);
     transition: all 0.2s;
 }
-.cpca:hover {
+.cpca:not(:disabled):hover {
     cursor: pointer;
     background-color: #898EBB;
 }
@@ -123,7 +127,7 @@ footer {
     position: relative;
     background-color: #eee;
     z-index: 0;
-    min-width: 300px;
+    min-width: 250px;
     transition: all 0.3s;
     overflow-y: auto;
     font-size: 15px;
@@ -214,7 +218,7 @@ footer {
     position: fixed;
     bottom: 27px;
     color: #868e96!important;
-    width: 300px;
+    width: 250px;
     background-color: #eee;
     text-align: center;
     padding: 14px 0px 30px 0px;
@@ -303,6 +307,15 @@ footer {
     background-color: rgba(0,0,0, 0.1);
     text-decoration: none!important;
 }
+.dashboard-panel i {
+    font-size: 70px;
+    color: rgba(0,0,0,0.3);
+    margin-bottom: 10px;
+    transition: color 0.2s;
+}
+.dashboard-panel:hover i {
+    color: #5C629C;
+}
 
 .button-main-title {
     padding-top: 5px;
@@ -327,6 +340,13 @@ footer {
 .top-search-row{
     margin-top: 5%;
     z-index: 10000;
+}
+
+.form-wrapper {
+    max-width: 700px;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 10px!important;
 }
 
 #overlay {
@@ -366,6 +386,77 @@ footer {
 }
 
 /* Search */
+.result-card {
+    margin: 10px;
+    width: 100%;
+    max-width: 350px;
+}
+
+.new-card {
+    border: 2px dashed #b9bbbe;
+}
+
+.result-card-dark {
+    background-color: #edeeff;
+    flex: 1;
+    min-width: 175px;
+}
+
+.result-subtitle {
+    line-height: 1;
+}
+
+/* Display Stack */
+
+.display-stack {
+    text-align: center;
+    max-width: 300px;
+    margin: 0 15px;
+    width: 100%;
+}
+
+.display-stack .display-top {
+    font-size: 26px;
+    padding: 0 15px;
+}
+
+.display-stack .display-bottom {
+    color: rgba(0,0,0,0.4);
+    font-weight: 500;
+    padding: 0 15px;
+}
+
+.display-stack .display-split {
+    border-top: 1px solid rgba(0,0,0,0.15);
+    width: 100%;
+}
+
+/* Warning Card */
+.view-card h4,
+.warning-card h4 {
+    font-weight: 300;
+}
+
+.view-card .card-header {
+    font-weight: 400;
+}
+
+.warning-card {
+    max-width: 700px;
+    width: 100%;
+    margin: 0 auto;
+    border-color: #B00;
+}
+.warning-card .card-header,
+.warning-card .card-footer {
+    border-color: #B00;
+    background-color: #f8d7da;
+}
+
+.warning-card .card-body {
+    background-color: #FFFAFA;
+}
+
 .agency-search-item{
     display: none!important;
 }
@@ -380,6 +471,6 @@ footer {
     height:20px!important;
 }
 .thin-title{
-	font-weight:300;
-	font-size: 1.5rem;
+    font-weight:300;
+    font-size: 1.5rem;
 }

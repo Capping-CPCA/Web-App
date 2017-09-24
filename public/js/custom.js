@@ -37,6 +37,7 @@ function Tutorial(title, content, selector, showElements, next, placement, trigg
 }
 
 var tutorials = {
+    // Dashboard Page
     menu: new Tutorial(
         'Navigation Menu',
         'Use this menu to navigate to major pages ' +
@@ -51,6 +52,29 @@ var tutorials = {
         'You will be redirected to the login.',
         '#login-btn',
         ['.navbar']
+    ),
+    // Curriculum Page
+    curriculum: new Tutorial(
+        'Curriculum Add',
+        'Click here to add a new curriculum.',
+        '#new-curriculum-btn',
+        ['#new-curriculum-btn'],
+        'curriculumFilter'
+    ),
+    curriculumFilter: new Tutorial(
+        'Curriculum Filter',
+        'Type here to filter curriculum results by ' +
+            'name and type.',
+        '#curriculum-filter',
+        ['#curriculum-filter'],
+        'curriculumCard'
+    ),
+    curriculumCard: new Tutorial(
+        'Curriculum Options',
+        'Use the buttons below each curriculum to: ' +
+            'View, Edit, or Archive the curriculum.',
+        '.result-card:first-child',
+        ['.result-card:first-child']
     )
 };
 

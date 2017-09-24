@@ -2,7 +2,7 @@
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['username'] = $_POST['username'];
-    $_SESSION['role'] = 'admin';
+    $_SESSION['role'] = Role::SuperAdmin;
     header('Location: ' . BASEURL . '/dashboard');
     die();
 } else if (isset($_SESSION['username'])) {
@@ -15,7 +15,7 @@ include('header.php');
 ?>
 
 <div class="page-wrapper">
-    <div class="jumbotron" style="max-width: 700px; width: 100%; margin: 0 auto; margin-top: 10px!important;">
+    <div class="jumbotron form-wrapper">
         <form class="form" method="post" action="/login">
             <label for="username">Username</label>
             <input class="form-control username" type="text" name="username">
