@@ -115,12 +115,18 @@ footer {
 
 /* Menu */
 
+.fa-fw {
+    padding-right: 25px;
+}
+
 .side-menu {
     position: relative;
     background-color: #eee;
     z-index: 0;
+    min-width: 300px;
     transition: all 0.3s;
     overflow-y: auto;
+    font-size: 15px;
 }
 .side-menu.hidden {
     transform: translateX(-100%);
@@ -152,15 +158,21 @@ footer {
     height: auto;
 }
 
+.side-menu > nav {
+    margin-bottom: 45px;
+}
+
 .side-menu nav a {
     flex: 1;
     padding: 0.5rem 1rem 0.5rem 0;
     color: rgba(0,0,0,0.75);
+    transition: font-weight 0.1s;
 }
 
 .side-menu nav a:hover {
     color: #898EBB!important;
-    color: rgba(0,0,0,0.8);		 
+    color: rgba(0,0,0,0.20);
+    font-weight: bold;
 }
 
 .side-menu .fill-spacer {
@@ -168,25 +180,44 @@ footer {
 }
 
 .side-menu .nav-link[data-toggle="collapse"]:not(.collapsed) {
-    color: #343a40!important;
+    font-weight: bold;
 }
 .side-menu .nav-link[data-toggle="collapse"]:after {
-    content: '▸';
+    content: '\f105';
+    font-family: FontAwesome;
     padding-left: 5px;
     font-weight: bold;
     transform-origin: 50% 50%;
     transform: rotate(0deg);
     display: inline-block;
     transition: transform 0.2s;
-    font-size: 20px;
+    font-size: 15px;
     line-height: 20px;
 }
 .side-menu .nav-link[data-toggle="collapse"]:not(.collapsed):after {
-     transform: rotate(90deg);
+    transform: translate(5px) rotate(90deg);
 }
 .side-menu ul a {
     padding-left: 1.5rem;
     font-weight: 300;
+}
+
+.side-menu nav a:not(:first-child):not(.py-0) {
+    border-top: 1px solid rgba(134, 142, 150, 0.30);
+}
+
+.side-menu nav a.py-0:last-child {
+    padding-bottom: 10px!important;
+}
+
+.side-menu-welcome {
+    position: fixed;
+    bottom: 27px;
+    color: #868e96!important;
+    width: 300px;
+    background-color: #eee;
+    text-align: center;
+    padding: 14px 0px 30px 0px;
 }
 
 #menu-title {

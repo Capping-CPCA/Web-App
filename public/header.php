@@ -11,6 +11,7 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/custom.css" />
+    <link rel="stylesheet" href="/css/font-awesome-4.7.0/css/font-awesome.min.css" />
 
     <!-- JavaScript -->
     <script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
