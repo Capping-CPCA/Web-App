@@ -1,6 +1,6 @@
 # CPCA Web Application
 
-### Server Set Up
+### Server Set Up (Apache) 
 
 The PHP server should be run from the `public/` directory. This is where the `.htaccess` file and the `index.php` file are stored.
 When using an Apache server, this would be the `DocumentRoot`.
@@ -47,6 +47,24 @@ DocumentRoot "path/to/base/directory/public"            # change this
 
 
 *Note: the `<VirtualHost>` is not always present in all Apache httpd configurations*
+
+**Add PostgreSQL Dependencies**
+
+Edit the `php.ini` file to include the postgres DLLs
+
+```ini
+...
+ 
+;extension=php_pdo_odbc.dll
+extension=php_pdo_pgsql.dll     ;uncomment this line
+;extension=php_pdo_sqlite.dll
+extension=php_pgsql.dll         ;uncomment this line
+;extension=php_shmop.dll
+ 
+...
+```
+
+Then you need to copy PHP's `libpq.dll` into Apache's `bin/` directory.
 
 ### Project Structure
 
