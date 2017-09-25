@@ -11,4 +11,12 @@ function active($route, $file) {
     return $route['file'] == $file ? 'active' : '';
 }
 
-$view->display($route['file']);
+try {
+    $params = $route['params'];
+    $view->display($route['file']);
+} catch (Exception $e) {
+    include('header.php');
+    echo http_response_code();
+    echo $e;
+    include('footer.php');
+}

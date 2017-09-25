@@ -12,16 +12,17 @@ class Router {
     }
 
     public function dispatch() {
-        $uri = str_replace(BASEURL . '/', "",
-            parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+        $uri = ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), BASEURL . '/');
         $uri = explode('/', $uri);
         foreach ($this->routes as $url => $route) {
-            $url = substr($url, 1);
-            if ( in_array($url, $uri) ) {
+            $url = substr($url, 1); // start at 1 to skip '/' in the '/page'
+            if ($url == $uri[0]) {
+                array_shift($uri);
+                $route['params'] = $uri;
                 return $route;
             }
         }
-        return '404.php';
+        return ["file" => '404.php', "title" => 'Page not found!'];
     }
 
 }

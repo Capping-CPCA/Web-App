@@ -1,8 +1,12 @@
 Options +FollowSymLinks
+Options -Indexes
+
 IndexIgnore */*
+
 # Turn on the RewriteEngine
 RewriteEngine On
 # Rules
+RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . index.php
