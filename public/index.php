@@ -9,7 +9,8 @@ global $router, $view, $db;
 
 $route = $router->dispatch();
 
-function active($route, $url) {
+function active($url) {
+    global $route;
     return $route['url'] == $url ? 'active' : '';
 }
 
