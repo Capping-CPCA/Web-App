@@ -30,11 +30,18 @@
 
     <nav class="navbar navbar-dark bg-dark">
         <div class="navbar-left d-flex align-items-center">
-            <a id="cpca-brand" class="navbar-brand" href="#">CPCA</a>
+            <a id="cpca-brand" class="navbar-brand" href="#">PEP Manager</a>
         </div>
         <?php if (!isset($hideMenu)) { ?>
-            <div class="navbar-right">
-                <button onclick="window.location = '/logout';" type="button" class="btn cpca" id="login-btn">Log Out</button>
+            <div class="navbar-right text-light">
+                <div class="collapsed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle-o fa-lg" id="accountOptions" aria-hidden="true"
+                   style="position: relative; padding: 10px"></i><i class="fa fa-caret-down" aria-hidden="true" style="margin-right:35px;"></i></div>
+                <div class="dropdown-menu" aria-labelledby="accountOptions" style="top: auto;">
+                    <a class="dropdown-item text-secondary <?= active($route, 'account_settings.php') ?>" href="<?= BASEURL.'/account-settings' ?>"><i class="fa fa-fw fa-cog" aria-hidden="true"></i>Account Settings</a>
+                    <a class="dropdown-item text-secondary <?= active($route, 'help.php') ?>" href="<?= BASEURL.'/help' ?>"><i class="fa fa-fw fa-question" aria-hidden="true"></i>Help</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="/logout" class="dropdown-item text-secondary" id="login-btn"><i class="fa fa-fw fa-sign-out" aria-hidden="true"></i>Log Out</a>
+                </div>
             </div>
         <?php } ?>
         <div class="navbar-center d-flex align-items-center justify-content-center">
