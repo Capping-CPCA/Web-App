@@ -15,7 +15,7 @@ class DashboardPanel {
             "<a class='dashboard-panel justify-content-center d-flex flex-column align-self-stretch'" .
                "href='" . $this->link . "'>" .
                 "<div class='img-div'>" .
-                    "<img class='img img-responsive icon-img' src='" . $this->img . "'>" .
+                    "<i class='fa fa-" . $this->img . "' aria-hidden='true'></i>" .
                 "</div>" .
                 "<h2 class='button-main-title'>" . $this->title . "</h2>" .
                 "<p class='button-sub-title'>" . $this->subtitle . "</p>" .
