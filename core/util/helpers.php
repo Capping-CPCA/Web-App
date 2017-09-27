@@ -24,7 +24,7 @@ function authorizedPage() {
 }
 
 function hasRole($role) {
-    return $_SESSION['role'] & $role;
+    return isset($_SESSION['role']) && $_SESSION['role'] & $role;
 }
 
 /**

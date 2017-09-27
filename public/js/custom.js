@@ -47,10 +47,10 @@ var tutorials = {
         'login'
     ),
     login: new Tutorial(
-        'Logout',
-        'Click here to log out of your account. ' +
-        'You will be redirected to the login.',
-        '#login-btn',
+        'Account Settings',
+        'Click here to log out of your account and' +
+        ' manage other account settings.',
+        '.navbar-right',
         ['.navbar']
     ),
     // Curriculum Page

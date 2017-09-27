@@ -40,6 +40,12 @@ class Router {
         return null;
     }
 
+    public function lastPage() {
+        if (!empty($_SESSION['history']) && count($_SESSION['history']) > 1)
+            return $_SESSION['history'][count($_SESSION['history']) - 2];
+        return null;
+    }
+
     /**
      * Adds a url to the navigation history
      * @param $url string the url currently visiting
@@ -72,9 +78,18 @@ class Router {
     public function dispatch() {
         $newUrl = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $currPage = $this->currentPage();
+        $lastPage = $this->lastPage();
+
         if (!startsWith($newUrl, '/js') &&
             !startsWith($newUrl, '/css') &&
-            !startsWith($newUrl, '/back')) {
+            !startsWith($newUrl, '/back') &&
+            !startsWith($newUrl, '/favicon.ico')) {
+
+            // This occurs when browser back button is clicked
+            if ($lastPage == $newUrl) {
+                header('Location: /back');
+                die();
+            }
 
             if ($currPage != null) {
                 if ($currPage != $newUrl) {
