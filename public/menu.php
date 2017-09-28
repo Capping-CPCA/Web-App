@@ -6,6 +6,7 @@
         <div class="collapse" id="ParticipantFormsSubMenu">
             <ul class="flex-column pl-2 nav">
                 <a class="nav-link text-secondary py-0 <?= active($route, '/referral-form') ?>" data-parent="#ParticipantForms" href="<?= BASEURL.'/referral-form' ?>">Referral Form</a>
+                <a class="nav-link text-secondary py-0 <?= active($route, '/self-referral-form') ?>" data-parent="#ParticipantForms"  href="<?= BASEURL.'/self-referral-form' ?>">Self-Referral Form</a>
                 <a class="nav-link text-secondary py-0 <?= active($route, '/intake-packet') ?>" data-parent="#ParticipantForms"  href="<?= BASEURL.'/intake-packet' ?>">Intake Packet</a>
             </ul>
         </div>
