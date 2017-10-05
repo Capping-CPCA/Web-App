@@ -30,7 +30,7 @@
 
     <nav class="navbar navbar-dark bg-dark">
         <div class="navbar-left d-flex align-items-center">
-            <a id="cpca-brand" class="navbar-brand" href="#">PEP Manager</a>
+            <a id="cpca-brand" class="navbar-brand" href="<?= BASEURL.'/'?>">PEP Manager</a>
         </div>
         <?php if (!isset($hideMenu)) { ?>
             <div class="navbar-right text-light">
