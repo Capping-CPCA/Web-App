@@ -124,7 +124,7 @@ include ('header.php');
                 </div>
             </div>
             <div class="form-group">
-                <label for="type-select" class="<?= $errors['desc'] ? 'text-danger' : '' ?>">Program Type</label>
+                <label for="type-select" class="<?= $errors['type'] ? 'text-danger' : '' ?>">Program Type</label>
                 <select id="type-select" class="form-control <?= $errors['type'] ? 'is-invalid' : '' ?>" name="type">
                     <?php
                     $res = $db->query("SELECT unnest(enum_range(NULL::programtype)) AS type", []);

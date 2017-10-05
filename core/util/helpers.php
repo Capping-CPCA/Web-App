@@ -11,7 +11,7 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.1.5
+ * @version 0.2
  * @since 0.1
  */
 
@@ -138,7 +138,7 @@ function authorize($url) {
  * in and authenticated.
  */
 function authorizedPage() {
-    requireRole(Role::User | Role::Facilitator | Role::Admin | Role::SuperAdmin | Role::Coordinator);
+    requireRole(Role::NewUser | Role::Facilitator | Role::Admin | Role::Superuser | Role::Coordinator);
 }
 
 function hasRole($role) {
@@ -151,7 +151,7 @@ function hasRole($role) {
  * @param $role - the roles to allow
  */
 function requireRole($role) {
-    if (!hasRole($role)) {
+    if (!isset($_SESSION['username']) || !hasRole($role)) {
         notAuthorized();
     }
 }
@@ -196,4 +196,16 @@ function isValidNumber($num, $min = null, $max = null) {
  */
 function prettyPrint($arr) {
     print("<pre>".print_r($arr,true)."</pre>");
+}
+
+/**
+ * Gets the value of an array if it exists, otherwise
+ * return an empty string.
+ * @param $arr array The associative array to search
+ * @param $key string The key of the array to find
+ * @return string the value at the key in the array or an
+ *   empty string if the key doesn't exist.
+ */
+function valueOrEmpty($arr, $key) {
+    return isset($arr[$key]) ? $arr[$key] : '';
 }

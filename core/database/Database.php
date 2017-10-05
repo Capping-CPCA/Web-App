@@ -1,11 +1,17 @@
 <?php
-
 /**
+ * PEP Capping 2017 Algozzine's Class
+ *
  * Class Database
  *
  * The database object holds all information about the currently
  * connected database. It also handles the queries to execute
  * on the database.
+ *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.2
+ * @since 0.1
  */
 class Database {
 
@@ -27,9 +33,8 @@ class Database {
         $this->name = $dbname;
     }
 
-    public static function loadFromConfig($path) {
-        $db_ini = parse_ini_file($path, true);
-        $conn_settings = $db_ini['connection_settings'];
+    public static function loadFromConfig() {
+        $conn_settings = CONFIG['database'];
         return new self($conn_settings['host'], $conn_settings['port'],
             $conn_settings['user'], $conn_settings['pass'],
             $conn_settings['dbname']);

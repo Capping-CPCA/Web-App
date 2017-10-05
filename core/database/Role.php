@@ -11,15 +11,15 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.1.5
+ * @version 0.2
  * @since 0.1
  */
 class Role {
-    const User = 1;
+    const NewUser = 1;
     const Facilitator = 2;
     const Coordinator = 4;
     const Admin = 8;
-    const SuperAdmin = 16;
+    const Superuser = 16;
 
     /**
      * Maps database permissionlevel to PHP Role
@@ -35,10 +35,10 @@ class Role {
             case 'Administrator':
                 return Role::Admin;
             case 'Superuser':
-                return Role::SuperAdmin;
-            case 'User':
+                return Role::Superuser;
+            case 'New':
             default:
-                return Role::User;
+                return Role::NewUser;
         }
     }
 }

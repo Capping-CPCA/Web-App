@@ -23,6 +23,7 @@ $router->add('/dashboard', 'dashboard.php', 'Home');
 
 $router->add('/login', 'login.php', 'Login');
 $router->add('/logout', 'logout.php', '');
+$router->add('/create-account', 'create_account.php', 'Create Account');
 
 # Agency Requests
 $router->add('/agency-requests', 'agency-requests/agency_requests.php', 'Agency Requests');
