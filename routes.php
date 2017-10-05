@@ -16,3 +16,10 @@ $router->add('/view-participant', 'agency-requests/view_participant.php', 'View 
 $router->add('/curricula', 'curricula/curricula.php', 'Curricula');
 $router->add('/classes', 'classes/classes.php', 'Classes');
 $router->add('/locations', 'locations/locations.php', 'Locations');
+
+#Reports
+$router->add('/quarterly-reports', 'reports/quarterly.php', 'Quarterly Reports');
+$router->add('/year-end-reports', 'reports/half_year.php', 'Year-End Reports');
+$router->add('/monthly-reports', 'reports/monthly_report.php', 'Monthly Reports');
+$router->add('/custom-reports', 'reports/custom_reports.php', 'Custom Report');
+$router->add('/custom-reports-table', 'reports/custom_reports_table.php', 'Custom Report');
