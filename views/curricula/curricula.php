@@ -6,7 +6,7 @@ global $params, $route, $view;
 
 include ('../models/Notification.php');
 
-$pages = ['view','edit','create','archive','restore'];
+$pages = ['view','edit','create','delete','restore'];
 
 # Update page title to reflect route
 if (!empty($params) && in_array($params[0], $pages)) {
@@ -21,7 +21,7 @@ if (!empty($params) && $params[0] == 'view') {
     $view->display('curricula/curricula_modify.php');
 } else if (!empty($params) && $params[0] == 'create') {
     $view->display('curricula/curricula_modify.php');
-} else if (!empty($params) && $params[0] == 'archive') {
+} else if (!empty($params) && $params[0] == 'delete') {
     $view->display('curricula/curricula_archive.php');
 } else {
     include('header.php');
@@ -39,10 +39,10 @@ if (!empty($params) && $params[0] == 'view') {
     ?>
     <div style="width: 100%">
         <?php
-        if (isset($_SESSION['archive-success']) && $_SESSION['archive-success']) {
-            $notification = new Notification('Success!', 'Curriculum was successfully archived!', 'success');
+        if (isset($_SESSION['delete-success']) && $_SESSION['delete-success']) {
+            $notification = new Notification('Success!', 'Curriculum was successfully deleted!', 'success');
             $notification->display();
-            unset($_SESSION['archive-success']);
+            unset($_SESSION['delete-success']);
         }
         ?>
         <div id="curriculum-btn-group" class="input-group">
@@ -77,8 +77,8 @@ if (!empty($params) && $params[0] == 'view') {
                         <a href="/curricula/edit/<?= $r['curriculumid'] ?>">
                             <button class="btn btn-outline-secondary btn-sm ml-2">Edit</button>
                         </a>
-                        <a href="/curricula/archive/<?= $r['curriculumid'] ?>">
-                            <button class="btn btn-outline-danger btn-sm ml-2">Archive</button>
+                        <a href="/curricula/delete/<?= $r['curriculumid'] ?>">
+                            <button class="btn btn-outline-danger btn-sm ml-2">Delete</button>
                         </a>
                     </div>
                 </div>

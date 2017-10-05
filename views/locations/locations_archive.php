@@ -19,9 +19,9 @@ $site = pg_fetch_assoc($result);
 pg_free_result($result);
 
 # Archive data
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['archive'])) {
-    // TODO: archive class
-    $_SESSION['archive-success'] = true;
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete'])) {
+    // TODO: delete class
+    $_SESSION['delete-success'] = true;
     header('Location: /locations');
     die();
 }
@@ -35,12 +35,12 @@ include('header.php');
                 <?= $site['sitename'] ?>
             </h4>
             <div class="card-body">
-                You are about to archive location "<?= $site['sitename'] ?>". Are you sure
-                you want to archive this location?
+                You are about to delete location "<?= $site['sitename'] ?>". Are you sure
+                you want to delete this location?
             </div>
             <div class="card-footer text-right">
                 <a href="/back"><button type="button" class="btn btn-light">Cancel</button></a>
-                <button type="submit" name="archive" class="btn btn-danger">Archive</button>
+                <button type="submit" name="delete" class="btn btn-danger">Delete</button>
             </div>
         </form>
     </div>

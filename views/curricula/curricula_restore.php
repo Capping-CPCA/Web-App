@@ -1,2 +1,2 @@
-<?php // TODO: when data is able to be archived ?>
+<?php // TODO: when data is able to be deleted ?>
 Curricula Restore
