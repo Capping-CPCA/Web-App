@@ -5,7 +5,7 @@ global $params, $route, $view;
 
 include ('../models/Notification.php');
 
-$pages = ['view','edit','create','archive','restore'];
+$pages = ['view','edit','create','delete','restore'];
 
 # Update page title to reflect route
 if (!empty($params) && in_array($params[0], $pages)) {
@@ -20,7 +20,7 @@ if (!empty($params) && $params[0] == 'view') {
     $view->display('classes/classes_modify.php');
 } else if (!empty($params) && $params[0] == 'create') {
     $view->display('classes/classes_modify.php');
-} else if (!empty($params) && $params[0] == 'archive') {
+} else if (!empty($params) && $params[0] == 'delete') {
     $view->display('classes/classes_archive.php');
 } else {
     include('header.php');
@@ -38,10 +38,10 @@ if (!empty($params) && $params[0] == 'view') {
     ?>
     <div style="width: 100%">
         <?php
-        if (isset($_SESSION['archive-success']) && $_SESSION['archive-success']) {
-            $notification = new Notification('Success!', 'Class was successfully archived!', 'success');
+        if (isset($_SESSION['delete-success']) && $_SESSION['delete-success']) {
+            $notification = new Notification('Success!', 'Class was successfully deleted!', 'success');
             $notification->display();
-            unset($_SESSION['archive-success']);
+            unset($_SESSION['delete-success']);
         }
         ?>
         <div id="classes-btn-group" class="input-group">
@@ -76,8 +76,8 @@ if (!empty($params) && $params[0] == 'view') {
                         <a href="/classes/edit/<?= $r['topicname'] ?>">
                             <button class="btn btn-outline-secondary btn-sm ml-2">Edit</button>
                         </a>
-                        <a href="/classes/archive/<?= $r['topicname'] ?>">
-                            <button class="btn btn-outline-danger btn-sm ml-2">Archive</button>
+                        <a href="/classes/delete/<?= $r['topicname'] ?>">
+                            <button class="btn btn-outline-danger btn-sm ml-2">Delete</button>
                         </a>
                     </div>
                 </div>

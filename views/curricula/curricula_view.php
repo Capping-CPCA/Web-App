@@ -24,7 +24,7 @@ include('header.php');
             <?= $curricula['curriculumname'] ?>
             <div class="float-right">
                 <a href="/curricula/edit/<?= $id ?>"><button class="btn btn-outline-secondary btn-sm">Edit</button></a>
-                <a href="/curricula/archive/<?= $id ?>"><button class="btn btn-outline-danger btn-sm">Archive</button></a>
+                <a href="/curricula/delete/<?= $id ?>"><button class="btn btn-outline-danger btn-sm">Delete</button></a>
             </div>
         </h4>
         <div class="card-body d-flex justify-content-center flex-column">

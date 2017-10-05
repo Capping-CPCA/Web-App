@@ -25,7 +25,7 @@ include('header.php');
                 <?= $site['sitename'] ?>
                 <div class="float-right">
                     <a href="/locations/edit/<?= implode('/', $params) ?>"><button class="btn btn-outline-secondary btn-sm">Edit</button></a>
-                    <a href="/locations/archive/<?= implode('/', $params) ?>"><button class="btn btn-outline-danger btn-sm">Archive</button></a>
+                    <a href="/locations/delete/<?= implode('/', $params) ?>"><button class="btn btn-outline-danger btn-sm">Delete</button></a>
                 </div>
             </h4>
             <div class="card-body d-flex justify-content-center flex-column">

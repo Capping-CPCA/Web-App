@@ -27,7 +27,7 @@ include('header.php');
             <?= $class['topicname'] ?>
             <div class="float-right">
                 <a href="/classes/edit/<?= implode('/', $params) ?>"><button class="btn btn-outline-secondary btn-sm">Edit</button></a>
-                <a href="/classes/archive/<?= implode('/', $params) ?>"><button class="btn btn-outline-danger btn-sm">Archive</button></a>
+                <a href="/classes/delete/<?= implode('/', $params) ?>"><button class="btn btn-outline-danger btn-sm">Delete</button></a>
             </div>
         </h4>
         <div class="card-body d-flex justify-content-center flex-column">
