@@ -27,6 +27,14 @@ class Database {
         $this->name = $dbname;
     }
 
+    public static function loadFromConfig($path) {
+        $db_ini = parse_ini_file($path, true);
+        $conn_settings = $db_ini['connection_settings'];
+        return new self($conn_settings['host'], $conn_settings['port'],
+            $conn_settings['user'], $conn_settings['pass'],
+            $conn_settings['dbname']);
+    }
+
     /**
      * Connects to the database based on constructor values.
      */

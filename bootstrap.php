@@ -10,9 +10,7 @@ require('core/router/Router.php');
 
 include_once('core/util/helpers.php');
 
-$db = new Database('10.11.12.21', '5432',
-    'postgres', '[actual password]', // replace with actual password
-    'New_DB');
+$db = Database::loadFromConfig("../core/database/db_config.ini");
 $db->connect();
 
 $viewLoader = new ViewLoader(BASEPATH.'/views/');
