@@ -506,3 +506,11 @@ label[for=password] {
     font-weight:300;
     font-size: 1.5rem;
 }
+
+/* Results for Live Search */
+.search-result:focus,
+.search-result:hover {
+	cursor:pointer!important;
+	background-color:#5C629C;
+	color:white;
+}
