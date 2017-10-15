@@ -18,7 +18,6 @@
 include('../models/Notification.php');
 
 $error = false;
-
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -68,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $_SESSION['employeeid'] = $info['employeeid'];
                         $_SESSION['username'] = $info['firstname'].' '.$info['lastname'];
                         $_SESSION['role'] = Role::roleFromPermissionLevel($info['permissionlevel']);
+                        $_SESSION['timeout'] = false;
 
                         ldap_close($ldapconn);
                         pg_free_result($res);
@@ -78,6 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         ldap_close($ldapconn);
                         pg_free_result($res);
                         $_SESSION['ldaprdn'] = $ldaprdn;
+                        // Capture the time at which the session starts
+                        $_SESSION['SESSION_START'] = time();
                         header("Location: /create-account");
                         die();
                     }
@@ -109,7 +111,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['username'] = $employee['firstname'] . ' ' . $employee['lastname'];
                 $_SESSION['role'] = Role::Superuser;
                 $_SESSION['employeeid'] = $info['superuserid'];
+                
+                $_SESSION['timeout'] = false;
                 pg_free_result($res);
+                
+                // Capture the time at which the session starts
+                $_SESSION['SESSION_START'] = time();
                 header('Location: ' . BASEURL . '/dashboard');
                 die();
             }
@@ -134,6 +141,13 @@ include('header.php');
                 $note = new Notification('Error!', 'Invalid credentials given.', 'danger');
                 $note->display();
             }
+            
+            // Check to see if the user was redirected from a time out
+            if (isset($_SESSION['timeout'])) {
+                $note = new Notification('Warning', 'You have been signed out due to inactivity.', 'warning');
+                $note->display();
+            }
+                
             ?>
             <form class="form" method="post" action="/login">
                 <label for="username">Username</label>

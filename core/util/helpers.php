@@ -235,7 +235,12 @@ function phoneStrToNum($phoneNum) {
 }
 /**
  * Checks to see if there are any duplicate PID's in the db, then returns a pid if already existing
-*/
+ * @param $db database object
+ * @param $pers_firstname first name of participant in form input field
+ * @param $pers_lastname last name of participant in form input field
+ * @param $pers_middlein initial of middle name of participant in form input field
+ * @reutnr participant id of new/duplicate participant 
+**/
 function checkForDuplicates($db, $pers_firstname,$pers_lastname,$pers_middlein){
     if($_POST['selectedID'] != ""){
         return $pIDResult = $_POST['selectedID'];
@@ -248,3 +253,41 @@ function checkForDuplicates($db, $pers_firstname,$pers_lastname,$pers_middlein){
         return $pIDResult = pg_fetch_result($pIDResult, 0);
     }  
 }
+
+/**
+ * Every time sessionTimeout is called, the start time stored in login will
+ * be checked against the current system time and converted into minutes.
+ * Should the elapsed time between the start time and current system
+ * time exceed 60 minutes, the browser will force a logout.
+**/
+function sessionTimeout(){
+    if(isset($_SESSION['SESSION_START'])){
+        // Create a new check time every time the user goes to a new page
+        $_SESSION['CHECK_TIME'] = time();
+        
+        // Set timeout time in minutes
+        $timeoutTime = 60;
+        
+        // Find total elapsed time and convert to minutes
+        $elapsedTime = ($_SESSION['CHECK_TIME'] - $_SESSION['SESSION_START']) / 60 % 60;
+        
+        // After the elapsed time reaches a limit, force destory the session and set the timeout flag to true
+        if($elapsedTime >= $timeoutTime){
+            session_destroy();
+            session_start();
+            
+            // Extra check for avoiding overwriting sessions
+            if (session_status() === PHP_SESSION_NONE){
+                $_SESSION['timeout'] = true;
+            }else{
+                $_SESSION['timeout'] = true;
+            } 
+            // Redirect user to the login page
+            header("Location: " . BASEURL . "/login");       
+        }
+    }
+         
+}
+
+
+

@@ -16,13 +16,17 @@
  * @since 0.1
  */
 
-session_start();
+
 
 require('../bootstrap.php');
 require('../routes.php');
 
 global $router, $view, $db;
 
+// Only create a session if there is not already one there
+if (session_status() === PHP_SESSION_NONE){
+    session_start();
+}
 # checks if url is the current one
 function active($url) {
     global $route;

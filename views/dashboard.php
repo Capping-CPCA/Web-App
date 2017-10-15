@@ -1,6 +1,5 @@
 <?php
 include_once('../models/DashboardPanel.php');
-
 $roleViews = [
     Role::User => [
         new DashboardPanel("/attendance", "Record Attendance", "Participants", "clock-o"),
@@ -27,6 +26,7 @@ $roleViews = [
         new DashboardPanel("/manage-users", "User Management", "Employees", "users"),
         new DashboardPanel("/agency-requests", "Agency Requests", "Participants", "search"),
     ]
+	
 ];
 
 include('header.php');
@@ -35,20 +35,24 @@ include('header.php');
 
     <div id="dashboard-wrapper" class="d-flex flex-row justify-content-center flex-wrap">
         <?php
-        if ($_SESSION['role'] != Role::NewUser) {
-            /* @var $panel DashboardPanel */
-            foreach ($roleViews[$_SESSION['role']] as $panel) {
-                $panel->createPanel();
+            // Only display the dashboard once a session has begun
+            if (session_status() !== PHP_SESSION_NONE){
+                if ($_SESSION['role'] != Role::NewUser  ) {
+                    /* @var $panel DashboardPanel */
+                    foreach ($roleViews[$_SESSION['role']] as $panel) {
+                    $panel->createPanel();
+                    }
+                }else {
+                    ?>
+                    <div class="jumbotron align-self-center text-center" style="max-width: 700px; margin: 0 auto; width: 100%">
+                        <h1 class="display-3" style="color: #5C629C"><i class="fa fa-child"></i></h1>
+                        <h1 class="display-3">Welcome!</h1>
+                        <p class="lead">You currently have no role assigned, please see your supervisor.</p>
+                    </div>
+                    <?php
+                }   
+            }else{
             }
-        } else {
-            ?>
-            <div class="jumbotron align-self-center text-center" style="max-width: 700px; margin: 0 auto; width: 100%">
-                <h1 class="display-3" style="color: #5C629C"><i class="fa fa-child"></i></h1>
-                <h1 class="display-3">Welcome!</h1>
-                <p class="lead">You currently have no role assigned, please see your supervisor.</p>
-            </div>
-            <?php
-        }
         ?>
     </div>
 

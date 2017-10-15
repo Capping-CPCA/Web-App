@@ -698,6 +698,7 @@ label[for=password] {
 .custom-control-input:checked~.custom-control-indicator:focus {
     outline: none;
 }
+
 /*When printing, display all of the main-content div, and nothing else.*/
 @media print{
     #main-content {
