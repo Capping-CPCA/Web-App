@@ -70,7 +70,7 @@ function setResultFilter(filter){
 
 		//taking cleaning user supplied input - no extra spaces or , will be queried
 		function filterResults(raw){
-			return raw.replace(/\s+/g,' ').trim().replace(',','');;
+			return raw.replace(/\s+/g,' ').replace(',','');
 		}
 		//set the form input element text to cleaned text, nice and tidy
 		uForm.find(":text").val(filterResults(uForm.find(":text").first().val()));
@@ -86,7 +86,13 @@ function setResultFilter(filter){
 				//clear the search result display each time we look up new results - otherwise duplicates show
 				results.empty();
 				var userResults = $(data).find(resultFilter);
-
+				
+				//check to see if we're looking for card elements
+				if(userResults.attr('class') ==  "card-title"){
+					userResults = $("."+userResults.attr('class')+":contains("+userInput+")");
+					
+				}
+				
 				//jquery for each short hand, populating result list with well...results
 				$(userResults).each(function(){
 					//creates new children for dev specified parent
