@@ -72,14 +72,20 @@ function setResultFilter(filter){
 		function filterResults(raw){
 			return raw.replace(/\s+/g,' ').replace(',','');
 		}
+				
+		//takes user input and sanitizes it live
+		function filterInput(raw){
+			return raw.replace(/\s\s/g,' ');
+		}
+		
 		//set the form input element text to cleaned text, nice and tidy
-		uForm.find(":text").val(filterResults(uForm.find(":text").first().val()));
+		uForm.find(":text").val(filterInput(uForm.find(":text").val()));
 		var userInput=  uForm.find(":text").val();
 
 		//ajax - asynchronously requesting resutls from our result page
 		$.ajax({
 			type: formMethod,
-			url: urlResult+userInput,
+			url: urlResult+userInput.trim(),
 			dataType: typeData,
 			data: uForm.serialize(),
 			success:function(data){
