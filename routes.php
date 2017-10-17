@@ -53,3 +53,9 @@ $router->add('/referral-form', 'forms/referral_form.php', 'Referral Form');
 $router->add('/self-referral-form', 'forms/self_referral_form.php', 'Initial Contact Form- Self-Referral');
 $router->add('/intake-packet', 'forms/intake_packet.php', 'Intake Packet');
 $router->add('/form-success', 'forms/form_success.php', 'Form Submitted');
+
+#Class Activity
+$router->add('/record-attendence', '/record-attendence/record-attendence.php', 'Record Attendence');
+
+#Survey Page
+$router->add('/surveys','surveys/view-survey-results.php', 'Survey Results');
