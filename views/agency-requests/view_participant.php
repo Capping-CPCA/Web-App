@@ -1,6 +1,4 @@
 <?php
-authorizedPage();
-
 global $db, $params;
 $peopleid = $params[0];
 

@@ -1,6 +1,4 @@
 <?php
-authorizedPage();
-
 global $params, $route, $view;
 
 include ('../models/Notification.php');

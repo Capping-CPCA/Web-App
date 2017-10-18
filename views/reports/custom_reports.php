@@ -12,10 +12,9 @@
  *
  * @author Rafael Mormol & Daniel Ahl
  * @copyright 2017 Marist College
- * @version 0.1.4
+ * @version 0.1.5
  * @since 0.1.4
  */
-    authorizedPage();
     global $params, $route, $view;
     include('header.php');
     ?>
