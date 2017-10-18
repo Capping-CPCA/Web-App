@@ -1,4 +1,5 @@
 <?php
+global $router;
 
 $router->add('/', 'dashboard.php', 'Home');
 $router->add('/back', 'back.php', '');

@@ -1,6 +1,4 @@
 <?php
-authorizedPage();
-
 global $db, $params;
 
 #Search for user inputed name, check both first/last combination and last/first name combinations

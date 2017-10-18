@@ -1,8 +1,6 @@
 <?php
 include_once('../models/DashboardPanel.php');
 
-authorizedPage();
-
 if (isset($_GET['role'])) {
     $_SESSION['role'] = $_GET['role'];
 }

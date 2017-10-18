@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * PEP Capping 2017 Algozzine's Class
+ *
  * Class Router
  *
  * The Router handles all of the URL requests and returns the
@@ -8,6 +10,10 @@
  * a history of the pages navigated to. This provides useful tools
  * for navigating back (without having to use the browser back button).
  *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.1.5
+ * @since 0.1
  */
 class Router {
 
@@ -108,10 +114,16 @@ class Router {
                 array_shift($uri);
                 $route['params'] = $uri;
                 $route['url'] = BASEURL."/".$url;
+
+                $route['fulluri'] = $route['url'];
+                if (count($uri) > 0)
+                    $route['fulluri'] .= "/".implode("/",$uri);
+                $route['fulluri'] = rtrim($route['fulluri'], "/");
+
                 return $route;
             }
         }
-        return ["file" => 'errors/404.php', "title" => 'Page not found!', "params" => '', "url" => ''];
+        return ["file" => 'errors/404.php', "title" => 'Page not found!', "params" => '', "url" => '', "fulluri" => '/error404'];
     }
 
 }

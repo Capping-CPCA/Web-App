@@ -1,7 +1,4 @@
 <?php
-authorizedPage();
-requireRole(Role::Admin | Role::SuperAdmin);
-
 global $params, $route, $view;
 
 include ('../models/Notification.php');
