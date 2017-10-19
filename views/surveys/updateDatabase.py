@@ -1,17 +1,50 @@
 import csv
 import sys
 import psycopg2
+import requests
+from bs4 import BeautifulSoup
 
 database = "Survey"
 username = "postgres"
 password = "password"
 address = "127.0.0.1"
+googleEmail = "pokcpcapep@gmail.com"
+googlePassword = "Marist1234"
+
+
+class SessionGoogle:
+    def __init__(self, url_login, url_auth, login, pwd):
+        self.ses = requests.session()
+        login_html = self.ses.get(url_login)
+        soup_login = BeautifulSoup(login_html.content).find('form').find_all('input')
+        my_dict = {}
+        for u in soup_login:
+            if u.has_attr('value'):
+                my_dict[u['name']] = u['value']
+        # override the inputs without login and pwd:
+        my_dict['Email'] = login
+        my_dict['Passwd'] = pwd
+        self.ses.post(url_auth, data=my_dict)
+
+    def get(self, URL):
+        return self.ses.get(URL)
+
+
+
+
 
 #connects to the web server on a port
 conn = psycopg2.connect("dbname=" + database + " user=" + username + " host=" + address + " password=" + password)
 #Allows Python code to execute PostgreSQL command in a database session.
 cursor = conn.cursor()
-with open("/Users/Administrator/Downloads/Responses - Form Responses 1.csv","r") as csvfile:
+
+url_login = "https://accounts.google.com/ServiceLogin"
+url_auth = "https://accounts.google.com/ServiceLoginAuth"
+session = SessionGoogle(url_login, url_auth, googleEmail, googlePassword)
+download = session.get("https://docs.google.com/spreadsheets/d/1bZ_K7fk1ut4B7qRvcbXFsq8tDIXN23w1ZWHe4nX0ay8/export?exportFormat=csv&gid=94817619")
+
+csvfile = download.content.decode('utf-8')
+
 
         #Loop that goes through each row and creates an insert statement
         reader = csv.reader(csvfile)
