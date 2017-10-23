@@ -1,4 +1,19 @@
 <?php
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Displays details about a location.
+ *
+ * This page displays the detailed information
+ * about a specific location. From here the user
+ * can also edit or delete the entry.
+ *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.1.6
+ * @since 0.1
+ */
+
 global $params, $db;
 array_shift($params);
 
@@ -19,7 +34,7 @@ pg_free_result($result);
 include('header.php');
 ?>
     <div style="width: 100%">
-        <a href="/back"><button class="cpca btn"><i class="fa fa-arrow-left"></i> Back</button></a>
+        <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
         <div class="form-wrapper card view-card">
             <h4 class="card-header text-left">
                 <?= $site['sitename'] ?>

@@ -1,4 +1,19 @@
 <?php
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Displays details about a class.
+ *
+ * This shows class details in subsections. The
+ * information about the related curricula are also
+ * displayed as well for quick access.
+ *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.1.6
+ * @since 0.1
+ */
+
 global $params, $db;
 array_shift($params);
 
@@ -21,7 +36,7 @@ $topics = $db->query("SELECT * FROM curriculuminfo WHERE topicname = $1", [$topi
 include('header.php');
 ?>
 <div style="width: 100%">
-    <a href="/back"><button class="cpca btn"><i class="fa fa-arrow-left"></i> Back</button></a>
+    <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
     <div class="form-wrapper card view-card">
         <h4 class="card-header text-left">
             <?= $class['topicname'] ?>

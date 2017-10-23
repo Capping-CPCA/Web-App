@@ -1,4 +1,19 @@
 <?php
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Views details about a given participant.
+ *
+ * This display shows participant information in subsections
+ * to allow for easy reading. Administrators can edit this
+ * information if necessary.
+ *
+ * @author Vallie Joseph
+ * @copyright 2017 Marist College
+ * @version 0.1.6
+ * @since 0.1
+ */
+
 global $db, $params;
 $peopleid = $params[0];
 
@@ -11,7 +26,9 @@ $participant = pg_fetch_assoc($result);
 include('header.php');
 ?>
 <div class="d-flex flex-column w-100" style="height: fit-content;">
-    <a href="/back"><button class="cpca btn"><i class="fa fa-arrow-left"></i> Back</button></a>
+    <div class="mb-2">
+        <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
+    </div>
     <div class="card" style="max-width: 700px; width: 100%; margin: 0 auto;">
         <div class="card-header">
             <h4 class="modal-title"><?= $participant['firstname']." ".$participant['middleinit']." ".$participant['lastname'] ?></h4>

@@ -1,8 +1,24 @@
 <?php
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Configures all the available routes in the system.
+ *
+ * Each route has a connected url, file, and title. The url is
+ * what the user will type into the address bar. The file is
+ * the relative location of the PHP file (based in the views
+ * directory) to be displayed. The title is the title to be
+ * displayed on the top of the page when the page is loaded.
+ *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.1.6
+ * @since 0.1
+ */
+
 global $router;
 
 $router->add('/', 'dashboard.php', 'Home');
-$router->add('/back', 'back.php', '');
 $router->add('/dashboard', 'dashboard.php', 'Home');
 
 $router->add('/login', 'login.php', 'Login');
