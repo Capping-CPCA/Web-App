@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 database = "Survey"
 username = "postgres"
 password = "password"
-address = "127.0.0.1"
+address = "10.11.12.24"
 googleEmail = "pokcpcapep@gmail.com"
 googlePassword = "Marist1234"
 
@@ -50,6 +50,7 @@ insertList = list(reader)
 cursor.execute("Select COUNT(*) FROM public.answers")
 x = 0
 y = cursor.fetchall()
+insertedRows = 0
 
 for row in insertList:
 		
@@ -59,6 +60,7 @@ for row in insertList:
 				x += 1
 
 		else:
+				insertedRows += 1
 				#print(row)
 				query = "INSERT INTO public.answers VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');" % (row[1], row[2], row[0], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16])
 				#print("     ")
@@ -66,6 +68,7 @@ for row in insertList:
 				#print(query)
 				conn.commit()
 
+print("Database has been updated. (" + str(insertedRows) + ") rows have been inserted.")
 cursor.close()
 conn.close()
 	
