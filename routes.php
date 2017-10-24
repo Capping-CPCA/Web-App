@@ -16,3 +16,9 @@ $router->add('/view-participant', 'agency-requests/view_participant.php', 'View 
 $router->add('/curricula', 'curricula/curricula.php', 'Curricula');
 $router->add('/classes', 'classes/classes.php', 'Classes');
 $router->add('/locations', 'locations/locations.php', 'Locations');
+
+#Class Activity
+$router->add('/record-attendence', '/record-attendence/record-attendence.php', 'Record Attendence');
+
+#Survey Page
+$router->add('/surveys','surveys/view-survey-results.php', 'Survey Results');
