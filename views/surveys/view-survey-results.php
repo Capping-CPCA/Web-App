@@ -28,7 +28,13 @@ if (!empty($params) && $params[0] == 'view') {
 		
 		
 		<!------------------------ This is the update button ------------------------->
-		<button type="button" class="btn btn-success">Update Surveys</button>
+		
+		<button class="btn btn-success">Update Surveys</button>
+		<?php 
+			$output = system("py C:\Program Files (x86)\EasyPHP-Devserver-17\eds-www\views\surveys\pullAndParseSurveys.py");
+			echo $output;
+		?>
+	
 		<p>
 		<center>
 		<div class="container">
