@@ -10,6 +10,8 @@ if (!empty($params) && in_array($params[0], $pages)) {
 # Select page to display
 if (!empty($params) && $params[0] == 'view') {
 	$view->display('/view-survey-results.php');
+} else if (!empty($params) && $params[0] == 'results') {
+    $view->display('surveys/results.php');
 } else {
 	include('header.php');
 	global $db;
@@ -22,12 +24,21 @@ if (!empty($params) && $params[0] == 'view') {
 		//$result = $db->query("SELECT * FROM curricula ORDER BY curriculumname", []);
 	}
 	?>
-	<div style="width: 100%">
+	<div style="width: 100%; height: 100%">
 		
+		
+		<!------------------------ This is the update button ------------------------->
+		<button type="button" class="btn btn-success">Update Surveys</button>
+		<p>
 		<center>
-		
-		<br><br>
-		
+		<div class="container">
+		<div class="row justify-content-md-center">
+		<div class="col-sm" style="height: 70px; max-width:75%">
+		<h4>Select class and filter by date for results</h4>
+		</div>
+		</div>
+		</div>
+		<!------------------------ This is the class selector ------------------------->
 		<div class="container">
 			<div class="row justify-content-md-center">
 			<div class="col-sm col-lg-6">
@@ -37,18 +48,17 @@ if (!empty($params) && $params[0] == 'view') {
 			<option value="Class One">Class One</option>
 			<option value="Class Two">Class Two</option>
 			<option value="Class Three">Class Three</option>
+			<option value="Class Three">Class Four</option>
+			<option value="Class Three">Class Five</option>
+			<option value="Class Three">Class Six</option>
 		</select>
 		</div>
 		</form>
 		</div>
-  </div>
-</div>
-		
-		
-		
-		
-	
-		<div class="container">
+		</div>
+		</div>
+		<!------------------------ This is the date selector ------------------------->
+		<div class="container" style="height: 70px">
 			<div class="row justify-content-md-center">
 			<div class="col-sm col-lg-2">
 		<form>
@@ -70,7 +80,7 @@ if (!empty($params) && $params[0] == 'view') {
 		</div>
 		</form>
 		</div>
-    <div class="col-sm col-lg-2">
+		<div class="col-sm col-lg-2">
 		<form>
 		<div class="form-group">
 		<select class="form-control" name="Day" id="day">
@@ -87,7 +97,7 @@ if (!empty($params) && $params[0] == 'view') {
 		</div>
 		</form>
 		</div>
-    <div class="col-sm col-lg-2">
+		<div class="col-sm col-lg-2">
 		<form>
 		<div class="form-group">
 		<select class="form-control" name="Year" id="year">
@@ -100,22 +110,29 @@ if (!empty($params) && $params[0] == 'view') {
 			<option value="7">2011</option>
 			<option value="8">2010</option>
 			<option value="9">2009</option>
+			<option value="6">2008</option>
+			<option value="7">2007</option>
+			<option value="8">2006</option>
+			<option value="9">2005</option>
+			<option value="6">2004</option>
+			<option value="7">2003</option>
+			<option value="8">2002</option>
+			<option value="9">2001</option>
+			<option value="9">2000</option>
 		</select>
 		</div>
 		</form>
 		</div>
-  </div>
-</div>
-	
-
-			
-		<br><br>
-		<button type="button" class="btn btn-primary" onclick="searchSurveys();">Search Surveys</button>
-			
+		</div>
+		</div>
+		<a id="new-curriculum-btn" href="/surveys/results">
+                <!--<button class="cpca btn"><i class="fa fa-plus"></i> Create Curriculum</button>-->
+		<button type="button" class="btn btn-primary" onclick="searchSurveys();" href="results">Search Surveys</button>
+		</a>	
 		</center >
 		
 		
-		<br><br>
+	
 		
 		
         
