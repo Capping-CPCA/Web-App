@@ -126,6 +126,13 @@ function unViewAllTutorials() {
     }
 }
 
+/**
+ * Navigates to the previous page
+ */
+function goBack() {
+    window.history.back();
+}
+
 /*
 ** NOTE: Unneeded as of now, menu is always present on screen **
 

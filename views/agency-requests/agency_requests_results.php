@@ -1,4 +1,20 @@
 <?php
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Displays the results from a participant search
+ *
+ * After a user enters a search or goes to the related URL,
+ * the route params are parsed and converted into a search.
+ * The results from the database are then displayed as
+ * separate cards.
+ *
+ * @author Vallie Joseph
+ * @copyright 2017 Marist College
+ * @version 0.1.6
+ * @since 0.1
+ */
+
 global $db, $params;
 
 #Search for user inputed name, check both first/last combination and last/first name combinations
@@ -12,7 +28,9 @@ $result = $db->query("SELECT  participants.participantid, participants.dateofbir
 include('header.php');
 ?>
 <div class="w-100 d-flex flex-column">
-    <a href="/back"><button class="cpca btn"><i class="fa fa-arrow-left"></i> Back</button></a>
+    <div class="mb-2">
+        <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
+    </div>
     <ul class="list-group" style="max-width: 700px; width: 100%; margin: 0 auto">
         <?php
         #if query returns nothing, throw an error to the user

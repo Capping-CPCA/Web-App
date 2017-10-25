@@ -1,4 +1,19 @@
 <?php
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Prompts the user to remove a location.
+ *
+ * This page displays a prompt to either remove the selected
+ * location or to cancel and go back. If the user removes the
+ * location then it is "deleted" from the database. It reality
+ * this entry is actually archived.
+ *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.1.6
+ * @since 0.1
+ */
 
 global $params, $db;
 array_shift($params);
@@ -39,7 +54,7 @@ include('header.php');
                 you want to delete this location?
             </div>
             <div class="card-footer text-right">
-                <a href="/back"><button type="button" class="btn btn-light">Cancel</button></a>
+                <button type="button" class="btn btn-light" onclick="goBack()">Cancel</button>
                 <button type="submit" name="delete" class="btn btn-danger">Delete</button>
             </div>
         </form>

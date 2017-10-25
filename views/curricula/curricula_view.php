@@ -1,4 +1,20 @@
 <?php
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Displays details about a curriculum.
+ *
+ * This shows detailed information about the chosen
+ * curriculum. Along with curriculum-related information,
+ * the related classes are displayed as well for
+ * quick access.
+ *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.1.6
+ * @since 0.1
+ */
+
 global $params, $db;
 $id = $params[1];
 
@@ -18,7 +34,7 @@ $topics = $db->query("SELECT * FROM curriculumclasses WHERE curriculumid = $1", 
 include('header.php');
 ?>
 <div style="width: 100%">
-    <a href="/back"><button class="cpca btn"><i class="fa fa-arrow-left"></i> Back</button></a>
+    <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
     <div class="form-wrapper card view-card">
         <h4 class="card-header text-left">
             <?= $curricula['curriculumname'] ?>

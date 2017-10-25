@@ -1,4 +1,20 @@
 <?php
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Displays a page to allow location editing.
+ *
+ * This page provides various sections to allow an
+ * admin to edit details about a location. Once the form
+ * is filled out, if there are any errors, they will
+ * be displayed upon submission.
+ *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.1.6
+ * @since 0.1
+ */
+
 global $params, $db;
 $isEdit = $params[0] == 'edit';
 array_shift($params);
@@ -85,7 +101,7 @@ include ('header.php');
 ?>
 
 <div class="page-wrapper">
-    <a href="/back"><button class="cpca btn"><i class="fa fa-arrow-left"></i> Back</button></a>
+    <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
     <div class="jumbotron form-wrapper mb-3">
         <?php
         if ($success == "true") {
