@@ -26,16 +26,35 @@ if (!empty($params) && $params[0] == 'view') {
 		
 		<center>
 		
-		<select id="classes" name="classes">
+		<br><br>
+		
+		<div class="container">
+			<div class="row justify-content-md-center">
+			<div class="col-sm col-lg-6">
+		<form>
+		<div class="form-group">
+		<select class="form-control" id="classes" name="classes">
 			<option value="Class One">Class One</option>
 			<option value="Class Two">Class Two</option>
 			<option value="Class Three">Class Three</option>
 		</select>
-
-		<br><br>
-
-			<select name="Month" id="month">
-			  <option value="January">January</option>
+		</div>
+		</form>
+		</div>
+  </div>
+</div>
+		
+		
+		
+		
+	
+		<div class="container">
+			<div class="row justify-content-md-center">
+			<div class="col-sm col-lg-2">
+		<form>
+		<div class="form-group">
+		<select class="form-control" name="Month" id="month">
+			<option value="January">January</option>
 			  <option value="February">February</option>
 			  <option value="March">March</option>
 			  <option value="April">April</option>
@@ -47,9 +66,15 @@ if (!empty($params) && $params[0] == 'view') {
 			  <option value="October">October</option>
 			  <option value="Nobember">November</option>
 			  <option value="December">December</option>
-			</select>
-			<select name="Day" id="day">
-			  <option value="1">1</option>
+		</select>
+		</div>
+		</form>
+		</div>
+    <div class="col-sm col-lg-2">
+		<form>
+		<div class="form-group">
+		<select class="form-control" name="Day" id="day">
+			<option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
 			  <option value="4">4</option>
@@ -58,13 +83,42 @@ if (!empty($params) && $params[0] == 'view') {
 			  <option value="7">7</option>
 			  <option value="8">8</option>
 			  <option value="9">9</option>
-			</select>
-			<select name="Year" id="year">
-			  <option value="2017">2017</option>
-			</select>
+		</select>
+		</div>
+		</form>
+		</div>
+    <div class="col-sm col-lg-2">
+		<form>
+		<div class="form-group">
+		<select class="form-control" name="Year" id="year">
+			<option value="1">2017</option>
+			<option value="2">2016</option>
+			<option value="3">2015</option>
+			<option value="4">2014</option>
+			<option value="5">2013</option>
+			<option value="6">2012</option>
+			<option value="7">2011</option>
+			<option value="8">2010</option>
+			<option value="9">2009</option>
+		</select>
+		</div>
+		</form>
+		</div>
+  </div>
+</div>
+	
+
+			
 		<br><br>
-			<button type="submit" onclick="searchSurveys();">Search Surveys</button>
+		<button type="button" class="btn btn-primary" onclick="searchSurveys();">Search Surveys</button>
+			
 		</center >
+		
+		
+		<br><br>
+		
+		
+        
 		
 		<script>
 		function searchSurveys() {
@@ -77,8 +131,15 @@ if (!empty($params) && $params[0] == 'view') {
 			var selectedMonth = currentMonth.options[currentMonth.selectedIndex].value;
 			var selectedDay = currentDay.options[currentDay.selectedIndex].value;
 			var selectedYear = currentYear.options[currentYear.selectedIndex].value;
-			alert(selectedClass+"  "+selectedMonth+"  "+selectedDay+"  "+selectedYear);
+			//alert(selectedClass+"  "+selectedMonth+"  "+selectedDay+"  "+selectedYear);
+			fullSearch = selectedMonth + '/' + selectedDay + '/' + selectedYear;
+			var query = "SELECT fullname FROM answers WHERE currentdate = '" + fullSearch + "' and class = '" + selectedClass + "'"
+			alert(query);
 		}
+		
+		
+		
+		
 		</script>
 
 	</div>
