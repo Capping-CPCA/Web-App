@@ -93,7 +93,393 @@ include ('header.php');
 <div class="page-wrapper">
     <a href="/back"><button class="btn btn-success"><i class="fa fa-arrow-left"></i> Back</button></a>
     <!--<div class="jumbotron form-wrapper mb-3">-->
-				
+	<p>
+	<center>
+	<div class="container">
+		<div class="row justify-content-md-center">
+			<div class="col-sm">
+				<h4>Results:</h4>
+			</div>
+		</div>
+	</div>
+	</center>
+	<p>
+	<div class="container">
+		<div class="row justify-content-md-center">
+			<div class="col-sm" style="max-width:85%">
+				<div id="accordion" role="tablist">
+				  <div class="card">
+					<div class="card-header" role="tab" id="headingOne">
+					  <h5 class="mb-0">
+						<a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+						  Mario Kheart
+						</a>
+					  </h5>
+					</div>
+
+					<div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+					  <div class="card-body">
+						Q1:	 <b>10/10/2017 10:58:34</b>	<br>
+						Q2:	 <b>Yes</b> <br>
+						Q3:	 <b>Ryan</b>	<br>
+						Q4:  <b>10/10/2017</b>	<br>
+						Q5:  <b>Class3</b>	<br>
+						Q6:  <b>Location1</b>	<br>
+						Q7:  <b>Male</b>	<br>
+						Q8:	 <b>White</b>	<br>
+						Q9:	 <b>15-19</b>	<br>
+						Q10: <b>6</b>	<br>
+						Q11: <b>7</b>	<br>
+						Q12: <b>7</b>	<br>
+						Q13: <b>7</b>	<br>
+						Q14: <b>7</b>	<br>
+						Q15: <b>7</b>	<br>
+						Q16: <b>None</b>	<br>
+						Q17: <b>Test</b><br>
+					  </div>
+					</div>
+				  </div>
+				  <div class="card">
+					<div class="card-header" role="tab" id="heading2">
+					  <h5 class="mb-0">
+						<a class="collapsed" data-toggle="collapse" href="#collapse2" aria-expanded="false" aria-controls="collapse2">
+						  Petey Cruiser
+						</a>
+					  </h5>
+					</div>
+					<div id="collapse2" class="collapse" role="tabpanel" aria-labelledby="heading2" data-parent="#accordion">
+					  <div class="card-body">
+						Q1:	 <b>10/10/2017 10:58:34</b>	<br>
+						Q2:	 <b>Yes</b> <br>
+						Q3:	 <b>Ryan</b>	<br>
+						Q4:  <b>10/10/2017</b>	<br>
+						Q5:  <b>Class3</b>	<br>
+						Q6:  <b>Location1</b>	<br>
+						Q7:  <b>Male</b>	<br>
+						Q8:	 <b>White</b>	<br>
+						Q9:	 <b>15-19</b>	<br>
+						Q10: <b>6</b>	<br>
+						Q11: <b>7</b>	<br>
+						Q12: <b>7</b>	<br>
+						Q13: <b>7</b>	<br>
+						Q14: <b>7</b>	<br>
+						Q15: <b>7</b>	<br>
+						Q16: <b>None</b>	<br>
+						Q17: <b>Test</b> <br>
+					  </div>
+					</div>
+				  </div>
+				  <div class="card">
+					<div class="card-header" role="tab" id="heading3">
+					  <h5 class="mb-0">
+						<a data-toggle="collapse" href="#collapse3" aria-expanded="true" aria-controls="collapse3">
+						  Josh Sthesia
+						</a>
+					  </h5>
+					</div>
+
+					<div id="collapse3" class="collapse" role="tabpanel" aria-labelledby="heading3" data-parent="#accordion">
+					  <div class="card-body">
+						Q1:	 <b>10/10/2017 10:58:34</b>	<br>
+						Q2:	 <b>Yes</b> <br>
+						Q3:	 <b>Ryan</b>	<br>
+						Q4:  <b>10/10/2017</b>	<br>
+						Q5:  <b>Class3</b>	<br>
+						Q6:  <b>Location1</b>	<br>
+						Q7:  <b>Male</b>	<br>
+						Q8:	 <b>White</b>	<br>
+						Q9:	 <b>15-19</b>	<br>
+						Q10: <b>6</b>	<br>
+						Q11: <b>7</b>	<br>
+						Q12: <b>7</b>	<br>
+						Q13: <b>7</b>	<br>
+						Q14: <b>7</b>	<br>
+						Q15: <b>7</b>	<br>
+						Q16: <b>None</b>	<br>
+						Q17: <b>Test</b><br>
+					  </div>
+					</div>
+				  </div>
+				  <div class="card">
+					<div class="card-header" role="tab" id="heading4">
+					  <h5 class="mb-0">
+						<a class="collapsed" data-toggle="collapse" href="#collapse4" aria-expanded="false" aria-controls="collapse4">
+						  Paul Molive
+						</a>
+					  </h5>
+					</div>
+					<div id="collapse4" class="collapse" role="tabpanel" aria-labelledby="heading4" data-parent="#accordion">
+					  <div class="card-body">
+						Q1:	 <b>10/10/2017 10:58:34</b>	<br>
+						Q2:	 <b>Yes</b> <br>
+						Q3:	 <b>Ryan</b>	<br>
+						Q4:  <b>10/10/2017</b>	<br>
+						Q5:  <b>Class3</b>	<br>
+						Q6:  <b>Location1</b>	<br>
+						Q7:  <b>Male</b>	<br>
+						Q8:	 <b>White</b>	<br>
+						Q9:	 <b>15-19</b>	<br>
+						Q10: <b>6</b>	<br>
+						Q11: <b>7</b>	<br>
+						Q12: <b>7</b>	<br>
+						Q13: <b>7</b>	<br>
+						Q14: <b>7</b>	<br>
+						Q15: <b>7</b>	<br>
+						Q16: <b>None</b>	<br>
+						Q17: <b>Test</b><br>
+					  </div>
+					</div>
+				  </div>
+				  <div class="card">
+					<div class="card-header" role="tab" id="heading5">
+					  <h5 class="mb-0">
+						<a data-toggle="collapse" href="#collapse5" aria-expanded="true" aria-controls="collapse5">
+						  Bob Frapples
+						</a>
+					  </h5>
+					</div>
+
+					<div id="collapse5" class="collapse" role="tabpanel" aria-labelledby="heading5" data-parent="#accordion">
+					  <div class="card-body">
+						Q1:	 <b>10/10/2017 10:58:34</b>	<br>
+						Q2:	 <b>Yes</b> <br>
+						Q3:	 <b>Ryan</b>	<br>
+						Q4:  <b>10/10/2017</b>	<br>
+						Q5:  <b>Class3</b>	<br>
+						Q6:  <b>Location1</b>	<br>
+						Q7:  <b>Male</b>	<br>
+						Q8:	 <b>White</b>	<br>
+						Q9:	 <b>15-19</b>	<br>
+						Q10: <b>6</b>	<br>
+						Q11: <b>7</b>	<br>
+						Q12: <b>7</b>	<br>
+						Q13: <b>7</b>	<br>
+						Q14: <b>7</b>	<br>
+						Q15: <b>7</b>	<br>
+						Q16: <b>None</b>	<br>
+						Q17: <b>Test</b><br>
+					  </div>
+					</div>
+				  </div>
+				  <div class="card">
+					<div class="card-header" role="tab" id="heading6">
+					  <h5 class="mb-0">
+						<a class="collapsed" data-toggle="collapse" href="#collapse6" aria-expanded="false" aria-controls="collapse6">
+						  Buck Kinnear
+						</a>
+					  </h5>
+					</div>
+					<div id="collapse6" class="collapse" role="tabpanel" aria-labelledby="heading6" data-parent="#accordion">
+					  <div class="card-body">
+						Q1:	 <b>10/10/2017 10:58:34</b>	<br>
+						Q2:	 <b>Yes</b> <br>
+						Q3:	 <b>Ryan</b>	<br>
+						Q4:  <b>10/10/2017</b>	<br>
+						Q5:  <b>Class3</b>	<br>
+						Q6:  <b>Location1</b>	<br>
+						Q7:  <b>Male</b>	<br>
+						Q8:	 <b>White</b>	<br>
+						Q9:	 <b>15-19</b>	<br>
+						Q10: <b>6</b>	<br>
+						Q11: <b>7</b>	<br>
+						Q12: <b>7</b>	<br>
+						Q13: <b>7</b>	<br>
+						Q14: <b>7</b>	<br>
+						Q15: <b>7</b>	<br>
+						Q16: <b>None</b>	<br>
+						Q17: <b>Test</b><br>
+					  </div>
+					</div>
+				  </div>
+				  <div class="card">
+					<div class="card-header" role="tab" id="heading7">
+					  <h5 class="mb-0">
+						<a data-toggle="collapse" href="#collapse7" aria-expanded="true" aria-controls="collapse7">
+						  Sal Monella
+						</a>
+					  </h5>
+					</div>
+
+					<div id="collapse7" class="collapse" role="tabpanel" aria-labelledby="heading7" data-parent="#accordion">
+					  <div class="card-body">
+						Q1:	 <b>10/10/2017 10:58:34</b>	<br>
+						Q2:	 <b>Yes</b> <br>
+						Q3:	 <b>Ryan</b>	<br>
+						Q4:  <b>10/10/2017</b>	<br>
+						Q5:  <b>Class3</b>	<br>
+						Q6:  <b>Location1</b>	<br>
+						Q7:  <b>Male</b>	<br>
+						Q8:	 <b>White</b>	<br>
+						Q9:	 <b>15-19</b>	<br>
+						Q10: <b>6</b>	<br>
+						Q11: <b>7</b>	<br>
+						Q12: <b>7</b>	<br>
+						Q13: <b>7</b>	<br>
+						Q14: <b>7</b>	<br>
+						Q15: <b>7</b>	<br>
+						Q16: <b>None</b>	<br>
+						Q17: <b>Test</b><br>
+					  </div>
+					</div>
+				  </div>
+				  <div class="card">
+					<div class="card-header" role="tab" id="heading8">
+					  <h5 class="mb-0">
+						<a class="collapsed" data-toggle="collapse" href="#collapse8" aria-expanded="false" aria-controls="collapse8">
+						  Cliff Hanger
+						</a>
+					  </h5>
+					</div>
+					<div id="collapse8" class="collapse" role="tabpanel" aria-labelledby="heading8" data-parent="#accordion">
+					  <div class="card-body">
+						Q1:	 <b>10/10/2017 10:58:34</b>	<br>
+						Q2:	 <b>Yes</b> <br>
+						Q3:	 <b>Ryan</b>	<br>
+						Q4:  <b>10/10/2017</b>	<br>
+						Q5:  <b>Class3</b>	<br>
+						Q6:  <b>Location1</b>	<br>
+						Q7:  <b>Male</b>	<br>
+						Q8:	 <b>White</b>	<br>
+						Q9:	 <b>15-19</b>	<br>
+						Q10: <b>6</b>	<br>
+						Q11: <b>7</b>	<br>
+						Q12: <b>7</b>	<br>
+						Q13: <b>7</b>	<br>
+						Q14: <b>7</b>	<br>
+						Q15: <b>7</b>	<br>
+						Q16: <b>None</b>	<br>
+						Q17: <b>Test</b><br>
+					  </div>
+					</div>
+				  </div>
+				  <div class="card">
+					<div class="card-header" role="tab" id="heading9">
+					  <h5 class="mb-0">
+						<a data-toggle="collapse" href="#collapse9" aria-expanded="true" aria-controls="collapse9">
+						  Terry Aki
+						</a>
+					  </h5>
+					</div>
+
+					<div id="collapse9" class="collapse" role="tabpanel" aria-labelledby="heading9" data-parent="#accordion">
+					  <div class="card-body">
+						Q1:	 <b>10/10/2017 10:58:34</b>	<br>
+						Q2:	 <b>Yes</b> <br>
+						Q3:	 <b>Ryan</b>	<br>
+						Q4:  <b>10/10/2017</b>	<br>
+						Q5:  <b>Class3</b>	<br>
+						Q6:  <b>Location1</b>	<br>
+						Q7:  <b>Male</b>	<br>
+						Q8:	 <b>White</b>	<br>
+						Q9:	 <b>15-19</b>	<br>
+						Q10: <b>6</b>	<br>
+						Q11: <b>7</b>	<br>
+						Q12: <b>7</b>	<br>
+						Q13: <b>7</b>	<br>
+						Q14: <b>7</b>	<br>
+						Q15: <b>7</b>	<br>
+						Q16: <b>None</b>	<br>
+						Q17: <b>Test</b><br>
+					  </div>
+					</div>
+				  </div>
+				  <div class="card">
+					<div class="card-header" role="tab" id="heading10">
+					  <h5 class="mb-0">
+						<a class="collapsed" data-toggle="collapse" href="#collapse10" aria-expanded="false" aria-controls="collapse10">
+						  Robin Banks
+						</a>
+					  </h5>
+					</div>
+					<div id="collapse10" class="collapse" role="tabpanel" aria-labelledby="heading10" data-parent="#accordion">
+					  <div class="card-body">
+						Q1:	 <b>10/10/2017 10:58:34</b>	<br>
+						Q2:	 <b>Yes</b> <br>
+						Q3:	 <b>Ryan</b>	<br>
+						Q4:  <b>10/10/2017</b>	<br>
+						Q5:  <b>Class3</b>	<br>
+						Q6:  <b>Location1</b>	<br>
+						Q7:  <b>Male</b>	<br>
+						Q8:	 <b>White</b>	<br>
+						Q9:	 <b>15-19</b>	<br>
+						Q10: <b>6</b>	<br>
+						Q11: <b>7</b>	<br>
+						Q12: <b>7</b>	<br>
+						Q13: <b>7</b>	<br>
+						Q14: <b>7</b>	<br>
+						Q15: <b>7</b>	<br>
+						Q16: <b>None</b>	<br>
+						Q17: <b>Test</b><br>
+					  </div>
+					</div>
+				  </div>
+				  <div class="card">
+					<div class="card-header" role="tab" id="heading11">
+					  <h5 class="mb-0">
+						<a class="collapsed" data-toggle="collapse" href="#collapse11" aria-expanded="false" aria-controls="collapse11">
+						  Jimmy Changa
+						</a>
+					  </h5>
+					</div>
+
+					<div id="collapse11" class="collapse" role="tabpanel" aria-labelledby="heading11" data-parent="#accordion">
+					  <div class="card-body">
+						Q1:	 <b>10/10/2017 10:58:34</b>	<br>
+						Q2:	 <b>Yes</b> <br>
+						Q3:	 <b>Ryan</b>	<br>
+						Q4:  <b>10/10/2017</b>	<br>
+						Q5:  <b>Class3</b>	<br>
+						Q6:  <b>Location1</b>	<br>
+						Q7:  <b>Male</b>	<br>
+						Q8:	 <b>White</b>	<br>
+						Q9:	 <b>15-19</b>	<br>
+						Q10: <b>6</b>	<br>
+						Q11: <b>7</b>	<br>
+						Q12: <b>7</b>	<br>
+						Q13: <b>7</b>	<br>
+						Q14: <b>7</b>	<br>
+						Q15: <b>7</b>	<br>
+						Q16: <b>None</b>	<br>
+						Q17: <b>Test</b><br>
+					  </div>
+					</div>
+				  </div>
+				  <div class="card">
+					<div class="card-header" role="tab" id="heading12">
+					  <h5 class="mb-0">
+						<a class="collapsed" data-toggle="collapse" href="#collapse12" aria-expanded="false" aria-controls="collapse12">
+						  Barry Wine
+						</a>
+					  </h5>
+					</div>
+					<div id="collapse12" class="collapse" role="tabpanel" aria-labelledby="heading12" data-parent="#accordion">
+					  <div class="card-body">
+						Q1:	 <b>10/10/2017 10:58:34</b>	<br>
+						Q2:	 <b>Yes</b> <br>
+						Q3:	 <b>Ryan</b>	<br>
+						Q4:  <b>10/10/2017</b>	<br>
+						Q5:  <b>Class3</b>	<br>
+						Q6:  <b>Location1</b>	<br>
+						Q7:  <b>Male</b>	<br>
+						Q8:	 <b>White</b>	<br>
+						Q9:	 <b>15-19</b>	<br>
+						Q10: <b>6</b>	<br>
+						Q11: <b>7</b>	<br>
+						Q12: <b>7</b>	<br>
+						Q13: <b>7</b>	<br>
+						Q14: <b>7</b>	<br>
+						Q15: <b>7</b>	<br>
+						Q16: <b>None</b>	<br>
+						Q17: <b>Test</b><br>
+					  </div>
+					</div>
+				  </div>
+				  <p>
+				  
+				</div>
+            </div>
+		</div>
+	</div>
        
     <!--</div>-->
 </div>
