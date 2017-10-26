@@ -514,3 +514,19 @@ label[for=password] {
 	background-color:#5C629C;
 	color:white;
 }
+
+/*When printing, display all of the main-content div, and nothing else.*/
+@media print{
+	#main-content {
+		overflow: visible;
+	}
+	body{
+		overflow: visible;
+	}
+	.navbar {
+		display: none;
+	}
+	.side-menu {
+		display: none;
+	}
+}
