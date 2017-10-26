@@ -37,6 +37,24 @@ function submitAll(){
         reqForm.submit();
     }
 }
+
+function submitAllSelf() {
+    var self_fname = document.getElementById("self_pers_firstname");
+    var self_lname = document.getElementById("self_pers_lastname");
+    var form = document.getElementById("self_participant_info");
+
+    if (form.checkValidity() === false) {
+        document.getElementById("self_pers_title").focus();
+        form.classList.add("was-validated");
+        if(self_lname.value.length === 0)
+            self_lname.focus();
+        if(self_fname.value.length === 0)
+            self_fname.focus();
+    } else {
+        form.submit();
+    }
+}
+
 // Functions for navigating through cards.
 function section1(){
     $('#collapse1').collapse('show');
