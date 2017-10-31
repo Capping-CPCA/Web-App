@@ -15,16 +15,16 @@
 	 * @copyright 2017 Marist College
 	 * @version 0.3
 	 * @since 0.1.4
-	 */	
+	 */
 	
 	global $db;
-	
+
 	$query = "SELECT DISTINCT(curriculumname) FROM curricula;";
 	$currs = pg_fetch_all($db->query($query, []));
-	
+
 	$query = "SELECT unnest(enum_range(NULL::race))  ";
 	$races = pg_fetch_all($db->query($query, []));
-	
+
 	include('header.php');
 ?>
 <div class="container py-5">
@@ -48,13 +48,13 @@
 				<label class="col-md-2 col-form-label" for="curricula[]"><b>Curricula</b></label>
 				<div class="col-md-4"><?php
 					for ($i=0; $i<count($currs); $i++) {
-						$curr = $currs[$i]['curriculumname'];						
+						$curr = $currs[$i]['curriculumname'];
 						echo "<div class='checkbox'>
 							<label for='curricula-$i'>
 							<input type='checkbox' name='curricula[]' id='curricula-$i' value='$curr'>
 							$curr
 							</label>
-						</div>";						
+						</div>";
 					}
 				?></div>
 			</div>
@@ -63,13 +63,13 @@
 				<label class="col-md-2 col-form-label" for="race[]"><b>Race</b></label>
 				<div class="col-md-4"><?php
 					for ($i=0; $i<count($races); $i++) {
-						$race = $races[$i]["unnest"];						
+						$race = $races[$i]["unnest"];
 						echo "<div class='checkbox'>
 							<label for='race-$i'>
 							<input type='checkbox' name='race[]' id='race-$i' value='$race'>
 							$race
 							</label>
-						</div>";						
+						</div>";
 					}
 				?></div>
 			</div>
@@ -116,7 +116,7 @@
 	
 	window.onload = initPage;
 	
-	/* 
+	/*
 	* Initialize the page by setting the date input to the
 	* current day, and their min & max. The max is the current day,
 	* and the the min is 4 years back from the current day.
@@ -128,7 +128,7 @@
 		var startElem = document.getElementById("startDate");
 		var endElem = document.getElementById("endDate");
 		var year = d.getFullYear();
-		var day = (d.getDate() < 10) ? "0" + d.getDate() : d.getDate(); 
+		var day = (d.getDate() < 10) ? "0" + d.getDate() : d.getDate();
 		var month = (d.getMonth() < 9) ? "0" + (d.getMonth()+1) : d.getMonth() + 1;
 		if (startElem.value === "") {
 			startElem.valueAsDate = d;
@@ -174,7 +174,7 @@
 			minList[i].disabled = i < maxIndex;
         }
 	}
-	
+
 	/*
 	* Set the endDate's min to the new startDate value.
 	*/
@@ -184,7 +184,7 @@
 		endElem.min = startElem.value;
 		if (endElem.value < endElem.min) endElem.value = endElem.min;
 	}
-	
+
 	/*
 	* Set the startDate's max to the new endDate value.
 	*/
@@ -194,10 +194,10 @@
 		startElem.max = endElem.value;
 		if (startElem.value > startElem.max) startElem.value = startElem.max;
 	}
-	
+
 	//Display tutorials for page
 	$(function() {
-            showTutorial('customReportsFields');
-        });
+        showTutorial('customReportsFields');
+    });
 </script>
 <?php include('footer.php'); ?>

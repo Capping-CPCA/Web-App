@@ -66,6 +66,11 @@ include('header.php');
         ?>
     </ul>
 </div>
+<script>
+    $(function() {
+        showTutorial('participantResult');
+    });
+</script>
 <?php
 include('footer.php');
 ?>
