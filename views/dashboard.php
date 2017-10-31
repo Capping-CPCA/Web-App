@@ -18,7 +18,7 @@ $roleViews = [
         new DashboardPanel("#", "Reports", "Reporting", "bar-chart"),
         new DashboardPanel("#", "User Management", "Participants", "users"),
     ],
-    Role::SuperAdmin => [
+    Role::Superuser => [
         new DashboardPanel("/curricula", "Manage Curricula and Classes", "Classes", "university"),
         new DashboardPanel("/locations", "Manage Locations", "Classes", "map-marker"),
         new DashboardPanel("/classes", "Manage Classes", "Participants", "book"),
@@ -28,13 +28,24 @@ $roleViews = [
 ];
 
 include('header.php');
+
 ?>
 
     <div id="dashboard-wrapper" class="d-flex flex-row justify-content-center flex-wrap">
         <?php
-        /* @var $panel DashboardPanel */
-        foreach ($roleViews[$_SESSION['role']] as $panel) {
-            $panel->createPanel();
+        if ($_SESSION['role'] != Role::NewUser) {
+            /* @var $panel DashboardPanel */
+            foreach ($roleViews[$_SESSION['role']] as $panel) {
+                $panel->createPanel();
+            }
+        } else {
+            ?>
+            <div class="jumbotron align-self-center text-center" style="max-width: 700px; margin: 0 auto; width: 100%">
+                <h1 class="display-3" style="color: #5C629C"><i class="fa fa-child"></i></h1>
+                <h1 class="display-3">Welcome!</h1>
+                <p class="lead">You currently have no role assigned, please see your supervisor.</p>
+            </div>
+            <?php
         }
         ?>
     </div>

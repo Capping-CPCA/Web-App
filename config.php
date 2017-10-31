@@ -12,19 +12,13 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.1.5
+ * @version 0.2
  * @since 0.1.3
  */
 
-define('BASEPATH', __DIR__);
-define('BASEURL', '');
-define('VERSION', exec('git describe --tags --abbrev=0') ?: '[No Tag]');
-
-define('PERMISSIONS', parse_ini_file('../page_permissions.ini', true));
-
 error_reporting(E_ALL);
-//error_reporting(0);
 // TODO: turn off error reporting in production
+//error_reporting(0);
 
 function errorHandler($severity, $message, $file, $line) {
     if (!(error_reporting() & $severity)) {
@@ -38,3 +32,19 @@ function errorHandler($severity, $message, $file, $line) {
 }
 
 set_error_handler("errorHandler");
+
+define('BASEPATH', __DIR__);
+define('BASEURL', '');
+define('VERSION', exec('git describe --tags --abbrev=0') ?: 'Unversioned');
+try {
+    define('CONFIG', parse_ini_file('../config.ini', true));
+} catch (Exception $e) {
+    die("The <b>config.ini</b> file is missing or could not be found. Go to ".
+        "<a href='https://github.com/Capping-CPCA/Web-App/wiki/Server-Set-Up#add-database-user-password'>the wiki</a> for more details.");
+}
+
+try {
+    define('PERMISSIONS', parse_ini_file('../page_permissions.ini', true));
+} catch (Exception $e) {
+    die("The <b>page_permissions.ini</b> file is missing or could not be found.");
+}
