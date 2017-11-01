@@ -11,7 +11,7 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.2
+ * @version 0.3.1
  * @since 0.1
  */
 
@@ -41,9 +41,9 @@ function authorize($url) {
     $per = 'DENY *';
 
     # try to match the url with a configuration
-    try {
+    if (isset($permission_config[$url])) {
         $per = $permission_config[$url];
-    } catch (Exception $e) {
+    } else {
         # Look for wildcard (*) matches
         $newPerm = '';
         foreach ($permission_config as $r => $perm) {

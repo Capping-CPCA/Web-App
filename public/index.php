@@ -12,7 +12,7 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.1.5
+ * @version 0.3.1
  * @since 0.1
  */
 
@@ -41,9 +41,9 @@ try {
     $params = $route['params'];
     $view->display($route['file']);
 } catch (Exception $e) {
-    include('header.php');
-    echo http_response_code();
-    echo $e;
-    include('footer.php');
+    global $err, $errst;
+    $err = $e->getCode();
+    $errst = $e->getMessage();
+    require('../views/errors/error.php');
 }
 $db->close();
