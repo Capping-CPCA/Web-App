@@ -1,5 +1,23 @@
 <?php
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Displays an error message on the page.
+ *
+ * Using the global $err (error number) and
+ * $errst (error message) constants, a message is
+ * displayed nicely on the page. If the headers have
+ * already been sent, only the message div is displayed.
+ * Otherwise the header and footers will be added too.
+ *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.3.1
+ * @since 0.1
+ */
+
 global $err, $errst;
+if (!headers_sent()) {
 ?>
 
 <html>
@@ -35,6 +53,7 @@ global $err, $errst;
         </nav>
         <div class="d-flex flex-row" id="content-wrapper">
             <div id="main-content" class="d-flex">
+<?php } ?>
                 <div class="w-100 d-flex flex-row justify-content-center">
                     <div class="jumbotron align-self-center text-center" style="max-width: 700px; margin: 0 auto; width: 100%">
                         <h1 class="display-3 text-danger"><i class="fa fa-exclamation-triangle"></i></h1>
@@ -47,6 +66,7 @@ global $err, $errst;
                         </p>
                     </div>
                 </div>
+<?php if (!headers_sent()) { ?>
             </div>
         </div>
         <nav class="navbar navbar-dark bg-dark">
@@ -57,3 +77,4 @@ global $err, $errst;
     </div>
 </body>
 </html>
+<?php } ?>
