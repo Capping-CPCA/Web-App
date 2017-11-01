@@ -49,7 +49,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (!$error) {
             try {
                 // Bind credentials to LDAP server
+                // Change error reporting to catch error
+                error_reporting(E_ALL);
                 $ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass);
+                error_reporting(0);
+
                 if ($ldapbind) {
                     // Query employee for email and info
                     $res = $db->query("SELECT firstname, lastname, permissionlevel, employeeid FROM people, employees WHERE employees.email = $1 ".

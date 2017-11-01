@@ -16,16 +16,17 @@
  * @since 0.1.3
  */
 
-error_reporting(E_ALL);
-// TODO: turn off error reporting in production
-//error_reporting(0);
+error_reporting(0);
 
 function errorHandler($severity, $message, $file, $line) {
-    global $err, $errst;
-    $err = $severity;
-    $errst = 'Error occurred in <mark>' . basename($file) . '</mark> on <b>line ' . $line . '</b>.<br />' . $message;
-    require('../views/errors/error.php');
-    die();
+    if (!(error_reporting() & $severity)) {
+        global $err, $errst;
+        $err = $severity;
+        $errst = 'Error occurred in <mark>' . basename($file) . '</mark> on <b>line ' . $line . '</b>.<br />' . $message;
+        require('../views/errors/error.php');
+        die();
+    }
+    throw new ErrorException($message, 0, $severity, $file, $line);
 }
 
 set_error_handler("errorHandler");
