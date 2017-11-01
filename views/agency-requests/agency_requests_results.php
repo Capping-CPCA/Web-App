@@ -11,7 +11,7 @@
  *
  * @author Vallie Joseph
  * @copyright 2017 Marist College
- * @version 0.1.6
+ * @version 0.3
  * @since 0.1
  */
 
@@ -22,7 +22,9 @@ $searchquery = strtolower(rawurldecode(implode('/',$params)));
 $result = $db->query("SELECT  participants.participantid, participants.dateofbirth, participants.race, people.firstname, people.lastname, people.middleinit ".
                         "FROM participants ".
                         "INNER JOIN people ON participants.participantid = people.peopleid ".
-                        "WHERE LOWER(CONCAT(people.firstname, ' ' , people.lastname)) LIKE $1 ".
+                        "WHERE LOWER(CONCAT(people.firstname, ' ' , people.middleinit , ' ' , people.lastname)) LIKE $1 ".
+                        "OR LOWER(CONCAT(people.lastname, ' ' , people.firstname, ' ',people.middleinit )) LIKE $1".
+						"OR LOWER(CONCAT(people.firstname, ' ' , people.lastname)) LIKE $1 ".
                         "OR LOWER(CONCAT(people.lastname, ' ' , people.firstname)) LIKE $1",  ['%'.$searchquery.'%']);
 
 include('header.php');
@@ -46,7 +48,7 @@ include('header.php');
             ?>
             <li class="list-group-item">
                 <button class="btn btn-outline-info advanced-info"><i class="fa fa-question" aria-hidden="true"></i></button>
-                <span>&nbsp;<?php echo $row['lastname'].", ".$row['middleinit']." ".$row['firstname'];?></span>
+                <span>&nbsp;<?php echo $row['lastname'].", ".$row['firstname']. " ". $row['middleinit'];?></span>
                 <a class="float-right" href="/view-participant/<?= $row['participantid'] ?>">
                     <button class="p-view btn cpca">
                         View Record
