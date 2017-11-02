@@ -11,7 +11,7 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.3.1
+ * @version 0.3.2
  * @since 0.1
  */
 
@@ -138,11 +138,11 @@ function authorize($url) {
  * in and authenticated.
  */
 function authorizedPage() {
-    requireRole(Role::NewUser | Role::Facilitator | Role::Admin | Role::Superuser | Role::Coordinator);
+    requireRole(Role::NewUser);
 }
 
 function hasRole($role) {
-    return isset($_SESSION['role']) && $_SESSION['role'] & $role;
+    return isset($_SESSION['role']) && (($_SESSION['role'] & $role) == $role);
 }
 
 /**

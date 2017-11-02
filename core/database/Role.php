@@ -11,15 +11,15 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.2
+ * @version 0.3.2
  * @since 0.1
  */
 class Role {
-    const NewUser = 1;
-    const Facilitator = 2;
-    const Coordinator = 4;
-    const Admin = 8;
-    const Superuser = 16;
+    const NewUser     = 0b00001;
+    const User        = 0b00011;
+    const Coordinator = 0b00111;
+    const Admin       = 0b01111;
+    const Superuser   = 0b11111;
 
     /**
      * Maps database permissionlevel to PHP Role
@@ -28,8 +28,9 @@ class Role {
      */
     static function roleFromPermissionLevel($permissionLevel) {
         switch ($permissionLevel) {
+            case 'User':
             case 'Facilitator':
-                return Role::Facilitator;
+                return Role::User;
             case 'Coordinator':
                 return Role::Coordinator;
             case 'Administrator':

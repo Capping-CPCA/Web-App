@@ -1,4 +1,20 @@
 <?php
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Page that displays the current curricula.
+ *
+ * This page displays curricula in a grid-like view
+ * where users can then view, edit, or delete
+ * curricula that appear. Superusers can view archived
+ * curricula and restore them or fully delete them.
+ *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.3.2
+ * @since 0.1
+ */
+
 global $params, $route, $view;
 
 include ('../models/Notification.php');
@@ -43,12 +59,18 @@ if (!empty($params) && $params[0] == 'view') {
         }
         ?>
         <div id="curriculum-btn-group" class="input-group">
-            <a id="new-curriculum-btn" href="/curricula/create">
-                <button class="cpca btn"><i class="fa fa-plus"></i> Create Curriculum</button>
-            </a>
-            <a id="restore-curriculum-btn" class="ml-3" href="/curricula/restore">
-                <button class="btn-outline-secondary btn"><i class="fa fa-repeat"></i> Restore</button>
-            </a>
+            <?php if (hasRole(Role::Coordinator)) { ?>
+                <a id="new-curriculum-btn" href="/curricula/create">
+                    <button class="cpca btn"><i class="fa fa-plus"></i> Create Curriculum</button>
+                </a>
+            <?php
+            }
+            if (hasRole(Role::Superuser)) {
+            ?>
+                <a id="restore-curriculum-btn" class="ml-3" href="/curricula/restore">
+                    <button class="btn-outline-secondary btn"><i class="fa fa-repeat"></i> Restore</button>
+                </a>
+            <?php } ?>
         </div><br />
 
         <form id="curriculum-filter" action="/curricula" method="post" class="input-group" style="max-width: 500px; width: 100%; margin: 0 auto">
@@ -71,12 +93,14 @@ if (!empty($params) && $params[0] == 'view') {
                         <a href="/curricula/view/<?= $r['curriculumid'] ?>">
                             <button class="btn btn-outline-secondary btn-sm ml-2">View</button>
                         </a>
-                        <a href="/curricula/edit/<?= $r['curriculumid'] ?>">
-                            <button class="btn btn-outline-secondary btn-sm ml-2">Edit</button>
-                        </a>
-                        <a href="/curricula/delete/<?= $r['curriculumid'] ?>">
-                            <button class="btn btn-outline-danger btn-sm ml-2">Delete</button>
-                        </a>
+                        <?php if (hasRole(Role::Coordinator)) { ?>
+                            <a href="/curricula/edit/<?= $r['curriculumid'] ?>">
+                                <button class="btn btn-outline-secondary btn-sm ml-2">Edit</button>
+                            </a>
+                            <a href="/curricula/delete/<?= $r['curriculumid'] ?>">
+                                <button class="btn btn-outline-danger btn-sm ml-2">Delete</button>
+                            </a>
+                        <?php } ?>
                     </div>
                 </div>
                 <?php

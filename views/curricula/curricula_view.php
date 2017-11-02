@@ -11,7 +11,7 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.1.6
+ * @version 0.3.2
  * @since 0.1
  */
 
@@ -38,10 +38,12 @@ include('header.php');
     <div class="form-wrapper card view-card">
         <h4 class="card-header text-left">
             <?= $curricula['curriculumname'] ?>
-            <div class="float-right">
-                <a href="/curricula/edit/<?= $id ?>"><button class="btn btn-outline-secondary btn-sm">Edit</button></a>
-                <a href="/curricula/delete/<?= $id ?>"><button class="btn btn-outline-danger btn-sm">Delete</button></a>
-            </div>
+            <?php if (hasRole(Role::Coordinator)) { ?>
+                <div class="float-right">
+                    <a href="/curricula/edit/<?= $id ?>"><button class="btn btn-outline-secondary btn-sm">Edit</button></a>
+                    <a href="/curricula/delete/<?= $id ?>"><button class="btn btn-outline-danger btn-sm">Delete</button></a>
+                </div>
+            <?php } ?>
         </h4>
         <div class="card-body d-flex justify-content-center flex-column">
             <h4>Information</h4>
