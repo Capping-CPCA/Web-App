@@ -22,7 +22,7 @@
 <div class="container py-5">
 	<div class="col-auto" >
 		<form action="custom-reports-table" method="POST" autocomplete="on">
-			<fieldset>
+			<fieldset id="custom-reports-fields">
 				<!-- Select Basic -->
 				<div class="form-group row">
 					<label class="col-md-2 col-form-label" for="month"><b>Month</b></label>
@@ -54,7 +54,7 @@
 					</div>
 				</div>
 				<!-- Multiple Checkboxes -->
-				<div class="form-group row">
+				<div id="custom-reports-checkboxes" class="form-group row">
 					<label class="col-md-2 col-form-label" for="location[]"><b>Location</b></label>
 					<div class="col-md-4">
 						<div class="checkbox">
@@ -169,7 +169,7 @@
 				<!-- Submit -->
 				<div class="form-group pt-2">
 					<div class="col-md-7" align="center">
-						<button type="submit" class="btn cpca">Generate Report</button>
+						<button id="custom-reports-generate" type="submit" class="btn cpca">Generate Report</button>
 					</div>
 				</div>
 			</fieldset>
@@ -214,7 +214,11 @@
 		var minList = document.getElementById("minAge").options;
 		for (i = 1; i < minList.length; i++) {
 			minList[i].disabled = i < maxIndex;
-		}
+        }
 	}
+	
+	$(function() {
+            showTutorial('customReportsFields');
+        });
 </script>
 <?php include('footer.php'); ?>

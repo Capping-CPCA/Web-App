@@ -60,7 +60,7 @@
 		<form action="" method="POST" autocomplete="on">
 			<div class="row" style="margin-bottom: 1%">
 				<div class="col">
-					<div class="form-group">
+					<div id="halfyear-reports-fields" class="form-group">
 						<select class="form-control" name="half" id="half">
                      <option value="true">Semi-Annual</option>
                      <option value="false">Annual</option>
@@ -78,7 +78,7 @@
 			<div class="row pb-3">
 				<div class="col"></div>
 				<div class="col-centered">
-					<button type="submit" class="btn cpca">Generate Report</button>
+					<button id="halfyear-reports-generate" type="submit" class="btn cpca">Generate Report</button>
 				</div>
 				<div class="col"></div>
 			</div>
@@ -205,7 +205,9 @@
 			yearElem.selectedIndex = year - y;
 		}
 	}
-</script>
+	$(function() {
+		showTutorial('halfYearReports');
+	});
 </script>
 <style>
 @media print{
