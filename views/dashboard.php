@@ -6,11 +6,17 @@ if (isset($_GET['role'])) {
 }
 
 $roleViews = [
-    Role::Facilitator => [
+    Role::User => [
         new DashboardPanel("#", "Participant Referrals", "Participants", "file-text-o"),
         new DashboardPanel("#", "Class Activity", "Classes", "book"),
         new DashboardPanel(BASEURL."/agency-requests", "Agency Requests", "Participants", "search"),
         new DashboardPanel("#", "Participant Intake", "Participants", "file-text-o"),
+    ],
+    Role::Coordinator => [
+        new DashboardPanel(BASEURL."/agency-requests", "Agency Requests", "Participants", "search"),
+        new DashboardPanel("#", "Participant Intake", "Participants", "file-text-o"),
+        new DashboardPanel("/curricula", "Manage Curricula and Classes", "Classes", "university"),
+        new DashboardPanel("/locations", "Manage Locations", "Classes", "map-marker"),
     ],
     Role::Admin => [
         new DashboardPanel("/curricula", "Manage Curricula and Classes", "Classes", "university"),

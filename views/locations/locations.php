@@ -1,4 +1,20 @@
 <?php
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Page that displays the current locations.
+ *
+ * This page displays locations in a grid-like view
+ * where users can then view, edit, or delete
+ * locations that appear. Superusers can view archived
+ * locations and restore them or fully delete them.
+ *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.3.2
+ * @since 0.1
+ */
+
 global $params, $route, $view;
 
 include ('../models/Notification.php');
@@ -43,12 +59,18 @@ if (!empty($params) && $params[0] == 'view') {
         }
         ?>
         <div id="location-btn-group" class="input-group">
-            <a id="new-location-btn" href="/locations/create">
-                <button class="cpca btn"><i class="fa fa-plus"></i> Create Location</button>
-            </a>
-            <a id="restore-location-btn" class="ml-3" href="/locations/restore">
-                <button class="btn-outline-secondary btn"><i class="fa fa-repeat"></i> Restore</button>
-            </a>
+            <?php if (hasRole(Role::Coordinator)) { ?>
+                <a id="new-location-btn" href="/locations/create">
+                    <button class="cpca btn"><i class="fa fa-plus"></i> Create Location</button>
+                </a>
+            <?php
+            }
+            if (hasRole(Role::Superuser)) {
+            ?>
+                <a id="restore-location-btn" class="ml-3" href="/locations/restore">
+                    <button class="btn-outline-secondary btn"><i class="fa fa-repeat"></i> Restore</button>
+                </a>
+            <?php } ?>
         </div><br />
 
         <form id="location-filter" action="/locations" method="post" class="input-group" style="max-width: 500px; width: 100%; margin: 0 auto">
@@ -71,12 +93,14 @@ if (!empty($params) && $params[0] == 'view') {
                         <a href="/locations/view/<?= $r['sitename'] ?>">
                             <button class="btn btn-outline-secondary btn-sm ml-2">View</button>
                         </a>
-                        <a href="/locations/edit/<?= $r['sitename'] ?>">
-                            <button class="btn btn-outline-secondary btn-sm ml-2">Edit</button>
-                        </a>
-                        <a href="/locations/delete/<?= $r['sitename'] ?>">
-                            <button class="btn btn-outline-danger btn-sm ml-2">Delete</button>
-                        </a>
+                        <?php if (hasRole(Role::Coordinator)) { ?>
+                            <a href="/locations/edit/<?= $r['sitename'] ?>">
+                                <button class="btn btn-outline-secondary btn-sm ml-2">Edit</button>
+                            </a>
+                            <a href="/locations/delete/<?= $r['sitename'] ?>">
+                                <button class="btn btn-outline-danger btn-sm ml-2">Delete</button>
+                            </a>
+                        <?php } ?>
                     </div>
                 </div>
                 <?php
