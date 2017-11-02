@@ -75,6 +75,72 @@ var tutorials = {
             'View, Edit, or Archive the curriculum.',
         '.result-card:first-child',
         ['.result-card:first-child']
+    ),
+    //Reports
+    //Custom Reports Page
+    customReportsFields: new Tutorial(
+        'Custom Reports',
+        'Select all of the filters you want applied to the search',
+        '#custom-reports-fields',
+        ['#custom-reports-fields'],
+        'customReportsCheckboxes'
+    ),
+    customReportsCheckboxes: new Tutorial(
+        'Checkboxes',
+        'If no box is checked, all of the options are included',
+        '#custom-reports-checkboxes',
+        ['#custom-reports-checkboxes'],
+        'customReportsGenerate'
+    ),
+    customReportsGenerate: new Tutorial(
+        'Generate Report',
+        'Click here to run the report.',
+        '#custom-reports-generate',
+        ['#custom-reports-generate']
+    ),
+    //Monthly Reports Page
+    monthlyReports: new Tutorial(
+        'Monthly Reports',
+        'Select a month and year that you want to see '+
+            'a full monthly report for',
+        '#monthly-reports-fields',
+        ['#monthly-reports-fields'],
+        'monthlyReportsGenerate'
+    ),
+    monthlyReportsGenerate: new Tutorial(
+        'Generate Report',
+        'Click here to run the report.',
+        '#monthly-reports-generate',
+        ['#monthly-reports-generate']
+    ),
+    //Quarterly Reports Page
+    quarterlyReports: new Tutorial(
+        'Quarterly Reports',
+        'Select a quarter and a year that you want to see '+
+            'a report for',
+        '#quarterly-reports-fields',
+        ['#quarterly-reports-fields'],
+        'quarterlyReportsGenerate'
+    ),
+    quarterlyReportsGenerate: new Tutorial(
+        'Generate Report',
+        'Click here to run the report.',
+        '#quarterly-reports-generate',
+        ['#quarterly-reports-generate']
+    ),
+    //Year End / Semi-Annual Reports Page
+    halfYearReports: new Tutorial(
+        'Year End / Semi-Annual Reports',
+        'Select Semi-Annual or Year-End and a year',
+        '#halfyear-reports-fields',
+        ['#halfyear-reports-fields'],
+        'halfYearReportsGenerate'
+    ),
+    halfYearReportsGenerate: new Tutorial(
+        'Generate Report',
+        'Click here to run the report.',
+        '#halfyear-reports-generate',
+        ['#halfyear-reports-generate']
     )
 };
 

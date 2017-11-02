@@ -158,7 +158,7 @@
 <div class="container">
 	<div class="container pt-5">
 		<form action="" method="POST" autocomplete="on">
-			<div class="row" style="margin-bottom: 1%">
+			<div id="monthly-reports-fields" class="row" style="margin-bottom: 1%">
 				<div class="col">
 					<div class="form-group">
 						<select class="form-control" name="month" id="month">
@@ -188,7 +188,7 @@
 			<div class="row pb-3">
 				<div class="col"></div>
 				<div class="col-centered">
-					<button type="submit" class="btn cpca">Generate Report</button>
+					<button id="monthly-reports-generate" type="submit" class="btn cpca">Generate Report</button>
 				</div>
 				<div class="col"></div>
 			</div>
@@ -1575,7 +1575,10 @@
 			var y = parseInt(display.substr(display.length - 4));
 			yearElem.selectedIndex = year - y;
 		}
-	}
+    }
+	$(function() {
+		showTutorial('monthlyReports');
+	});
 </script>
 <style>
 @media print{
