@@ -42,6 +42,7 @@ $router->add('/monthly-reports', 'reports/monthly_report.php', 'Monthly Reports'
 $router->add('/custom-reports', 'reports/custom_reports.php', 'Custom Report');
 $router->add('/custom-reports-table', 'reports/custom_reports_table.php', 'Custom Report');
 
-# Forms
+#Forms
 $router->add('/referral-form', 'forms/referral_form.php', 'Referral Form');
+$router->add('/self-referral-form', 'forms/self_referral_form.php', 'Self-Referral Form');
 $router->add('/form-success', 'forms/form_success.php', 'Form Submitted');

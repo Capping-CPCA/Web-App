@@ -739,7 +739,7 @@ include('header.php');
             </div>  <!-- panel group end -->
             <br>
 
-            <button id="btnRegister" onclick="submitAll()" class="cpca btn">Submit</button>
+            <button id="btnRegister" onclick="submitAll()" class="cpca btn" style="margin-bottom: 20px;">Submit</button>
 
         </div>  <!-- /#container -->
     </div>  <!-- /#container-fluid class -->
