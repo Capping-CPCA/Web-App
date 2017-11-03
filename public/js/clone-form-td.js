@@ -28,6 +28,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+
+
 // FOR ADDING FAMILY MEMBERS
 $(function () {
     $('#btnAddMember').click(function () {
@@ -104,10 +106,6 @@ $(function () {
     // Disable the "remove" button
     $('#btnDelMember').attr('disabled', true);
 });
-
-
-
-
 
 // FOR ADDING ADDITIONAL PARTIES
 $(function () {

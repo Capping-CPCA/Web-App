@@ -55,7 +55,7 @@ $active = [
                         Referral Form
                     </a>
                     <a class="nav-link text-secondary py-0 <?= active('/self-referral-form') ?>" data-parent="#ParticipantForms"  href="<?= BASEURL.'/self-referral-form' ?>">
-                        Self-Referral Form
+                        Initial Contact Form
                     </a>
                     <a class="nav-link text-secondary py-0 <?= active('/intake-packet') ?>" data-parent="#ParticipantForms"  href="<?= BASEURL.'/intake-packet' ?>">
                         Intake Packet
