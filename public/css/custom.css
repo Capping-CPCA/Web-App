@@ -530,3 +530,22 @@ label[for=password] {
 		display: none;
 	}
 }
+
+/* Referral Forms */
+.form-header {
+    flex: 1;
+    padding: 0.5rem 1rem 0.5rem 0;
+    color: rgba(0,0,0,0.75);
+    transition: font-weight 0.1s;
+    text-decoration: none !important;
+}
+
+.form-header:hover {
+    color: #898EBB!important;
+    color: rgba(0,0,0,0.20);
+    font-weight: bold;
+}
+
+.col-form-label {
+    text-align: right;
+}
