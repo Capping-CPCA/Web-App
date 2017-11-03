@@ -20,6 +20,9 @@
     <script type="text/javascript" src="/js/custom.js"></script>
     <script type="text/javascript" src="/js/search.js"></script>
     <script type="text/javascript" src="/js/livesearch.js"></script>
+    <script type="text/javascript" src="/js/clone-form-td.js"></script>
+    <script type="text/javascript" src="/js/jquery.mask.min.js"></script>
+    <script type="text/javascript" src="/js/form_helpers.js"></script>
 </head>
 <body>
 <div class="non-menu-content d-flex flex-column
