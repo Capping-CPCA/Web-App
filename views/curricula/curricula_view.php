@@ -11,11 +11,13 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.3.2
+ * @version 0.6
  * @since 0.1
  */
 
 global $params, $db;
+
+# Get topic name from params
 $id = $params[1];
 
 $result = $db->query("SELECT * FROM curricula WHERE curriculumid = $1", [$id]);
@@ -29,7 +31,11 @@ if (pg_num_rows($result) == 0) {
 $curricula = pg_fetch_assoc($result);
 pg_free_result($result);
 
-$topics = $db->query("SELECT * FROM curriculumclasses WHERE curriculumid = $1", [$id]);
+$topics = $db->query("SELECT * FROM curriculumclasses, classes WHERE curriculumid = $1 ".
+    "AND curriculumclasses.classid = classes.classid ".
+    "AND classes.df = 0 ORDER BY classes.topicname", [$id]);
+$curriculaName = $curricula['curriculumname'];
+$site = pg_fetch_assoc($db->query("SELECT * FROM sites WHERE sitename = $1", [$curriculaName]));
 
 include('header.php');
 ?>
@@ -56,9 +62,9 @@ include('header.php');
             <h4>Information</h4>
             <div class="d-flex justify-content-center">
                 <div class="display-stack">
-                    <div class="display-top"><?= $curricula['curriculumtype'] ?></div>
+                    <div class="display-top"><?= $site['sitetype'] ?></div>
                     <div class="display-split"></div>
-                    <div class="display-bottom">Type</div>
+                    <div class="display-bottom">Location</div>
                 </div>
                 <div class="display-stack">
                     <div class="display-top"><?= $curricula['missnumber'] ?></div>
@@ -76,7 +82,7 @@ include('header.php');
                         <tr>
                             <td class="pl-2 align-middle"><?= $class['topicname'] ?></td>
                             <td class="pr-2 text-right">
-                                <a href="/classes/view/<?= $class['topicname'] ?>">
+                                <a href="/classes/view/<?= $class['classid'] ?>">
                                     <button class="btn btn-outline-secondary btn-sm">View</button>
                                 </a>
                             </td>

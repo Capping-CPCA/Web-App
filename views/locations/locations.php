@@ -11,15 +11,16 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.3.2
+ * @version 0.6
  * @since 0.1
+ * @deprecated
  */
 
 global $params, $route, $view;
 
 include ('../models/Notification.php');
 
-$pages = ['view', 'edit', 'create', 'delete', 'restore'];
+$pages = ['view', 'edit', 'create', 'delete'];
 
 # Update page title to reflect route
 if (!empty($params) && in_array($params[0], $pages)) {
@@ -35,7 +36,7 @@ if (!empty($params) && $params[0] == 'view') {
 } else if (!empty($params) && $params[0] == 'create') {
     $view->display('locations/locations_modify.php');
 } else if (!empty($params) && $params[0] == 'delete') {
-    $view->display('locations/locations_archive.php');
+    $view->display('locations/locations_delete.php');
 } else {
     include('header.php');
     global $db;
@@ -43,19 +44,20 @@ if (!empty($params) && $params[0] == 'view') {
     $filter = "";
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $filter = isset($_POST['filter']) ? '%' . $_POST['filter'] . '%' : '%%';
-        $result = $db->query("SELECT * FROM sites WHERE LOWER(sitename) LIKE LOWER($1)".
-            " OR LOWER(programtype::text) LIKE LOWER($1) ORDER BY sitename", [$filter]);
+        $result = $db->query("SELECT unnest(enum_range(NULL::programtype)) AS sitetype WHERE LOWER(sitetype) LIKE LOWER($1)".
+            " ORDER BY sitetype", [$filter]);
     } else {
-        $result = $db->query("SELECT * FROM sites ORDER BY sitename", []);
+        $result = $db->query("SELECT unnest(enum_range(NULL::programtype)) AS sitetype", []);
     }
 
     ?>
     <div style="width: 100%">
         <?php
-        if (isset($_SESSION['delete-success']) && $_SESSION['delete-success']) {
-            $notification = new Notification('Success!', 'Location was successfully deleted!', 'success');
+        if (isset($_SESSION['notification'])) {
+            $note = $_SESSION['notification'];
+            $notification = new Notification($note['title'], $note['msg'], $note['type']);
             $notification->display();
-            unset($_SESSION['delete-success']);
+            unset($_SESSION['notification']);
         }
         ?>
         <div id="location-btn-group" class="input-group">
@@ -65,12 +67,7 @@ if (!empty($params) && $params[0] == 'view') {
                 </a>
             <?php
             }
-            if (hasRole(Role::Superuser)) {
             ?>
-                <a id="restore-location-btn" class="ml-3" href="/locations/restore">
-                    <button class="btn-outline-secondary btn"><i class="fa fa-repeat"></i> Restore</button>
-                </a>
-            <?php } ?>
         </div><br />
 
         <form id="location-filter" action="/locations" method="post" class="input-group" style="max-width: 500px; width: 100%; margin: 0 auto">
@@ -86,18 +83,17 @@ if (!empty($params) && $params[0] == 'view') {
                 ?>
                 <div class="card text-center result-card">
                     <div class="card-body">
-                        <h4 class="card-title"><?= $r['sitename'] ?></h4>
-                        <h6 class="card-subtitle text-muted"><?= $r['programtype'] ?></h6>
+                        <h4 class="card-title"><?= $r['sitetype'] ?></h4>
                     </div>
-                    <div class="card-footer d-flex flex-row justify-content-center">
-                        <a href="/locations/view/<?= $r['sitename'] ?>">
-                            <button class="btn btn-outline-secondary btn-sm ml-2">View</button>
-                        </a>
+                    <div class="card-footer d-flex flex-row justify-content-center"
+                        <?= !hasRole(Role::Coordinator) ? 'style="padding: 4px; background-color: #e5e6ee"' : '' ?>>
                         <?php if (hasRole(Role::Coordinator)) { ?>
-                            <a href="/locations/edit/<?= $r['sitename'] ?>">
+                            <a href="/locations/edit/<?= $r['sitetype'] ?>">
                                 <button class="btn btn-outline-secondary btn-sm ml-2">Edit</button>
                             </a>
-                            <a href="/locations/delete/<?= $r['sitename'] ?>">
+                        <?php } ?>
+                        <?php if (hasRole(Role::Superuser)) { ?>
+                            <a href="/locations/delete/<?= $r['sitetype'] ?>">
                                 <button class="btn btn-outline-danger btn-sm ml-2">Delete</button>
                             </a>
                         <?php } ?>

@@ -11,18 +11,16 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.1.6
+ * @version 0.6
  * @since 0.1
  */
 
 global $params, $db;
-array_shift($params);
 
-# Get topic name from params
-$topicname = rawurldecode(implode('/', $params));
+$id = $params[1];
 
-$db->prepare("get_class", "SELECT * FROM classes WHERE topicname = $1");
-$result = $db->execute("get_class", [$topicname]);
+$db->prepare("get_class", "SELECT * FROM classes WHERE classid = $1");
+$result = $db->execute("get_class", [$id]);
 
 # If no results, class doesn't exist, redirect
 if (pg_num_rows($result) == 0) {
@@ -35,9 +33,17 @@ pg_free_result($result);
 
 # Archive data
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete'])) {
-    // TODO: delete class
-    $_SESSION['delete-success'] = true;
-    header('Location: /classes');
+    $deleteRes = $db->query("UPDATE classes SET df = 1 WHERE classid = $1", [$id]);
+    if ($deleteRes) {
+        $success = true;
+    } else {
+        $success = false;
+    }
+    $note['title'] = ($success ? 'Success!' : 'Error!');
+    $note['msg'] = ($success ? 'The class has been deleted.' : 'The class wasn\'t deleted.');
+    $note['type'] = ($success ? 'success' : 'danger');
+    $_SESSION['notification'] = $note;
+    header("Location: /classes");
     die();
 }
 

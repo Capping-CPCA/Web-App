@@ -11,7 +11,7 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.3.2
+ * @version 0.6
  * @since 0.1
  */
 
@@ -19,7 +19,7 @@ global $params, $route, $view;
 
 include ('../models/Notification.php');
 
-$pages = ['view','edit','create','delete','restore'];
+$pages = ['view','edit','create','delete','archive', 'classes'];
 
 # Update page title to reflect route
 if (!empty($params) && in_array($params[0], $pages)) {
@@ -32,10 +32,14 @@ if (!empty($params) && $params[0] == 'view') {
     $view->display('curricula/curricula_view.php');
 } else if (!empty($params) && $params[0] == 'edit') {
     $view->display('curricula/curricula_modify.php');
+} else if (!empty($params) && $params[0] == 'classes') {
+    $view->display('curricula/curricula_add_class.php');
 } else if (!empty($params) && $params[0] == 'create') {
     $view->display('curricula/curricula_modify.php');
 } else if (!empty($params) && $params[0] == 'delete') {
-    $view->display('curricula/curricula_archive.php');
+    $view->display('curricula/curricula_delete.php');
+} else if (!empty($params) && $params[0] == 'archive') {
+    $view->display('curricula/curricula_archives.php');
 } else {
     include('header.php');
     global $db;
@@ -43,19 +47,20 @@ if (!empty($params) && $params[0] == 'view') {
     $filter = "";
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $filter = isset($_POST['filter']) ? "%" . $_POST['filter'] . "%" : "%%";
-        $result = $db->query("SELECT * FROM curricula WHERE LOWER(curriculumname::text) LIKE LOWER($1) " .
+        $result = $db->query("SELECT * FROM curricula WHERE df = 0 AND LOWER(curriculumname::text) LIKE LOWER($1) " .
             "OR LOWER(curriculumtype::text) LIKE LOWER($1) ORDER BY curriculumname", [$filter]);
     } else {
-        $result = $db->query("SELECT * FROM curricula ORDER BY curriculumname", []);
+        $result = $db->query("SELECT * FROM curricula WHERE df = 0 ORDER BY curriculumname", []);
     }
 
     ?>
     <div style="width: 100%">
         <?php
-        if (isset($_SESSION['delete-success']) && $_SESSION['delete-success']) {
-            $notification = new Notification('Success!', 'Curriculum was successfully deleted!', 'success');
+        if (isset($_SESSION['notification'])) {
+            $note = $_SESSION['notification'];
+            $notification = new Notification($note['title'], $note['msg'], $note['type']);
             $notification->display();
-            unset($_SESSION['delete-success']);
+            unset($_SESSION['notification']);
         }
         ?>
         <div id="curriculum-btn-group" class="input-group">
@@ -65,10 +70,10 @@ if (!empty($params) && $params[0] == 'view') {
                 </a>
             <?php
             }
-            if (hasRole(Role::Superuser)) {
+            if (hasRole(Role::Admin)) {
             ?>
-                <a id="restore-curriculum-btn" class="ml-3" href="/curricula/restore">
-                    <button class="btn-outline-secondary btn"><i class="fa fa-repeat"></i> Restore</button>
+                <a id="restore-curriculum-btn" class="ml-3" href="/curricula/archive">
+                    <button class="btn-outline-secondary btn"><i class="fa fa-archive"></i> See Archive</button>
                 </a>
             <?php } ?>
         </div><br />
@@ -87,13 +92,15 @@ if (!empty($params) && $params[0] == 'view') {
                 <div class="card text-center result-card">
                     <div class="card-body">
                         <h4 class="card-title"><?= $r['curriculumname'] ?></h4>
-                        <h6 class="card-subtitle text-muted"><?= $r['curriculumtype'] ?></h6>
                     </div>
                     <div class="card-footer d-flex flex-row justify-content-center">
                         <a href="/curricula/view/<?= $r['curriculumid'] ?>">
                             <button class="btn btn-outline-secondary btn-sm ml-2">View</button>
                         </a>
                         <?php if (hasRole(Role::Coordinator)) { ?>
+                            <a href="/curricula/classes/<?= $r['curriculumid'] ?>">
+                                <button class="btn btn-outline-secondary btn-sm ml-2">Classes</button>
+                            </a>
                             <a href="/curricula/edit/<?= $r['curriculumid'] ?>">
                                 <button class="btn btn-outline-secondary btn-sm ml-2">Edit</button>
                             </a>

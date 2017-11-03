@@ -1,10 +1,6 @@
 <?php
 include_once('../models/DashboardPanel.php');
 
-if (isset($_GET['role'])) {
-    $_SESSION['role'] = $_GET['role'];
-}
-
 $roleViews = [
     Role::User => [
         new DashboardPanel("#", "Participant Referrals", "Participants", "file-text-o"),

@@ -12,7 +12,8 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.2
+ * @version 0.6
+ * @since 0.1
  */
 
 include('../models/Notification.php');
@@ -57,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($ldapbind) {
                     // Query employee for email and info
                     $res = $db->query("SELECT firstname, lastname, permissionlevel, employeeid FROM people, employees WHERE employees.email = $1 ".
-                        "AND employees.employeeid = people.peopleid", [$ldaprdn]);
+                        "AND employees.employeeid = people.peopleid", [strtolower($ldaprdn)]);
 
                     // If employee exists, get info and redirect
                     if ($res && pg_num_rows($res) > 0) {
@@ -102,7 +103,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $hashed = $info['hashedpassword'];
             // Match passwords
             if (hash('sha256', $ldappass . $salt) == $hashed) {
-                $_SESSION['username'] = $ldaprdn_no_domain;
+
+                $employee = pg_fetch_assoc($res = $db->query("SELECT * FROM people WHERE peopleid = $1", [$info['superuserid']]));
+
+                $_SESSION['employeeid'] = $info['superuserid'];
+                $_SESSION['username'] = $employee['firstname'] . ' ' . $employee['lastname'];
                 $_SESSION['role'] = Role::Superuser;
                 $_SESSION['employeeid'] = $info['superuserid'];
                 pg_free_result($res);

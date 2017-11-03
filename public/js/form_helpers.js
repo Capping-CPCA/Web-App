@@ -17,7 +17,7 @@ $(document).ready(function(){
         .on('input', function() {
             validation($(this));
         })
-        .on('focusin', function() {
+        .on('focusout', function() {
             validation($(this));
         });
 });

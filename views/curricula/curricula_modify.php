@@ -11,21 +11,19 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.1.6
+ * @version 0.6
  * @since 0.1
  */
 
 global $params, $db;
 $isEdit = $params[0] == 'edit';
+
+# Get topic name from params
 $id = isset($params[1]) ? $params[1] : '';
 
 # Prepare SQL statements for later use
 $db->prepare("get_curriculum", "SELECT * FROM curricula WHERE curriculumid = $1");
-$db->prepare("get_curr_classes", "SELECT * FROM curriculumclasses WHERE curriculumid = $1 ORDER BY topicname");
-$db->prepare("get_other_classes",
-    "SELECT * FROM classes WHERE topicname NOT IN (" .
-    "SELECT topicname FROM curriculumclasses WHERE curriculumid = $1" .
-    ") ORDER BY topicname");
+$db->prepare("get_site", "SELECT * FROM sites WHERE sitename = $1");
 
 // If editing, populate data into variables
 if ($isEdit) {
@@ -39,19 +37,15 @@ if ($isEdit) {
 
     $curricula = pg_fetch_assoc($result);
     pg_free_result($result);
-
-    # Classes associated with curriculum
-    $topics = $db->execute("get_curr_classes", [$id]);
-
-    # All other available classes
-    $allTopics = $db->execute("get_other_classes", [$id]);
-} else {
-    $allTopics = $db->query("SELECT * FROM classes", []);
 }
 
 # Store table columns in variable
 $name = isset($curricula) ? $curricula['curriculumname'] : '';
-$type = isset($curricula) ? $curricula['curriculumtype'] : '';
+$type = '';
+if (isset($curricula)) {
+    $site = pg_fetch_assoc($db->execute("get_site", [$name]));
+    $type = $site['sitetype'];
+}
 $miss = isset($curricula) ? $curricula['missnumber'] : '';
 
 # Used to track POST errors
@@ -60,16 +54,12 @@ $errors = [
     "type" => false,
     "miss" => false
 ];
-# Used to display messages based on POST
-$success = null;
 
 # Validate form information, display errors if needed
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = isset($_POST['name']) ? $_POST['name'] : $name;
+    $name = isset($_POST['name']) ? trim($_POST['name']) : $name;
     $type = isset($_POST['type']) ? $_POST['type'] : $type;
     $miss = isset($_POST['miss']) ? $_POST['miss'] : $miss;
-    $newClasses = isset($_POST['classes']) ? $_POST['classes'] : [];
-    $removedClasses = isset($_POST['removed']) ? $_POST['removed'] : [];
 
     $valid = true;
 
@@ -86,34 +76,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if ($valid) {
-        if ($isEdit) {
-            $res = $db->query("UPDATE curricula SET curriculumname = $1, curriculumtype = $2, " .
-                "missnumber = $3 WHERE curriculumid = $4", [$name, $type, $miss, $id]);
-        } else {
-            $res = $db->query("INSERT INTO curricula (curriculumname, curriculumtype, missnumber) VALUES ($1, $2, $3) RETURNING curriculumid",
-                [$name, $type, $miss]);
-            $id = pg_fetch_assoc($res)['curriculumid'];
+        // Edit & Update
+        if ($isEdit && isset($site)) {
+            $siteName = $site['sitename'];
+            $res = $db->query("UPDATE sites SET sitename = $1, sitetype = $2 WHERE sitename = $3", [$name, $type, $siteName]); // update sitename
+            $res = $db->query("UPDATE curricula SET curriculumname = $1, " .
+                "missnumber = $2 WHERE curriculumid = $3", [$name, $miss, $id]);
         }
+        // Create
+        else {
+            $res = $db->query("INSERT INTO sites (sitename, sitetype) VALUES ($1, $2)", [$name, $type]);
+            if ($res && pg_result_error_field($res, PGSQL_DIAG_SQLSTATE) == 0) {
+                $res = $db->query("INSERT INTO curricula (curriculumname, missnumber) VALUES ($1, $2) ;",
+                    [$name, $miss]);
+            }
+        }
+
         if ($res) {
-            foreach ($newClasses as $c) {
-                $db->query("INSERT INTO curriculumclasses VALUES ($1, $2)", [$c, $id]);
+            $state = pg_result_error_field($res, PGSQL_DIAG_SQLSTATE);
+            if ($state == 0) {
+                $success = true;
+            } else {
+                $success = false;
+                if ($state == "23505") { // unique violation
+                    $errorMsg = "Curriculum with name \"$name\" already exists. [$state]";
+                }
+                $errorState = $state;
             }
-            foreach ($removedClasses as $r) {
-                $db->query("DELETE FROM curriculumclasses WHERE topicname = $1 AND curriculumid = $2",
-                    [$r, $id]);
-            }
-            $success = true;
         } else {
             $success = false;
         }
 
         # update variables for displaying new values
         $curricula = pg_fetch_assoc($db->execute("get_curriculum", [$id]));
-        if (isset($topics)) pg_free_result($topics);
-        $topics = $db->execute("get_curr_classes", [$id]);
-        if (isset($allTopics)) pg_free_result($allTopics);
-        $allTopics = $db->execute("get_other_classes", [$id]);
+    } else {
+        $success = false;
+        $errorMsg = "There are errors in the form.";
     }
+
+    if ($success) {
+        $note['title'] = 'Success!';
+        $note['msg'] = 'The curriculum has been ' . ($isEdit ? 'updated' : 'created') . '.';
+        $note['type'] = 'success';
+        $_SESSION['notification'] = $note;
+        header("Location: /curricula");
+        die();
+    }
+
 }
 
 # Display Page
@@ -124,13 +133,13 @@ include ('header.php');
     <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
     <div class="jumbotron form-wrapper mb-3">
         <?php
-        if ($success) {
-            $notification = new Notification('Success!', 'The curriculum has been '.($isEdit ? 'updated' : 'created').'.', 'success');
-            $notification->display();
-        } else if ($success == false && $success != null) { // == false, prevents == null from being true
-            $notification = new Notification('Error!', 'Uh oh! an error occurred and the curriculum wasn\'t '.
-                ($isEdit ? 'updated' : 'created').'.', 'danger');
-            $notification->display();
+        if (isset($success)) {
+            if (!$success) {
+                $notification = new Notification('Error!',
+                    isset($errorMsg) ? $errorMsg : ('Uh oh! An error occurred and the curriculum wasn\'t ' .
+                    ($isEdit ? 'updated' : 'created') . '.') . (isset($errorState) ? " [$errorState]" : ""), 'danger');
+                $notification->display();
+            }
         }
         ?>
         <form class="form" method="post" action="<?= $_SERVER['REQUEST_URI'] ?>" novalidate>
@@ -144,7 +153,7 @@ include ('header.php');
                 </div>
             </div>
             <div class="form-group">
-                <label for="curriculum-type" class="<?= $errors['type'] ? 'text-danger' : '' ?>">Type</label>
+                <label for="curriculum-type" class="<?= $errors['type'] ? 'text-danger' : '' ?>">Location</label>
                 <select type="text" class="form-control <?= $errors['type'] ? 'is-invalid' : '' ?>"
                        id="curriculum-type" name="type" required>
                     <?php
@@ -158,7 +167,7 @@ include ('header.php');
                     ?>
                 </select>
                 <div class="invalid-feedback">
-                    Please select a curriculum type.
+                    Please select a curriculum location.
                 </div>
             </div>
             <div class="form-group">
@@ -169,113 +178,12 @@ include ('header.php');
                     Please select a number 0 (zero) or greater.
                 </div>
             </div>
-            <h4>Classes</h4>
-            <table class="table table-hover table-responsive table-striped table-sm">
-                <tbody>
-                <?php
-                while(isset($topics) && $class = pg_fetch_assoc($topics)) {
-                    ?>
-                    <tr>
-                        <td class="align-middle">
-                            <span><?= $class['topicname'] ?></span>
-                        </td>
-                        <td class="text-right">
-                            <button type="button" class="btn btn-outline-danger btn-sm"
-                                    onclick="removeClass(this)">
-                                Remove
-                            </button>
-                        </td>
-                    </tr>
-                    <?php
-                }
-                if (isset($topics)) pg_free_result($topics);
-                ?>
-                    <tr id="add-class-row">
-                        <td class="align-middle">
-                            <select id="class-selector" class="form-control">
-                                <option value="" disabled selected>Select a Class</option>
-                                <?php
-                                while ($t = pg_fetch_assoc($allTopics)) {
-                                    ?>
-                                    <option value="<?= $t['topicname'] ?>"><?= $t['topicname'] ?></option>
-                                    <?php
-                                }
-                                pg_free_result($allTopics);
-                                ?>
-                            </select>
-                        </td>
-                        <td class="text-right align-middle">
-                            <button type="button" id="add-class-btn" class="btn cpca btn-sm" disabled>Add</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
             <div class="form-footer submit">
-                <button type="submit" class="btn cpca"><?= $isEdit ? 'Update' : 'Create' ?></button>
+                <button type="submit" class="btn cpca"><?= $isEdit ? 'Submit New Changes' : 'Add Curriculum' ?></button>
             </div>
         </form>
     </div>
 </div>
-
-<script>
-    function removeClass(el) {
-        // Remove class from table
-        var clazz = $($(el).closest('td').prev('td').children('span').get(0)).text();
-        $(el).closest('tr').remove();
-
-        // Add class to select list
-        $("#class-selector").append(
-            '<option value="' + clazz + '">' + clazz + '</option>'
-        );
-
-        const hiddenEl = $('input[type="hidden"][value="' + clazz + '"]');
-        // Add hidden element for form submission (if not added by form)
-        if (hiddenEl.length === 0)
-            $(".form").append('<input type="hidden" name="removed[]" value="' + clazz + '" />');
-
-        // Remove hidden element (if added)
-        hiddenEl.remove();
-    }
-
-    function addClass() {
-        const val = $("#class-selector").val();
-
-        // Add class to table
-        $("<tr>" +
-            "<td class='align-middle'>" +
-                "<span>" + val + "</span>" +
-            "</td>" +
-            "<td class='text-right'>" +
-                "<button type='button' class='btn btn-outline-danger btn-sm' " +
-                        "onclick='removeClass(this)'>Remove</button>" +
-            "</td>" +
-        "</tr>").insertBefore("#add-class-row");
-
-
-        // Remove from select list
-        $('option[value="' + val + '"]').remove();
-
-        const hiddenEl = $('input[type="hidden"][value="' + val + '"]');
-        // Add hidden element for form submission (if not deleted by form)
-        if (hiddenEl.length === 0)
-            $(".form").append('<input type="hidden" name="classes[]" value="' + val + '" />');
-
-        // Remove hidden element (if deleted)
-        hiddenEl.remove();
-    }
-
-    $(function() {
-        $('#add-class-btn').click(addClass);
-
-        // Enable button if value is selected
-        $('#class-selector').change(function() {
-            const val = $("#class-selector").val();
-            if (val) {
-                $('#add-class-btn').attr('disabled', false);
-            }
-        });
-    });
-</script>
 
 <?php
 include ('footer.php');

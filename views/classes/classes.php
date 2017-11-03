@@ -11,7 +11,7 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.3.2
+ * @version 0.6
  * @since 0.1
  */
 
@@ -19,7 +19,7 @@ global $params, $route, $view;
 
 include ('../models/Notification.php');
 
-$pages = ['view','edit','create','delete','restore'];
+$pages = ['view','edit','create','delete','archive'];
 
 # Update page title to reflect route
 if (!empty($params) && in_array($params[0], $pages)) {
@@ -35,7 +35,9 @@ if (!empty($params) && $params[0] == 'view') {
 } else if (!empty($params) && $params[0] == 'create') {
     $view->display('classes/classes_modify.php');
 } else if (!empty($params) && $params[0] == 'delete') {
-    $view->display('classes/classes_archive.php');
+    $view->display('classes/classes_delete.php');
+} else if (!empty($params) && $params[0] == 'archive') {
+    $view->display('classes/classes_archives.php');
 } else {
     include('header.php');
     global $db;
@@ -43,19 +45,20 @@ if (!empty($params) && $params[0] == 'view') {
     $filter = "";
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $filter = isset($_POST['filter']) ? '%' . $_POST['filter'] . '%' : '%%';
-        $result = $db->query("SELECT * FROM classes WHERE LOWER(topicname) LIKE LOWER($1)".
+        $result = $db->query("SELECT * FROM classes WHERE df = 0 && LOWER(topicname) LIKE LOWER($1)".
             " OR LOWER(description) LIKE LOWER($1) ORDER BY topicname", [$filter]);
     } else {
-        $result = $db->query("SELECT * FROM classes ORDER BY topicname", []);
+        $result = $db->query("SELECT * FROM classes WHERE df = 0 ORDER BY topicname", []);
     }
 
     ?>
     <div style="width: 100%">
         <?php
-        if (isset($_SESSION['delete-success']) && $_SESSION['delete-success']) {
-            $notification = new Notification('Success!', 'Class was successfully deleted!', 'success');
+        if (isset($_SESSION['notification'])) {
+            $note = $_SESSION['notification'];
+            $notification = new Notification($note['title'], $note['msg'], $note['type']);
             $notification->display();
-            unset($_SESSION['delete-success']);
+            unset($_SESSION['notification']);
         }
         ?>
         <div id="classes-btn-group" class="input-group">
@@ -65,10 +68,10 @@ if (!empty($params) && $params[0] == 'view') {
                 </a>
             <?php
             }
-            if (hasRole(Role::Superuser)) {
+            if (hasRole(Role::Admin)) {
             ?>
-                <a id="restore-class-btn" class="ml-3" href="/classes/restore">
-                    <button class="btn-outline-secondary btn"><i class="fa fa-repeat"></i> Restore</button>
+                <a id="restore-class-btn" class="ml-3" href="/classes/archive">
+                    <button class="btn-outline-secondary btn"><i class="fa fa-archive"></i> See Archive</button>
                 </a>
             <?php } ?>
         </div><br />
@@ -90,14 +93,14 @@ if (!empty($params) && $params[0] == 'view') {
                         <h6 class="card-subtitle text-muted"><?= $r['description'] ?></h6>
                     </div>
                     <div class="card-footer d-flex flex-row justify-content-center">
-                        <a href="/classes/view/<?= $r['topicname'] ?>">
+                        <a href="/classes/view/<?= $r['classid'] ?>">
                             <button class="btn btn-outline-secondary btn-sm ml-2">View</button>
                         </a>
                         <?php if (hasRole(Role::Coordinator)) { ?>
-                            <a href="/classes/edit/<?= $r['topicname'] ?>">
+                            <a href="/classes/edit/<?= $r['classid'] ?>">
                                 <button class="btn btn-outline-secondary btn-sm ml-2">Edit</button>
                             </a>
-                            <a href="/classes/delete/<?= $r['topicname'] ?>">
+                            <a href="/classes/delete/<?= $r['classid'] ?>">
                                 <button class="btn btn-outline-danger btn-sm ml-2">Delete</button>
                             </a>
                         <?php } ?>
