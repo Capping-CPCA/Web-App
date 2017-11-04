@@ -13,6 +13,13 @@
 
 $(document).ready(function(){
     initMask();
+    $('input:required')
+        .on('input', function() {
+            validation($(this));
+        })
+        .on('focusin', function() {
+            validation($(this));
+        });
 });
 
 function initMask(){
@@ -38,20 +45,28 @@ function submitAll(){
     }
 }
 
-function submitAllSelf() {
+function submitAllSelf(){
     var self_fname = document.getElementById("self_pers_firstname");
     var self_lname = document.getElementById("self_pers_lastname");
-    var form = document.getElementById("self_participant_info");
-
-    if (form.checkValidity() === false) {
+    var self_form = document.getElementById("self_participant_info");
+    // Handles all validation when the user hits the submit button.
+    if (self_form.checkValidity() === false) {
         document.getElementById("self_pers_title").focus();
-        form.classList.add("was-validated");
         if(self_lname.value.length === 0)
             self_lname.focus();
         if(self_fname.value.length === 0)
             self_fname.focus();
     } else {
-        form.submit();
+        self_form.submit();
+    }
+}
+
+// Hides or displays the error message accordingly.
+function validation(el){
+    if (el.val().length !== 0) {
+        el.removeClass('is-invalid');
+    } else {
+        el.addClass('is-invalid');
     }
 }
 
