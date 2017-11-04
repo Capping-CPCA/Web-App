@@ -22,25 +22,35 @@ global $params, $route, $view;
 
     <div style="width: 100%">
         <?php
-        if(isset($_SESSION['form-type'])) {
-            $form_type = $_SESSION['form-type'];
-            unset($_SESSION['form-type']);
-            echo '<div id="referral_submit_success" class="alert alert-success" role="alert">';
-            echo  '<h4 class="alert-heading">Success!</h4>';
-            if ($form_type == "agency referral") {
-                echo '<p>You have successfully submitted the agency referral form.</p>';
-                echo '<p>Would you like to <a id="submit_again_link" href="/referral-form" class="alert-link">submit another agency referral form?</a></p>';
-            } else if ($form_type == "self referral") {
-                echo '<p>You have successfully submitted the self referral form.</p>';
-                echo '<p>Would you like to <a id="submit_again_link" href="/self-referral-form" class="alert-link">submit another self-referral form?</a></p>';
-            } else if ($form_type == "intake packet") {
-                echo '<p>You have successfully submitted the intake packet.</p>';
-                echo '<p>Would you like to <a id="submit_again_link" href="/intake-packet" class="alert-link">submit another intake packet?</a></p>';
-            }
-        } else {
+        if(isset($_SESSION['form-error'])){
+            $errorstate = $_SESSION['error-state'];
             echo '<div id="referral_submit_success" class="alert alert-danger" role="alert">';
-            echo '<h4 class="alert-heading">Error!</h4>';
-            echo '<p>A form was not properly submitted!</p>';
+            echo '<h4 class="alert-heading">Error Submitting Form!</h4>';
+            echo "<p>The following error code was generated when submitting: $errorstate</p>";
+            unset($_SESSION['form-error']);
+            unset($_SESSION['error-state']);
+
+        } else {
+            if (isset($_SESSION['form-type'])) {
+                $form_type = $_SESSION['form-type'];
+                unset($_SESSION['form-type']);
+                echo '<div id="referral_submit_success" class="alert alert-success" role="alert">';
+                echo '<h4 class="alert-heading">Success!</h4>';
+                if ($form_type == "agency referral") {
+                    echo '<p>You have successfully submitted the agency referral form.</p>';
+                    echo '<p>Would you like to <a id="submit_again_link" href="/referral-form" class="alert-link">submit another agency referral form?</a></p>';
+                } else if ($form_type == "self referral") {
+                    echo '<p>You have successfully submitted the self referral form.</p>';
+                    echo '<p>Would you like to <a id="submit_again_link" href="/self-referral-form" class="alert-link">submit another self-referral form?</a></p>';
+                } else if ($form_type == "intake packet") {
+                    echo '<p>You have successfully submitted the intake packet.</p>';
+                    echo '<p>Would you like to <a id="submit_again_link" href="/intake-packet" class="alert-link">submit another intake packet?</a></p>';
+                }
+            } else {
+                echo '<div id="referral_submit_success" class="alert alert-danger" role="alert">';
+                echo '<h4 class="alert-heading">Error!</h4>';
+                echo '<p>A form was not properly submitted!</p>';
+            }
         }
         ?>
 

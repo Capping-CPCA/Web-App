@@ -72,11 +72,6 @@ $(function () {
         newElem.find('.label_relationship').attr('for', 'family_relationship_' + newNum);
         newElem.find('.select_relationship').attr('id', 'family_relationship_' + newNum).attr('name', 'family_relationship_' + newNum).val('');
 
-        // Needs - text
-        newElem.find('.label_needs').attr('for', 'family_needs_' + newNum);
-        newElem.find('.input_needs').attr('id', 'family_needs_' + newNum).attr('name', 'family_needs_' + newNum).val('');
-
-
         // Insert the new element after the last "duplicatable" input field
         $('#familyEntry_' + num).after(newElem);
         $('#ID' + newNum + '_title').focus();

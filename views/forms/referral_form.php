@@ -23,14 +23,14 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
     $form_type = "agency referral";
 
     // First card (Participant Information)
-    $pers_firstname = !empty($_POST['pers_firstname']) ? trim($_POST['pers_firstname']) : "";
-    $pers_lastname = !empty($_POST['pers_lastname']) ? trim($_POST['pers_lastname']) : "";
-    $pers_middlein = !empty($_POST['pers_middlein']) ? trim($_POST['pers_middlein']) : "";
+    $pers_firstname = !empty($_POST['pers_firstname']) ? trim($_POST['pers_firstname']) : NULL;
+    $pers_lastname = !empty($_POST['pers_lastname']) ? trim($_POST['pers_lastname']) : NULL;
+    $pers_middlein = !empty($_POST['pers_middlein']) ? trim($_POST['pers_middlein']) : NULL;
     $pers_dob = !empty($_POST['pers_dob']) ? trim($_POST['pers_dob']) : NULL;
-    $pers_address = !empty($_POST['pers_address']) ? trim($_POST['pers_address']) : "";
+    $pers_address = !empty($_POST['pers_address']) ? trim($_POST['pers_address']) : NULL;
     $address_info = explode(" ", $pers_address);
     $pers_address_num = null;
-    $pers_address_street = "";
+    $pers_address_street = NULL;
 
     // Address separation logic
     for($i = 0; $i < sizeOf($address_info); $i++){
@@ -43,69 +43,65 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         }
     }
 
-
+    $pers_apartment_info = !empty($_POST['pers_apt_info']) ? trim($_POST['pers_apt_info']) : NULL;
     $pers_state = !empty($_POST['pers_state']) ? trim($_POST['pers_state']) : NULL;
-    $pers_zip = !empty($_POST['pers_zip']) ? $_POST['pers_zip'] : NULL;
-    $pers_city = !empty($_POST['pers_city']) ? trim($_POST['pers_city']) : "";
-    $pers_primphone = !empty($_POST['pers_primphone']) ? trim($_POST['pers_primphone']) : "";
-    $pers_secphone = !empty($_POST['pers_secphone']) ? trim($_POST['pers_secphone']) : "";
-    $pers_reason = !empty($_POST['pers_reason']) ? trim($_POST['pers_reason']) : "";
+    $pers_zip = !empty($_POST['pers_zip']) ? $_POST['pers_zip'] : 12601;
+    $pers_city = !empty($_POST['pers_city']) ? trim($_POST['pers_city']) : NULL;
+    $pers_primphone = !empty($_POST['pers_primphone']) ? trim($_POST['pers_primphone']) : NULL;
+    $pers_secphone = !empty($_POST['pers_secphone']) ? trim($_POST['pers_secphone']) : NULL;
+    $pers_reason = !empty($_POST['pers_reason']) ? trim($_POST['pers_reason']) : NULL;
 
 
     // Second card (Referring Party Information)
-    $ref_party = !empty($_POST['ref_party']) ? trim($_POST['ref_party']) : "";
+    $ref_party = !empty($_POST['ref_party']) ? trim($_POST['ref_party']) : NULL;
     $ref_date = !empty($_POST['ref_date']) ? trim($_POST['ref_date']) : NULL;
-    $ref_firstname = !empty($_POST['ref_firstname']) ? trim($_POST['ref_firstname']) : "";
-    $ref_lastname = !empty($_POST['ref_lastname']) ? trim($_POST['ref_lastname']) : "";
-    $ref_phone = !empty($_POST['ref_phone']) ? trim($_POST['ref_phone']) : "";
-    $ref_email = !empty($_POST['ref_email']) ? trim($_POST['ref_email']) : "";
+    $ref_firstname = !empty($_POST['ref_firstname']) ? trim($_POST['ref_firstname']) : NULL;
+    $ref_lastname = !empty($_POST['ref_lastname']) ? trim($_POST['ref_lastname']) : NULL;
+    $ref_phone = !empty($_POST['ref_phone']) ? trim($_POST['ref_phone']) : NULL;
+    $ref_email = !empty($_POST['ref_email']) ? trim($_POST['ref_email']) : NULL;
 
 
     // Third card (Participant Household Information with all 5 members)
-    $family_first_name_1 = !empty($_POST['family_first_name_1']) ? trim($_POST['family_first_name_1']) : "";
-    $family_last_name_1 = !empty($_POST['family_last_name_1']) ? trim($_POST['family_last_name_1']) : "";
-    $family_mi_1 = !empty($_POST['family_mi_1']) ? trim($_POST['family_mi_1']) : "";
+    $family_first_name_1 = !empty($_POST['family_first_name_1']) ? trim($_POST['family_first_name_1']) : NULL;
+    $family_last_name_1 = !empty($_POST['family_last_name_1']) ? trim($_POST['family_last_name_1']) : NULL;
+    $family_mi_1 = !empty($_POST['family_mi_1']) ? trim($_POST['family_mi_1']) : NULL;
     $family_dob_1 = !empty($_POST['family_dob_1']) ? trim($_POST['family_dob_1']) : NULL;
-    $family_sex_1 = !empty($_POST['family_sex_1']) ? trim($_POST['family_sex_1']) : "";
-    $family_race_1 = !empty($_POST['family_race_1']) ? trim($_POST['family_race_1']) : "";
-    $family_relationship_1 = !empty($_POST['family_relationship_1']) ? trim($_POST['family_relationship_1']) : "";
-    $family_needs_1 = !empty($_POST['family_needs_1']) ? trim($_POST['family_needs_1']) : "";
+    $family_sex_1 = !empty($_POST['family_sex_1']) ? trim($_POST['family_sex_1']) : NULL;
+    $family_race_1 = !empty($_POST['family_race_1']) ? trim($_POST['family_race_1']) : NULL;
+    $family_relationship_1 = !empty($_POST['family_relationship_1']) ? trim($_POST['family_relationship_1']) : NULL;
 
-    $family_first_name_2 = !empty($_POST['family_first_name_2']) ? trim($_POST['family_first_name_2']) : "";
-    $family_last_name_2 = !empty($_POST['family_last_name_2']) ? trim($_POST['family_last_name_2']) : "";
-    $family_mi_2 = !empty($_POST['family_mi_2']) ? trim($_POST['family_mi_2']) : "";
+    $family_first_name_2 = !empty($_POST['family_first_name_2']) ? trim($_POST['family_first_name_2']) : NULL;
+    $family_last_name_2 = !empty($_POST['family_last_name_2']) ? trim($_POST['family_last_name_2']) : NULL;
+    $family_mi_2 = !empty($_POST['family_mi_2']) ? trim($_POST['family_mi_2']) : NULL;
     $family_dob_2 = !empty($_POST['family_dob_2']) ? trim($_POST['family_dob_2']) : NULL;
-    $family_sex_2 = !empty($_POST['family_sex_2']) ? trim($_POST['family_sex_2']) : "";
-    $family_race_2 = !empty($_POST['family_race_2']) ? trim($_POST['family_race_2']) : "";
-    $family_relationship_2 = !empty($_POST['family_relationship_2']) ? trim($_POST['family_relationship_2']) : "";
-    $family_needs_2 = !empty($_POST['family_needs_2']) ? trim($_POST['family_needs_2']) : "";
+    $family_sex_2 = !empty($_POST['family_sex_2']) ? trim($_POST['family_sex_2']) : NULL;
+    $family_race_2 = !empty($_POST['family_race_2']) ? trim($_POST['family_race_2']) : NULL;
+    $family_relationship_2 = !empty($_POST['family_relationship_2']) ? trim($_POST['family_relationship_2']) : NULL;
+    $family_needs_2 = !empty($_POST['family_needs_2']) ? trim($_POST['family_needs_2']) : NULL;
 
-    $family_first_name_3 = !empty($_POST['family_first_name_3']) ? trim($_POST['family_first_name_3']) : "";
-    $family_last_name_3 = !empty($_POST['family_last_name_3']) ? trim($_POST['family_last_name_3']) : "";
-    $family_mi_3 = !empty($_POST['family_mi_3']) ? trim($_POST['family_mi_3']) : "";
+    $family_first_name_3 = !empty($_POST['family_first_name_3']) ? trim($_POST['family_first_name_3']) : NULL;
+    $family_last_name_3 = !empty($_POST['family_last_name_3']) ? trim($_POST['family_last_name_3']) : NULL;
+    $family_mi_3 = !empty($_POST['family_mi_3']) ? trim($_POST['family_mi_3']) : NULL;
     $family_dob_3 = !empty($_POST['family_dob_3']) ? trim($_POST['family_dob_3']) : NULL;
-    $family_sex_3 = !empty($_POST['family_sex_3']) ? trim($_POST['family_sex_3']) : "";
-    $family_race_3 = !empty($_POST['family_race_3']) ? trim($_POST['family_race_3']) : "";
-    $family_relationship_3 = !empty($_POST['family_relationship_3']) ? trim($_POST['family_relationship_3']) : "";
-    $family_needs_3 = !empty($_POST['family_needs_3']) ? trim($_POST['family_needs_3']) : "";
+    $family_sex_3 = !empty($_POST['family_sex_3']) ? trim($_POST['family_sex_3']) : NULL;
+    $family_race_3 = !empty($_POST['family_race_3']) ? trim($_POST['family_race_3']) : NULL;
+    $family_relationship_3 = !empty($_POST['family_relationship_3']) ? trim($_POST['family_relationship_3']) : NULL;
 
-    $family_first_name_4 = !empty($_POST['family_first_name_4']) ? trim($_POST['family_first_name_4']) : "";
-    $family_last_name_4 = !empty($_POST['family_last_name_4']) ? trim($_POST['family_last_name_4']) : "";
-    $family_mi_4 = !empty($_POST['family_mi_4']) ? trim($_POST['family_mi_4']) : "";
+    $family_first_name_4 = !empty($_POST['family_first_name_4']) ? trim($_POST['family_first_name_4']) : NULL;
+    $family_last_name_4 = !empty($_POST['family_last_name_4']) ? trim($_POST['family_last_name_4']) : NULL;
+    $family_mi_4 = !empty($_POST['family_mi_4']) ? trim($_POST['family_mi_4']) : NULL;
     $family_dob_4 = !empty($_POST['family_dob_4']) ? trim($_POST['family_dob_4']) : NULL;
-    $family_sex_4 = !empty($_POST['family_sex_4']) ? trim($_POST['family_sex_4']) : "";
-    $family_race_4 = !empty($_POST['family_race_4']) ? trim($_POST['family_race_4']) : "";
-    $family_relationship_4 = !empty($_POST['family_relationship_4']) ? trim($_POST['family_relationship_4']) : "";
-    $family_needs_4 = !empty($_POST['family_needs_4']) ? trim($_POST['family_needs_4']) : "";
+    $family_sex_4 = !empty($_POST['family_sex_4']) ? trim($_POST['family_sex_4']) : NULL;
+    $family_race_4 = !empty($_POST['family_race_4']) ? trim($_POST['family_race_4']) : NULL;
+    $family_relationship_4 = !empty($_POST['family_relationship_4']) ? trim($_POST['family_relationship_4']) : NULL;
 
-    $family_first_name_5 = !empty($_POST['family_first_name_5']) ? trim($_POST['family_first_name_5']) : "";
-    $family_last_name_5 = !empty($_POST['family_last_name_5']) ? trim($_POST['family_last_name_5']) : "";
-    $family_mi_5 = !empty($_POST['family_mi_5']) ? trim($_POST['family_mi_5']) : "";
+    $family_first_name_5 = !empty($_POST['family_first_name_5']) ? trim($_POST['family_first_name_5']) : NULL;
+    $family_last_name_5 = !empty($_POST['family_last_name_5']) ? trim($_POST['family_last_name_5']) : NULL;
+    $family_mi_5 = !empty($_POST['family_mi_5']) ? trim($_POST['family_mi_5']) : NULL;
     $family_dob_5 = !empty($_POST['family_dob_5']) ? trim($_POST['family_dob_5']) : NULL;
-    $family_sex_5 = !empty($_POST['family_sex_5']) ? trim($_POST['family_sex_5']) : "";
-    $family_race_5 = !empty($_POST['family_race_5']) ? trim($_POST['family_race_5']) : "";
-    $family_relationship_5 = !empty($_POST['family_relationship_5']) ? trim($_POST['family_relationship_5']) : "";
-    $family_needs_5 = !empty($_POST['family_needs_5']) ? trim($_POST['family_needs_5']) : "";
+    $family_sex_5 = !empty($_POST['family_sex_5']) ? trim($_POST['family_sex_5']) : NULL;
+    $family_race_5 = !empty($_POST['family_race_5']) ? trim($_POST['family_race_5']) : NULL;
+    $family_relationship_5 = !empty($_POST['family_relationship_5']) ? trim($_POST['family_relationship_5']) : NULL;
 
 
     // Fourth Card (Additional Information with all 5 parties)
@@ -118,102 +114,107 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
     $chkViolence = !empty($_POST['chkViolence']) ? 1 : 0;
     $chkReside = !empty($_POST['chkReside']) ? 1 : 0;
     $chkSigned = !empty($_POST['chkSigned']) ? 1 : 0;
-    $additional_info = !empty($_POST['additional_info']) ? trim($_POST['additional_info']) : "";
+    $additional_info = !empty($_POST['additional_info']) ? trim($_POST['additional_info']) : NULL;
 
-    $party_type_1 = !empty($_POST['party_type_1']) ? trim($_POST['party_type_1']) : "";
-    $party_firstname_1 = !empty($_POST['party_firstname_1']) ? trim($_POST['party_firstname_1']) : "";
-    $party_lastname_1 = !empty($_POST['party_lastname_1']) ? trim($_POST['party_lastname_1']) : "";
-    $party_phone_1 = !empty($_POST['party_phone_1']) ? trim($_POST['party_phone_1']) : "";
-    $party_email_1 = !empty($_POST['party_email_1']) ? trim($_POST['party_email_1']) : "";
+    $party_type_1 = !empty($_POST['party_type_1']) ? trim($_POST['party_type_1']) : NULL;
+    $party_firstname_1 = !empty($_POST['party_firstname_1']) ? trim($_POST['party_firstname_1']) : NULL;
+    $party_lastname_1 = !empty($_POST['party_lastname_1']) ? trim($_POST['party_lastname_1']) : NULL;
+    $party_phone_1 = !empty($_POST['party_phone_1']) ? trim($_POST['party_phone_1']) : NULL;
+    $party_email_1 = !empty($_POST['party_email_1']) ? trim($_POST['party_email_1']) : NULL;
 
-    $party_type_2 = !empty($_POST['party_type_2']) ? trim($_POST['party_type_2']) : "";
-    $party_firstname_2 = !empty($_POST['party_firstname_2']) ? trim($_POST['party_firstname_2']) : "";
-    $party_lastname_2 = !empty($_POST['party_lastname_2']) ? trim($_POST['party_lastname_2']) : "";
-    $party_phone_2 = !empty($_POST['party_phone_2']) ? trim($_POST['party_phone_2']) : "";
-    $party_email_2 = !empty($_POST['party_email_2']) ? trim($_POST['party_email_2']) : "";
+    $party_type_2 = !empty($_POST['party_type_2']) ? trim($_POST['party_type_2']) : NULL;
+    $party_firstname_2 = !empty($_POST['party_firstname_2']) ? trim($_POST['party_firstname_2']) : NULL;
+    $party_lastname_2 = !empty($_POST['party_lastname_2']) ? trim($_POST['party_lastname_2']) : NULL;
+    $party_phone_2 = !empty($_POST['party_phone_2']) ? trim($_POST['party_phone_2']) : NULL;
+    $party_email_2 = !empty($_POST['party_email_2']) ? trim($_POST['party_email_2']) : NULL;
 
-    $party_type_3 = !empty($_POST['party_type_3']) ? trim($_POST['party_type_3']) : "";
-    $party_firstname_3 = !empty($_POST['party_firstname_3']) ? trim($_POST['party_firstname_3']) : "";
-    $party_lastname_3 = !empty($_POST['party_lastname_3']) ? trim($_POST['party_lastname_3']) : "";
-    $party_phone_3 = !empty($_POST['party_phone_3']) ? trim($_POST['party_phone_3']) : "";
-    $party_email_3 = !empty($_POST['party_email_3']) ? trim($_POST['party_email_3']) : "";
+    $party_type_3 = !empty($_POST['party_type_3']) ? trim($_POST['party_type_3']) : NULL;
+    $party_firstname_3 = !empty($_POST['party_firstname_3']) ? trim($_POST['party_firstname_3']) : NULL;
+    $party_lastname_3 = !empty($_POST['party_lastname_3']) ? trim($_POST['party_lastname_3']) : NULL;
+    $party_phone_3 = !empty($_POST['party_phone_3']) ? trim($_POST['party_phone_3']) : NULL;
+    $party_email_3 = !empty($_POST['party_email_3']) ? trim($_POST['party_email_3']) : NULL;
 
-    $party_type_4 = !empty($_POST['party_type_4']) ? trim($_POST['party_type_4']) : "";
-    $party_firstname_4 = !empty($_POST['party_firstname_4']) ? trim($_POST['party_firstname_4']) : "";
-    $party_lastname_4 = !empty($_POST['party_lastname_4']) ? trim($_POST['party_lastname_4']) : "";
-    $party_phone_4 = !empty($_POST['party_phone_4']) ? trim($_POST['party_phone_4']) : "";
-    $party_email_4 = !empty($_POST['party_email_4']) ? trim($_POST['party_email_4']) : "";
+    $party_type_4 = !empty($_POST['party_type_4']) ? trim($_POST['party_type_4']) : NULL;
+    $party_firstname_4 = !empty($_POST['party_firstname_4']) ? trim($_POST['party_firstname_4']) : NULL;
+    $party_lastname_4 = !empty($_POST['party_lastname_4']) ? trim($_POST['party_lastname_4']) : NULL;
+    $party_phone_4 = !empty($_POST['party_phone_4']) ? trim($_POST['party_phone_4']) : NULL;
+    $party_email_4 = !empty($_POST['party_email_4']) ? trim($_POST['party_email_4']) : NULL;
 
-    $party_type_5 = !empty($_POST['party_type_5']) ? trim($_POST['party_type_5']) : "";
-    $party_firstname_5 = !empty($_POST['party_firstname_5']) ? trim($_POST['party_firstname_5']) : "";
-    $party_lastname_5 = !empty($_POST['party_lastname_5']) ? trim($_POST['party_lastname_5']) : "";
-    $party_phone_5 = !empty($_POST['party_phone_5']) ? trim($_POST['party_phone_5']) : "";
-    $party_email_5 = !empty($_POST['party_email_5']) ? trim($_POST['party_email_5']) : "";
+    $party_type_5 = !empty($_POST['party_type_5']) ? trim($_POST['party_type_5']) : NULL;
+    $party_firstname_5 = !empty($_POST['party_firstname_5']) ? trim($_POST['party_firstname_5']) : NULL;
+    $party_lastname_5 = !empty($_POST['party_lastname_5']) ? trim($_POST['party_lastname_5']) : NULL;
+    $party_phone_5 = !empty($_POST['party_phone_5']) ? trim($_POST['party_phone_5']) : NULL;
+    $party_email_5 = !empty($_POST['party_email_5']) ? trim($_POST['party_email_5']) : NULL;
 
     // Fourth Card (Office Information)
     $office_contact_date = !empty($_POST['office_contact_date']) ? trim($_POST['office_contact_date']) : NULL;
-    $office_means = !empty($_POST['office_means']) ? trim($_POST['office_means']) : "";
+    $office_means = !empty($_POST['office_means']) ? trim($_POST['office_means']) : NULL;
     $office_initial_date = !empty($_POST['office_initial_date']) ? trim($_POST['office_initial_date']) : NULL;
-    $office_time = !empty($_POST['office_time']) ? trim($_POST['office_time']) : "";
-    $office_location = !empty($_POST['office_location']) ? trim($_POST['office_location']) : "";
-    $comments = !empty($_POST['comments']) ? trim($_POST['comments']) : "";
+    $office_location = !empty($_POST['office_location']) ? trim($_POST['office_location']) : NULL;
+    $comments = !empty($_POST['comments']) ? trim($_POST['comments']) : NULL;
+    $employeeID = $_SESSION['employeeid'];
 
 
+    /*                 ---------------------
+                       | STORED PROCEDURES |
+                       ---------------------                  */
 
 
-    // TODO: stored procedure
+    /*                     - Main Procedures -
+     Participant PeopleInsert and main addAgencyReferral stored procedures
+     Primary and Secondary phone inserts into phone table              */
 
-    /*              This is stored procedure work that is being commented out for now so we can at least have our forms in develop for the rest of the class to see.
+    $pIDResult = $db->query("SELECT PeopleInsert(
+                                       fName := $1::TEXT,
+                                       lName := $2::TEXT,
+                                       mInit := $3::VARCHAR
+                                       );", [$pers_firstname, $pers_lastname, $pers_middlein]);
+    $pIDResult = pg_fetch_result($pIDResult, 0);
 
-    $con = pg_connect('host=10.11.12.33 port=5432 user=postgres password=@lgozzineIsTheBest dbname=PEP_DB');
-    pg_query($con, 'BEGIN;');
-    $result = pg_query_params($con,
+    // Run the main stored procedure
+    $result = $db->query(
         'SELECT addAgencyReferral(
-          fName := $1::TEXT,
-          lName := $2::TEXT,
-          mInit := $3::VARCHAR,
-          dob :=  $4::DATE,
-          houseNum := $5::INTEGER,
-          streetAddress := $6::TEXT,
-          apartmentInfo := $7::TEXT,
-          zipCode := $8::INTEGER,
-          city := $9::TEXT,
-          state := $10::STATES,
-          referralReason := $11::TEXT,
-          hasAgencyConsentForm := $12::BOOLEAN,
-          referringAgency := $13::TEXT,
-          referringAgencyDate := $14::DATE,
-          additionalInfo := $15::TEXT,
-          hasSpecialNeeds :=$16::BOOLEAN,
-          hasSubstanceAbuseHistory :=$17::BOOLEAN,
-          hasInvolvementCPS :=$18::BOOLEAN,
-          isPregnant :=$19::BOOLEAN,
-          hasIQDoc := $20::BOOLEAN,
-          mentalHealthIssue := $21::BOOLEAN,
-          hasDomesticViolenceHistory := $22::BOOLEAN,
-          childrenLiveWithIndividual := $23::BOOLEAN,
-          dateFirstContact := $24::DATE,
-          meansOfContact := $25::TEXT,
-          dateOfInitialMeeting := $26::DATE,
-          location := $27::TEXT,
-          comments := $28::TEXT,
-          eID := $29::INTEGER)',
+          agencyReferralParticipantID := $1::INT,
+          agencyReferralParticipantDateOfBirth :=  $2::DATE,
+          houseNum := $3::INTEGER,
+          streetAddress := $4::TEXT,
+          apartmentInfo := $5::TEXT,
+          zipCode := $6::INTEGER,
+          city := $7::TEXT,
+          state := $8::STATES,
+          referralReason := $9::TEXT,
+          hasAgencyConsentForm := $10::BOOLEAN,
+          referringAgency := $11::TEXT,
+          referringAgencyDate := $12::DATE,
+          additionalInfo := $13::TEXT,
+          hasSpecialNeeds :=$14::BOOLEAN,
+          hasSubstanceAbuseHistory :=$15::BOOLEAN,
+          hasInvolvementCPS :=$16::BOOLEAN,
+          isPregnant :=$17::BOOLEAN,
+          hasIQDoc := $18::BOOLEAN,
+          mentalHealthIssue := $19::BOOLEAN,
+          hasDomesticViolenceHistory := $20::BOOLEAN,
+          childrenLiveWithIndividual := $21::BOOLEAN,
+          dateFirstContact := $22::DATE,
+          meansOfContact := $23::TEXT,
+          dateOfInitialMeeting := $24::DATE,
+          location := $25::TEXT,
+          comments := $26::TEXT,
+          eID := $27::INTEGER)',
         array(
-            '$pers_firstname',
-            '$pers_lastname',
-            '$pers_middlein',
+            $pIDResult,
             $pers_dob,
             $pers_address_num,
-            '$pers_address_street',
-            '$pers_apartment',
+            $pers_address_street,
+            $pers_apartment_info,
             $pers_zip,
-            '$pers_city',
+            $pers_city,
             $pers_state,
-            '$pers_reason',
+            $pers_reason,
             $chkSigned,
-            '$ref_party',
+            $ref_party,
             $ref_date,
-            '$additional_info',
+            $additional_info,
             $chkSpecialEd,
             $chkSubAbuse,
             $chkCPS,
@@ -223,21 +224,174 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
             $chkViolence,
             $chkReside,
             $office_contact_date,
-            '$office_means',
+            $office_means,
             $office_initial_date,
-            '$office_location',
-            '$comments',
-            1)); */
+            $office_location,
+            $comments,
+            $employeeID));
+    $formID = pg_fetch_result($result, 0);
+
+    if ($result) {
+        $state = pg_result_error_field($result, PGSQL_DIAG_SQLSTATE);
+        if ($state != 0) {
+            $_SESSION['form-error'] = true;
+            $_SESSION['error-state'] = $state;
+            header("Location: /form-success");
+            die();
+        }
+    }
+
+    //Insert primary phone number
+    if($pers_primphone !== NULL) {
+        $phoneResults = $db->query("INSERT INTO FormPhoneNumbers(
+                                        formID,
+                                        phoneNumber,
+                                        phoneType) VALUES ($1, $2, $3);"
+            , [$formID, $pers_primphone, "Primary"]);
+    }
+
+    // Insert secondary phone number
+    if($pers_secphone !== NULL) {
+        $secPhoneResults = $db->query("INSERT INTO FormPhoneNumbers(
+                                        formID,
+                                        phoneNumber,
+                                        phoneType) VALUES ($1, $2, $3);"
+            , [$formID, $pers_secphone, "Secondary"]);
+    }
+    /*              - End Main Procedures -             */
+
+
+
+
+    /*              - Agency Stored Procedures -
+    Main agency contact member is run through PeopleInsert and then
+    agencyMemberInsert with type as main. Other Agencies are run
+    through a for loop the same way and added in only if the main
+    agency is set.
+                                                                    */
+
+    // Insert Main agency contact
+    if($ref_firstname !== NULL && $ref_lastname !== NULL){
+        $pIDMainAgency = $db->query("SELECT PeopleInsert(
+                                       fName := $1::TEXT,
+                                       lName := $2::TEXT,
+                                       mInit := $3::VARCHAR
+                                       );", [$ref_firstname,
+                                            $ref_lastname,
+                                            NULL]);
+        // Get the main agency PID
+        $pIDMainAgency = pg_fetch_result($pIDMainAgency, 0);
+
+        // agencyMemberInsert for the main agency contact
+        $agencyMemberResult = $db->query("SELECT agencyMemberInsert(
+                                agencyMemberID := $1::INT,
+                                agen := $2::referraltype,
+                                phn := $3::text,
+                                em := $4::text,
+                                isMain := $5::boolean,
+                                arID := $6::int
+                                );", [$pIDMainAgency,
+                                    $ref_party,
+                                    $ref_phone,
+                                    $ref_email,
+                                    TRUE,
+                                    $formID]);
+
+        // ADDITIONAL REFERRING AGENCIES
+
+        for($i = 1; $i <= 5; $i++){
+            $prt_type = "party_type_".$i;
+            $prt_first_name = "party_firstname_".$i;
+            $prt_last_name = "party_lastname_".$i;
+            $prt_phone = "party_phone_".$i;
+            $prt_email = "party_email_".$i;
+
+
+            if($$prt_first_name !== NULL && $$prt_last_name !== NULL) {
+                $pidParty = $db->query("SELECT PeopleInsert(
+                                           fName := $1::TEXT,
+                                           lName := $2::TEXT,
+                                           mInit := $3::VARCHAR
+                                           );", [$$prt_first_name,
+                                                $$prt_last_name,
+                                                NULL]);
+                $pidParty = pg_fetch_result($pidParty, 0);
+
+                $partyResult = $db->query("SELECT agencyMemberInsert(
+                                agencyMemberID := $1::INT,
+                                agen := $2::referraltype,
+                                phn := $3::text,
+                                em := $4::text,
+                                isMain := $5::boolean,
+                                arID := $6::int
+                                );", [$pidParty,
+                                    $$prt_type,
+                                    $$prt_phone,
+                                    $$prt_email,
+                                    0,
+                                    $formID]);
+            }
+        }
+    }
+    /*            - End Agency Stored Procedures -              */
+
+
+
+    /*          - Household Members Stored Procedure -
+    Uses a for loop to iterate through every instance of family_
+    variables, checks to see whether it should run through based
+    off of if the first or last name is set
+                                                                    */
+    for($i = 1; $i <= 5; $i++){
+        // Create variable names
+        $fam_first_name = "family_first_name_".$i;
+        $fam_last_name = "family_last_name_".$i;
+        $fam_mi = "family_mi_".$i;
+        $fam_relationship = "family_relationship_".$i;
+        $fam_dob = "family_dob_".$i;
+        $fam_race = "family_race_".$i;
+        $fam_sex = "family_sex_".$i;
+
+        // Check to see if the household member is a child
+        if ($$fam_relationship === "Son" || $$fam_relationship === "Daughter")
+            $isChild = 1;
+        else
+            $isChild = 0;
+
+        // Run InsertPeople for current household member
+        if($$fam_first_name !== NULL && $$fam_last_name !== NULL){
+            $pIDFamily = $db->query("SELECT PeopleInsert(
+                                       fName := $1::TEXT,
+                                       lName := $2::TEXT,
+                                       mInit := $3::VARCHAR
+                                       );", [$$fam_first_name,
+                                            $$fam_last_name,
+                                            $$fam_mi]);
+            $pIDFamily = pg_fetch_result($pIDFamily, 0);
+
+            // Run createFamilyMember for current household member
+            $familyResult = $db->query("SELECT createFamilyMember(
+                                            familyID := $1::INT,
+                                            rel := $2::RELATIONSHIP,
+                                            dob := $3::DATE,
+                                            race := $4::RACE,
+                                            gender := $5::SEX,
+                                            child := $6::BOOLEAN,
+                                            cust := $7::TEXT,
+                                            loc := $8::TEXT,
+                                            fID := $9::INT)", [$pIDFamily, $$fam_relationship, $$fam_dob, $$fam_race, $$fam_sex, $isChild, NULL, NULL, $formID]);
+
+        }
+    }
+    /*              -  End Household Stored Procedures -        */
+
+    /*                   END OF STORED PROCEDURES                */
+
 
 
     $_SESSION['form-type'] = $form_type;
     header("Location: /form-success");
     die();
-    
-    // Used for inspecting input variables
-//    $arr = get_defined_vars();
-//    print_r($arr);
-
 
 }
 
@@ -303,9 +457,9 @@ include('header.php');
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" name="pers_address" id="pers_address" placeholder="Street address">
                                         </div>
-                                        <label class="col-form-label col-sm-1" for="pers_zip">ZIP:</label>
-                                        <div class="col-sm-1">
-                                            <input type="text" class="form-control mask-zip" name="pers_zip" id="pers_zip" placeholder="Zip">
+                                        <label class="col-form-label col-sm-1" for="pers_apt_info">Apartment Info:</label>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control" name="pers_apt_info" id="pers_apt_info" placeholder="Apartment Information">
                                         </div>
                                     </div>
 
@@ -328,6 +482,13 @@ include('header.php');
                                         <label class="col-form-label col-sm-1" for="pers_city">City:</label>
                                         <div class="col-sm-2">
                                             <input type="text" class="form-control" name="pers_city" id="pers_city" placeholder="City" data-error="Enter city.">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-2" for="pers_zip">ZIP:</label>
+                                        <div class="col-sm-1">
+                                            <input type="text" class="form-control mask-zip" name="pers_zip" id="pers_zip" placeholder="Zip">
                                         </div>
                                     </div>
 
@@ -508,13 +669,6 @@ include('header.php');
                                                     }
                                                     ?>
                                                 </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label label_needs">Specific Needs:</label>
-                                            <div class="col-sm-4">
-                                                <input type="text" class="form-control input_needs" name="family_needs_1" id="family_needs_1" placeholder="Ex: allergies">
                                             </div>
                                         </div>
 
@@ -712,11 +866,6 @@ include('header.php');
                                     <label class="col-form-label col-sm-2" for="office_initial_date">Initial Meeting Info:</label>
                                     <div class="col-sm-2">
                                         <input type="date" class="form-control" name="office_initial_date" id="office_initial_date">
-                                    </div>
-
-                                    <label class="col-form-label col-sm-0 sr-only" for="office_time">Time:</label>
-                                    <div class="col-sm-2">
-                                        <input type="time" class="form-control" name="office_time" id="office_time" placeholder="Time">
                                     </div>
 
                                     <label class="col-form-label col-sm-0 sr-only" for="office_location">Location:</label>
