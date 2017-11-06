@@ -80,6 +80,9 @@
 	include('header.php');
 ?>
 <div class="container">
+	<div class="container" align="right">
+		<button type="button" class="btn cpca" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+	</div>
 	<div class="container py-2">
 		<div align="center">
 			<h2><?=cal_info(0)['months'][$month] . " " . $year;?></h2>

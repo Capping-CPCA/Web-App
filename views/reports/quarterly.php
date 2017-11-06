@@ -64,7 +64,10 @@
     include('header.php');
 ?>
 <div class="container">
-	<div class="container pt-5">
+	<div class="container" align="right">
+		<button type="button" class="btn cpca" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+	</div>
+	<div class="container pt-3">
 		<form action="" method="POST" autocomplete="on">
 			<div class="row" style="margin-bottom: 1%">
 				<div class="col">

@@ -36,7 +36,14 @@ $topics = $db->query("SELECT * FROM curriculuminfo WHERE topicname = $1", [$topi
 include('header.php');
 ?>
 <div style="width: 100%">
-    <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
+    <div class="row">
+			<div class="col">
+				<button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
+			</div>
+			<div class="col pr-5" align="right">
+				<button type="button" class="btn cpca" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+			</div>
+		</div>
     <div class="form-wrapper card view-card">
         <h4 class="card-header text-left">
             <?= $class['topicname'] ?>
