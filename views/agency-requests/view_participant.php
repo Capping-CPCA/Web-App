@@ -27,7 +27,14 @@ include('header.php');
 ?>
 <div class="d-flex flex-column w-100" style="height: fit-content;">
     <div class="mb-2">
-        <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
+		<div class="row">
+			<div class="col">
+				<button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
+			</div>
+			<div class="col pr-5" align="right">
+				<button type="button" class="btn cpca" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+			</div>
+		</div>
     </div>
     <div class="card" style="max-width: 700px; width: 100%; margin: 0 auto;">
         <div class="card-header">
