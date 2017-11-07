@@ -18,7 +18,7 @@
 	 */
 	 
     global $db;
-
+	
 	$month = "";
 	$year = "";	
 	
@@ -157,7 +157,9 @@
 ?>
 <div class="container">
 	<div class="container" align="right">
-		<button type="button" class="btn cpca" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+		<button type="button" class="btn cpca" onclick="window.print()" <?php if ($_SERVER['REQUEST_METHOD'] !== 'POST') echo "style='display: none;'"?>>
+			<i class="fa fa-print" aria-hidden="true"></i> Print
+		</button>
 	</div>
 	<div class="container pt-3">
 		<form action="" method="POST" autocomplete="on">
