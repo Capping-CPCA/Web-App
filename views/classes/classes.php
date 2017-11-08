@@ -108,6 +108,13 @@ if (!empty($params) && $params[0] == 'view') {
             ?>
         </div>
     </div>
+
+    <script>
+        $(function() {
+            showTutorial('classes');
+        });
+    </script>
+
     <?php
     include('footer.php');
 }
