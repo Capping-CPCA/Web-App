@@ -57,6 +57,6 @@ global $params, $route, $view;
         <hr>
 
     </div>
-</div>
+    </div>
 
 <?php include('footer.php'); ?>
