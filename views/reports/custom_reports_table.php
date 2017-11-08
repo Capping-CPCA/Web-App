@@ -17,22 +17,27 @@
 	
 	global $db;
 
-	$month = $_POST['month'];
-	$year = $_POST['year'];
-	$locs = isset($_POST['location']) ? $_POST['location'] : [];
+	//Get POST data to query database
+	$startDate = $_POST['startDate'];
+	$endDate = $_POST['endDate'];
+	$sDateFormatted = date_format(date_create($startDate),"m/d/Y");
+	$eDateFormatted = date_format(date_create($endDate),"m/d/Y");
+	
+	$currs = isset($_POST['curricula']) ? $_POST['curricula'] : [];
 	$races = isset($_POST['race']) ? $_POST['race'] : [];
 	$minAge = $_POST['minAge'];
 	$maxAge = $_POST['maxAge'];
-	$monthQuery = "(date_part('month', participantclassattendance.date) = $month)";
-	$yearQuery = "(date_part('year', participantclassattendance.date) = $year)";
-	$locQuery = "";
 	
-	if (count($locs) > 0) {
-		$locQuery = "(participantclassattendance.siteName = '" . $locs[0] . "' ";
-		for ($i = 1; $i < count($locs); $i++) {
-			$locQuery .= "OR participantclassattendance.siteName = '" . $locs[$i] . "' ";
+	//Build queries based on POST data
+	$dateQuery = "(participantclassattendance.date >= '$startDate' AND participantclassattendance.date <= '$endDate')";
+	$currQuery = "";
+	
+	if (count($currs) > 0) {
+		$currQuery = "(participantclassattendance.curriculumname = '" . $currs[0] . "' ";
+		for ($i = 1; $i < count($currs); $i++) {
+			$currQuery .= "OR participantclassattendance.curriculumname = '" . $currs[$i] . "' ";
 		}
-		$locQuery .= ")";
+		$currQuery .= ")";
 	}
 	
 	$raceQuery = "";
@@ -58,24 +63,22 @@
 		if ($ageQuery !== "") $ageQuery .= ")";
 	}
 	
-	$yearWhereClause = "$yearQuery ";
-	if ($locQuery !== "") $yearWhereClause .= "AND $locQuery ";
-	if ($raceQuery !== "") $yearWhereClause .= "AND $raceQuery ";
-	if ($ageQuery !== "") $yearWhereClause .= "AND $ageQuery ";
-	
-	$monthWhereClause = $yearWhereClause . "AND $monthQuery ";
-	$newWhereClause = $monthWhereClause . "AND participantclassattendance.isnew = TRUE;";
-	$monthWhereClause .= ";";
+	$totalWhere = "$dateQuery ";
+	if ($currQuery !== "") $totalWhere .= "AND $currQuery ";
+	if ($raceQuery !== "") $totalWhere .= "AND $raceQuery ";
+	if ($ageQuery !== "") $totalWhere .= "AND $ageQuery ";
+	$newWhere = $totalWhere . "AND participantclassattendance.isnew = TRUE;";
+	$totalWhere .= ";";
 	
 	$baseQuery = "SELECT COUNT(DISTINCT(participants.participantid)) as Participants
 				FROM participants INNER JOIN participantclassattendance
 				ON participants.participantid = participantclassattendance.participantid
 				WHERE ";
-				
-	$monthRes = pg_fetch_result($db->query($baseQuery . $monthWhereClause, []), 0, 0);
-	$newRes = pg_fetch_result($db->query($baseQuery . $newWhereClause, []), 0, 0);
-	$duplRes = $monthRes - $newRes;
-	$yearRes = pg_fetch_result($db->query($baseQuery . $yearWhereClause, []), 0, 0);
+	
+	//Actually query database and store results to be displayed below
+	$totalRes = pg_fetch_result($db->query($baseQuery . $totalWhere, []), 0, 0);
+	$newRes = pg_fetch_result($db->query($baseQuery . $newWhere, []), 0, 0);
+	$duplRes = $totalRes - $newRes;
 	
 	include('header.php');
 ?>
@@ -85,15 +88,22 @@
 	</div>
 	<div class="container py-2">
 		<div align="center">
-			<h2><?=cal_info(0)['months'][$month] . " " . $year;?></h2>
+			<h2><?php
+				//Display the date range, unless it's a
+				//single day, then just display that date.
+				if ($sDateFormatted === $eDateFormatted) {
+					echo $sDateFormatted;
+				} else {
+					echo $sDateFormatted . " - " . $eDateFormatted;
+				}?></h2>
 		</div>
 		<div align="center">
 			<?php
-			#Display the chosen locations
-			if (count($locs) > 0) {
-				echo "<div><b>Locations:</b> " . $locs[0];
-				for ($i = 1; $i < count($locs); $i++) {
-					echo ", " . $locs[$i];
+			#Display the chosen curriculum
+			if (count($currs) > 0) {
+				echo "<div><b>Curricula:</b> " . $currs[0];
+				for ($i = 1; $i < count($currs); $i++) {
+					echo ", " . $currs[$i];
 				}
 				echo "</div>";
 			}
@@ -127,24 +137,18 @@
 			<thead>
 				<tr>
 					<th>
-						Current Month
-					</th>
-					<th>
 						Newly Served
 					</th>
 					<th>
 						Duplicate Served
 					</th>
 					<th>
-						Year
+						Total Served
 					</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td>
-						<?=$monthRes?>
-					</td>
 					<td>
 						<?=$newRes?>
 					</td>
@@ -152,7 +156,7 @@
 						<?=$duplRes?>
 					</td>
 					<td>
-						<?=$yearRes?>
+						<?=$totalRes?>
 					</td>
 				</tr>
 			</tbody>
