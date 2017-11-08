@@ -23,16 +23,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form_type = "self referral";
 
     // First Card (Participant Information)
-    $self_pers_firstname = !empty($_POST['self_pers_firstname']) ? trim($_POST['self_pers_firstname']) : "";
-    $self_pers_lastname = !empty($_POST['self_pers_lastname']) ? trim($_POST['self_pers_lastname']) : "";
-    $self_pers_middlein = !empty($_POST['self_pers_middlein']) ? trim($_POST['self_pers_middlein']) : "";
-    $self_pers_dob = !empty($_POST['self_pers_dob']) ? $_POST['self_pers_dob'] : "";
-    $self_pers_address = !empty($_POST['self_pers_address']) ? trim($_POST['self_pers_address']) : "";
+    $self_pers_firstname = !empty($_POST['self_pers_firstname']) ? trim($_POST['self_pers_firstname']) : NULL;
+    $self_pers_lastname = !empty($_POST['self_pers_lastname']) ? trim($_POST['self_pers_lastname']) : NULL;
+    $self_pers_middlein = !empty($_POST['self_pers_middlein']) ? trim($_POST['self_pers_middlein']) : NULL;
+    $self_pers_dob = !empty($_POST['self_pers_dob']) ? $_POST['self_pers_dob'] : NULL;
+    $self_pers_address = !empty($_POST['self_pers_address']) ? trim($_POST['self_pers_address']) : NULL;
 
     // Logic for parsing the address into the address number and street name.
     $self_address_info = explode(" ", $self_pers_address);
     $self_pers_street_num = NULL;
-    $self_pers_street_name = "";
+    $self_pers_street_name = NULL;
 
         // Loop to parse through the address array ($self_address_info)
         for($i = 0; $i < sizeOf($self_address_info); $i++){
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $self_pers_zip = !empty($_POST['self_pers_zip']) ? $_POST['self_pers_zip'] : 12601; // Default Zipcode is Poughkeepsie.
     $self_pers_state = !empty($_POST['self_pers_state']) ? $_POST['self_pers_state'] : NULL;
     $self_pers_city = !empty($_POST['self_pers_city']) ? trim($_POST['self_pers_city']) : NULL;
-    $self_apt_info = !empty($_POST['self_apt_info']) ? trim($_POST['self_apt_info']) : "";
+    $self_apt_info = !empty($_POST['self_apt_info']) ? trim($_POST['self_apt_info']) : NULL;
     $self_pers_phone = !empty($_POST['self_pers_phone']) ? $_POST['self_pers_phone'] : NULL;
 
     // Second Card (Additional Information)
@@ -65,16 +65,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $self_attended = NULL;
     }
 
-    $self_ref_source = !empty($_POST['self_ref_source']) ? $_POST['self_ref_source'] : "";
-    $reason = !empty($_POST['reason']) ? trim($_POST['reason']) : "";
+    $self_ref_source = !empty($_POST['self_ref_source']) ? $_POST['self_ref_source'] : NULL;
+    $reason = !empty($_POST['reason']) ? trim($_POST['reason']) : NULL;
 
     // Third Card (Office Information)
     $self_office_firstCall = !empty($_POST['self_office_firstCall']) ? trim($_POST['self_office_firstCall']) : NULL;
     $self_office_returnedCall = !empty($_POST['self_office_returnedCall']) ? trim($_POST['self_office_returnedCall']) : NULL;
     $self_tentative_start = !empty($_POST['self_tentative_start']) ? trim($_POST['self_tentative_start']) : NULL;
     $self_letter_mailed = !empty($_POST['self_letter_mailed']) ? trim($_POST['self_letter_mailed']) : NULL;
-    $self_assigned_to = !empty($_POST['self_assigned_to']) ? trim($_POST['self_assigned_to']) : "";
-    $notes = !empty($_POST['notes']) ? trim($_POST['notes']) : "";
+    $self_assigned_to = !empty($_POST['self_assigned_to']) ? trim($_POST['self_assigned_to']) : NULL;
+    $notes = !empty($_POST['notes']) ? trim($_POST['notes']) : NULL;
     $eID = $_SESSION['employeeid'];
 
     // Stored Procedures
@@ -112,6 +112,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     );", [$pIDResult, $self_pers_dob, $self_pers_street_num, $self_pers_street_name, $self_apt_info, $self_pers_zip, $self_pers_city,
                                             $self_pers_state, $self_pers_phone, $self_ref_source, $self_involvement, $self_attended, $reason, $self_office_firstCall,
                                             $self_office_returnedCall, $self_tentative_start, $self_assigned_to, $self_letter_mailed, $notes, $eID]);
+
+    if ($result) {
+        $state = pg_result_error_field($result, PGSQL_DIAG_SQLSTATE);
+        if ($state != 0) {
+            $_SESSION['form-error'] = true;
+            $_SESSION['error-state'] = $state;
+            header("Location: /form-success");
+            die();
+        }
+    }
 
     // Redirect user to success page.
     $_SESSION['form-type'] = $form_type;
