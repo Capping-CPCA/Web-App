@@ -38,7 +38,11 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
     for($i = 0; $i < sizeOf($address_info); $i++){
         if($i === 0){
             if($address_info[$i] !== "") {
-                $pers_address_num = $address_info[$i];
+                if(is_numeric($address_info[$i])){
+                    $pers_address_num = $address_info[$i];
+                } else {
+                    $pers_address_street .= " ".$address_info[$i];
+                }
             }
         } else {
             $pers_address_street .= " ".$address_info[$i];
@@ -49,8 +53,8 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
     $pers_state = !empty($_POST['pers_state']) ? trim($_POST['pers_state']) : "New York";
     $pers_zip = !empty($_POST['pers_zip']) ? $_POST['pers_zip'] : 12601;
     $pers_city = !empty($_POST['pers_city']) ? trim($_POST['pers_city']) : "Poughkeepsie";
-    $pers_primphone = !empty($_POST['pers_primphone']) ? trim($_POST['pers_primphone']) : NULL;
-    $pers_secphone = !empty($_POST['pers_secphone']) ? trim($_POST['pers_secphone']) : NULL;
+    $pers_primphone = !empty($_POST['pers_primphone']) ? phoneStrToNum($_POST['pers_primphone']) : NULL;
+    $pers_secphone = !empty($_POST['pers_secphone']) ? phoneStrToNum($_POST['pers_secphone']) : NULL;
     $pers_reason = !empty($_POST['pers_reason']) ? trim($_POST['pers_reason']) : NULL;
 
 
@@ -59,7 +63,7 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
     $ref_date = !empty($_POST['ref_date']) ? trim($_POST['ref_date']) : NULL;
     $ref_firstname = !empty($_POST['ref_firstname']) ? trim($_POST['ref_firstname']) : NULL;
     $ref_lastname = !empty($_POST['ref_lastname']) ? trim($_POST['ref_lastname']) : NULL;
-    $ref_phone = !empty($_POST['ref_phone']) ? trim($_POST['ref_phone']) : NULL;
+    $ref_phone = !empty($_POST['ref_phone']) ? phoneStrToNum($_POST['ref_phone']) : NULL;
     $ref_email = !empty($_POST['ref_email']) ? trim($_POST['ref_email']) : NULL;
 
 
@@ -121,31 +125,31 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
     $party_type_1 = !empty($_POST['party_type_1']) ? trim($_POST['party_type_1']) : NULL;
     $party_firstname_1 = !empty($_POST['party_firstname_1']) ? trim($_POST['party_firstname_1']) : NULL;
     $party_lastname_1 = !empty($_POST['party_lastname_1']) ? trim($_POST['party_lastname_1']) : NULL;
-    $party_phone_1 = !empty($_POST['party_phone_1']) ? trim($_POST['party_phone_1']) : NULL;
+    $party_phone_1 = !empty($_POST['party_phone_1']) ? phoneStrToNum($_POST['party_phone_1']) : NULL;
     $party_email_1 = !empty($_POST['party_email_1']) ? trim($_POST['party_email_1']) : NULL;
 
     $party_type_2 = !empty($_POST['party_type_2']) ? trim($_POST['party_type_2']) : NULL;
     $party_firstname_2 = !empty($_POST['party_firstname_2']) ? trim($_POST['party_firstname_2']) : NULL;
     $party_lastname_2 = !empty($_POST['party_lastname_2']) ? trim($_POST['party_lastname_2']) : NULL;
-    $party_phone_2 = !empty($_POST['party_phone_2']) ? trim($_POST['party_phone_2']) : NULL;
+    $party_phone_2 = !empty($_POST['party_phone_2']) ? phoneStrToNum($_POST['party_phone_2']) : NULL;
     $party_email_2 = !empty($_POST['party_email_2']) ? trim($_POST['party_email_2']) : NULL;
 
     $party_type_3 = !empty($_POST['party_type_3']) ? trim($_POST['party_type_3']) : NULL;
     $party_firstname_3 = !empty($_POST['party_firstname_3']) ? trim($_POST['party_firstname_3']) : NULL;
     $party_lastname_3 = !empty($_POST['party_lastname_3']) ? trim($_POST['party_lastname_3']) : NULL;
-    $party_phone_3 = !empty($_POST['party_phone_3']) ? trim($_POST['party_phone_3']) : NULL;
+    $party_phone_3 = !empty($_POST['party_phone_3']) ? phoneStrToNum($_POST['party_phone_3']) : NULL;
     $party_email_3 = !empty($_POST['party_email_3']) ? trim($_POST['party_email_3']) : NULL;
 
     $party_type_4 = !empty($_POST['party_type_4']) ? trim($_POST['party_type_4']) : NULL;
     $party_firstname_4 = !empty($_POST['party_firstname_4']) ? trim($_POST['party_firstname_4']) : NULL;
     $party_lastname_4 = !empty($_POST['party_lastname_4']) ? trim($_POST['party_lastname_4']) : NULL;
-    $party_phone_4 = !empty($_POST['party_phone_4']) ? trim($_POST['party_phone_4']) : NULL;
+    $party_phone_4 = !empty($_POST['party_phone_4']) ? phoneStrToNum($_POST['party_phone_4']) : NULL;
     $party_email_4 = !empty($_POST['party_email_4']) ? trim($_POST['party_email_4']) : NULL;
 
     $party_type_5 = !empty($_POST['party_type_5']) ? trim($_POST['party_type_5']) : NULL;
     $party_firstname_5 = !empty($_POST['party_firstname_5']) ? trim($_POST['party_firstname_5']) : NULL;
     $party_lastname_5 = !empty($_POST['party_lastname_5']) ? trim($_POST['party_lastname_5']) : NULL;
-    $party_phone_5 = !empty($_POST['party_phone_5']) ? trim($_POST['party_phone_5']) : NULL;
+    $party_phone_5 = !empty($_POST['party_phone_5']) ? phoneStrToNum($_POST['party_phone_5']) : NULL;
     $party_email_5 = !empty($_POST['party_email_5']) ? trim($_POST['party_email_5']) : NULL;
 
     // Fourth Card (Office Information)
@@ -291,11 +295,11 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         // agencyMemberInsert for the main agency contact
         $agencyMemberResult = $db->query("SELECT agencyMemberInsert(
                                 agencyMemberID := $1::INT,
-                                agen := $2::referraltype,
-                                phn := $3::text,
-                                em := $4::text,
-                                isMain := $5::boolean,
-                                arID := $6::int
+                                agen := $2::REFERRALTYPE,
+                                phn := $3::TEXT,
+                                em := $4::TEXT,
+                                isMain := $5::BOOLEAN,
+                                arID := $6::INT
                                 );", [$pIDMainAgency,
                                     $ref_party,
                                     $ref_phone,
@@ -323,16 +327,18 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
                                                 NULL]);
                 $pidParty = pg_fetch_result($pidParty, 0);
 
+                $formatted_phone = phoneStrToNum($$prt_phone);
+
                 $partyResult = $db->query("SELECT agencyMemberInsert(
                                 agencyMemberID := $1::INT,
                                 agen := $2::referraltype,
-                                phn := $3::text,
+                                phn := $3::TEXT,
                                 em := $4::text,
                                 isMain := $5::boolean,
                                 arID := $6::int
                                 );", [$pidParty,
                                     $$prt_type,
-                                    $$prt_phone,
+                                    $formatted_phone,
                                     $$prt_email,
                                     0,
                                     $formID]);
@@ -450,12 +456,12 @@ include('header.php');
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Sex:</label>
+                                        <label class="col-sm-2 col-form-label">Race:</label>
                                         <div class="col-sm-2">
-                                            <select class="form-control" name="pers_sex" id="pers_sex">
+                                            <select class="form-control " name="pers_race" id="pers_race">
                                                 <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                 <?php
-                                                $res = $db->query("SELECT unnest(enum_range(NULL::sex)) AS type", []);
+                                                $res = $db->query("SELECT unnest(enum_range(NULL::race)) AS type", []);
                                                 while ($enumtype = pg_fetch_assoc($res)) {
                                                     $t = $enumtype ['type'];
                                                     ?>
@@ -468,12 +474,12 @@ include('header.php');
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Race:</label>
+                                        <label class="col-sm-2 col-form-label">Sex:</label>
                                         <div class="col-sm-2">
-                                            <select class="form-control " name="pers_race" id="pers_race">
+                                            <select class="form-control" name="pers_sex" id="pers_sex">
                                                 <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                 <?php
-                                                $res = $db->query("SELECT unnest(enum_range(NULL::race)) AS type", []);
+                                                $res = $db->query("SELECT unnest(enum_range(NULL::sex)) AS type", []);
                                                 while ($enumtype = pg_fetch_assoc($res)) {
                                                     $t = $enumtype ['type'];
                                                     ?>
@@ -492,7 +498,7 @@ include('header.php');
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" name="pers_address" id="pers_address" placeholder="Street address">
                                         </div>
-                                        <label class="col-form-label col-sm-1" for="pers_apt_info">Apartment Info:</label>
+                                        <label class="col-form-label col-sm-1" for="pers_apt_info">Apartment:</label>
                                         <div class="col-sm-2">
                                             <input type="text" class="form-control" name="pers_apt_info" id="pers_apt_info" placeholder="Apartment Information">
                                         </div>
@@ -555,7 +561,7 @@ include('header.php');
                         <div class="card" id="section2">
                             <div class="card-header">
                                 <h5 class="card-title" style="font-weight: normal;">
-                                    <a data-toggle="collapse"  class="form-header" data-parent="#accordion" onfocusin="section2()" id="section2Header" href="#collapse2">Referring Party Information</a>
+                                    <a data-toggle="collapse"  class="form-header" data-parent="#accordion" onfocusin="section2()" id="pers_referring_party_info" href="#collapse2">Referring Party Information</a>
                                 </h5>
                             </div>
 
@@ -623,6 +629,26 @@ include('header.php');
                                 <h5 class="card-title" style="font-weight: normal;">
                                     <a data-toggle="collapse" class="form-header" onfocusin="section3()" data-parent="#accordion" href="#collapse3">Participant Household Information</a>
                                 </h5>
+                            </div>
+
+                            <div class="modal fade" id="memberModal" tabindex="-1" role="dialog" aria-labelledby="memberModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="memberModalLabel">Remove Household Member?</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you wish to remove this household member? This action cannot be undone.
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" id ="memberConfirm" class="btn cpca" data-dismiss="modal">OK</button>
+                                            <button type="button" id ="memberCancel" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div id="collapse3" class="collapse">
@@ -706,13 +732,12 @@ include('header.php');
                                                 </select>
                                             </div>
                                         </div>
-
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Add Member:</label>
                                         <div class="col-sm-1">
-                                            <button class="btn btn-default" type="button" id="btnAddMember">+</button> <!-- every other dropdown on this form uses down arrows -->
+                                            <button class="btn btn-default" type="button" id="btnAddMember"><span class="fa fa-plus"></span></button> <!-- every other dropdown on this form uses down arrows -->
                                         </div>
 
                                     </div>
@@ -720,7 +745,7 @@ include('header.php');
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Remove Member:</label>
                                         <div class="col-sm-1">
-                                            <button class="btn btn-default" type="button" id="btnDelMember" disabled="disabled">-</button> <!-- every other dropdown on this form uses down arrows -->
+                                            <button class="btn btn-default" type="button" id="btnDelMember" disabled="disabled"><span class="fa fa-minus"></span></button> <!-- every other dropdown on this form uses down arrows -->
                                         </div>
                                     </div>
 
@@ -804,7 +829,6 @@ include('header.php');
                                         </div>
                                     </div>
 
-
                                     <div id="partyEntry_1" class="clonedParty">
                                         <h5 class="heading-reference">Additional Parties Involved</h5>
                                         <br>
@@ -823,6 +847,26 @@ include('header.php');
                                                     }
                                                     ?>
                                                 </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal fade" id="agencyModal" tabindex="-1" role="dialog" aria-labelledby="agencyModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="agencyModalLabel">Remove Party?</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you wish to remove this party? This action cannot be undone.
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" id ="agencyConfirm" class="btn cpca" data-dismiss="modal">OK</button>
+                                                        <button type="button" id ="agencyCancel" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -856,13 +900,13 @@ include('header.php');
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Add Another Party:</label>
                                         <div class="col-sm-1">
-                                            <button class="btn btn-default" type="button" id="btnAddParty">+</button>
+                                            <button class="btn btn-default" type="button" id="btnAddParty"><span class="fa fa-plus"></span></button>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Remove Party:</label>
                                         <div class="col-sm-1">
-                                            <button class="btn btn-default" type="button" id="btnDelParty">-</button>
+                                            <button class="btn btn-default" type="button" id="btnDelParty"><span class="fa fa-minus"></span></button>
                                         </div>
                                     </div>
 

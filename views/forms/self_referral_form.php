@@ -40,7 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         for($i = 0; $i < sizeOf($self_address_info); $i++){
             if($i === 0){
                 if($self_address_info[$i] !== "") {
-                    $self_pers_street_num = $self_address_info[$i];
+                    if(is_numeric($self_address_info[$i])){
+                        $self_pers_street_num = $self_address_info[$i];
+                    } else {
+                        $self_pers_street_name .= " ".$self_address_info[$i];
+                    }
                 }
             } else {
                 $self_pers_street_name .= $self_address_info[$i] . " ";
@@ -51,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $self_pers_state = !empty($_POST['self_pers_state']) ? $_POST['self_pers_state'] : "New York";
     $self_pers_city = !empty($_POST['self_pers_city']) ? trim($_POST['self_pers_city']) : "Poughkeepsie";
     $self_apt_info = !empty($_POST['self_apt_info']) ? trim($_POST['self_apt_info']) : NULL;
-    $self_pers_phone = !empty($_POST['self_pers_phone']) ? $_POST['self_pers_phone'] : NULL;
+    $self_pers_phone = !empty($_POST['self_pers_phone']) ? phoneStrToNum($_POST['self_pers_phone']) : NULL;
 
     // Second Card (Additional Information)
     // This is logic for if a user does NOT select Yes or No, the result in the DB will be NULL.
@@ -237,7 +241,7 @@ include('header.php');
 
                                         <label class="col-form-label col-sm-1" for="self_apt_info">Apartment:</label>
                                         <div class="col-sm-2">
-                                            <input type="text" class="form-control" id="self_apt_info" name="self_apt_info" placeholder="Apt number">
+                                            <input type="text" class="form-control" id="self_apt_info" name="self_apt_info" placeholder="Apartment Information">
                                         </div>
                                     </div>
 

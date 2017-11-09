@@ -228,5 +228,8 @@ function prettyPrintPhone($string) {
 function toString($object){
 	$array = (array) $object;
 	return $array;
-}	
+}
 
+function phoneStrToNum($phoneNum) {
+    return str_replace(['(',')',' ','-'], '', $phoneNum);
+}

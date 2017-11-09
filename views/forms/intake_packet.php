@@ -35,35 +35,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $intake_intake_apt_info = !empty($_POST['intake_apt_info']) ? trim($_POST['intake_apt_info']) : NULL;
 
     // Logic for parsing the address into the address number and street name.
+    $intake_street_num = NULL;
+    $intake_street_name = NULL;
+
     if ($intake_address !== NULL) {
         $intake_address_info = explode(" ", $intake_address);
-        $intake_street_name = "";
 
         // Loop to parse through the address array ($self_address_info)
         for($i = 0; $i < sizeOf($intake_address_info); $i++){
             if($i === 0){
                 if($intake_address_info[$i] !== "") {
-                    $intake_street_num = $intake_address_info[$i];
+                    if(is_numeric($intake_address_info[$i])){
+                        $intake_street_num = $intake_address_info[$i];
+                    } else {
+                        $intake_street_name .= " ".$intake_address_info[$i];
+                    }
                 }
             } else {
                 $intake_street_name .= $intake_address_info[$i] . " ";
             }
         }
-    } else {
-        $intake_street_num = NULL;
-        $intake_street_name = NULL;
     }
 
     $intake_state = !empty($_POST['intake_state']) ? $_POST['intake_state'] : "New York";
     $intake_city = !empty($_POST['intake_city']) ? trim($_POST['intake_city']) : "Poughkeepsie";
     $intake_zip = !empty($_POST['intake_zip']) ? $_POST['intake_zip'] : 12601;
-    $intake_phone_day = !empty($_POST['intake_phone_day']) ? trim($_POST['intake_phone_day']) : NULL;
-    $leave_message_day = !empty($_POST['leave_message_day']) ? 1 : 0;
-    $intake_phone_night = !empty($_POST['intake_phone_night']) ? trim($_POST['intake_phone_night']) : NULL;
-    $leave_message_night = !empty($_POST['leave_message_night']) ? 1 : 0;
+    $intake_phone_day = !empty($_POST['intake_phone_day']) ? phoneStrToNum($_POST['intake_phone_day']) : NULL;
+    $intake_phone_night = !empty($_POST['intake_phone_night']) ? phoneStrToNum($_POST['intake_phone_night']) : NULL;
     // Emergency Contact
     $contact_relationship = !empty($_POST['contact_relationship']) ? $_POST['contact_relationship'] : NULL;
-    $contact_phone = !empty($_POST['contact_phone']) ? trim($_POST['contact_phone']) : NULL;
+    $contact_phone = !empty($_POST['contact_phone']) ? phoneStrToNum($_POST['contact_phone']) : NULL;
 
     // Second Card (Participant Children Information)
     $child_first_name_1 = !empty($_POST['child_first_name_1']) ? trim($_POST['child_first_name_1']) : NULL;
@@ -336,7 +337,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($intake_phone_day !== NULL) {
         $dayPhoneResult = $db->query("INSERT INTO FormPhoneNumbers (formID, phoneNumber, phoneType)
                                     VALUES ($1, $2, $3);", [$formID, $intake_phone_day, 'Day']);
-        echo pg_result_error($dayPhoneResult);
     }
 
     if ($intake_phone_night !== NULL) {
@@ -363,28 +363,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Run InsertPeople for current child
         if($$chd_first_name !== NULL && $$chd_last_name !== NULL){
-            $pIDChild = $db->query("SELECT PeopleInsert(
-                                       fName := $1::TEXT,
-                                       lName := $2::TEXT,
-                                       mInit := $3::VARCHAR
-                                       );", [$$chd_first_name,
-                $$chd_last_name,
-                $$chd_mi]);
 
-            $pIDChild = pg_fetch_result($pIDChild, 0);
+            if($$chd_first_name !== NULL && $$chd_last_name !== NULL){
+                $childResult = $db->query("SELECT createFamilyMember(
+                                            familyMemberFName := $1::TEXT,
+                                            familyMemberLName := $2::TEXT,
+                                            familyMemberMiddleInit := $3::VARCHAR(1),
+                                            rel := $4::RELATIONSHIP,
+                                            dob := $5::DATE,
+                                            race := $6::RACE,
+                                            sex := $7::SEX,
+                                            child := $8::BOOLEAN,
+                                            cust := $9::TEXT,
+                                            loc := $10::TEXT,
+                                            fID := $11::INT)", [$$chd_first_name, $$chd_last_name, $$chd_mi, NULL, $$chd_dob, $$chd_race, $$chd_sex, TRUE, $$chd_custody, $$chd_live, $formID]);
+            }
 
-            // Run createFamilyMember for current child
-            $childResult = $db->query("SELECT createFamilyMember(
-                                            familyID := $1::INT,
-                                            rel := $2::RELATIONSHIP,
-                                            dob := $3::DATE,
-                                            race := $4::RACE,
-                                            gender := $5::SEX,
-                                            child := $6::BOOLEAN,
-                                            cust := $7::TEXT,
-                                            loc := $8::TEXT,
-                                            fID := $9::INT)", [$pIDChild, NULL, $$chd_dob, $$chd_race, $$chd_sex, TRUE, $$chd_custody, $$chd_live, $formID]);
         }
+
     }
 
     // Redirect user to success page.
@@ -404,7 +400,7 @@ include('header.php');
         <div class="container-fluid">
 
             <div class="dropdown">
-                
+
                 <form id="intake_packet" action="/intake-packet" method="post" novalidate>
                     <div id="accordion" role="tablist" aria-multiselectable="true">
                         <br>
@@ -499,7 +495,7 @@ include('header.php');
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="intake_last_year_school">Last Year of School:</label>
                                         <div class="col-sm-2">
-                                            <input type="text" class="form-control mask-year-school" id="intake_last_year_school" name="intake_last_year_school" placeholder="example: 1988">
+                                            <input type="text" class="form-control" id="intake_last_year_school" name="intake_last_year_school" placeholder="example: 1988">
                                         </div>
                                     </div>
 
@@ -526,7 +522,7 @@ include('header.php');
                                         </div>
                                         <label class="col-form-label col-sm-1" for="intake_apt_info">Apartment:</label>
                                         <div class="col-sm-2">
-                                            <input type="text" class="form-control" id="intake_apt_info" name="intake_apt_info" placeholder="Apt number">
+                                            <input type="text" class="form-control" id="intake_apt_info" name="intake_apt_info" placeholder="Apartment Information">
                                         </div>
                                     </div>
 
@@ -565,24 +561,12 @@ include('header.php');
                                         <div class="col-sm-2">
                                             <input type="tel" class="form-control mask-phone feedback-icon" id="intake_phone_day" name="intake_phone_day" placeholder="(999) 999-9999">
                                         </div>
-
-                                        <div class="form-check form-check-inline">
-                                            <label class="form-check-label">
-                                                <input class="form-check-input" type="checkbox" id="leave_message_day" name="leave_message_day" value="Yes"> Leave message
-                                            </label>
-                                        </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="intake_phone_night">Evening Phone:</label>
                                         <div class="col-sm-2">
                                             <input type="tel" class="form-control mask-phone feedback-icon" id="intake_phone_night" name="intake_phone_night" placeholder="(999) 999-9999">
-                                        </div>
-
-                                        <div class="form-check form-check-inline">
-                                            <label class="form-check-label">
-                                                <input class="form-check-input" type="checkbox" id="leave_message_night" name="leave_message_night" value="Yes"> Leave message
-                                            </label>
                                         </div>
                                     </div>
                                     <br>
@@ -623,6 +607,26 @@ include('header.php');
                                 <h5 class="card-title" style="font-weight: normal;">
                                     <a data-toggle="collapse" class="form-header" onfocusin="section2()" data-parent="#accordion" href="#collapse2">Participant Children Information</a>
                                 </h5>
+                            </div>
+
+                            <div class="modal fade" id="childModal" tabindex="-1" role="dialog" aria-labelledby="childModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="childModalLabel">Remove Child?</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you wish to remove this child? This action cannot be undone.
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" id ="childConfirm" class="btn cpca" data-dismiss="modal">OK</button>
+                                            <button type="button" id ="childCancel" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div id="collapse2" class="collapse">
@@ -707,7 +711,7 @@ include('header.php');
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Add Child:</label>
                                         <div class="col-sm-1">
-                                            <button class="btn btn-default" type="button" id="btnAddChild">+</button>
+                                            <button class="btn btn-default" type="button" id="btnAddChild"><span class="fa fa-plus"></span></button>
                                         </div>
 
                                     </div>
@@ -715,7 +719,7 @@ include('header.php');
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Remove Child:</label>
                                         <div class="col-sm-1">
-                                            <button class="btn btn-default" type="button" id="btnDelChild" disabled="disabled">-</button>
+                                            <button class="btn btn-default" type="button" id="btnDelChild" disabled="disabled"><span class="fa fa-minus"></span></button>
                                         </div>
                                     </div>
 
@@ -769,7 +773,7 @@ include('header.php');
                                     </div>
 
                                     <div class="form-group hidden-field row live_with_children_div answer_no">
-                                            <label class="col-form-label col-sm-2" for="live_with_children_separated">Separated child(ren):</label>
+                                            <label class="col-form-label col-sm-2" for="live_with_children_separated">Length of Separation:</label>
                                             <div class="col-sm-5">
                                                 <input type="text" class="form-control" id="live_with_children_separated" name="live_with_children_separated" placeholder="For how long have you been separated from your child(ren)?">
                                             </div>
@@ -1129,7 +1133,6 @@ include('header.php');
                                         <input type="text" class="form-control" id="family_members" name="family_members" placeholder="Please list their name(s)">
                                     </div>
                                 </div>
-
                             </div>
                         </div>   <!-- 4th collapsible end -->
                     </div>
