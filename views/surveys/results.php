@@ -1,5 +1,5 @@
 <?php
-global $params, $db, $test;
+global $params, $db;
 $isEdit = $params[0] == 'edit';
 $id = isset($params[1]) ? $params[1] : '';
 # Prepare SQL statements for later use
@@ -47,10 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $removedClasses = isset($_POST['removed']) ? $_POST['removed'] : [];
     $valid = true;
 	
-	
-
-	
-	
     if (!isValidText($name)) {
         $errors['name'] = true;
         $valid = false;
@@ -83,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $success = false;
         }
-        # update variables for displaying new values
+        # update variables for d<isplaying new values
         $curricula = pg_fetch_assoc($db->execute("get_curriculum", [$id]));
         if (isset($topics)) pg_free_result($topics);
         $topics = $db->execute("get_curr_classes", [$id]);
@@ -96,16 +92,110 @@ include ('header.php');
 
 ?>
 
+<script>
+function copyToClipboard(num) {
+     var tempInput = document.createElement("textarea");
+    tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+    tempInput.value = document.querySelector("#testCopy" + num).innerText;
+	console.log(tempInput.value);
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+	
+	alert("Individual has been copied successfully!");
+	//var dummyContent = document.querySelector("#testCopy" + num).innerText;
+	
+	
+	//var dummy = $('<input>').val(dummyContent).appendTo('body').select();
+	//document.execCommand('Copy', false, null);
+	//console.log(dummyContent);
+  }	
+ 
+ function copyClassToClipboard() {
+	 
+     var tempInput = document.createElement("textarea");
+    tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+    tempInput.value = document.querySelector("#entireClass").innerText.replace("Back", "");
+	console.log(tempInput.value);
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+	
+	
+	//var dummyContent = document.querySelector("#testCopy" + num).innerText;
+	
+	
+	//var dummy = $('<input>').val(dummyContent).appendTo('body').select();
+	//document.execCommand('Copy', false, null);
+	//console.log(dummyContent);
+  }	
+	  
+	function expand() {
+		var originalContents = document.body.innerHTML;
+		$('.collapse').collapse('toggle');	
+		setTimeout(copyClassToClipboard, 200);
+		setTimeout(function(){document.body.innerHTML = originalContents;}, 300);
+		setTimeout(function(){
+			alert("Class has been copied successfully!")
+		}, 1000);
+		
+		
+		
+		
+		}
+		
+	function collapseCards() {
+		
+		$('.collapse').collapse('toggle');
+		
+	}
+	
+	function downloadPDFClass(){
+		var originalContents = document.body.innerHTML;
+		$('.collapse').collapse('toggle');	
+		setTimeout(function(){
+			var printContents = document.getElementById("entireClass").innerHTML.replace('Back', '');
+			
 
-<div class="page-wrapper">
-    <a href="/back"><button class="btn btn-success"><i class="fa fa-arrow-left"></i> Back</button></a>
+		document.body.innerHTML = printContents;
+
+		window.print();		
+
+		document.body.innerHTML = originalContents;
+	}, 200);
+		
+		
+	}
+	
+	function downloadPDFIndividual(num){
+	
+		var printContents = document.getElementById("testCopy" + num).innerHTML;
+		var originalContents = document.body.innerHTML;
+
+		document.body.innerHTML = printContents;
+
+		window.print();
+
+		document.body.innerHTML = originalContents;
+		
+	}
+			
+			
+</script>
+
+
+
+<div class="page-wrapper" id="entireClass">
+    <a href="/back"><button class="btn btn-success"><i value="Back" class="fa fa-arrow-left"></i> Back</button></a>
     <!--<div class="jumbotron form-wrapper mb-3">-->
-	<p>
 	<center>
 	<div class="container">
 		<div class="row justify-content-md-center">
 			<div class="col-sm">
-				<h4>Results:</h4>
+				
+				<h4 id="date">Results for <?php echo($_POST["classes"])?> held on <?php echo($_POST["Month"] . "/" . $_POST["Day"] . "/" . $_POST["Year"]) ?></h4>
 			</div>
 		</div>
 	</div>
@@ -116,10 +206,9 @@ include ('header.php');
 	
 		$db_connection = pg_connect("host=10.11.12.24 dbname=Survey user=postgres password=password");
 		
-		$query = "SELECT fullname FROM answers WHERE currentdate = '" . $_POST["Month"] . "/" . $_POST["Day"] . "/" . $_POST["Year"] . "' and workshoptopic = '" . $_POST["classes"] . "';";
+		$query = "SELECT fullname FROM answers WHERE currentdate LIKE '" . $_POST["Month"] . "/" . $_POST["Day"] . "/" . $_POST["Year"] . "%' and workshoptopic = '" . $_POST["classes"] . "';";
 		$result = pg_query($db_connection,$query);
-		$test = "test";
-		$counter = 0;
+		$counter = 1;
 		$nameNum = 1;
 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 			
@@ -132,45 +221,56 @@ include ('header.php');
 								<div class="card">
 									<div class="card-header" role="tab" id="heading' . $nameNum . '">
 										<h5 class="mb-0">
-											<a data-toggle="collapse" href="#collapse' . $nameNum . '" aria-expanded="true" aria-controls="collapse' . $nameNum . '">') . 
+											<a data-toggle="collapse" href="#collapse' . $nameNum . '" aria-expanded="false" aria-controls="collapse">') . 
 												$col_value . 
-												('
-													  </h5>
-													</div> '); 
-				
-				$query2 = "SELECT * FROM answers WHERE fullname='$col_value' and currentdate = '" . $_POST["Month"] . "/" . $_POST["Day"] . "/" . $_POST["Year"] . "' and workshoptopic = '" . $_POST["classes"] . "';";
+												('</a>
+												</h5>
+												</div>
+												'); 
+				$query2 = "SELECT * FROM answers WHERE fullname='$col_value' and currentdate LIKE '" . $_POST["Month"] . "/" . $_POST["Day"] . "/" . $_POST["Year"] . "%' and workshoptopic = '" . $_POST["classes"] . "';";
 				$result2 = pg_query($db_connection,$query2);
 				echo('
-
-													<div id="collapse' . $nameNum . '" class="collapse" role="tabpanel" aria-labelledby="heading' . $nameNum . '" data-parent="#accordion">
-													  <div class="card-body"> ');
+					<div id="collapse' . $nameNum . '" class="collapse" role="tabpanel" aria-labelledby="heading' . $nameNum . '" data-parent="" >
+					<div class="card-body" id="testCopy' . $nameNum . '"> 
+					');
+					
 				while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
 			
 					foreach ($line2 as $col_value) {
-								echo("Question " . $counter . ": ");
+								echo("<p><b>Question " . $counter . ": </b>");
 								echo($col_value);
-								echo("<br />");
+								echo("</p>");
 								$counter += 1;
 				
 					}
 					
 				}
-				$counter = 0;
+				$counter = 1;
 											
 				
 			}
-			echo('</div>
-													</div>
-												  </div>
-												  </div>
+			echo('
+			</div><p><center>'); ?>
+			<input value="Copy Individual" type="Submit" class="btn btn-success" onclick="copyToClipboard(<?php echo($nameNum); ?>)">
+			<input value="Print Individual" type="Submit" class="btn btn-success" onclick="downloadPDFIndividual(<?php echo($nameNum);?>)">
+			<?php
+			echo('</center></p>
+			</div>
+			</div>
+			</div>
             </div>
 		</div>
 	</div>
-	</p>');	
+	</p>
+	');	
 			$nameNum += 1;
 		}
-		
-		
+			?>
+			<center>
+			<input value="Copy Class" type="Submit" class="btn btn-success" onclick="expand()">
+			<input value="Print Class" type="Submit" class="btn btn-success" onclick="downloadPDFClass()">
+			</center>
+			<?php
 		pg_free_result($result);
 		pg_close($db_connection);
 	

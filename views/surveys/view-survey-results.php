@@ -16,6 +16,7 @@ if (!empty($params) && $params[0] == 'view') {
 	include('header.php');
 	global $db;
 	$filter = "";
+	
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$filter = isset($_POST['filter']) ? "%" . $_POST['filter'] . "%" : "%%";
 		$result = $db->query("SELECT * FROM curricula WHERE LOWER(curriculumname::text) LIKE LOWER($1) " .
@@ -28,32 +29,75 @@ if (!empty($params) && $params[0] == 'view') {
 		
 		
 		<!------------------------ This is the update button ------------------------->
-		<?php 
-			function updateDB(){
-				$output = system('py "C:\Program Files (x86)\EasyPHP-Devserver-17\eds-www\views\surveys\pullAndParseSurveys.py"');
-				echo $output;
+		
+		<?php
+			function updateDB(){	
+				//$command = escapeshellcmd('py C:\Program Files (x86)\EasyPHP-Devserver-17\eds-www\views\surveys\pullAndParseSurveys.py');
+				$output = shell_exec('py "C:\Program Files (x86)\EasyPHP-Devserver-17\eds-www\views\surveys\pullAndParseSurveys.py"');
+				echo("<script>alert('" . $output . "')</script>");
+				?>
+					<script>
+						var now = new Date();
+						
+						localStorage.setItem("lastSave", now);
+					</script>
+				<?php
+			}
+			
+			if (isset($_POST['updated'])) {
+				
+				updateDB();
 			}
 		?>
-		<button class="btn btn-success" onclick="document.write('<? updateDB() ?>')">Update Surveys</button>
 		
-	
+		<script>
+			function validateForm() {
+				var w = document.forms["userInput"]["classes"].value;
+				var x = document.forms["userInput"]["Month"].value;
+				var y = document.forms["userInput"]["Day"].value;
+				var z = document.forms["userInput"]["Year"].value;
+				if (w == "") {
+					alert("Please select a class");
+					return false;
+				} else if (x == "") {
+					alert("Please select a Month");
+					return false;
+				} else if (y == "") {
+					alert("Please select a Day");
+					return false;
+				} else if (z == "") {
+					alert("Please select a Year");
+					return false;
+				} else {
+					return true;
+				}
+			}
+		</script>
 		<p>
+		
+		<!--<form method="POST">
+		<input name="updated" value="Update Surveys" type="Submit" class="btn btn-success" style="float: right;"/>
+		</form>-->
+		
 		<center>
+		<br />
+		<br />
 		<div class="container">
 		<div class="row justify-content-md-center">
-		<div class="col-sm" style="height: 70px; max-width:75%">
+		<div class="col-sm" style="max-width:75%">
+		
 		<h4>Select class and filter by date for results</h4>
 		</div>
 		</div>
 		</div>
 		<!------------------------ This is the class selector ------------------------->
-		<div class="container">
+		<div class="container" >
 			<div class="row justify-content-md-center">
 			<div class="col-sm col-lg-6">
-		<form method="POST" action="/surveys/results">
+		<form method="POST" action="/surveys/results" onsubmit = "return validateForm()"name = "userInput">
 		<div class="form-group">
 		<select class="form-control" id="classes" name="classes">
-		<option selected disabled="disabled" value="">Class</option>
+			<option value="" disabled selected hidden>Class</option>
 			<option value="Class 1">Class 1</option>
 			<option value="Class 2">Class 2</option>
 			<option value="Class 3">Class 3</option>
@@ -67,8 +111,8 @@ if (!empty($params) && $params[0] == 'view') {
 		</div>
 		</div>
 		<!------------------------ This is the date selector ------------------------->
-		<div class="container" style="height: 70px">
-			<div class="row justify-content-md-center">
+		<div class="container" >
+				<div class="row justify-content-md-center">
 			<div class="col-sm col-lg-2">
 		<div class="form-group">
 		<select class="form-control" name="Month" id="month">
@@ -153,47 +197,39 @@ if (!empty($params) && $params[0] == 'view') {
 		</div>
 		</div>
 		</div>
-			<!--<a id="new-curriculum-btn" href="/surveys/results">
-					<button class="cpca btn"><i class="fa fa-plus"></i> Create Curriculum</button>
-				
-			
-			</a>	
-		</form> -->
-		
 			<input type="Submit" method = "POST" class="btn btn-primary" value="Search Surveys">
 			</form>
-		</center >
 		
-		<?php
-		/*	
-			
-			if($_SERVER['REQUEST_METHOD'] == 'POST') { 
+		<p>
+		<br />
+		<a href="http://Mari.st/pep" target="_blank">Link to Survey</a>
+		<div class="container">
+			<div class="row justify-content-md-center">
+				<div class="col-sm" style="max-width:75%; position: absolute; bottom: 5%;">
+				
+					<h5><small>Survey Database was last updated on:</small><h5> 
+					<h6 style="font-size: 10px; color: darkGray;" id="result"></p>
+					<script>
+					if (localStorage.lastSave != null){
+						
+						document.getElementById("result").innerHTML = localStorage.lastSave;
+						
+					} else { 
 					
-					$fullSearch = document.getElementById('month').options[currentMonth.selectedIndex].value + "/" + $_GET["Day"] + "/" + $_GET["Year"];
-                    $db_connection = pg_connect("host=10.11.12.24 dbname=Survey user=postgres password=password");
-                    $result = pg_query($db_connection, "SELECT fullname FROM answers WHERE currentdate = '" + $fullSearch + "' and class = '" + $_GET["classes"] + "'");
-                    echo "<table>\n";
-					while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-						echo "\t<tr>\n";
-						foreach ($line as $col_value) {
-							echo "\t\t<td>$col_value</td>\n";
-						}
-						echo "\t</tr>\n";
+						document.getElementById("result").innerHTML = "never";
+						
 					}
-					echo "</table>\n";
-                    pg_free_result($result);
-                    pg_close($db_connection);
-				
-			
-			} else {
-				
-				echo("shit");
-				
-			}
-			
-			*/
-        ?>
-
+					</script>
+					<p>
+					<form method="POST">
+						<input name="updated" value="Update Surveys" type="Submit" class="btn btn-success" />
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		</center>
+	
 	</div>
 
 	<?php
