@@ -576,6 +576,21 @@ label[for=password] {
     font-size: 1.5rem;
 }
 
+/* start attendance project */
+
+.panel-heading h3 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: normal;
+    width: 75%;
+    padding-top: 8px;
+}
+.add-participant{
+	display:hidden;
+}
+
+/* end attendance project */
 /* Results for Live Search */
 .search-result:focus,
 .search-result:hover {
@@ -625,4 +640,23 @@ label[for=password] {
 	.side-menu {
 		display: none;
 	}
+}
+
+/* Referral Forms */
+.form-header {
+    flex: 1;
+    padding: 0.5rem 1rem 0.5rem 0;
+    color: rgba(0,0,0,0.75);
+    transition: font-weight 0.1s;
+    text-decoration: none !important;
+}
+
+.form-header:hover {
+    color: #898EBB!important;
+    color: rgba(0,0,0,0.20);
+    font-weight: bold;
+}
+
+.col-form-label {
+    text-align: right;
 }
