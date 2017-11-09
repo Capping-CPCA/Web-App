@@ -35,6 +35,12 @@ $router->add('/curricula', 'curricula/curricula.php', 'Curricula');
 $router->add('/classes', 'classes/classes.php', 'Classes');
 $router->add('/locations', 'locations/locations.php', 'Locations');
 
+# Account Settings
+$router->add('/account-settings', 'account/account_settings.php', 'Account Settings');
+
+# User Management
+$router->add('/manage-users', 'user/user_management.php', 'User Management');
+
 #Reports
 $router->add('/quarterly-reports', 'reports/quarterly.php', 'Quarterly Reports');
 $router->add('/year-end-reports', 'reports/half_year.php', 'Year-End Reports');

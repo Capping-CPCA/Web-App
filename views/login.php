@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // If LDAP doesn't work, check for super user
     if ($error) {
-        $res = $db->query("SELECT salt, hashedpassword FROM superusers WHERE username = $1", [$ldaprdn_no_domain]);
+        $res = $db->query("SELECT * FROM superusers WHERE username = $1", [$ldaprdn_no_domain]);
         if ($res && pg_num_rows($res) > 0) {
             $info = pg_fetch_assoc($res);
             $salt = $info['salt'];
@@ -104,6 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (hash('sha256', $ldappass . $salt) == $hashed) {
                 $_SESSION['username'] = $ldaprdn_no_domain;
                 $_SESSION['role'] = Role::Superuser;
+                $_SESSION['employeeid'] = $info['superuserid'];
                 pg_free_result($res);
                 header('Location: ' . BASEURL . '/dashboard');
                 die();
