@@ -51,7 +51,7 @@
 						$curr = $currs[$i]['curriculumname'];
 						echo "<div class='checkbox'>
 							<label for='curricula-$i'>
-							<input type='checkbox' name='curricula[]' id='curricula-$i' value='$curr'>
+							<input type='checkbox' name='curricula[]' id='curricula-$i' value=\"$curr\">
 							$curr
 							</label>
 						</div>";
@@ -66,7 +66,7 @@
 						$race = $races[$i]["unnest"];
 						echo "<div class='checkbox'>
 							<label for='race-$i'>
-							<input type='checkbox' name='race[]' id='race-$i' value='$race'>
+							<input type='checkbox' name='race[]' id='race-$i' value=\"$race\">
 							$race
 							</label>
 						</div>";
@@ -131,8 +131,8 @@
 		var day = (d.getDate() < 10) ? "0" + d.getDate() : d.getDate();
 		var month = (d.getMonth() < 9) ? "0" + (d.getMonth()+1) : d.getMonth() + 1;
 		if (startElem.value === "") {
-			startElem.valueAsDate = d;
-			endElem.valueAsDate = d;
+			startElem.value = year + "-" + month + "-" + day;
+			endElem.value = startElem.value;
 			startElem.max = startElem.value;
 			endElem.max = endElem.value;
 			year -= NUM_YEARS_BACK;

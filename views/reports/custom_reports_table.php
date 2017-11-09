@@ -33,18 +33,18 @@
 	$currQuery = "";
 	
 	if (count($currs) > 0) {
-		$currQuery = "(participantclassattendance.curriculumname = '" . $currs[0] . "' ";
+		$currQuery = "(participantclassattendance.curriculumname = '" . pg_escape_string($currs[0]) . "' ";
 		for ($i = 1; $i < count($currs); $i++) {
-			$currQuery .= "OR participantclassattendance.curriculumname = '" . $currs[$i] . "' ";
+			$currQuery .= "OR participantclassattendance.curriculumname = '" . pg_escape_string($currs[$i]) . "' ";
 		}
 		$currQuery .= ")";
 	}
 	
 	$raceQuery = "";
 	if (count($races) > 0) {
-		$raceQuery = "(participants.race = '" . $races[0] . "' ";
+		$raceQuery = "(participants.race = '" . pg_escape_string($races[0]) . "' ";
 		for ($i = 1; $i < count($races); $i++) {
-			$raceQuery .= "OR participants.race = '" . $races[$i] . "' ";
+			$raceQuery .= "OR participants.race = '" . pg_escape_string($races[$i]) . "' ";
 		}
 		$raceQuery .= ")";
 	}
