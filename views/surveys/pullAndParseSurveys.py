@@ -36,7 +36,7 @@ cursor = conn.cursor()
 url_login = "https://accounts.google.com/ServiceLogin"
 url_auth = "https://accounts.google.com/ServiceLoginAuth"
 session = SessionGoogle(url_login, url_auth, googleEmail, googlePassword)
-download = session.get("https://docs.google.com/spreadsheets/d/1bZ_K7fk1ut4B7qRvcbXFsq8tDIXN23w1ZWHe4nX0ay8/export?exportFormat=csv&gid=94817619")
+download = session.get("https://docs.google.com/spreadsheets/d/1LDN8wTZMKf7R01U6d0ToHfFjuxnkm5_9gkgptMouvQw/export?exportFormat=csv&gid=2000530113")
 
 csvfile = download.content.decode('utf-8')
 
