@@ -151,6 +151,7 @@
 		$numClassMonthRes = pg_fetch_result($db->query($query ,[]), 0, 0);
 		$query = $baseQuery . "WHERE $yearWhere;";
 		$numClassYearRes = pg_fetch_result($db->query($query ,[]), 0, 0);
+	
 	}
 	
 	include('header.php'); 
