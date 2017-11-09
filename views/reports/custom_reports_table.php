@@ -33,9 +33,9 @@
 	$currQuery = "";
 	
 	if (count($currs) > 0) {
-		$currQuery = "(participantclassattendance.curriculumname = '" . pg_escape_string($currs[0]) . "' ";
+		$currQuery = "(participantclassattendance.curriculumid = '" . pg_escape_string($currs[0]) . "' ";
 		for ($i = 1; $i < count($currs); $i++) {
-			$currQuery .= "OR participantclassattendance.curriculumname = '" . pg_escape_string($currs[$i]) . "' ";
+			$currQuery .= "OR participantclassattendance.curriculumid = '" . pg_escape_string($currs[$i]) . "' ";
 		}
 		$currQuery .= ")";
 	}
@@ -80,6 +80,19 @@
 	$newRes = pg_fetch_result($db->query($baseQuery . $newWhere, []), 0, 0);
 	$duplRes = $totalRes - $newRes;
 	
+	//Get all the names of the curriculum selected, using their ids
+	$currIdSet = "( ";
+	if (count($currs) > 0) {
+		$currIdSet .= $currs[0];
+	}
+	for ($i=1; $i<count($currs); $i++) {
+		$currIdSet .= ", $currs[$i]";
+	}
+	$currIdSet .= ")";
+	
+	$query = "SELECT curriculumname FROM curricula WHERE curriculumid IN $currIdSet;";
+	$currNames = pg_fetch_all($db->query($query, []));
+	
 	include('header.php');
 ?>
 <div class="container">
@@ -100,10 +113,10 @@
 		<div align="center">
 			<?php
 			#Display the chosen curriculum
-			if (count($currs) > 0) {
-				echo "<div><b>Curricula:</b> " . $currs[0];
-				for ($i = 1; $i < count($currs); $i++) {
-					echo ", " . $currs[$i];
+			if ($currNames[0]["curriculumname"] !== NULL) {
+				echo "<div><b>Curricula:</b> " . $currNames[0]["curriculumname"];
+				for ($i = 1; $i < count($currNames); $i++) {
+					echo ", " . $currNames[$i]["curriculumname"];
 				}
 				echo "</div>";
 			}
