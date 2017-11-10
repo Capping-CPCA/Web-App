@@ -147,6 +147,8 @@
 			endElem.max = year + "-" + month + "-" + day;
 			year -= NUM_YEARS_BACK;
 			startElem.min = year + "-" + month + "-" + day;
+			minAgeChange()
+			maxAgeChange()
 		}
 	}
 	
