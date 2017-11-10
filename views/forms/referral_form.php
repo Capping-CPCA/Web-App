@@ -27,6 +27,8 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
     $pers_lastname = !empty($_POST['pers_lastname']) ? trim($_POST['pers_lastname']) : NULL;
     $pers_middlein = !empty($_POST['pers_middlein']) ? trim($_POST['pers_middlein']) : NULL;
     $pers_dob = !empty($_POST['pers_dob']) ? trim($_POST['pers_dob']) : NULL;
+    $pers_sex = !empty($_POST['pers_sex']) ? trim($_POST['pers_sex']) : NULL;
+    $pers_race = !empty($_POST['pers_race']) ? trim($_POST['pers_race']) : NULL;
     $pers_address = !empty($_POST['pers_address']) ? trim($_POST['pers_address']) : NULL;
     $address_info = explode(" ", $pers_address);
     $pers_address_num = null;
@@ -44,9 +46,9 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
     }
 
     $pers_apartment_info = !empty($_POST['pers_apt_info']) ? trim($_POST['pers_apt_info']) : NULL;
-    $pers_state = !empty($_POST['pers_state']) ? trim($_POST['pers_state']) : NULL;
+    $pers_state = !empty($_POST['pers_state']) ? trim($_POST['pers_state']) : "New York";
     $pers_zip = !empty($_POST['pers_zip']) ? $_POST['pers_zip'] : 12601;
-    $pers_city = !empty($_POST['pers_city']) ? trim($_POST['pers_city']) : NULL;
+    $pers_city = !empty($_POST['pers_city']) ? trim($_POST['pers_city']) : "Poughkeepsie";
     $pers_primphone = !empty($_POST['pers_primphone']) ? trim($_POST['pers_primphone']) : NULL;
     $pers_secphone = !empty($_POST['pers_secphone']) ? trim($_POST['pers_secphone']) : NULL;
     $pers_reason = !empty($_POST['pers_reason']) ? trim($_POST['pers_reason']) : NULL;
@@ -175,35 +177,39 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
     $result = $db->query(
         'SELECT addAgencyReferral(
           agencyReferralParticipantID := $1::INT,
-          agencyReferralParticipantDateOfBirth :=  $2::DATE,
-          houseNum := $3::INTEGER,
-          streetAddress := $4::TEXT,
-          apartmentInfo := $5::TEXT,
-          zipCode := $6::INTEGER,
-          city := $7::TEXT,
-          state := $8::STATES,
-          referralReason := $9::TEXT,
-          hasAgencyConsentForm := $10::BOOLEAN,
-          referringAgency := $11::TEXT,
-          referringAgencyDate := $12::DATE,
-          additionalInfo := $13::TEXT,
-          hasSpecialNeeds :=$14::BOOLEAN,
-          hasSubstanceAbuseHistory :=$15::BOOLEAN,
-          hasInvolvementCPS :=$16::BOOLEAN,
-          isPregnant :=$17::BOOLEAN,
-          hasIQDoc := $18::BOOLEAN,
-          mentalHealthIssue := $19::BOOLEAN,
-          hasDomesticViolenceHistory := $20::BOOLEAN,
-          childrenLiveWithIndividual := $21::BOOLEAN,
-          dateFirstContact := $22::DATE,
-          meansOfContact := $23::TEXT,
-          dateOfInitialMeeting := $24::DATE,
-          location := $25::TEXT,
-          comments := $26::TEXT,
-          eID := $27::INTEGER)',
+          agencyReferralParticipantDateOfBirth := $2::DATE,
+          agencyReferralParticipantRace := $3::RACE,
+          agencyReferralParticipantSex := $4::SEX,
+          houseNum := $5::INTEGER,
+          streetAddress := $6::TEXT,
+          apartmentInfo := $7::TEXT,
+          zipCode := $8::VARCHAR(5),
+          city := $9::TEXT,
+          state := $10::STATES,
+          referralReason := $11::TEXT,
+          hasAgencyConsentForm := $12::BOOLEAN,
+          referringAgency := $13::TEXT,
+          referringAgencyDate := $14::DATE,
+          additionalInfo := $15::TEXT,
+          hasSpecialNeeds :=$16::BOOLEAN,
+          hasSubstanceAbuseHistory :=$17::BOOLEAN,
+          hasInvolvementCPS :=$18::BOOLEAN,
+          isPregnant :=$19::BOOLEAN,
+          hasIQDoc := $20::BOOLEAN,
+          mentalHealthIssue := $21::BOOLEAN,
+          hasDomesticViolenceHistory := $22::BOOLEAN,
+          childrenLiveWithIndividual := $23::BOOLEAN,
+          dateFirstContact := $24::DATE,
+          meansOfContact := $25::TEXT,
+          dateOfInitialMeeting := $26::DATE,
+          location := $27::TEXT,
+          comments := $28::TEXT,
+          eID := $29::INTEGER)',
         array(
             $pIDResult,
             $pers_dob,
+            $pers_race,
+            $pers_sex,
             $pers_address_num,
             $pers_address_street,
             $pers_apartment_info,
@@ -360,26 +366,20 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 
         // Run InsertPeople for current household member
         if($$fam_first_name !== NULL && $$fam_last_name !== NULL){
-            $pIDFamily = $db->query("SELECT PeopleInsert(
-                                       fName := $1::TEXT,
-                                       lName := $2::TEXT,
-                                       mInit := $3::VARCHAR
-                                       );", [$$fam_first_name,
-                                            $$fam_last_name,
-                                            $$fam_mi]);
-            $pIDFamily = pg_fetch_result($pIDFamily, 0);
-
             // Run createFamilyMember for current household member
             $familyResult = $db->query("SELECT createFamilyMember(
-                                            familyID := $1::INT,
-                                            rel := $2::RELATIONSHIP,
-                                            dob := $3::DATE,
-                                            race := $4::RACE,
-                                            gender := $5::SEX,
-                                            child := $6::BOOLEAN,
-                                            cust := $7::TEXT,
-                                            loc := $8::TEXT,
-                                            fID := $9::INT)", [$pIDFamily, $$fam_relationship, $$fam_dob, $$fam_race, $$fam_sex, $isChild, NULL, NULL, $formID]);
+                                            familyMemberFName := $1::TEXT,
+                                            familyMemberLName := $2::TEXT,
+                                            familyMemberMiddleInit := $3::VARCHAR(1),
+                                            rel := $4::RELATIONSHIP,
+                                            dob := $5::DATE,
+                                            race := $6::RACE,
+                                            sex := $7::SEX,
+                                            child := $8::BOOLEAN,
+                                            cust := $9::TEXT,
+                                            loc := $10::TEXT,
+                                            fID := $11::INT)", [$$fam_first_name, $$fam_last_name, $$fam_mi, $$fam_relationship, $$fam_dob, $$fam_race, $$fam_sex, $isChild, NULL, NULL, $formID]);
+
 
         }
     }
@@ -447,6 +447,42 @@ include('header.php');
                                         <label class="col-form-label col-sm-2" for="pers_dob">Date of Birth:</label>
                                         <div class="col-sm-2">
                                             <input type="date" class="form-control" name="pers_dob" id="pers_dob" placeholder="Enter DOB">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Sex:</label>
+                                        <div class="col-sm-2">
+                                            <select class="form-control" name="pers_sex" id="pers_sex">
+                                                <option value="" selected="selected" disabled="disabled">Choose one</option>
+                                                <?php
+                                                $res = $db->query("SELECT unnest(enum_range(NULL::sex)) AS type", []);
+                                                while ($enumtype = pg_fetch_assoc($res)) {
+                                                    $t = $enumtype ['type'];
+                                                    ?>
+                                                    <option value="<?= $t ?>"><?= $t ?></option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Race:</label>
+                                        <div class="col-sm-2">
+                                            <select class="form-control " name="pers_race" id="pers_race">
+                                                <option value="" selected="selected" disabled="disabled">Choose one</option>
+                                                <?php
+                                                $res = $db->query("SELECT unnest(enum_range(NULL::race)) AS type", []);
+                                                while ($enumtype = pg_fetch_assoc($res)) {
+                                                    $t = $enumtype ['type'];
+                                                    ?>
+                                                    <option value="<?= $t ?>"><?= $t ?></option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select>
                                         </div>
                                     </div>
 
