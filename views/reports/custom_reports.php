@@ -19,7 +19,7 @@
 	
 	global $db;
 
-	$query = "SELECT DISTINCT(curriculumname) FROM curricula;";
+	$query = "SELECT DISTINCT(curriculumname), curriculumid FROM curricula;";
 	$currs = pg_fetch_all($db->query($query, []));
 
 	$query = "SELECT unnest(enum_range(NULL::race))  ";
@@ -47,14 +47,17 @@
 			<div id="custom-reports-checkboxes" class="form-group row">
 				<label class="col-md-2 col-form-label" for="curricula[]"><b>Curricula</b></label>
 				<div class="col-md-4"><?php
-					for ($i=0; $i<count($currs); $i++) {
-						$curr = $currs[$i]['curriculumname'];
-						echo "<div class='checkbox'>
-							<label for='curricula-$i'>
-							<input type='checkbox' name='curricula[]' id='curricula-$i' value=\"$curr\">
-							$curr
-							</label>
-						</div>";
+					if ($currs[0]["curriculumid"] !== NULL) {
+						for ($i=0; $i<count($currs); $i++) {
+							$currName = $currs[$i]["curriculumname"];
+							$currId = $currs[$i]["curriculumid"];
+							echo "<div class='checkbox'>
+								<label for='curricula-$i'>
+								<input type='checkbox' name='curricula[]' id='curricula-$i' value=\"$currId\">
+								$currName
+								</label>
+							</div>";
+						}
 					}
 				?></div>
 			</div>
