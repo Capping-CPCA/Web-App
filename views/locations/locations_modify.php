@@ -11,88 +11,92 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.1.6
+ * @version 0.6
  * @since 0.1
+ * @deprecated
  */
 
 global $params, $db;
 $isEdit = $params[0] == 'edit';
+
 array_shift($params);
 
-# Get site name from params
-$sitename = rawurldecode(implode('/', $params));
+$name = rawurldecode(implode('/', $params));
 
-# Prepare SQL statements for later use
-$db->prepare("get_site", "SELECT * FROM sites WHERE sitename = $1");
+$db->prepare("get_site", "SELECT TRUE WHERE $1 IN (SELECT unnest(enum_range(NULL::programtype))::text as type);");
 
-// If editing, populate data into variables
 if ($isEdit) {
-    $result = $db->execute("get_site", [$sitename]);
+    $result = $db->execute("get_site", [$name]);
 
-    # If no results, class doesn't exist, redirect
     if (pg_num_rows($result) == 0) {
         header('Location: /locations');
         die();
     }
 
-    $site = pg_fetch_assoc($result);
     pg_free_result($result);
 }
-
-$name = isset($site) ? $site['sitename'] : '';
-$type = isset($site) ? $site['programtype'] : '';
 
 # Used to track POST errors
 $errors = [
     "name" => false,
-    "type" => false
 ];
-# Used to display messages based on POST
-$success = "";
-$errorMsg = "";
 
 # Validate form information, display errors if needed
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $oldName = $name;
     $name = isset($_POST['name']) ? $_POST['name'] : $name;
-    $type = isset($_POST['type']) ? $_POST['type'] : $type;
-
+    $name = trim(addslashes($name));
     $valid = true;
 
     if (!isValidText($name)) {
         $errors['name'] = true;
         $valid = false;
     }
-    if (empty($type)) {
-        $errors['type'] = true;
-        $valid = false;
-    }
 
     if ($valid) {
         if ($isEdit) {
-            $res = $db->query("UPDATE sites SET programtype = $1 ".
-                "WHERE sitename = $2", [$type,$oldName]);
+            // Remove old enum from site
+            $res = $db->query("UPDATE sites SET sitetype = NULL WHERE sitetype = $1", [$oldName]);
+            if ($res && pg_result_error_field($res, PGSQL_DIAG_SQLSTATE) == 0) {
+                // Update enum name
+                $res = $db->query("UPDATE pg_enum SET enumlabel = $1 " .
+                    "WHERE enumtypid = 'programtype'::REGTYPE AND " .
+                    "enumlabel = $2", [$name, $oldName]);
+                if ($res && pg_result_error_field($res, PGSQL_DIAG_SQLSTATE) == 0) {
+                    // Update sitetype in site
+                    $res = $db->query("UPDATE sites SET sitetype = $1 WHERE sitetype IS NULL", [$name]);
+                }
+            }
         } else {
-            $res = $db->query("INSERT INTO sites VALUES ($1, $2)", [$name,$type]);
+            $res = $db->query("ALTER TYPE programtype ADD VALUE E'$name'", []);
         }
 
         if ($res) {
             $state = pg_result_error_field($res, PGSQL_DIAG_SQLSTATE);
             if ($state == 0) {
-                $success = "true";
+                $success = true;
             } else {
-                $success = "false";
+                $success = false;
                 if ($state == "23505") { // unique_violation
                     $errorMsg = "Location with name \"$name\" already exists.";
-                } else {
-                    // process other errors
                 }
+                $errorState = $state;
             }
         } else {
-            $success = "false";
+            $success = false;
         }
 
-        $site = pg_fetch_assoc($db->execute("get_site", [$name]));
+    } else {
+        $success = false;
+    }
+
+    if ($success) {
+        $note['title'] = 'Success!';
+        $note['msg'] = 'The location has been ' . ($isEdit ? 'updated.' : 'created.');
+        $note['type'] = 'success';
+        $_SESSION['notification'] = $note;
+        header("Location: /locations");
+        die();
     }
 }
 
@@ -104,13 +108,12 @@ include ('header.php');
     <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
     <div class="jumbotron form-wrapper mb-3">
         <?php
-        if ($success == "true") {
-            $notification = new Notification('Success!', 'The location has been '.($isEdit ? 'updated' : 'created').'.', 'success');
-            $notification->display();
-        } else if ($success == "false") { // == false, prevents == null from being true
-            $notification = new Notification('Error!', !empty($errorMsg) ? $errorMsg : ('Uh oh! an error occurred and the location wasn\'t '.
-                ($isEdit ? 'updated' : 'created').'.'), 'danger');
-            $notification->display();
+        if (isset($success)) {
+            if (!$success) {
+                $notification = new Notification('Error!',
+                    isset($errorMsg) ? $errorMsg : ('Uh oh! An error occurred and the location wasn\'t created.') . (isset($errorState) ? " [$errorState]" : ""), 'danger');
+                $notification->display();
+            }
         }
         ?>
         <form class="form" method="post" action="<?= $_SERVER['REQUEST_URI'] ?>" novalidate>
@@ -118,30 +121,13 @@ include ('header.php');
             <div class="form-group">
                 <label for="class-name" class="<?= $errors['name'] ? 'text-danger' : '' ?>">Name</label>
                 <input type="text" class="form-control <?= $errors['name'] ? 'is-invalid' : '' ?>"
-                       value="<?= $name ?>" id="class-name" name="name" required <?= $isEdit ? 'disabled' : '' ?> />
+                       value="<?= $name ?>" id="class-name" name="name" required />
                 <div class="invalid-feedback">
                     Invalid characters found in name.
                 </div>
             </div>
-            <div class="form-group">
-                <label for="type-select" class="<?= $errors['type'] ? 'text-danger' : '' ?>">Program Type</label>
-                <select id="type-select" class="form-control <?= $errors['type'] ? 'is-invalid' : '' ?>" name="type">
-                    <?php
-                    $res = $db->query("SELECT unnest(enum_range(NULL::programtype)) AS type", []);
-                    while ($programtype = pg_fetch_assoc($res)) {
-                        $t = $programtype['type'];
-                        ?>
-                        <option value="<?= $t ?>" <?= $type == $t ? 'selected' : '' ?>><?= $t ?></option>
-                        <?php
-                    }
-                    ?>
-                </select>
-                <div class="invalid-feedback">
-                    Invalid characters found in description.
-                </div>
-            </div>
             <div class="form-footer submit">
-                <button type="submit" class="btn cpca"><?= $isEdit ? 'Update' : 'Create' ?></button>
+                <button type="submit" class="btn cpca"><?= $isEdit ? 'Submit New Changes' : 'Add Location' ?></button>
             </div>
         </form>
     </div>

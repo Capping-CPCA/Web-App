@@ -11,7 +11,7 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.2
+ * @version 0.6
  * @since 0.2
  */
 
@@ -25,16 +25,22 @@ if (!isset($_SESSION['ldaprdn']))
 $error = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = $_SESSION['ldaprdn'];
+    $email = strtolower($_SESSION['ldaprdn']);
     $fname = valueOrEmpty($_POST, 'firstName');
     $mInit = valueOrEmpty($_POST, 'middleInit');
     $lname = valueOrEmpty($_POST, 'lastName');
     $phone = valueOrEmpty($_POST, 'primaryPhone');
 
     // Create new employee / person
-    $res = $db->query("SELECT employeeinsert(fname := $1::TEXT, lname := $2::TEXT, ".
-        "mInit := $3::VARCHAR, em := $4::TEXT, pPhone := $5::TEXT, pLevel := 'New'::PERMISSION)",
-        [$fname, $lname, $mInit, $email, $phone]);
+    $peopleRes = $db->query("SELECT PeopleInsert(
+                                       fName := $1::TEXT,
+                                       lName := $2::TEXT,
+                                       mInit := $3::VARCHAR
+                                       );", [$fname, $lname, $mInit]);
+    $peopleId = pg_fetch_result($peopleRes, 0);
+    $res = $db->query("SELECT employeeinsert(personid := $1::INTEGER, em := $2::TEXT, pphone := $3::TEXT, pLevel := 'New'::PERMISSION)",
+        [$peopleId, $email, $phone]);
+
     if ($res) {
 
         // Check for query errors

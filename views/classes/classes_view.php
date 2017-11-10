@@ -10,17 +10,15 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.3.2
+ * @version 0.6
  * @since 0.1
  */
 
 global $params, $db;
-array_shift($params);
 
-# Get topic name from params
-$topicname = rawurldecode(implode('/', $params));
+$id = $params[1];
 
-$result = $db->query("SELECT * FROM classes WHERE topicname = $1", [$topicname]);
+$result = $db->query("SELECT * FROM classes WHERE classid = $1", [$id]);
 
 # If no results, class doesn't exist, redirect
 if (pg_num_rows($result) == 0) {
@@ -31,7 +29,7 @@ if (pg_num_rows($result) == 0) {
 $class = pg_fetch_assoc($result);
 pg_free_result($result);
 
-$topics = $db->query("SELECT * FROM curriculuminfo WHERE topicname = $1", [$topicname]);
+$topics = $db->query("SELECT * FROM curriculuminfo WHERE classid = $1", [$id]);
 
 include('header.php');
 ?>
@@ -46,11 +44,11 @@ include('header.php');
 		</div>
     <div class="form-wrapper card view-card">
         <h4 class="card-header text-left">
-            <?= $class['topicname'] ?>
-            <?php if (hasRole(Role::Coordinator)) { ?>
+            <?php echo $class['topicname'] . ($class['df'] != 0 ? ' <span class="badge badge-secondary">Deleted</span>' : '') ?>
+            <?php if (hasRole(Role::Coordinator) && $class['df'] == 0) { ?>
                 <div class="float-right">
-                    <a href="/classes/edit/<?= implode('/', $params) ?>"><button class="btn btn-outline-secondary btn-sm">Edit</button></a>
-                    <a href="/classes/delete/<?= implode('/', $params) ?>"><button class="btn btn-outline-danger btn-sm">Delete</button></a>
+                    <a href="/classes/edit/<?= $id ?>"><button class="btn btn-outline-secondary btn-sm">Edit</button></a>
+                    <a href="/classes/delete/<?= $id ?>"><button class="btn btn-outline-danger btn-sm">Delete</button></a>
                 </div>
             <?php } ?>
         </h4>

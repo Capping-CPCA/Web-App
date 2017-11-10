@@ -8,7 +8,7 @@ $(document).ready(function(){
         .on('input', function() {
             validationIntake($(this));
         })
-        .on('focusin', function() {
+        .on('focusout', function() {
             validationIntake($(this));
         });
 });
