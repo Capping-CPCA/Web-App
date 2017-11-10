@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 database = "Survey"
 username = "postgres"
 password = "password"
-address = "10.11.12.24"
+address = "10.11.12.26"
 googleEmail = "pokcpcapep@gmail.com"
 googlePassword = "Marist1234"
 

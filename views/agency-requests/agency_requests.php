@@ -11,10 +11,8 @@
  * @author Vallie Joseph
  * @copyright 2017 Marist College
  * @since 0.1.2
- * @version 0.1.2
+ * @version 0.1.5
  */
-authorizedPage();
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     # send search GET request with params to /participant-search
     $search = isset($_POST['searchquery']) ? $_POST['searchquery'] : '';

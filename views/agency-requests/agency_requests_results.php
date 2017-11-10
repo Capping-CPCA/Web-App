@@ -1,5 +1,19 @@
 <?php
-authorizedPage();
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Displays the results from a participant search
+ *
+ * After a user enters a search or goes to the related URL,
+ * the route params are parsed and converted into a search.
+ * The results from the database are then displayed as
+ * separate cards.
+ *
+ * @author Vallie Joseph
+ * @copyright 2017 Marist College
+ * @version 0.3
+ * @since 0.1
+ */
 
 global $db, $params;
 
@@ -8,13 +22,17 @@ $searchquery = strtolower(rawurldecode(implode('/',$params)));
 $result = $db->query("SELECT  participants.participantid, participants.dateofbirth, participants.race, people.firstname, people.lastname, people.middleinit ".
                         "FROM participants ".
                         "INNER JOIN people ON participants.participantid = people.peopleid ".
-                        "WHERE LOWER(CONCAT(people.firstname, ' ' , people.lastname)) LIKE $1 ".
+                        "WHERE LOWER(CONCAT(people.firstname, ' ' , people.middleinit , ' ' , people.lastname)) LIKE $1 ".
+                        "OR LOWER(CONCAT(people.lastname, ' ' , people.firstname, ' ',people.middleinit )) LIKE $1".
+						"OR LOWER(CONCAT(people.firstname, ' ' , people.lastname)) LIKE $1 ".
                         "OR LOWER(CONCAT(people.lastname, ' ' , people.firstname)) LIKE $1",  ['%'.$searchquery.'%']);
 
 include('header.php');
 ?>
 <div class="w-100 d-flex flex-column">
-    <a href="/back"><button class="cpca btn"><i class="fa fa-arrow-left"></i> Back</button></a>
+    <div class="mb-2">
+        <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
+    </div>
     <ul class="list-group" style="max-width: 700px; width: 100%; margin: 0 auto">
         <?php
         #if query returns nothing, throw an error to the user
@@ -30,7 +48,7 @@ include('header.php');
             ?>
             <li class="list-group-item">
                 <button class="btn btn-outline-info advanced-info"><i class="fa fa-question" aria-hidden="true"></i></button>
-                <span>&nbsp;<?php echo $row['lastname'].", ".$row['middleinit']." ".$row['firstname'];?></span>
+                <span>&nbsp;<?php echo $row['lastname'].", ".$row['firstname']. " ". $row['middleinit'];?></span>
                 <a class="float-right" href="/view-participant/<?= $row['participantid'] ?>">
                     <button class="p-view btn cpca">
                         View Record
@@ -48,6 +66,11 @@ include('header.php');
         ?>
     </ul>
 </div>
+<script>
+    $(function() {
+        showTutorial('participantResult');
+    });
+</script>
 <?php
 include('footer.php');
 ?>

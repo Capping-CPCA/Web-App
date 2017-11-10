@@ -107,11 +107,37 @@ html, body {
     font-size: 15px;
 }
 
+#account-settings.dropdown-item.text-secondary:active:focus {
+    background-color: rgba(255,255,255,0.1)!important;
+}
 
+tr.language-row {
+    height: 54px!important;
+}
+
+span.language-span {
+    padding-left: 10px!important;
+}
 
 /* End Nav Bar */
 
 /* Button */
+
+.outline-cpca {
+    background-color: transparent;
+    color: #5C629C;
+    border-color: #5C629C;
+    transition: all 0.2s;
+}
+.outline-cpca:disabled {
+    color: #727699;
+    background-color: transparent;
+}
+.outline-cpca:not(:disabled):hover {
+    cursor: pointer;
+    background-color: #5C629C;
+    color: white;
+}
 
 .cpca {
     background-color: #5C629C;
@@ -125,6 +151,30 @@ html, body {
 .cpca:active, .cpca:focus {
     outline: none;
     box-shadow: none;
+}
+
+#isFacilitator.active, #isNotFacilitator.active {
+    outline: none!important;
+    background-color: #5C629C!important;
+    color: rgba(255,255,255,0.8)!important;
+    transition: all 0.2s!important;
+}
+
+#isFacilitator.active:not(:disabled):hover, #isNotFacilitator.active:not(:disabled):hover {
+    cursor: pointer!important;
+    background-color: #898EBB!important;
+}
+#isFacilitator.active:active, .cpca:focus, #isNotFacilitator.active:active {
+    outline: none!important;
+    box-shadow: none!important;
+}
+
+#isFacilitator.focus, #isNotFacilitator.active:active {
+    background-color: #5C629C;
+    color: rgba(255,255,255,0.8);
+    transition: all 0.2s;
+    outline: none!important;
+    box-shadow: none!important;
 }
 
 /* End Button
@@ -355,6 +405,8 @@ footer {
 .icon-img{
     height:100px;
     width: auto;
+    border: 1px solid rgba(0,0,0,.125)!important;
+    padding: 5px;
 }
 
 /*Form Stuff*/
@@ -464,6 +516,7 @@ label[for=password] {
 }
 
 /* Warning Card */
+.cpca-card h4,
 .view-card h4,
 .warning-card h4 {
     font-weight: 300;
@@ -473,12 +526,18 @@ label[for=password] {
     font-weight: 400;
 }
 
+.cpca-card,
 .warning-card {
     max-width: 700px;
     width: 100%;
     margin: 0 auto;
     border-color: #B00;
 }
+
+.cpca-card {
+    border-color: #5C629C;
+}
+
 .warning-card .card-header,
 .warning-card .card-footer {
     border-color: #B00;
@@ -486,6 +545,16 @@ label[for=password] {
 }
 
 .warning-card .card-body {
+    background-color: #FFFAFA;
+}
+
+.cpca-card .card-header,
+.cpca-card .card-footer {
+    border-color: #5C629C;
+    background-color: #c5c6cc;
+}
+
+.cpca-card .card-body {
     background-color: #FFFAFA;
 }
 
@@ -513,4 +582,47 @@ label[for=password] {
 	cursor:pointer!important;
 	background-color:#5C629C;
 	color:white;
+}
+
+/* Referral Forms */
+.form-header {
+    flex: 1;
+    padding: 0.5rem 1rem 0.5rem 0;
+    color: rgba(0,0,0,0.75);
+    transition: font-weight 0.1s;
+    text-decoration: none !important;
+}
+
+.form-header:hover {
+    color: #898EBB!important;
+    color: rgba(0,0,0,0.20);
+    font-weight: bold;
+}
+
+.col-form-label {
+    text-align: right;
+}
+
+.radio-group {
+    text-align: right;
+}
+
+.hidden-field {
+    display: none;
+}
+
+/*When printing, display all of the main-content div, and nothing else.*/
+@media print{
+	#main-content {
+		overflow: visible;
+	}
+	body{
+		overflow: visible;
+	}
+	.navbar {
+		display: none;
+	}
+	.side-menu {
+		display: none;
+	}
 }

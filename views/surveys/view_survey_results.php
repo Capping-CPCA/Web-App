@@ -98,12 +98,18 @@ if (!empty($params) && $params[0] == 'view') {
 		<div class="form-group">
 		<select class="form-control" id="classes" name="classes">
 			<option value="" disabled selected hidden>Class</option>
-			<option value="Class 1">Class 1</option>
-			<option value="Class 2">Class 2</option>
-			<option value="Class 3">Class 3</option>
-			<option value="Class 4">Class 4</option>
-			<option value="Class 5">Class 5</option>
-			<option value="Class 6">Class 6</option>
+			<option value="Class 1">Cornerstone</option>
+			<option value="Class 2">Fishkill/New Vision Church</option>
+			<option value="Class 3">Florence Manor</option>
+			<option value="Class 4">Fox Run</option>
+			<option value="Class 5">In-House Men</option>
+			<option value="Class 6">In-House Women</option>
+			<option value="Class 6">ITAP</option>
+			<option value="Class 6">jenfjg</option>
+			<option value="Class 6">Meadow Run</option>
+			<option value="Class 6">Men's DC Jail</option>
+			<option value="Class 6">Women's DC Jail</option>
+			
 		</select>
 		</div>
 
@@ -172,6 +178,20 @@ if (!empty($params) && $params[0] == 'view') {
 		</div>
 		<div class="col-sm col-lg-2">
 		<div class="form-group">
+		<select class="form-control" name="Year" id="year"';
+		<?php $starting_year  =date('2000');
+		 $ending_year = date('Y', strtotime('+0 year'));
+		 $current_year = date('Y');
+		 for($starting_year; $starting_year <= $ending_year; $starting_year++) {
+			 echo '<option value="'.$starting_year.'"';
+			 if( $starting_year ==  $current_year ) {
+					echo ' selected="selected"';
+			 }
+			 echo ' >'.$starting_year.'</option>';
+		 }               
+		 echo '<select>';
+		 ?>
+		<!--
 		<select class="form-control" name="Year" id="year">
 		<option selected disabled="disabled" value="">Year</option>
 			<option value="2017">2017</option>
@@ -193,16 +213,25 @@ if (!empty($params) && $params[0] == 'view') {
 			<option value="2001">2001</option>
 			<option value="2000">2000</option>
 		</select>
+		-->
 		</div>
 		</div>
 		</div>
 		</div>
+<<<<<<< HEAD
 			<input type="Submit" method = "POST" class="btn btn-primary" value="Search Surveys">
+=======
+			<input type="Submit" method = "POST" class="btn btn-secondary" value="Search Surveys">
+>>>>>>> 75673d2592387acab13013ce084cfab93a1fd4a1
 			</form>
 		
 		<p>
 		<br />
+<<<<<<< HEAD
 		<a href="http://Mari.st/pep" target="_blank">Link to Survey</a>
+=======
+		<a href="http://Mari.st/pep" target="_blank" class="text-secondary">Link to Survey</a>
+>>>>>>> 75673d2592387acab13013ce084cfab93a1fd4a1
 		<div class="container">
 			<div class="row justify-content-md-center">
 				<div class="col-sm" style="max-width:75%; position: absolute; bottom: 5%;">
@@ -222,7 +251,11 @@ if (!empty($params) && $params[0] == 'view') {
 					</script>
 					<p>
 					<form method="POST">
+<<<<<<< HEAD
 						<input name="updated" value="Update Surveys" type="Submit" class="btn btn-success" />
+=======
+						<input name="updated" value="Update Surveys" type="Submit" class="btn cpca" />
+>>>>>>> 75673d2592387acab13013ce084cfab93a1fd4a1
 					</form>
 				</div>
 			</div>

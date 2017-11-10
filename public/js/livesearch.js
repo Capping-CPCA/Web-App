@@ -70,9 +70,9 @@ function setResultFilter(filter){
 
 		//taking cleaning user supplied input - no extra spaces or , will be queried
 		function filterResults(raw){
-			return raw.replace(/\s+/g,' ').replace(',','');
+			return raw.replace(/\s+/g,' ').trim().replace(',','');
 		}
-				
+		
 		//takes user input and sanitizes it live
 		function filterInput(raw){
 			return raw.replace(/\s\s/g,' ');

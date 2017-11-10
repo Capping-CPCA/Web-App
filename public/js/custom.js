@@ -29,7 +29,8 @@ function Tutorial(title, content, selector, showElements, next, placement, trigg
         '<h3 class="popover-header"></h3>' +
         '<div class="popover-body"></div>' +
         '<div class="popover-footer">' +
-        '<button type="button" class="btn cpca popover-btn">OK</button>' +
+            '<button type="button" class="btn btn-outline-danger popover-btn" name="no-show">Hide Tutorials</button>' +
+            '<button style="margin-left: 10px" type="button" class="btn cpca popover-btn" name="ok">OK</button>' +
         '</div>' +
         '</div>'
     };
@@ -75,21 +76,135 @@ var tutorials = {
             'View, Edit, or Archive the curriculum.',
         '.result-card:first-child',
         ['.result-card:first-child']
+    ),
+    // Classes Page
+    classes: new Tutorial(
+        'Class Add',
+        'Click here to add a new class.',
+        '#new-class-btn',
+        ['#new-class-btn'],
+        'classesFilter'
+    ),
+    classesFilter: new Tutorial(
+        'Class Filter',
+        'Type here to filter class results by ' +
+        'name and type.',
+        '#class-filter',
+        ['#class-filter'],
+        'classesCard'
+    ),
+    classesCard: new Tutorial(
+        'Class Options',
+        'Use the buttons below each class to: ' +
+        'View, Edit, or Archive the class.',
+        '.result-card:first-child',
+        ['.result-card:first-child']
+    ),
+    //Reports
+    //Custom Reports Page
+    customReportsFields: new Tutorial(
+        'Custom Reports',
+        'Select all of the filters you want applied to the search',
+        '#custom-reports-fields',
+        ['#custom-reports-fields'],
+        'customReportsCheckboxes'
+    ),
+    customReportsCheckboxes: new Tutorial(
+        'Checkboxes',
+        'If no box is checked, all of the options are included',
+        '#custom-reports-checkboxes',
+        ['#custom-reports-checkboxes'],
+        'customReportsGenerate'
+    ),
+    customReportsGenerate: new Tutorial(
+        'Generate Report',
+        'Click here to run the report.',
+        '#custom-reports-generate',
+        ['#custom-reports-generate']
+    ),
+    //Monthly Reports Page
+    monthlyReports: new Tutorial(
+        'Monthly Reports',
+        'Select a month and year that you want to see '+
+            'a full monthly report for',
+        '#monthly-reports-fields',
+        ['#monthly-reports-fields'],
+        'monthlyReportsGenerate'
+    ),
+    monthlyReportsGenerate: new Tutorial(
+        'Generate Report',
+        'Click here to run the report.',
+        '#monthly-reports-generate',
+        ['#monthly-reports-generate']
+    ),
+    //Quarterly Reports Page
+    quarterlyReports: new Tutorial(
+        'Quarterly Reports',
+        'Select a quarter and a year that you want to see '+
+            'a report for',
+        '#quarterly-reports-fields',
+        ['#quarterly-reports-fields'],
+        'quarterlyReportsGenerate'
+    ),
+    quarterlyReportsGenerate: new Tutorial(
+        'Generate Report',
+        'Click here to run the report.',
+        '#quarterly-reports-generate',
+        ['#quarterly-reports-generate']
+    ),
+    //Year End / Semi-Annual Reports Page
+    halfYearReports: new Tutorial(
+        'Year End / Semi-Annual Reports',
+        'Select Semi-Annual or Year-End and a year',
+        '#halfyear-reports-fields',
+        ['#halfyear-reports-fields'],
+        'halfYearReportsGenerate'
+    ),
+    halfYearReportsGenerate: new Tutorial(
+        'Generate Report',
+        'Click here to run the report.',
+        '#halfyear-reports-generate',
+        ['#halfyear-reports-generate']
+    ),
+    // Participant Search Result
+    participantResult: new Tutorial(
+        'View Participant Record',
+        'Click here to view more details about a participant.',
+        '.p-view:first',
+        ['#main-content .list-group-item:first'],
+        'participantQuickView'
+    ),
+    participantQuickView: new Tutorial(
+        'Quick View',
+        'Click here to quickly view information about a participant.',
+        '.advanced-info:first',
+        ['#main-content .list-group-item:first']
     )
 };
 
 function showTutorial(name) {
     const tutorial = tutorials[name];
-    if (!tutorial.viewed) {
-        $(tutorial.selector).popover(tutorial.popover);
+
+    if (!tutorial.viewed && !localStorage.getItem("hide-tutorials")) {
+        const $el = $(tutorial.selector);
+        if ($el.length === 0) {
+            // No element on page to show tutorial
+            return;
+        }
+        $el.popover(tutorial.popover);
         for (var i = 0; i < tutorial.elements.length; i++) {
             $(tutorial.elements[i]).addClass('tutorial');
         }
         $('.menu-cover').addClass('tutorial-cover');
-        $(tutorial.selector).popover('show');
+        $el.popover('show');
 
         // "OK" button closes tutorial
-        $('.popover-btn').on('click', function () {
+        $('.popover-btn[name="ok"]').on('click', function () {
+            hideTutorial(name);
+        });
+
+        $('.popover-btn[name="no-show"]').on('click', function() {
+            localStorage.setItem("hide-tutorials", true);
             hideTutorial(name);
         });
     }
@@ -108,7 +223,7 @@ function hideTutorial(name) {
     // save viewed tutorials in localStorage (possibly in DB later?)
     localStorage.setItem("tutorials", JSON.stringify(tutorials));
 
-    if (tutorial.next) {
+    if (tutorial.next && !localStorage.getItem("hide-tutorials")) {
         showTutorial(tutorial.next);
     }
 }
@@ -119,11 +234,19 @@ function hideTutorial(name) {
  */
 function unViewAllTutorials() {
     localStorage.removeItem("tutorials");
+    localStorage.removeItem("hide-tutorials");
     for (var key in tutorials) {
         if (!tutorials.hasOwnProperty(key))
             continue;
         tutorials[key].viewed = false;
     }
+}
+
+/**
+ * Navigates to the previous page
+ */
+function goBack() {
+    window.history.back();
 }
 
 /*

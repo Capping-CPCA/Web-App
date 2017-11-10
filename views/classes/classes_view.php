@@ -1,11 +1,24 @@
 <?php
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Displays details about a class.
+ *
+ * This shows class details in subsections. The
+ * information about the related curricula are also
+ * displayed as well for quick access.
+ *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.6
+ * @since 0.1
+ */
+
 global $params, $db;
-array_shift($params);
 
-# Get topic name from params
-$topicname = rawurldecode(implode('/', $params));
+$id = $params[1];
 
-$result = $db->query("SELECT * FROM classes WHERE topicname = $1", [$topicname]);
+$result = $db->query("SELECT * FROM classes WHERE classid = $1", [$id]);
 
 # If no results, class doesn't exist, redirect
 if (pg_num_rows($result) == 0) {
@@ -16,19 +29,28 @@ if (pg_num_rows($result) == 0) {
 $class = pg_fetch_assoc($result);
 pg_free_result($result);
 
-$topics = $db->query("SELECT * FROM curriculuminfo WHERE topicname = $1", [$topicname]);
+$topics = $db->query("SELECT * FROM curriculuminfo WHERE classid = $1", [$id]);
 
 include('header.php');
 ?>
 <div style="width: 100%">
-    <a href="/back"><button class="cpca btn"><i class="fa fa-arrow-left"></i> Back</button></a>
+    <div class="row">
+			<div class="col">
+				<button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
+			</div>
+			<div class="col pr-5" align="right">
+				<button type="button" class="btn cpca" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+			</div>
+		</div>
     <div class="form-wrapper card view-card">
         <h4 class="card-header text-left">
-            <?= $class['topicname'] ?>
-            <div class="float-right">
-                <a href="/classes/edit/<?= implode('/', $params) ?>"><button class="btn btn-outline-secondary btn-sm">Edit</button></a>
-                <a href="/classes/delete/<?= implode('/', $params) ?>"><button class="btn btn-outline-danger btn-sm">Delete</button></a>
-            </div>
+            <?php echo $class['topicname'] . ($class['df'] != 0 ? ' <span class="badge badge-secondary">Deleted</span>' : '') ?>
+            <?php if (hasRole(Role::Coordinator) && $class['df'] == 0) { ?>
+                <div class="float-right">
+                    <a href="/classes/edit/<?= $id ?>"><button class="btn btn-outline-secondary btn-sm">Edit</button></a>
+                    <a href="/classes/delete/<?= $id ?>"><button class="btn btn-outline-danger btn-sm">Delete</button></a>
+                </div>
+            <?php } ?>
         </h4>
         <div class="card-body d-flex justify-content-center flex-column">
             <h4>Description</h4>
