@@ -402,7 +402,6 @@ include('header.php');
     <div id="page-content-wrapper" style="width:100%">
 
         <div class="container-fluid">
-            <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
 
             <div class="dropdown">
 

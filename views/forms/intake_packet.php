@@ -305,9 +305,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                       offensejailprisonrec := $45::TEXT,
                                       currentlyonparole := $46::BOOLEAN,
                                       onparoleforwhatoffense := $47::TEXT,
-                                      ptpmainformsigneddate := $48::DATE,
-                                      ptpenrollmentsigneddate := $49::DATE,
-                                      lang := $50::TEXT,
+                                      lang := $48::TEXT,
+                                      ptpmainformsigneddate := $49::DATE,
+                                      ptpenrollmentsigneddate := $50::DATE,
                                       familyMembersTakingClass := $51::BOOLEAN,
                                       familyMemberNamesTakingClass := $52::TEXT,
                                       ptpconstentreleaseformsigneddate := $53::DATE,
@@ -317,30 +317,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             $separated_length, $relationship, $parenting, $child_protective, $previous_child_protective, $mandated, $mandated_by, $reason_for_attendance, $class_participation, $parenting_opinion,
                                             $other_classes, $other_classes_where_when, $victim_of_abuse, $form_of_abuse, $abuse_therapy, $childhood_abuse_relating, $class_takeaway, $domestic_violence, $domestic_violence_discussed,
                                             $history_violence_family, $history_violence_nuclear, $protection_order, $protection_order_explain, $crime_arrested, $crime_convicted, $crime_explain,
-                                            $jail_prison_record, $jail_prison_explain, $parole_probation, $parole_probation_explain, $datestamp, $datestamp, $intake_languages_spoken, $family_members_taking_class, $family_members, $datestamp, $eID]);
+                                            $jail_prison_record, $jail_prison_explain, $parole_probation, $parole_probation_explain, $intake_languages_spoken, $datestamp, $datestamp, $family_members_taking_class, $family_members, $datestamp, $eID]);
 
-    if ($formID) {
-        $state = pg_result_error_field($formID, PGSQL_DIAG_SQLSTATE);
-        if ($state != 0) {
-            $_SESSION['form-error'] = true;
-            $_SESSION['error-state'] = $state;
-            header("Location: /form-success");
-            die();
-        }
-    }
+//    if ($formID) {
+//        $state = pg_result_error_field($formID, PGSQL_DIAG_SQLSTATE);
+//        if ($state != 0) {
+//            $_SESSION['form-error'] = true;
+//            $_SESSION['error-state'] = $state;
+//            header("Location: /form-success");
+//            die();
+//        }
+//    }
 
     $formID = pg_fetch_result($formID, 0);
 
     // Inserts the day, evening, and emergency contact phone numbers into the FormPhoneNumbers table.
-    $dayPhoneResult = $db->query("INSERT INTO FormPhoneNumbers (formID, phoneNumber, phoneType)
-                                    VALUES ($1, $2, $3);", [$formID, $intake_phone_day, 'Daytime']);
+    if ($intake_phone_day !== NULL) {
+        $dayPhoneResult = $db->query("INSERT INTO FormPhoneNumbers (formID, phoneNumber, phoneType)
+                                    VALUES ($1, $2, $3);", [$formID, $intake_phone_day, 'Day']);
+        echo pg_result_error($dayPhoneResult);
+    }
 
-    $eveningPhoneResult = $db->query("INSERT INTO FormPhoneNumbers (formID, phoneNumber, phoneType)
+    if ($intake_phone_night !== NULL) {
+        $eveningPhoneResult = $db->query("INSERT INTO FormPhoneNumbers (formID, phoneNumber, phoneType)
                                     VALUES ($1, $2, $3);", [$formID, $intake_phone_night, 'Evening']);
+    }
 
-    $emergencyContact = $db->query("INSERT INTO FormPhoneNumbers (formID, phoneNumber, phoneType)
-                                    VALUES ($1, $2, $3);", [$formID, $contact_phone, 'Emergency Contact']);
-
+    if ($contact_phone !== NULL) {
+        $emergencyContact = $db->query("INSERT INTO FormPhoneNumbers (formID, phoneNumber, phoneType)
+                                    VALUES ($1, $2, $3);", [$formID, $contact_phone, 'Primary']);
+    }
 
     // Child stored procedures (handles entering multiple children for an intake packet).
     for($i = 1; $i <= 5; $i++){
@@ -381,9 +387,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Redirect user to success page.
-    $_SESSION['form-type'] = $form_type;
-    header("Location: /form-success");
-    die();
+//    $_SESSION['form-type'] = $form_type;
+//    header("Location: /form-success");
+//    die();
 
 }
 
@@ -397,9 +403,7 @@ include('header.php');
         <div class="container-fluid">
 
             <div class="dropdown">
-
-                <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
-
+                
                 <form id="intake_packet" action="/intake-packet" method="post" novalidate>
                     <div id="accordion" role="tablist" aria-multiselectable="true">
                         <br>
