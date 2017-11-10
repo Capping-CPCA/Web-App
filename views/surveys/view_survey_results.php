@@ -98,17 +98,17 @@ if (!empty($params) && $params[0] == 'view') {
 		<div class="form-group">
 		<select class="form-control" id="classes" name="classes">
 			<option value="" disabled selected hidden>Class</option>
-			<option value="Class 1">Cornerstone</option>
-			<option value="Class 2">Fishkill/New Vision Church</option>
-			<option value="Class 3">Florence Manor</option>
-			<option value="Class 4">Fox Run</option>
-			<option value="Class 5">In-House Men</option>
-			<option value="Class 6">In-House Women</option>
-			<option value="Class 6">ITAP</option>
-			<option value="Class 6">jenfjg</option>
-			<option value="Class 6">Meadow Run</option>
-			<option value="Class 6">Men's DC Jail</option>
-			<option value="Class 6">Women's DC Jail</option>
+			<option value="Cornerstone">Cornerstone</option>
+			<option value="Fishkill/New Vision Church">Fishkill/New Vision Church</option>
+			<option value="Florence Manor">Florence Manor</option>
+			<option value="Fox Run">Fox Run</option>
+			<option value="In-House Men">In-House Men</option>
+			<option value="In-House Women">In-House Women</option>
+			<option value="ITAP">ITAP</option>
+			<option value="jenfjg">jenfjg</option>
+			<option value="Meadow Run">Meadow Run</option>
+			<option value="Men's DC Jail">Men's DC Jail</option>
+			<option value="Women's DC Jail">Women's DC Jail</option>
 			
 		</select>
 		</div>
