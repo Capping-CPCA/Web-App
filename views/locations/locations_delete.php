@@ -34,9 +34,12 @@ if (pg_num_rows($result) == 0) {
 $site = pg_fetch_assoc($result);
 pg_free_result($result);
 
+$sitesRes = $db->query("SELECT * FROM sites WHERE sitetype = $1", [$sitename]);
+
+$curriculaReferences = pg_num_rows($sitesRes);
+
 # Archive data
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete'])) {
-    // TODO: Stored procedure delete enum value
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete']) && $curriculaReferences == 0) {
     $deleteRes = $db->query("DELETE FROM pg_enum WHERE enumtypid = 'programtype'::regtype AND enumlabel = $1", [$sitename]);
     if ($deleteRes) {
         $success = true;
@@ -60,12 +63,19 @@ include('header.php');
                 <?= $sitename ?>
             </h4>
             <div class="card-body">
-                You are about to delete location "<?= $sitename ?>". Are you sure
-                you want to delete this location?
+                <?php if ($curriculaReferences > 0) {
+                    echo "There are currently curricula referencing this location. Please change the locations ".
+                    "of these curricula before deleting this location.";
+                } else {
+                    echo "You are about to delete location \"$sitename\". Are you sure ".
+                    "you want to delete this location?";
+                } ?>
             </div>
             <div class="card-footer text-right">
                 <button type="button" class="btn btn-light" onclick="goBack()">Cancel</button>
-                <button type="submit" name="delete" class="btn btn-danger">Delete</button>
+                <?php if ($curriculaReferences == 0) { ?>
+                    <button type="submit" name="delete" class="btn btn-danger">Delete</button>
+                <?php } ?>
             </div>
         </form>
     </div>
