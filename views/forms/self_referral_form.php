@@ -27,6 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $self_pers_lastname = !empty($_POST['self_pers_lastname']) ? trim($_POST['self_pers_lastname']) : NULL;
     $self_pers_middlein = !empty($_POST['self_pers_middlein']) ? trim($_POST['self_pers_middlein']) : NULL;
     $self_pers_dob = !empty($_POST['self_pers_dob']) ? $_POST['self_pers_dob'] : NULL;
+    $self_pers_race = !empty($_POST['self_pers_race']) ? $_POST['self_pers_race'] : NULL;
+    $self_pers_sex = !empty($_POST['self_pers_sex']) ? $_POST['self_pers_sex'] : NULL;
     $self_pers_address = !empty($_POST['self_pers_address']) ? trim($_POST['self_pers_address']) : NULL;
 
     // Logic for parsing the address into the address number and street name.
@@ -46,8 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
     $self_pers_zip = !empty($_POST['self_pers_zip']) ? $_POST['self_pers_zip'] : 12601; // Default Zipcode is Poughkeepsie.
-    $self_pers_state = !empty($_POST['self_pers_state']) ? $_POST['self_pers_state'] : NULL;
-    $self_pers_city = !empty($_POST['self_pers_city']) ? trim($_POST['self_pers_city']) : NULL;
+    $self_pers_state = !empty($_POST['self_pers_state']) ? $_POST['self_pers_state'] : "New York";
+    $self_pers_city = !empty($_POST['self_pers_city']) ? trim($_POST['self_pers_city']) : "Poughkeepsie";
     $self_apt_info = !empty($_POST['self_apt_info']) ? trim($_POST['self_apt_info']) : NULL;
     $self_pers_phone = !empty($_POST['self_pers_phone']) ? $_POST['self_pers_phone'] : NULL;
 
@@ -91,27 +93,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = $db->query("SELECT addSelfReferral(  
                                     referralParticipantID := $1::INT,
                                     referralDOB := $2::DATE,
-                                    houseNum := $3::INT,
-                                    streetAddress := $4::TEXT,
-                                    apartmentInfo := $5::TEXT,
-                                    zip := $6::INT,
-                                    cityName := $7::TEXT,
-                                    stateName := $8::STATES,
-                                    phoneNum := $9::TEXT,
-                                    refSource := $10::TEXT,
-                                    hasInvolvement := $11::BOOLEAN,
-                                    hasAttended := $12::BOOLEAN,
-                                    reasonAttending := $13::TEXT,
-                                    firstCall := $14::DATE,
-                                    returnCallDate := $15::DATE,
-                                    startDate := $16::DATE,
-                                    classAssigned := $17::TEXT,
-                                    letterMailedDate := $18::DATE,
-                                    extraNotes := $19::TEXT,
-                                    eID := $20::INT
-                                    );", [$pIDResult, $self_pers_dob, $self_pers_street_num, $self_pers_street_name, $self_apt_info, $self_pers_zip, $self_pers_city,
-                                            $self_pers_state, $self_pers_phone, $self_ref_source, $self_involvement, $self_attended, $reason, $self_office_firstCall,
+                                    referralRace := $3::RACE,
+                                    referralSex := $4::SEX,
+                                    houseNum := $5::INT,
+                                    streetAddress := $6::TEXT,
+                                    apartmentInfo := $7::TEXT,
+                                    zip := $8::VARCHAR(5),
+                                    cityName := $9::TEXT,
+                                    stateName := $10::STATES,
+                                    refSource := $11::TEXT,
+                                    hasInvolvement := $12::BOOLEAN,
+                                    hasAttended := $13::BOOLEAN,
+                                    reasonAttending := $14::TEXT,
+                                    firstCall := $15::DATE,
+                                    returnCallDate := $16::DATE,
+                                    startDate := $17::DATE,
+                                    classAssigned := $18::TEXT,
+                                    letterMailedDate := $19::DATE,
+                                    extraNotes := $20::TEXT,
+                                    eID := $21::INT
+                                    );", [$pIDResult, $self_pers_dob, $self_pers_race, $self_pers_sex, $self_pers_street_num, $self_pers_street_name, $self_apt_info, $self_pers_zip, $self_pers_city,
+                                            $self_pers_state, $self_ref_source, $self_involvement, $self_attended, $reason, $self_office_firstCall,
                                             $self_office_returnedCall, $self_tentative_start, $self_assigned_to, $self_letter_mailed, $notes, $eID]);
+
+    $result = pg_fetch_result($result, 0);
+
+    if ($self_pers_phone !== NULL) {
+        $phoneResult = $db->query("INSERT INTO FormPhoneNumbers (formID, phoneNumber, phoneType)
+                                    VALUES ($1, $2, $3);", [$result, $self_pers_phone, 'Primary']);
+    }
 
     if ($result) {
         $state = pg_result_error_field($result, PGSQL_DIAG_SQLSTATE);
@@ -139,8 +149,6 @@ include('header.php');
         <div class="container-fluid">
 
             <div class="dropdown">
-
-                <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
 
                 <form id="self_participant_info" action="/self-referral-form" method="post" novalidate>
                     <div id="accordion" role="tablist" aria-multiselectable="true">
@@ -180,6 +188,42 @@ include('header.php');
                                         <label class="col-form-label col-sm-2" for="self_pers_dob">Date of Birth:</label>
                                         <div class="col-sm-2">
                                             <input type="date" class="form-control" id="self_pers_dob" name="self_pers_dob">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-2" for="self_pers_race">Race:</label>
+                                        <div class="col-sm-2">
+                                            <select class="form-control select_sex" name="self_pers_race" id="intake_ethnicity">
+                                                <option value="" selected="selected" disabled="disabled">Choose one</option>
+                                                <?php
+                                                $res = $db->query("SELECT unnest(enum_range(NULL::race)) AS type", []);
+                                                while ($enumtype = pg_fetch_assoc($res)) {
+                                                    $t = $enumtype ['type'];
+                                                    ?>
+                                                    <option value="<?= $t ?>"><?= $t ?></option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-2" for="self_pers_sex">Sex:</label>
+                                        <div class="col-sm-2">
+                                            <select class="form-control select_sex" name="self_pers_sex" id="intake_ethnicity">
+                                                <option value="" selected="selected" disabled="disabled">Choose one</option>
+                                                <?php
+                                                $res = $db->query("SELECT unnest(enum_range(NULL::sex)) AS type", []);
+                                                while ($enumtype = pg_fetch_assoc($res)) {
+                                                    $t = $enumtype ['type'];
+                                                    ?>
+                                                    <option value="<?= $t ?>"><?= $t ?></option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select>
                                         </div>
                                     </div>
 
