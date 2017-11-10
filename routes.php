@@ -35,6 +35,18 @@ $router->add('/curricula', 'curricula/curricula.php', 'Curricula');
 $router->add('/classes', 'classes/classes.php', 'Classes');
 $router->add('/locations', 'locations/locations.php', 'Locations');
 
+# Attendance Application
+$router->add('/record-attendance', 'attendance/attendance_dashboard.php', 'Attendance Dashboard');
+$router->add('/new-class', 'attendance/new_class.php', 'New Attendance Sheet');
+$router->add('/attendance-form', 'attendance/attendance_form.php', 'Attendance Form');
+$router->add('/attendance-form-confirmation', 'attendance/attendance_form_confirmation.php', 'Confirm Attendance');
+$router->add('/historical-class-view', 'attendance/historical_class_view.php', 'Historical Class View');
+$router->add('/historical-class-search', 'attendance/historical_class_lookup.php', 'Search By Day');
+$router->add('/historical-class-search-results', 'attendance/historical_class_lookup_results.php', 'Historical Class Search Results');
+$router->add('/attendance-form-confirmed', 'attendance/attendance_form_confirmed.php', 'Attendance Confirmed');
+$router->add('/edit-participant', 'attendance/edit_participant.php', 'Edit Participant');
+$router->add('/edit-participant-confirm', 'attendance/edit_participant_confirm.php', 'Confirm Participant Edit');
+
 # Account Settings
 $router->add('/account-settings', 'account/account_settings.php', 'Account Settings');
 

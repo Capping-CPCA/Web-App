@@ -128,25 +128,25 @@ include('header.php');
 
 ?>
 
-<div class="page-wrapper">
-    <div class="jumbotron form-wrapper">
-        <?php
-        if ($error) {
-            $note = new Notification('Error!', 'Invalid credentials given.', 'danger');
-            $note->display();
-        }
-        ?>
-        <form class="form" method="post" action="/login">
-            <label for="username">Username</label>
-            <input class="form-control username" type="text" name="username" value="<?= isset($_POST['username']) ? $_POST['username'] : '' ?>">
-            <label for="password">Password</label>
-            <input class="form-control password" type="password" name="password" value="<?= isset($_POST['password']) ? $_POST['password'] : '' ?>">
-            <div class="form-footer submit">
-                <button type="submit" class="btn cpca">Submit</button>
-            </div>
-        </form>
+    <div class="page-wrapper">
+        <div class="jumbotron form-wrapper">
+            <?php
+            if ($error) {
+                $note = new Notification('Error!', 'Invalid credentials given.', 'danger');
+                $note->display();
+            }
+            ?>
+            <form class="form" method="post" action="/login">
+                <label for="username">Username</label>
+                <input class="form-control username" type="text" name="username" value="<?= isset($_POST['username']) ? $_POST['username'] : '' ?>">
+                <label for="password">Password</label>
+                <input class="form-control password" type="password" name="password" value="<?= isset($_POST['password']) ? $_POST['password'] : '' ?>">
+                <div class="form-footer submit">
+                    <button type="submit" class="btn cpca">Submit</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
 <?php
 
