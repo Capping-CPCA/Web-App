@@ -73,7 +73,7 @@ include('header.php');
                 </div>
             </div>
             <br />
-            <h4>Classes</h4>
+            <h4>Classes <small class="text-muted">(Total: <?= pg_num_rows($topics) ?>)</small></h4>
             <table class="table table-striped table-sm table-hover">
                 <tbody>
                     <?php

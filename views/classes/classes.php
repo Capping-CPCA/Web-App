@@ -45,7 +45,7 @@ if (!empty($params) && $params[0] == 'view') {
     $filter = "";
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $filter = isset($_POST['filter']) ? '%' . $_POST['filter'] . '%' : '%%';
-        $result = $db->query("SELECT * FROM classes WHERE df = 0 && LOWER(topicname) LIKE LOWER($1)".
+        $result = $db->query("SELECT * FROM classes WHERE df = 0 AND LOWER(topicname) LIKE LOWER($1)".
             " OR LOWER(description) LIKE LOWER($1) ORDER BY topicname", [$filter]);
     } else {
         $result = $db->query("SELECT * FROM classes WHERE df = 0 ORDER BY topicname", []);
