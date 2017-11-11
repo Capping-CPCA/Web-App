@@ -29,7 +29,7 @@
 	$maxAge = $_POST['maxAge'];
 	
 	//Build queries based on POST data
-	$dateQuery = "(participantclassattendance.date >= '$startDate' AND participantclassattendance.date <= '$endDate')";
+	$dateQuery = "(participantclassattendance.date::date >= '$startDate' AND participantclassattendance.date::date <= '$endDate')";
 	$currQuery = "";
 	
 	if (count($currs) > 0) {
@@ -74,6 +74,7 @@
 				FROM participants INNER JOIN participantclassattendance
 				ON participants.participantid = participantclassattendance.participantid
 				WHERE ";
+	
 	
 	//Actually query database and store results to be displayed below
 	$totalRes = pg_fetch_result($db->query($baseQuery . $totalWhere, []), 0, 0);
