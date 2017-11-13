@@ -21,7 +21,7 @@ $id = $params[1];
 
 $db->prepare("get_curr_classes", "SELECT * FROM classes, curriculumclasses ".
     "WHERE curriculumid = $1 AND classes.classid = curriculumclasses.classid ".
-    "AND classes.df = 0 ORDER BY topicname");
+    "AND classes.df = 0");
 $db->prepare("get_other_classes",
     "SELECT * FROM classes WHERE classid NOT IN (" .
     "SELECT classid FROM curriculumclasses WHERE curriculumid = $1" .
@@ -144,7 +144,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
     }
-
 }
 
 include('header.php');
@@ -185,7 +184,24 @@ include('header.php');
             }
             ?>
             <h2 class="display-4 text-center" style="font-size: 34px"><?= $curriculum['curriculumname'] ?></h2>
-            <h4>Current Classes</h4>
+            <form class="form" method="post" action="<?= $_SERVER['REQUEST_URI'] ?>" novalidate>
+                <h4>Add New Class</h4>
+                <select id="class-selector" class="form-control" name="class" required>
+                    <option value="" disabled selected>Select a Class</option>
+                    <?php
+                    while ($t = pg_fetch_assoc($allTopics)) {
+                        ?>
+                        <option value="<?= $t['classid'] ?>"><?= $t['topicname'] ?></option>
+                        <?php
+                    }
+                    pg_free_result($allTopics);
+                    ?>
+                </select>
+                <div class="form-footer submit">
+                    <button type="submit" class="btn cpca">Add Class</button>
+                </div>
+            </form>
+            <h4>Current Classes <small class="text-muted">(Total: <?= pg_num_rows($topics) ?>)</small></h4>
             <table class="table table-hover table-responsive table-striped table-sm">
                 <tbody>
                 <?php
@@ -212,23 +228,6 @@ include('header.php');
                 ?>
                 </tbody>
             </table>
-            <form class="form" method="post" action="<?= $_SERVER['REQUEST_URI'] ?>" novalidate>
-                <h4>Add New Class</h4>
-                <select id="class-selector" class="form-control" name="class" required>
-                    <option value="" disabled selected>Select a Class</option>
-                    <?php
-                    while ($t = pg_fetch_assoc($allTopics)) {
-                        ?>
-                        <option value="<?= $t['classid'] ?>"><?= $t['topicname'] ?></option>
-                        <?php
-                    }
-                    pg_free_result($allTopics);
-                    ?>
-                </select>
-                <div class="form-footer submit">
-                    <button type="submit" class="btn cpca">Add Class</button>
-                </div>
-            </form>
         </div>
 
     <?php } ?>

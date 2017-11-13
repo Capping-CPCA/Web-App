@@ -35,7 +35,6 @@ function active($url) {
 
 $route = $router->dispatch();
 
-
 try {
     authorize($route['fulluri']);
     $params = $route['params'];

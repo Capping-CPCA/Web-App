@@ -48,7 +48,7 @@ if (!empty($params) && $params[0] == 'view') {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $filter = isset($_POST['filter']) ? "%" . $_POST['filter'] . "%" : "%%";
         $result = $db->query("SELECT * FROM curricula WHERE df = 0 AND LOWER(curriculumname::text) LIKE LOWER($1) " .
-            "OR LOWER(curriculumtype::text) LIKE LOWER($1) ORDER BY curriculumname", [$filter]);
+            "ORDER BY curriculumname", [$filter]);
     } else {
         $result = $db->query("SELECT * FROM curricula WHERE df = 0 ORDER BY curriculumname", []);
     }

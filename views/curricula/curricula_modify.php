@@ -142,6 +142,9 @@ include ('header.php');
             }
         }
         ?>
+        <?php if (isset($curricula)) { ?>
+            <h2 class="display-4 text-center" style="font-size: 34px"><?= $curricula['curriculumname'] ?></h2>
+        <?php } ?>
         <form class="form" method="post" action="<?= $_SERVER['REQUEST_URI'] ?>" novalidate>
             <h4>Information</h4>
             <div class="form-group">
@@ -178,6 +181,8 @@ include ('header.php');
                     Please select a number 0 (zero) or greater.
                 </div>
             </div>
+            <h4>Classes</h4>
+            <a href="/curricula/classes/<?= $id ?>"><button type="button" class="btn btn-secondary">Click to Manage Classes</button></a>
             <div class="form-footer submit">
                 <button type="submit" class="btn cpca"><?= $isEdit ? 'Submit New Changes' : 'Add Curriculum' ?></button>
             </div>

@@ -354,6 +354,10 @@ footer {
     width: 100%;
 }
 
+select.form-control {
+    height: 2.5rem!important;
+}
+
 /* Popover */
 
 .popover-footer {
