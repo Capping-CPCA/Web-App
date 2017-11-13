@@ -100,7 +100,7 @@ include ('header.php');
                     </div>
                     <div class="col-sm-2">
                         <label for="employee-middleInit" class="">Middle</label>
-                        <input type="text" class="form-control" id="employee-middleInit" name="middleInit" required maxlength="1" minlength="1">
+                        <input type="text" class="form-control" id="employee-middleInit" name="middleInit" maxlength="1">
                         <div class="invalid-feedback">
                             Invalid characters found in middle initial.
                         </div>

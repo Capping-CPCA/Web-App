@@ -181,8 +181,10 @@ include ('header.php');
                     Please select a number 0 (zero) or greater.
                 </div>
             </div>
-            <h4>Classes</h4>
-            <a href="/curricula/classes/<?= $id ?>"><button type="button" class="btn btn-secondary">Click to Manage Classes</button></a>
+            <?php if ($isEdit) { ?>
+                <h4>Classes</h4>
+                <a href="/curricula/classes/<?= $id ?>"><button type="button" class="btn btn-secondary">Click to Manage Classes</button></a>
+            <?php } ?>
             <div class="form-footer submit">
                 <button type="submit" class="btn cpca"><?= $isEdit ? 'Submit New Changes' : 'Add Curriculum' ?></button>
             </div>
