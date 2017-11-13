@@ -111,7 +111,7 @@ if (($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) {
             $valid = false;
         }
 
-        if (empty($primaryphone) || !ctype_digit($primaryphone)) {
+        if (!empty($primaryphone) && !ctype_digit($primaryphone)) {
             $errors['$primaryphone'] = true;
             $errorMsg = "The employee phone number could not be updated.";
             $valid = false;
