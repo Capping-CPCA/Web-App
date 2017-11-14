@@ -42,13 +42,45 @@
 		
 		$queryBuild = function($where, &$monthRes, &$newRes, &$dupRes, &$yearRes)
 				use ($db, $pMonthQuery, $pNewQuery, $pYearQuery) {
-			$query = $pMonthQuery . " AND $where ";
-			$monthRes = pg_fetch_result($db->query($query ,[]), 0, 0);
-			$query = $pNewQuery . " AND $where ";
-			$newRes = pg_fetch_result($db->query($query ,[]), 0, 0);
+			//Query database
+			$monthQuery = $pMonthQuery . " AND $where ";
+			$newQuery = $pNewQuery . " AND $where ";
+			$yearQuery = $pYearQuery . " AND $where ";
+			$query = "SELECT ($monthQuery) as month, ($newQuery) as new, 
+						($yearQuery) as year;";
+			$res = pg_fetch_array($db->query($query, []));
+			//Get results
+			$monthRes = $res['month'];
+			$newRes = $res['new'];
 			$dupRes = $monthRes - $newRes;
-			$query = $pYearQuery . " AND $where ";
-			$yearRes = pg_fetch_result($db->query($query ,[]), 0, 0);
+			$yearRes = $res['year'];
+		};
+		
+		$getZipCodeRes = function($zipcode, $monthArr, $newArr, $yearArr, &$monthRes, &$newRes, &$dupRes, &$yearRes) {
+			if (array_key_exists($zipcode, $monthArr)) {
+				$monthRes = $monthArr[$zipcode];
+			} else {
+				$monthRes = 0;
+			}
+			if (array_key_exists($zipcode, $newArr)) {
+				$newRes = $newArr[$zipcode];
+			} else {
+				$newRes = 0;
+			}
+			$dupRes = $monthRes - $newRes;
+			if (array_key_exists($zipcode, $yearArr)) {
+				$yearRes = $yearArr[$zipcode];
+			} else {
+				$yearRes = 0;
+			}
+		};
+		
+		$toHash = function($zipcodeArray) {
+			$zipHash = array();
+			for ($i=0; $i<count($zipcodeArray); $i++) {
+				$zipHash[$zipcodeArray[$i]['zipcode']] = $zipcodeArray[$i]['count'];
+			}
+			return $zipHash;
 		};
 		
 		#Gender Where clauses
@@ -90,41 +122,53 @@
 		$queryBuild($otherRacWhere, $otherRacMonthRes,$otherRacNewRes, $otherRacDupRes, $otherRacYearRes);
 		
 		#Zip Codes
-		$queryBuild(" zipcode = '12501' ", $_12501MonthRes, $_12501NewRes, $_12501DupRes, $_12501YearRes);
-		$queryBuild(" zipcode = '12504' ", $_12504MonthRes, $_12504NewRes, $_12504DupRes, $_12504YearRes);
-		$queryBuild(" zipcode = '12506' ", $_12506MonthRes, $_12506NewRes, $_12506DupRes, $_12506YearRes);
-		$queryBuild(" zipcode = '12507' ", $_12507MonthRes, $_12507NewRes, $_12507DupRes, $_12507YearRes);
-		$queryBuild(" zipcode = '12508' ", $_12508MonthRes, $_12508NewRes, $_12508DupRes, $_12508YearRes);
-		$queryBuild(" zipcode = '12514' ", $_12514MonthRes, $_12514NewRes, $_12514DupRes, $_12514YearRes);
-		$queryBuild(" zipcode = '12522' ", $_12522MonthRes, $_12522NewRes, $_12522DupRes, $_12522YearRes);
-		$queryBuild(" zipcode = '12524' ", $_12524MonthRes, $_12524NewRes, $_12524DupRes, $_12524YearRes);
-		$queryBuild(" zipcode = '12531' ", $_12531MonthRes, $_12531NewRes, $_12531DupRes, $_12531YearRes);
-		$queryBuild(" zipcode = '12533' ", $_12533MonthRes, $_12533NewRes, $_12533DupRes, $_12533YearRes);
-		$queryBuild(" zipcode = '12537' ", $_12537MonthRes, $_12537NewRes, $_12537DupRes, $_12537YearRes);
-		$queryBuild(" zipcode = '12538' ", $_12538MonthRes, $_12538NewRes, $_12538DupRes, $_12538YearRes);
-		$queryBuild(" zipcode = '12540' ", $_12540MonthRes, $_12540NewRes, $_12540DupRes, $_12540YearRes);
-		$queryBuild(" zipcode = '12545' ", $_12545MonthRes, $_12545NewRes, $_12545DupRes, $_12545YearRes);
-		$queryBuild(" zipcode = '12546' ", $_12546MonthRes, $_12546NewRes, $_12546DupRes, $_12546YearRes);
-		$queryBuild(" zipcode = '12564' ", $_12564MonthRes, $_12564NewRes, $_12564DupRes, $_12564YearRes);
-		$queryBuild(" zipcode = '12567' ", $_12567MonthRes, $_12567NewRes, $_12567DupRes, $_12567YearRes);
-		$queryBuild(" zipcode = '12569' ", $_12569MonthRes, $_12569NewRes, $_12569DupRes, $_12569YearRes);
-		$queryBuild(" zipcode = '12570' ", $_12570MonthRes, $_12570NewRes, $_12570DupRes, $_12570YearRes);
-		$queryBuild(" zipcode = '12571' ", $_12571MonthRes, $_12571NewRes, $_12571DupRes, $_12571YearRes);
-		$queryBuild(" zipcode = '12572' ", $_12572MonthRes, $_12572NewRes, $_12572DupRes, $_12572YearRes);
-		$queryBuild(" zipcode = '12574' ", $_12574MonthRes, $_12574NewRes, $_12574DupRes, $_12574YearRes);
-		$queryBuild(" zipcode = '12578' ", $_12578MonthRes, $_12578NewRes, $_12578DupRes, $_12578YearRes);
-		$queryBuild(" zipcode = '12580' ", $_12580MonthRes, $_12580NewRes, $_12580DupRes, $_12580YearRes);
-		$queryBuild(" zipcode = '12581' ", $_12581MonthRes, $_12581NewRes, $_12581DupRes, $_12581YearRes);
-		$queryBuild(" zipcode = '12582' ", $_12582MonthRes, $_12582NewRes, $_12582DupRes, $_12582YearRes);
-		$queryBuild(" zipcode = '12583' ", $_12583MonthRes, $_12583NewRes, $_12583DupRes, $_12583YearRes);
-		$queryBuild(" zipcode = '12585' ", $_12585MonthRes, $_12585NewRes, $_12585DupRes, $_12585YearRes);
-		$queryBuild(" zipcode = '12590' ", $_12590MonthRes, $_12590NewRes, $_12590DupRes, $_12590YearRes);
-		$queryBuild(" zipcode = '12592' ", $_12592MonthRes, $_12592NewRes, $_12592DupRes, $_12592YearRes);
-		$queryBuild(" zipcode = '12594' ", $_12594MonthRes, $_12594NewRes, $_12594DupRes, $_12594YearRes);
-		$queryBuild(" zipcode = '12601' ", $_12601MonthRes, $_12601NewRes, $_12601DupRes, $_12601YearRes);
-		$queryBuild(" zipcode = '12602' ", $_12602MonthRes, $_12602NewRes, $_12602DupRes, $_12602YearRes);
-		$queryBuild(" zipcode = '12603' ", $_12603MonthRes, $_12603NewRes, $_12603DupRes, $_12603YearRes);
-		$queryBuild(" zipcode = '12604' ", $_12604MonthRes, $_12604NewRes, $_12604DupRes, $_12604YearRes);
+		
+		//Get all zipcode numbers
+		$baseQuery = "SELECT zipcode, COUNT(DISTINCT(participantid)) FROM classattendancedetails ";
+		$groupbyQuery = " GROUP BY zipcode";
+		$zipCodesMonth = pg_fetch_all($db->query($baseQuery . "WHERE " . $monthWhere . " AND " . $yearWhere . " " . $groupbyQuery, []));
+		$zipCodesNew = pg_fetch_all($db->query($baseQuery . "WHERE " . $monthWhere . " AND " . $yearWhere . " AND " . $pNewWhere . " " . $groupbyQuery, []));
+		$zipCodesYear = pg_fetch_all($db->query($baseQuery . "WHERE " . $yearWhere . " "  . $groupbyQuery, []));
+		//Build hash maps from data
+		$zipMonthHash = $toHash($zipCodesMonth);
+		$zipNewHash = $toHash($zipCodesNew);
+		$zipYearHash = $toHash($zipCodesYear);
+		//Get results from hashmaps
+		$getZipCodeRes("12501", $zipMonthHash, $zipNewHash, $zipYearHash, $_12501MonthRes, $_12501NewRes, $_12501DupRes, $_12501YearRes);
+		$getZipCodeRes("12504", $zipMonthHash, $zipNewHash, $zipYearHash, $_12504MonthRes, $_12504NewRes, $_12504DupRes, $_12504YearRes);
+		$getZipCodeRes("12506", $zipMonthHash, $zipNewHash, $zipYearHash, $_12506MonthRes, $_12506NewRes, $_12506DupRes, $_12506YearRes);
+		$getZipCodeRes("12507", $zipMonthHash, $zipNewHash, $zipYearHash, $_12507MonthRes, $_12507NewRes, $_12507DupRes, $_12507YearRes);
+		$getZipCodeRes("12508", $zipMonthHash, $zipNewHash, $zipYearHash, $_12508MonthRes, $_12508NewRes, $_12508DupRes, $_12508YearRes);
+		$getZipCodeRes("12514", $zipMonthHash, $zipNewHash, $zipYearHash, $_12514MonthRes, $_12514NewRes, $_12514DupRes, $_12514YearRes);
+		$getZipCodeRes("12522", $zipMonthHash, $zipNewHash, $zipYearHash, $_12522MonthRes, $_12522NewRes, $_12522DupRes, $_12522YearRes);
+		$getZipCodeRes("12524", $zipMonthHash, $zipNewHash, $zipYearHash, $_12524MonthRes, $_12524NewRes, $_12524DupRes, $_12524YearRes);
+		$getZipCodeRes("12531", $zipMonthHash, $zipNewHash, $zipYearHash, $_12531MonthRes, $_12531NewRes, $_12531DupRes, $_12531YearRes);
+		$getZipCodeRes("12533", $zipMonthHash, $zipNewHash, $zipYearHash, $_12533MonthRes, $_12533NewRes, $_12533DupRes, $_12533YearRes);
+		$getZipCodeRes("12537", $zipMonthHash, $zipNewHash, $zipYearHash, $_12537MonthRes, $_12537NewRes, $_12537DupRes, $_12537YearRes);
+		$getZipCodeRes("12538", $zipMonthHash, $zipNewHash, $zipYearHash, $_12538MonthRes, $_12538NewRes, $_12538DupRes, $_12538YearRes);
+		$getZipCodeRes("12540", $zipMonthHash, $zipNewHash, $zipYearHash, $_12540MonthRes, $_12540NewRes, $_12540DupRes, $_12540YearRes);
+		$getZipCodeRes("12545", $zipMonthHash, $zipNewHash, $zipYearHash, $_12545MonthRes, $_12545NewRes, $_12545DupRes, $_12545YearRes);
+		$getZipCodeRes("12546", $zipMonthHash, $zipNewHash, $zipYearHash, $_12546MonthRes, $_12546NewRes, $_12546DupRes, $_12546YearRes);
+		$getZipCodeRes("12564", $zipMonthHash, $zipNewHash, $zipYearHash, $_12564MonthRes, $_12564NewRes, $_12564DupRes, $_12564YearRes);
+		$getZipCodeRes("12567", $zipMonthHash, $zipNewHash, $zipYearHash, $_12567MonthRes, $_12567NewRes, $_12567DupRes, $_12567YearRes);
+		$getZipCodeRes("12569", $zipMonthHash, $zipNewHash, $zipYearHash, $_12569MonthRes, $_12569NewRes, $_12569DupRes, $_12569YearRes);
+		$getZipCodeRes("12570", $zipMonthHash, $zipNewHash, $zipYearHash, $_12570MonthRes, $_12570NewRes, $_12570DupRes, $_12570YearRes);
+		$getZipCodeRes("12571", $zipMonthHash, $zipNewHash, $zipYearHash, $_12571MonthRes, $_12571NewRes, $_12571DupRes, $_12571YearRes);
+		$getZipCodeRes("12572", $zipMonthHash, $zipNewHash, $zipYearHash, $_12572MonthRes, $_12572NewRes, $_12572DupRes, $_12572YearRes);
+		$getZipCodeRes("12574", $zipMonthHash, $zipNewHash, $zipYearHash, $_12574MonthRes, $_12574NewRes, $_12574DupRes, $_12574YearRes);
+		$getZipCodeRes("12578", $zipMonthHash, $zipNewHash, $zipYearHash, $_12578MonthRes, $_12578NewRes, $_12578DupRes, $_12578YearRes);
+		$getZipCodeRes("12580", $zipMonthHash, $zipNewHash, $zipYearHash, $_12580MonthRes, $_12580NewRes, $_12580DupRes, $_12580YearRes);
+		$getZipCodeRes("12581", $zipMonthHash, $zipNewHash, $zipYearHash, $_12581MonthRes, $_12581NewRes, $_12581DupRes, $_12581YearRes);
+		$getZipCodeRes("12582", $zipMonthHash, $zipNewHash, $zipYearHash, $_12582MonthRes, $_12582NewRes, $_12582DupRes, $_12582YearRes);
+		$getZipCodeRes("12583", $zipMonthHash, $zipNewHash, $zipYearHash, $_12583MonthRes, $_12583NewRes, $_12583DupRes, $_12583YearRes);
+		$getZipCodeRes("12585", $zipMonthHash, $zipNewHash, $zipYearHash, $_12585MonthRes, $_12585NewRes, $_12585DupRes, $_12585YearRes);
+		$getZipCodeRes("12590", $zipMonthHash, $zipNewHash, $zipYearHash, $_12590MonthRes, $_12590NewRes, $_12590DupRes, $_12590YearRes);
+		$getZipCodeRes("12592", $zipMonthHash, $zipNewHash, $zipYearHash, $_12592MonthRes, $_12592NewRes, $_12592DupRes, $_12592YearRes);
+		$getZipCodeRes("12594", $zipMonthHash, $zipNewHash, $zipYearHash, $_12594MonthRes, $_12594NewRes, $_12594DupRes, $_12594YearRes);
+		$getZipCodeRes("12601", $zipMonthHash, $zipNewHash, $zipYearHash, $_12601MonthRes, $_12601NewRes, $_12601DupRes, $_12601YearRes);
+		$getZipCodeRes("12602", $zipMonthHash, $zipNewHash, $zipYearHash, $_12602MonthRes, $_12602NewRes, $_12602DupRes, $_12602YearRes);
+		$getZipCodeRes("12603", $zipMonthHash, $zipNewHash, $zipYearHash, $_12603MonthRes, $_12603NewRes, $_12603DupRes, $_12603YearRes);
+		$getZipCodeRes("12604", $zipMonthHash, $zipNewHash, $zipYearHash, $_12604MonthRes, $_12604NewRes, $_12604DupRes, $_12604YearRes);
 		
 		$otherZipWhere = "(zipcode NOT IN ('12501','12504','12506','12507','12508','12514','12522','12524','12531','12533','12537',
 							'12538','12540','12545','12546','12564','12567','12569','12570','12571','12572','12574','12578',
@@ -162,7 +206,7 @@
 		</button>
 	</div>
 	<div class="container pt-3">
-		<form action="" method="POST" autocomplete="on">
+		<form action="" method="POST" autocomplete="on" onsubmit="onSubmit()">
 			<div id="monthly-reports-fields" class="row" style="margin-bottom: 1%">
 				<div class="col">
 					<div class="form-group">
@@ -194,6 +238,13 @@
 				<div class="col"></div>
 				<div class="col-centered">
 					<button id="monthly-reports-generate" type="submit" class="btn cpca">Generate Report</button>
+				</div>
+				<div class="col"></div>
+			</div>
+			<div class="row">
+				<div class="col"></div>
+				<div class="col-auto col-centered">
+					<div class="loader" id="loader" style="display:none"></div>
 				</div>
 				<div class="col"></div>
 			</div>
@@ -1581,6 +1632,12 @@
 			yearElem.selectedIndex = year - y;
 		}
     }
+	
+	function onSubmit(){
+		document.getElementById("monthly-reports-generate").disabled = true;
+		document.getElementById("loader").style.display = "block";
+	}
+	
 	$(function() {
 		showTutorial('monthlyReports');
 	});
@@ -1593,6 +1650,26 @@
 	.form-group {
 		display: none;
 	}
+}
+
+.loader {
+  border: 5px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 5px solid #3498db;
+  width: 35px;
+  height: 35px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>
 <?php include('footer.php'); ?>
