@@ -307,16 +307,19 @@ if (($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) {
                                                   style='padding-left: 10px;'><?= $primaryLang['lang'] ?></span>
                                         </td>
                                     <?php } else { ?>
-                                        <td class="align-middle">
-                                            <span class="language-span" style='padding-left: 10px;'>User has no primary language</span>
+                                        <td class="align-middle" id="employee-primaryLanguage">
+                                            <span class="language-span" style='padding-left: 10px;'>No primary language</span>
                                         </td>
                                     <?php } ?>
                                     <td class="text-right align-middle">
                                         <select class="form-control" id="primaryLanguage-selector"
                                                 style="margin-left: 200px; height: 45px; width: 220px;">
+                                            <?php if ($languages) { ?>
                                             <option selected disabled>Choose a language...</option>
                                             <?php foreach ($languages as $language) { ?>
                                                 <option value="<?= $language['lang'] ?>"><?= $language['lang'] ?></option>
+                                            <?php } } else { ?>
+                                            <option selected disabled>No languages available</option>
                                             <?php } ?>
                                         </select>
                                     </td>
@@ -359,7 +362,7 @@ if (($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) {
                                                 <span class="secondaryLanguage language-span" id="no-secondary-lang"
                                                       style='padding-left: 10px;'>
                                                     <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-                                                    <i>User has no secondary languages</i>
+                                                    <i>No secondary languages</i>
                                                 </span>
                                         </td>
                                         <td class="text-right">
@@ -371,9 +374,12 @@ if (($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) {
                                     <td class="text-right align-middle languages">
                                         <select class="form-control" id="secondaryLanguage-selector"
                                                 style="margin-left: 271px; height: 45px; width: 220px;">
-                                            <option selected disabled>Choose a language...</option>
-                                            <?php foreach ($languages as $language) { ?>
-                                                <option value="<?= $language['lang'] ?>"><?= $language['lang'] ?></option>
+                                            <?php if ($languages) { ?>
+                                                <option selected disabled>Choose a language...</option>
+                                                <?php foreach ($languages as $language) { ?>
+                                                    <option value="<?= $language['lang'] ?>"><?= $language['lang'] ?></option>
+                                                <?php } } else { ?>
+                                                <option selected disabled>No languages available</option>
                                             <?php } ?>
                                         </select>
                                     </td>
