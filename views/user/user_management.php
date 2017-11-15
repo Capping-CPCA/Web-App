@@ -61,6 +61,10 @@ if (!empty($params) && $params[0] == 'restore') {
             <?php
             # Displays the active users
             while ($user = pg_fetch_assoc($res)) {
+                # Get if user is a superuser
+                $eId = $user['employeeid'];
+                $result = $db->query("SELECT superuserID FROM superusers WHERE superuserid = $1", [$eId]);
+                $isSuperUser = pg_fetch_assoc($result);
                 ?>
                 <div class="card mb-2 user-card">
                     <div class="p-3 card-body d-flex flex-row justify-content-start">
@@ -70,9 +74,11 @@ if (!empty($params) && $params[0] == 'restore') {
                             <a href="/account-settings/<?= $user['employeeid'] ?>" style="text-decoration: none;">
                                 <button type='button' class="btn outline-cpca btn-sm ml-2">View</button>
                             </a>
-                            <?php if ($user['employeeid'] != $_SESSION['employeeid']) { ?>
-                                <a href = "/account-settings/delete/<?= $user['employeeid']?>">
-                                    <button type = 'button' class="btn btn-outline-danger btn-sm ml-2" > Delete</button >
+                            <?php if (($user['employeeid'] != $_SESSION['employeeid']) &&
+                                        (($isSuperUser && hasRole(Role::Superuser)) ||
+                                            (!$isSuperUser && hasRole(Role::Admin)))) { ?>
+                                <a href="/account-settings/delete/<?= $user['employeeid']?>">
+                                    <button type='button' class="btn btn-outline-danger btn-sm ml-2">Delete</button >
                                 </a >
                             <?php } ?>
                         </div>
