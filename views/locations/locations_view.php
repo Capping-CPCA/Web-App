@@ -10,9 +10,8 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.6
+ * @version 0.3.2
  * @since 0.1
- * @deprecated
  */
 
 global $params, $db;
@@ -35,14 +34,7 @@ pg_free_result($result);
 include('header.php');
 ?>
     <div style="width: 100%">
-        <div class="row">
-			<div class="col">
-				<button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
-			</div>
-			<div class="col pr-5" align="right">
-				<button type="button" class="btn cpca" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
-			</div>
-		</div>
+        <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
         <div class="form-wrapper card view-card">
             <h4 class="card-header text-left">
                 <?= $site['sitename'] ?>
@@ -57,9 +49,9 @@ include('header.php');
                 <h4>Information</h4>
                 <div class="d-flex justify-content-center">
                     <div class="display-stack">
-                        <div class="display-top"><?= $site['programtype'] ?></div>
+                        <div class="display-top"><?= $site['sitetype'] ?></div>
                         <div class="display-split"></div>
-                        <div class="display-bottom">Program Type</div>
+                        <div class="display-bottom">Location Type</div>
                     </div>
                 </div>
             </div>

@@ -11,9 +11,8 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.6
+ * @version 0.1.6
  * @since 0.1
- * @deprecated
  */
 
 global $params, $db;
@@ -22,7 +21,7 @@ array_shift($params);
 # Get site name from params
 $sitename = rawurldecode(implode('/', $params));
 
-$db->prepare("get_site", "SELECT TRUE WHERE $1 IN (SELECT unnest(enum_range(NULL::programtype))::text as type);");
+$db->prepare("get_site", "SELECT * FROM sites WHERE sitename = $1");
 $result = $db->execute("get_site", [$sitename]);
 
 # If no results, site doesn't exist, redirect
@@ -34,21 +33,33 @@ if (pg_num_rows($result) == 0) {
 $site = pg_fetch_assoc($result);
 pg_free_result($result);
 
+$notConnected = pg_fetch_result($db->query("SELECT TRUE WHERE $1 NOT IN (SELECT sitename FROM classoffering)", [$sitename]), 0);
+
 # Archive data
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete'])) {
-    // TODO: Stored procedure delete enum value
-    $deleteRes = $db->query("DELETE FROM pg_enum WHERE enumtypid = 'programtype'::regtype AND enumlabel = $1", [$sitename]);
-    if ($deleteRes) {
-        $success = true;
-    } else {
-        $success = false;
+    $canDelete = $notConnected || (hasRole(Role::Superuser));
+
+    if ($canDelete) {
+        $deleteRes = $db->query("DELETE FROM participantclassattendance WHERE sitename = $1", [$sitename]);
+        $success = $deleteRes && pg_result_error_field($deleteRes, PGSQL_DIAG_SQLSTATE) == 0;
+
+        if ($success) {
+            $deleteRes = $db->query("DELETE FROM facilitatorclassattendance WHERE sitename = $1", [$sitename]);
+            $success = $deleteRes && pg_result_error_field($deleteRes, PGSQL_DIAG_SQLSTATE) == 0;
+
+            if ($success) {
+                $deleteRes = $db->query("DELETE FROM sites WHERE sitename = $1", [$sitename]);
+                $success = $deleteRes && pg_result_error_field($deleteRes, PGSQL_DIAG_SQLSTATE) == 0;
+            }
+        }
+
+        $note['title'] = ($success ? 'Success!' : 'Error!');
+        $note['msg'] = ($success ? 'The location has been deleted.' : 'The location wasn\'t deleted.');
+        $note['type'] = ($success ? 'success' : 'danger');
+        $_SESSION['notification'] = $note;
+        header("Location: /locations");
+        die();
     }
-    $note['title'] = ($success ? 'Success!' : 'Error!');
-    $note['msg'] = ($success ? 'The location has been deleted.' : 'The location wasn\'t deleted.');
-    $note['type'] = ($success ? 'success' : 'danger');
-    $_SESSION['notification'] = $note;
-    header("Location: /locations");
-    die();
 }
 
 include('header.php');
@@ -57,15 +68,26 @@ include('header.php');
     <div class="page-wrapper">
         <form class="card warning-card" method="post" action="<?= $_SERVER['REQUEST_URI'] ?>">
             <h4 class="card-header card-title">
-                <?= $sitename ?>
+                <?= $site['sitename'] ?>
             </h4>
             <div class="card-body">
-                You are about to delete location "<?= $sitename ?>". Are you sure
-                you want to delete this location?
+                <?php
+                if ($notConnected) {
+                    echo "You are about to delete location \"" . $site['sitename'] . "\". Are you sure ".
+                        "you want to delete this location?";
+                } else if (hasRole(Role::Superuser)) {
+                    echo "This location is currently being used for attendance. Fully deleting this location will also delete the ".
+                        "attendance for this location.<br /><br />Are you sure you want to continue?";
+                } else {
+                    echo "You do not have permission to delete this location.";
+                }
+                ?>
             </div>
             <div class="card-footer text-right">
                 <button type="button" class="btn btn-light" onclick="goBack()">Cancel</button>
-                <button type="submit" name="delete" class="btn btn-danger">Delete</button>
+                <?php if ($notConnected || hasRole(Role::Superuser)) { ?>
+                    <button type="submit" name="delete" class="btn btn-danger">Delete</button>
+                <?php } ?>
             </div>
         </form>
     </div>
