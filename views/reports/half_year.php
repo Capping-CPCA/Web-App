@@ -40,7 +40,7 @@
 		$pResult = pg_fetch_result($db->query($pQuery, []), 0, 0);
 		
 		$pIDQuery = "SELECT DISTINCT(participantclassattendance.participantid) FROM participantclassattendance WHERE $pWhere";
-		$formIDQuery = "SELECT DISTINCT(formid) FROM participantsformdetails WHERE participantid IN ($pIDQuery)";
+		$formIDQuery = "SELECT DISTINCT(formid) FROM forms WHERE participantid IN ($pIDQuery)";
 		
 		$sBaseQuery = "SELECT COUNT(prestopicdiscussedscore) as topic, COUNT(preschildperspectivescore) as perspective,
 					COUNT(presotherparentsscore) as otherparents, COUNT(practiceinfoscore) as practice
@@ -121,61 +121,61 @@
 				<tbody>
 					<tr>
 						<td scope="row">Have an increased knowledge of the topics</td>
-						<td>
+						<td align="center">
 							<?php if (count($sFavorResults) > 0) {
 							if ($sTotalResults["topic"] > 0) 
 								echo ($sFavorResults["topic"]/$sTotalResults["topic"])*100 . "%";
 						}?>
 						</td>
-						<td>
+						<td align="center">
 							<?php if (count($sFavorResults) > 0) echo $sFavorResults["topic"];?>
 						</td>
-						<td>
+						<td align="center">
 							<?php if (count($sTotalResults) > 0) echo $sTotalResults["topic"];?>
 						</td>
 					</tr>
 					<tr>
 						<td scope="row">Plan on using specific techniques discussed in class</td>
-						<td>
+						<td align="center">
 							<?php if (count($sFavorResults) > 0) {
 							if ($sTotalResults["practice"] > 0) 
 								echo ($sFavorResults["practice"]/$sTotalResults["practice"])*100 . "%";
 						}?>
 						</td>
-						<td>
+						<td align="center">
 							<?php if (count($sFavorResults) > 0) echo $sFavorResults["practice"];?>
 						</td>
-						<td>
+						<td align="center">
 							<?php if (count($sTotalResults) > 0) echo $sTotalResults["practice"];?>
 						</td>
 					</tr>
 					<tr>
 						<td scope="row">Realized other parents share the same concerns</td>
-						<td>
+						<td align="center">
 							<?php if (count($sFavorResults) > 0) {
 							if ($sTotalResults["otherparents"] > 0) 
 								echo ($sFavorResults["otherparents"]/$sTotalResults["otherparents"])*100 . "%";
 						}?>
 						</td>
-						<td>
+						<td align="center">
 							<?php if (count($sFavorResults) > 0) echo $sFavorResults["otherparents"];?>
 						</td>
-						<td>
+						<td align="center">
 							<?php if (count($sTotalResults) > 0) echo $sTotalResults["otherparents"];?>
 						</td>
 					</tr>
 					<tr>
 						<td scope="row">Understand children have different perspectives than they do</td>
-						<td>
+						<td align="center">
 							<?php if (count($sFavorResults) > 0) {
 							if ($sTotalResults["perspective"] > 0) 
 								echo ($sFavorResults["perspective"]/$sTotalResults["perspective"])*100 . "%";
 						}?>
 						</td>
-						<td>
+						<td align="center">
 							<?php if (count($sFavorResults) > 0) echo $sFavorResults["perspective"];?>
 						</td>
-						<td>
+						<td align="center">
 							<?php if (count($sTotalResults) > 0) echo $sTotalResults["perspective"];?>
 						</td>
 					</tr>
