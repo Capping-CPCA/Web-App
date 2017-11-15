@@ -22,8 +22,13 @@ global $db, $route, $params, $view;
 
 $employeeid = $params[1];
 
+# Get if user is a superuser
+$result = $db->query("SELECT superuserID FROM superusers WHERE superuserid = $1", [$employeeid]);
+$isSuperUser = pg_fetch_assoc($result);
+
 # Checks if the user trying to edit their own account or if they are an admin/superuser
-if (($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) {
+if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
+        ($isSuperUser && !(hasRole(Role::Superuser)))) {
     header('Location: /dashboard');
     die();
 } else {
@@ -46,11 +51,6 @@ if (($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) {
     # Prepare query to get languages
     $db->prepare("get-languages", "SELECT languages.lang FROM languages ");
     $db->prepare("get-facilitator-languages", "SELECT lang " . "FROM facilitatorlanguage " . "WHERE facilitatorid = $1 AND level = $2");
-
-    # Get if user is a superuser
-    $result = $db->query("SELECT superuserID FROM superusers WHERE superuserid = $1", [$employeeid]);
-    $isSuperUser = pg_fetch_assoc($result);
-
 
     # Check if the user is a facilitator
     $db->prepare("get-is-facilitator", "SELECT facilitatorid " . "FROM facilitators WHERE facilitatorid = $1 AND df = $2");
@@ -169,7 +169,7 @@ if (($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) {
                 }
             }
 
-            if (hasRole(Role::Admin)) {
+            if (hasRole(Role::Admin) && !$isSuperUser) {
                 $res4 = $db->query("UPDATE employees SET permissionlevel = $1 " .
                     "WHERE employeeid = $2", [$permissionlevel, $employeeid]);
                 if ($res4) {
