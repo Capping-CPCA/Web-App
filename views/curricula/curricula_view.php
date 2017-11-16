@@ -61,11 +61,11 @@ include('header.php');
         <div class="card-body d-flex justify-content-center flex-column">
             <h4>Information</h4>
             <div class="d-flex justify-content-center">
-                <div class="display-stack">
-                    <div class="display-top"><?= $site['sitetype'] ?></div>
-                    <div class="display-split"></div>
-                    <div class="display-bottom">Location</div>
-                </div>
+<!--                <div class="display-stack">-->
+<!--                    <div class="display-top">--><?//= $site['sitetype'] ?><!--</div>-->
+<!--                    <div class="display-split"></div>-->
+<!--                    <div class="display-bottom">Location</div>-->
+<!--                </div>-->
                 <div class="display-stack">
                     <div class="display-top"><?= $curricula['missnumber'] ?></div>
                     <div class="display-split"></div>

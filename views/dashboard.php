@@ -3,29 +3,29 @@ include_once('../models/DashboardPanel.php');
 
 $roleViews = [
     Role::User => [
-        new DashboardPanel("#", "Participant Referrals", "Participants", "file-text-o"),
-        new DashboardPanel("#", "Class Activity", "Classes", "book"),
-        new DashboardPanel(BASEURL."/agency-requests", "Agency Requests", "Participants", "search"),
-        new DashboardPanel("#", "Participant Intake", "Participants", "file-text-o"),
+        new DashboardPanel("/attendance", "Record Attendance", "Participants", "clock-o"),
+        new DashboardPanel("/referral-form", "Participant Referrals", "Participants", "files-o"),
+        new DashboardPanel("/intake-packet", "Participant Intake", "Classes", "file-text-o"),
+        new DashboardPanel("/agency-requests", "Agency Requests", "Participants", "search"),
     ],
     Role::Coordinator => [
-        new DashboardPanel(BASEURL."/agency-requests", "Agency Requests", "Participants", "search"),
-        new DashboardPanel("#", "Participant Intake", "Participants", "file-text-o"),
-        new DashboardPanel("/curricula", "Manage Curricula and Classes", "Classes", "university"),
-        new DashboardPanel("/locations", "Manage Locations", "Classes", "map-marker"),
+        new DashboardPanel("/classes", "Class Management", "Classes", "book"),
+        new DashboardPanel("/curricula", "Curricula Management", "Classes", "university"),
+        new DashboardPanel("/locations", "Location Management", "Classes", "map-marker"),
+        new DashboardPanel("/agency-requests", "Agency Requests", "Participants", "search"),
     ],
     Role::Admin => [
-        new DashboardPanel("/curricula", "Manage Curricula and Classes", "Classes", "university"),
-        new DashboardPanel("/locations", "Manage Locations", "Classes", "map-marker"),
-        new DashboardPanel("#", "Reports", "Reporting", "bar-chart"),
-        new DashboardPanel("#", "User Management", "Participants", "users"),
+        new DashboardPanel("/manage-users", "User Management", "Employees", "users"),
+        new DashboardPanel("/referral-form", "Participant Referrals", "Participants", "files-o"),
+        new DashboardPanel("/intake-packet", "Participant Intake", "Classes", "file-text-o"),
+        new DashboardPanel("/agency-requests", "Agency Requests", "Participants", "search"),
     ],
     Role::Superuser => [
-        new DashboardPanel("/curricula", "Manage Curricula and Classes", "Classes", "university"),
+        new DashboardPanel("/curricula", "Manage Curricula", "Classes", "university"),
         new DashboardPanel("/locations", "Manage Locations", "Classes", "map-marker"),
-        new DashboardPanel("/classes", "Manage Classes", "Participants", "book"),
-        new DashboardPanel("#", "Manage Participants", "Users", "users"),
-        new DashboardPanel("#", "User Management", "Users", "users"),
+        new DashboardPanel("/classes", "Manage Classes", "Classes", "book"),
+        new DashboardPanel("/manage-users", "User Management", "Employees", "users"),
+        new DashboardPanel("/agency-requests", "Agency Requests", "Participants", "search"),
     ]
 ];
 

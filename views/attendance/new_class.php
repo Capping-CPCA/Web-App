@@ -38,6 +38,7 @@ $result_facilitators = $db->no_param_query("SELECT peop.firstname, peop.middlein
                                             "FROM people peop, employees emp, facilitators f " .
                                             "WHERE peop.peopleid = emp.employeeid " .
                                             "AND emp.employeeid = f.facilitatorid " .
+                                            "AND f.df = 0 " .
                                             "ORDER BY peop.lastname ASC;"
 );
 
@@ -180,6 +181,18 @@ include('header.php');
 
         <form action="attendance-form" method="post">
             <div class="form-group">
+                <label for="site">Location</label>
+                <select id="site" class="form-control" name="site" onchange="">
+                    <?php
+                    //site options
+                    while($row = pg_fetch_assoc($result_sites)){
+                        echo "<option>{$row['sitename']}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label for="curr">Curriculum</label>
                 <select id="curr" class="form-control" onchange="enableSecondSelection()" name="curr">
                     <option disabled selected name="classList">Select Curriculum</option>
@@ -194,7 +207,7 @@ include('header.php');
 
             <fieldset disabled="disabled" id="classSelection" >
                 <div class="form-group">
-                    <label for="classes">Class Selection</label>
+                    <label for="classes">Class</label>
                     <select id="classes" class="form-control" name="classes" onchange="enableSubmitButton()">
                         <option></option>
                     </select>
@@ -202,19 +215,7 @@ include('header.php');
             </fieldset>
 
             <div class="form-group">
-                <label for="site">Site Selection</label>
-                <select id="site" class="form-control" name="site" onchange="">
-                    <?php
-                    //site options
-                    while($row = pg_fetch_assoc($result_sites)){
-                        echo "<option>{$row['sitename']}</option>";
-                    }
-                    ?>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="language">Language Selection</label>
+                <label for="language">Language</label>
                 <select id="language" class="form-control" name="lang" onchange="">
                     <?php
                     //language options
@@ -226,7 +227,7 @@ include('header.php');
             </div>
 
             <div class="form-group">
-                <label for="facilitator-name">Facilitator Selection</label>
+                <label for="facilitator-name">Facilitator</label>
                 <select id="facilitator-name" class="form-control" name="facilitator-name" onchange="setEmployeeIdField()">
                     <?php
                     $counter = 0;
@@ -250,21 +251,18 @@ include('header.php');
                 </select>
             </div>
 
-            <div class="form-group row">
-                <label for="date-input" class="col-2 col-form-label">Date</label>
-                <div class="col-10">
+            <div class="row">
+                <div class="form-group col-6">
+                    <label for="date-input">Date</label>
                     <input class="form-control" type="date" value="<?php echo date('Y-m-d'); ?>" id="date-input" name = "date-input">
                 </div>
-            </div>
 
-            <div class="form-group row">
-                <label for="time-input" class="col-2 col-form-label">Time</label>
-                <div class="col-10">
-                    <select class="form-control" id="time-input" name = "time-input">
-
-                    </select>
+                <div class="form-group col-6">
+                    <label for="time-input">Time</label>
+                    <select class="form-control" id="time-input" name = "time-input"></select>
                 </div>
             </div>
+
             <?php echo "<input type = \"hidden\" id=\"facilitator\" name=\"facilitator\" value=\"{$defaultValueFacilitatorId}\" />"  ?>
             <input type = "hidden" id="topic-id" name="topic-id" value="" />
             <input type = "hidden" id="curr-id" name="curr-id" value="" />

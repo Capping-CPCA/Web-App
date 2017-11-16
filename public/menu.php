@@ -24,7 +24,7 @@ function isActive($urls) {
 
 $active = [
     "referral-intake" => isActive(['/referral-form','/intake-packet','/self-referral-form']),
-    "class-activity" => isActive(['/record-attendance','/record-surver-results','/view-survey-results']),
+    "class-activity" => isActive(['/attendance','/record-surver-results','/view-survey-results']),
     "curr-and-class" => isActive(['/curricula','/locations','/classes']),
     "reports" => isActive(['/monthly-reports','/quarterly-reports','/year-end-reports','/custom-reports'])
 ];
@@ -70,8 +70,8 @@ $active = [
             </a>
             <div class="collapse <?=!$active['class-activity']?'':'show'?>" id="ClassActivitySubMenu">
                 <ul class="flex-column pl-2 nav">
-                    <a class="nav-link text-secondary py-0 <?= active('/record-attendance') ?>" data-parent="#ClassActivity" href="<?= BASEURL.'/record-attendance' ?>">
-                        Record Attendance
+                    <a class="nav-link text-secondary py-0 <?= active('/attendance') ?>" data-parent="#ClassActivity" href="<?= BASEURL.'/attendance' ?>">
+                        Attendance
                     </a>
                     <a class="nav-link text-secondary py-0 <?= active('/record-survey-results') ?>" data-parent="#ClassActivity" href="<?= BASEURL.'/record-survey-results' ?>">
                         Record Survey Results

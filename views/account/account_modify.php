@@ -125,6 +125,8 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
                 if ($state != 0) {
                     $success = false;
                     $errorMsg = "The employee name could not be updated.";
+                } else {
+                    $_SESSION['username'] = "$firstname $lastname";
                 }
             } else {
                 $success = false;

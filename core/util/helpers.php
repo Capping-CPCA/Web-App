@@ -209,3 +209,13 @@ function prettyPrint($arr) {
 function valueOrEmpty($arr, $key) {
     return isset($arr[$key]) ? $arr[$key] : '';
 }
+
+/**
+ * Takes in a string of length 10 and returns a formatted phone number.
+ * @param $string
+ * @return string
+ */
+
+function prettyPrintPhone($string) {
+    return '('.substr($string, 0, 3).') '.substr($string, 3, 3).'-'.substr($string,6);
+}
