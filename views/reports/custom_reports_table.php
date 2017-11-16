@@ -29,56 +29,63 @@
 	$maxAge = $_POST['maxAge'];
 	
 	//Build queries based on POST data
-	$dateQuery = "(participantclassattendance.date::date >= '$startDate' AND participantclassattendance.date::date <= '$endDate')";
+	$dateQuery = "(classattendancedetails.date::date >= '$startDate' AND classattendancedetails.date::date <= '$endDate')";
 	$currQuery = "";
 	
 	if (count($currs) > 0) {
-		$currQuery = "(participantclassattendance.curriculumid = '" . pg_escape_string($currs[0]) . "' ";
+		$currQuery = "(classattendancedetails.curriculumid = '" . pg_escape_string($currs[0]) . "' ";
 		for ($i = 1; $i < count($currs); $i++) {
-			$currQuery .= "OR participantclassattendance.curriculumid = '" . pg_escape_string($currs[$i]) . "' ";
+			$currQuery .= "OR classattendancedetails.curriculumid = '" . pg_escape_string($currs[$i]) . "' ";
 		}
 		$currQuery .= ")";
 	}
 	
 	$raceQuery = "";
 	if (count($races) > 0) {
-		$raceQuery = "(participants.race = '" . pg_escape_string($races[0]) . "' ";
+		$raceQuery = "(classattendancedetails.race = '" . pg_escape_string($races[0]) . "' ";
 		for ($i = 1; $i < count($races); $i++) {
-			$raceQuery .= "OR participants.race = '" . pg_escape_string($races[$i]) . "' ";
+			$raceQuery .= "OR classattendancedetails.race = '" . pg_escape_string($races[$i]) . "' ";
 		}
 		$raceQuery .= ")";
 	}
-	$ageQuery = "";
-	if ($minAge !== 'any') {
-		$ageQuery = "((date_part('year', AGE(participants.dateOfBirth)) >= $minAge) ";
-	}
-	if ($maxAge !== 'any') {
-		if ($minAge === 'any') {
-			$ageQuery = "(";
-		} else {
-			$ageQuery .= "AND ";
+	
+	if (count($races) > 0 && count($currs) > 0) {
+		$ageQuery = "";
+		if ($minAge !== 'any') {
+			$ageQuery = "((date_part('year', AGE(classattendancedetails.dateOfBirth)) >= $minAge) ";
 		}
-		$ageQuery .= "(date_part('year', AGE(participants.dateOfBirth)) <= $maxAge))";
+		if ($maxAge !== 'any') {
+			if ($minAge === 'any') {
+				$ageQuery = "(";
+			} else {
+				$ageQuery .= "AND ";
+			}
+			$ageQuery .= "(date_part('year', AGE(classattendancedetails.dateOfBirth)) <= $maxAge))";
+		} else {
+			if ($ageQuery !== "") $ageQuery .= ")";
+		}
+		
+		$totalWhere = "$dateQuery ";
+		if ($currQuery !== "") $totalWhere .= "AND $currQuery ";
+		if ($raceQuery !== "") $totalWhere .= "AND $raceQuery ";
+		if ($ageQuery !== "") $totalWhere .= "AND $ageQuery ";
+		$newWhere = $totalWhere . "AND classattendancedetails.isnew = TRUE;";
+		$totalWhere .= ";";
+		
+		$baseQuery = "SELECT COUNT(DISTINCT(classattendancedetails.participantid)) as participants
+					FROM classattendancedetails
+					WHERE ";
+		
+		
+		//Actually query database and store results to be displayed below
+		$totalRes = pg_fetch_result($db->query($baseQuery . $totalWhere, []), 0, 0);
+		$newRes = pg_fetch_result($db->query($baseQuery . $newWhere, []), 0, 0);
+		
 	} else {
-		if ($ageQuery !== "") $ageQuery .= ")";
+		$totalRes = 0;
+		$newRes = 0;
 	}
 	
-	$totalWhere = "$dateQuery ";
-	if ($currQuery !== "") $totalWhere .= "AND $currQuery ";
-	if ($raceQuery !== "") $totalWhere .= "AND $raceQuery ";
-	if ($ageQuery !== "") $totalWhere .= "AND $ageQuery ";
-	$newWhere = $totalWhere . "AND participantclassattendance.isnew = TRUE;";
-	$totalWhere .= ";";
-	
-	$baseQuery = "SELECT COUNT(DISTINCT(participants.participantid)) as Participants
-				FROM participants INNER JOIN participantclassattendance
-				ON participants.participantid = participantclassattendance.participantid
-				WHERE ";
-	
-	
-	//Actually query database and store results to be displayed below
-	$totalRes = pg_fetch_result($db->query($baseQuery . $totalWhere, []), 0, 0);
-	$newRes = pg_fetch_result($db->query($baseQuery . $newWhere, []), 0, 0);
 	$duplRes = $totalRes - $newRes;
 	
 	//Get all the names of the curriculum selected, using their ids
