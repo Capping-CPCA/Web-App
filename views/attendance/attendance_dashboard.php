@@ -63,13 +63,13 @@ $result = $db->no_param_query($dashboardClassesQuery);
                             //populate table with historical class information
                             while($row = pg_fetch_assoc($result)) {
                                 echo "<tr id='{$counter}'>";
-                                    echo "<td>{$row['sitename']}</td>";
-                                    echo "<td>{$row['topicname']}</td>";
+                                    echo "<td class='align-middle'>{$row['sitename']}</td>";
+                                    echo "<td class='align-middle'>{$row['topicname']}</td>";
                                     $time = strtotime($row['date']);
                                     $myFormatDate = date("m/d/y", $time);
                                     $myFormatTime = date("h:i A", $time);
-                                    echo "<td>{$myFormatDate} <em>{$myFormatTime}</em></td>";
-                                    echo "<td><button href=\"\" class=\"btn outline-cpca\" type=\"submit\" onclick=\"changeHiddenFormFieldValue({$counter})\">More details...</button></td>";
+                                    echo "<td class='align-middle'>{$myFormatDate} <em>{$myFormatTime}</em></td>";
+                                    echo "<td class='align-middle'><button href=\"\" class=\"btn outline-cpca\" type=\"submit\" onclick=\"changeHiddenFormFieldValue({$counter})\">More details...</button></td>";
                                 echo "</tr>";
                                 $counter++;
                             }

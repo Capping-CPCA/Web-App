@@ -111,7 +111,7 @@ include('header.php');
             </div>
 
             <div class="text-center" style="margin-bottom: 20px; margin-top: 15px;">
-                <a href="/record-attendance"><button type="button" class="btn cpca">Return To Attendance Dashboard</button></a>
+                <a href="/attendance"><button type="button" class="btn cpca">Return To Attendance Dashboard</button></a>
                 <a href="/historical-class-search"><button type="button" class="btn btn-outline-secondary">Return To Date Selection</button></a>
             </div>
         </div>

@@ -149,10 +149,10 @@ $result = $db->no_param_query($queryClassInformation);
             <?php
             //back to previous page depends on whether or not came from historical class lookup or dashboard
             if($whatPageWeCameFrom == "dashboard"){
-                echo "<a href='/record-attendance'><button type=\"button\" class=\"btn btn-outline-secondary\">Back To Dashboard</button></a>";
+                echo "<a href='/attendance'><button type=\"button\" class=\"btn btn-outline-secondary\">Back To Dashboard</button></a>";
             } else { //historicalLookup
                 echo "<a href='/historical-class-search' class='mr-2'><button type=\"button\" class=\"btn cpca\">Search New Day</button></a>";
-                echo "<a href='/record-attendance'><button type=\"button\" class=\"btn btn-outline-secondary\">Back To Dashboard</button></a>";
+                echo "<a href='/attendance'><button type=\"button\" class=\"btn btn-outline-secondary\">Back To Dashboard</button></a>";
             }
             ?>
         </div>

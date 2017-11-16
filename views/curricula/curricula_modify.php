@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($valid) {
         // Edit & Update
-        if ($isEdit && isset($site)) {
+        if ($isEdit) {
             $res = $db->query("UPDATE curricula SET curriculumname = $1, " .
                 "missnumber = $2 WHERE curriculumid = $3", [$name, $miss, $id]);
         }

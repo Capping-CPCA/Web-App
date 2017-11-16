@@ -221,7 +221,7 @@ include('header.php');
                     echo "<h6 class=\"card-subtitle mb-2 text-muted\" style=\"text-align: center;\">Attendance has been submitted!</h6>";
 
                     echo "<div class=\"d-flex justify-content-center\">";
-                    echo "<button type=\"button\" class=\"btn cpca\" onclick=\"location.href = '/record-attendance'\" style='margin-top: 10px;'>Back To Dashboard</button>";
+                    echo "<button type=\"button\" class=\"btn cpca\" onclick=\"location.href = '/attendance'\" style='margin-top: 10px;'>Back To Dashboard</button>";
                     echo "</div>";
                 } else{
                     echo "<h4 class=\"card-title\" style=\"text-align: center;\"><i class=\"fa fa-exclamation-triangle\" aria-hidden=\"true\" style='color: red;'></i> Error</h4>";

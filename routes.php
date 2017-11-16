@@ -55,7 +55,7 @@ $router->add('/intake-packet', 'forms/intake_packet.php', 'Intake Packet');
 $router->add('/form-success', 'forms/form_success.php', 'Form Submitted');
 
 # Attendance Application
-$router->add('/record-attendance', 'attendance/attendance_dashboard.php', 'Attendance Dashboard');
+$router->add('/attendance', 'attendance/attendance_dashboard.php', 'Attendance Dashboard');
 $router->add('/new-class', 'attendance/new_class.php', 'New Attendance Sheet');
 $router->add('/attendance-form', 'attendance/attendance_form.php', 'Attendance Form');
 $router->add('/attendance-form-confirmation', 'attendance/attendance_form_confirmation.php', 'Confirm Attendance');

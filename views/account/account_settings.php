@@ -102,7 +102,7 @@ if (!empty($params) && $params[0] == 'modify') {
                             </div>
                             <?php if ($primaryphone) { ?>
                             <div class="display-stack">
-                                <div class="display-top"><?= $primaryphone ?></div>
+                                <div class="display-top"><?= prettyPrintPhone($primaryphone)?></div>
                                 <div class="display-split"></div>
                                 <div class="display-bottom">Primary Phone</div>
                             </div>

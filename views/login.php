@@ -15,7 +15,6 @@
  * @version 0.6
  * @since 0.1
  */
-
 include('../models/Notification.php');
 
 $error = false;
