@@ -228,9 +228,8 @@
 				</div>
 				<div class="col">
 					<div class="form-group">
-						<select class="form-control" name="year" id="year">
-						<!-- Javascript below adds the options based on current year -->
-                  </select>
+						<input class="form-control" name="year" id="year" type="number">
+						<!-- Javascript below sets value and range based on current year -->
 					</div>
 				</div>
 			</div>
@@ -1580,21 +1579,18 @@
 	</div>
 </div>
 <script>
-	const NUM_YEARS_BACK = 4;
+	const MIN_YEAR = 2016;
 
 	window.onload = initPage;
-
+	
 	function initPage() {
 		var d = new Date();
 		var monthElem = document.getElementById("month");
 		var yearElem = document.getElementById("year");
 		var year = d.getFullYear();
-		for (i = 0; i <= NUM_YEARS_BACK; i++) {
-			var opt = document.createElement('option');
-			opt.value = year - i;
-			opt.innerHTML = year - i;
-			yearElem.appendChild(opt);
-		}
+		yearElem.min = MIN_YEAR;
+		yearElem.max = year;
+		yearElem.value = year;
 		display = document.getElementById("date_display").innerHTML;
 		if (display === "") {
 			var month = d.getMonth();
@@ -1629,7 +1625,7 @@
 			monthElem.selectedIndex = monthIndex;
 			
 			var y = parseInt(display.substr(display.length - 4));
-			yearElem.selectedIndex = year - y;
+			yearElem.value = y;
 		}
     }
 	
