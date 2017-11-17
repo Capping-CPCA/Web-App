@@ -127,7 +127,7 @@
 	</form>
 </div>
 <script>
-	const NUM_YEARS_BACK = 4;
+	const MIN_YEAR = 2016;
 	
 	window.onload = initPage;
 	
@@ -150,15 +150,13 @@
 			endElem.value = startElem.value;
 			startElem.max = startElem.value;
 			endElem.max = endElem.value;
-			year -= NUM_YEARS_BACK;
-			startDate.min = year + "-" + month + "-" + day;
-			endDate.min = year + "-" + month + "-" + day;
+			startDate.min = MIN_YEAR + "-" + month + "-" + day;
+			endDate.min = MIN_YEAR + "-" + month + "-" + day;
 		} else {
 			startElem.max = endElem.value;
 			endElem.min = startElem.value;
 			endElem.max = year + "-" + month + "-" + day;
-			year -= NUM_YEARS_BACK;
-			startElem.min = year + "-" + month + "-" + day;
+			startElem.min = MIN_YEAR + "-" + month + "-" + day;
 			minAgeChange()
 			maxAgeChange()
 		}
