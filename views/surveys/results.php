@@ -225,6 +225,7 @@ function copyToClipboard(num) {
 												$col_value . 
 												('</a>
 												</h5>
+												
 												</div>
 												'); 
 				$query2 = "SELECT * FROM answers WHERE fullname='$col_value' and currentdate LIKE '" . $_POST["Month"] . "/" . $_POST["Day"] . "/" . $_POST["Year"] . "%' and workshoptopic = '" . $_POST["classes"] . "';";
