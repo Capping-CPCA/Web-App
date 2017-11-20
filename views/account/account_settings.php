@@ -92,6 +92,7 @@ if (!empty($params) && $params[0] == 'modify') {
                         <?php if ($isFacilitator) {?>
                             <p class="account_languages"><b>Language(s): </b> <?=$primaryLang['lang']?> (Primary)<?php if ($secondaryLang) { foreach ($secondaryLang as $lang) { ?>, <?= $lang['lang']?> (Secondary) <?php } } ?></p>
                         <?php } ?>
+                        <p class="is_facilitator"><b>Facilitator:</b> <?= $isFacilitator ? 'Yes' : 'No' ?></p>
                         <p class="account_permission"><b>Type: </b><?= $permissionlevel ?></p>
                         <p class="participant_contact"><b>Contact: </b></p>
                         <div class="d-flex justify-content-center">
