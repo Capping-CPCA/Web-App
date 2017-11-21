@@ -195,7 +195,9 @@ function copyToClipboard(num) {
 		<div class="row justify-content-md-center">
 			<div class="col-sm">
 				
-				<h4 id="date">Results for <?php echo($_POST["classes"])?> held on <?php echo($_POST["Month"] . "/" . $_POST["Day"] . "/" . $_POST["Year"]) ?></h4>
+				<h3 style="color: #5C639A;" id="date">Results for <?php 
+				$months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+				echo($_POST["classes"])?><br /></h3><h6 style="color: #5C639A;";><b> <?php echo($months[$_POST["Month"] - 1] . " " . $_POST["Day"] . ", " . $_POST["Year"]) ?></b></h6>
 			</div>
 		</div>
 	</div>
@@ -204,31 +206,31 @@ function copyToClipboard(num) {
 	
 	<?php
 	
-		$db_connection = pg_connect("host=10.11.12.24 dbname=Survey user=postgres password=password");
-		
-		$query = "SELECT fullname FROM answers WHERE currentdate LIKE '" . $_POST["Month"] . "/" . $_POST["Day"] . "/" . $_POST["Year"] . "%' and workshoptopic = '" . $_POST["classes"] . "';";
+		$db_connection = pg_connect("host=10.11.12.24 dbname=Actual user=postgres password=password");
+		$query = "SELECT participantname FROM surveys WHERE cast(starttime as text) LIKE '" . $_POST["Year"] . "-" . $_POST["Month"] . "-" . $_POST["Day"] . "%' and topicname = '" . $_POST["classes"] . "' ORDER BY participantname;";
 		$result = pg_query($db_connection,$query);
 		$counter = 1;
 		$nameNum = 1;
 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-			
 			foreach ($line as $col_value) {
 				echo ('
 				<div class="container">
 					<div class="row justify-content-md-center">
 						<div class="col-sm" style="max-width:85%">
 							<div id="accordion" role="tablist">
-								<div class="card">
+								<div class="card" style="border: 0.5px solid #5C639A;">
 									<div class="card-header" role="tab" id="heading' . $nameNum . '">
-										<h5 class="mb-0">
-											<a data-toggle="collapse" href="#collapse' . $nameNum . '" aria-expanded="false" aria-controls="collapse">') . 
-												$col_value . 
+										<h4 class="mb-0"><small><b>
+											<a data-toggle="collapse" href="#collapse' . $nameNum . '" aria-expanded="false" aria-controls="collapse" style="color: #343A40;-">') . 
+												stripslashes($col_value) . 
 												('</a>
-												</h5>
+												</b>
+												</small>
+												</h4>
 												
 												</div>
 												'); 
-				$query2 = "SELECT * FROM answers WHERE fullname='$col_value' and currentdate LIKE '" . $_POST["Month"] . "/" . $_POST["Day"] . "/" . $_POST["Year"] . "%' and workshoptopic = '" . $_POST["classes"] . "';";
+				$query2 = "SELECT * FROM surveys WHERE participantname='$col_value' and cast(starttime as text) LIKE '" . $_POST["Year"] . "-" . $_POST["Month"] . "-" . $_POST["Day"] . "%' and topicname = '" . $_POST["classes"] . "';";
 				$result2 = pg_query($db_connection,$query2);
 				echo('
 					<div id="collapse' . $nameNum . '" class="collapse" role="tabpanel" aria-labelledby="heading' . $nameNum . '" data-parent="" >
@@ -239,7 +241,7 @@ function copyToClipboard(num) {
 			
 					foreach ($line2 as $col_value) {
 								echo("<p><b>Question " . $counter . ": </b>");
-								echo($col_value);
+								echo stripslashes($col_value);
 								echo("</p>");
 								$counter += 1;
 				
@@ -264,14 +266,25 @@ function copyToClipboard(num) {
 	</div>
 	</p>
 	');	
+	
 			$nameNum += 1;
 		}
+		if($nameNum == 1) {
+			
+			echo("<center><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><h5 style='color: #CACCCE;'>No survey results found.</h5></center>");
+			
+			
+		} else {
+		
 			?>
 			<center>
+			<p>
 			<input value="Copy Class" type="Submit" class="btn btn-success" onclick="expand()">
 			<input value="Print Class" type="Submit" class="btn btn-success" onclick="downloadPDFClass()">
+			</p>
 			</center>
 			<?php
+		}
 		pg_free_result($result);
 		pg_close($db_connection);
 	

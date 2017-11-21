@@ -86,7 +86,7 @@ if (!empty($params) && $params[0] == 'view') {
 		<div class="row justify-content-md-center">
 		<div class="col-sm" style="max-width:75%">
 		
-		<h4>Select class and filter by date for results</h4>
+		<h4 style="color: #5C639A;">Select class and filter by date for results</h4>
 		</div>
 		</div>
 		</div>
@@ -96,20 +96,22 @@ if (!empty($params) && $params[0] == 'view') {
 			<div class="col-sm col-lg-6">
 		<form method="POST" action="/surveys/results" onsubmit = "return validateForm()"name = "userInput">
 		<div class="form-group">
-		<select class="form-control" id="classes" name="classes">
+		<select class="form-control" id="classes" name="classes" style="color: #5C639A;">
 			<option value="" disabled selected hidden>Class</option>
-			<option value="Cornerstone">Cornerstone</option>
-			<option value="Fishkill/New Vision Church">Fishkill/New Vision Church</option>
-			<option value="Florence Manor">Florence Manor</option>
-			<option value="Fox Run">Fox Run</option>
-			<option value="In-House Men">In-House Men</option>
-			<option value="In-House Women">In-House Women</option>
-			<option value="ITAP">ITAP</option>
-			<option value="jenfjg">jenfjg</option>
-			<option value="Meadow Run">Meadow Run</option>
-			<option value="Men's DC Jail">Men's DC Jail</option>
-			<option value="Women's DC Jail">Women's DC Jail</option>
+			<?php
+			$db_connection = pg_connect("host=10.11.12.24 dbname=Actual user=postgres password=password");
+			$query = "SELECT topicname FROM classes";
+			$result = pg_query($db_connection,$query);
+			while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 			
+				foreach ($line as $col_value) {
+					echo('<option value="' . $col_value . '">' . $col_value . '</option>');
+				
+				
+				}
+			}
+			?>
+		
 		</select>
 		</div>
 
@@ -121,7 +123,7 @@ if (!empty($params) && $params[0] == 'view') {
 				<div class="row justify-content-md-center">
 			<div class="col-sm col-lg-2">
 		<div class="form-group">
-		<select class="form-control" name="Month" id="month">
+		<select class="form-control" name="Month" id="month" style="color: #5C639A;">
 		<option selected disabled="disabled" value="">Month</option>
 			<option value="01">January</option>
 			  <option value="02">February</option>
@@ -140,17 +142,17 @@ if (!empty($params) && $params[0] == 'view') {
 		</div>
 		<div class="col-sm col-lg-2">
 		<div class="form-group">
-		<select class="form-control" name="Day" id="day">
+		<select class="form-control" name="Day" id="day" style="color: #5C639A;">
 			<option selected disabled="disabled" value="">Day</option>
-			<option value="01">1</option>
-			  <option value="02">2</option>
-			  <option value="03">3</option>
-			  <option value="04">4</option>
-			  <option value="05">5</option>
-			  <option value="06">6</option>
-			  <option value="07">7</option>
-			  <option value="08">8</option>
-			  <option value="09">9</option>
+			<option value="1">1</option>
+			  <option value="2">2</option>
+			  <option value="3">3</option>
+			  <option value="4">4</option>
+			  <option value="5">5</option>
+			  <option value="6">6</option>
+			  <option value="7">7</option>
+			  <option value="8">8</option>
+			  <option value="9">9</option>
 			  <option value="10">10</option>
 			  <option value="11">11</option>
 			  <option value="12">12</option>
@@ -178,9 +180,9 @@ if (!empty($params) && $params[0] == 'view') {
 		</div>
 		<div class="col-sm col-lg-2">
 		<div class="form-group">
-		<select class="form-control" name="Year" id="year"';
+		<select class="form-control" name="Year" id="year" style="color: #5C639A;"';
 		<?php $starting_year  =date('2000');
-		 $ending_year = date('Y', strtotime('+0 year'));
+		 $ending_year = date('Y', strtotime('+1 year'));
 		 $current_year = date('Y');
 		 for($starting_year; $starting_year <= $ending_year; $starting_year++) {
 			 echo '<option value="'.$starting_year.'"';
@@ -189,10 +191,9 @@ if (!empty($params) && $params[0] == 'view') {
 			 }
 			 echo ' >'.$starting_year.'</option>';
 		 }               
-		 echo '<select>';
+		 echo '</select>';
 		 ?>
-		<!--
-		<select class="form-control" name="Year" id="year">
+		<!--<select class="form-control" name="Year" id="year">
 		<option selected disabled="disabled" value="">Year</option>
 			<option value="2017">2017</option>
 			<option value="2016">2016</option>
@@ -212,31 +213,22 @@ if (!empty($params) && $params[0] == 'view') {
 			<option value="2002">2002</option>
 			<option value="2001">2001</option>
 			<option value="2000">2000</option>
-		</select>
-		-->
+		</select>-->
 		</div>
 		</div>
 		</div>
 		</div>
-<<<<<<< HEAD
-			<input type="Submit" method = "POST" class="btn btn-primary" value="Search Surveys">
-=======
-			<input type="Submit" method = "POST" class="btn btn-secondary" value="Search Surveys">
->>>>>>> 75673d2592387acab13013ce084cfab93a1fd4a1
+			<input type="Submit" method = "POST" class="btn btn-primary" value="Search Surveys" style="background: #5C639A;">
 			</form>
 		
 		<p>
 		<br />
-<<<<<<< HEAD
-		<a href="http://Mari.st/pep" target="_blank">Link to Survey</a>
-=======
-		<a href="http://Mari.st/pep" target="_blank" class="text-secondary">Link to Survey</a>
->>>>>>> 75673d2592387acab13013ce084cfab93a1fd4a1
+		<a href="http://Mari.st/pep" target="_blank" style="color: #5C639A;">Link to Survey</a>
 		<div class="container">
 			<div class="row justify-content-md-center">
 				<div class="col-sm" style="max-width:75%; position: absolute; bottom: 5%;">
 				
-					<h5><small>Survey Database was last updated on:</small><h5> 
+					<h5><small style="color: #5C639A;">Survey Database was last updated on:</small><h5> 
 					<h6 style="font-size: 10px; color: darkGray;" id="result"></p>
 					<script>
 					if (localStorage.lastSave != null){
@@ -251,11 +243,7 @@ if (!empty($params) && $params[0] == 'view') {
 					</script>
 					<p>
 					<form method="POST">
-<<<<<<< HEAD
-						<input name="updated" value="Update Surveys" type="Submit" class="btn btn-success" />
-=======
-						<input name="updated" value="Update Surveys" type="Submit" class="btn cpca" />
->>>>>>> 75673d2592387acab13013ce084cfab93a1fd4a1
+						<input name="updated" value="Update Surveys" type="Submit" class="btn btn-success" style="background: #5C639A;"/>
 					</form>
 				</div>
 			</div>
