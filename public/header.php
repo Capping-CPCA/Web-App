@@ -1,5 +1,5 @@
 <?php
-    global $route;
+    global $route, $breadcrumbs;
 ?>
 
 <html>
@@ -56,3 +56,11 @@
     <div class="d-flex flex-row" id="content-wrapper">
         <?php if (!isset($hideMenu)) require_once('menu.php'); ?>
         <div id="main-content" class="d-flex">
+		<?php
+		
+$addPage = $breadcrumbs->addPage("hi");
+$historyArray = $breadcrumbs->getArray();
+
+echo SessionHandler::read();
+
+print_r($historyArray);?>

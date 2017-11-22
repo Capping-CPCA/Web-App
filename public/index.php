@@ -21,7 +21,7 @@ session_start();
 require('../bootstrap.php');
 require('../routes.php');
 
-global $router, $view, $db;
+global $router, $view, $db ,$breadcrumbs;
 
 # checks if url is the current one
 function active($url) {
