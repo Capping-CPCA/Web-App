@@ -54,13 +54,11 @@
         </div>
     </nav>
     <div class="d-flex flex-row" id="content-wrapper">
-        <?php if (!isset($hideMenu)) require_once('menu.php'); ?>
-        <div id="main-content" class="d-flex">
-		<?php
+        <?php if (!isset($hideMenu)) require_once('menu.php');
+
+		?>
 		
-$addPage = $breadcrumbs->addPage("hi");
-$historyArray = $breadcrumbs->getArray();
-
-echo SessionHandler::read();
-
-print_r($historyArray);?>
+        <div id="main-content" class="d-flex flex-column">
+        <div class="row">
+		<p> Hi </p>
+		</div>

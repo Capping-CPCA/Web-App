@@ -17,16 +17,23 @@
  
  class BreadCrumbs{
 	 
-	public $historyArray = array();
 	
 	public function addPage($page){
-		 $this->historyArray[] = $page;
-		return $this->historyArray;
+	//	 $_SESSION["history"]->append($page);
+		//return $this->historyArray;
 	}
 	public function getArray(){
-		return $this->historyArray;
+		//print_r($this->$_SESSION["history"]);
 	}
 
 }
 
 
+/*
+if($route['title'] != "Page not found!"){
+			$_SESSION['history'][] = $route['title'];
+			}
+			//$_SESSION['history'][] = $route['title'];
+			$_SESSION['history']= array();
+			var_dump($_SESSION['history']);
+			*/

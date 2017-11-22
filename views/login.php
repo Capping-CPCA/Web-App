@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     global $db;
     $ldap_config = CONFIG['ldap'];
 
+	$_SESSION["history"] = array();
     // Initialize LDAP credentials
     $ldap_usr_dom = $ldap_config['user_domain'];
     $ldaprdn = $_POST['username'];

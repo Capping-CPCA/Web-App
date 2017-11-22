@@ -29,6 +29,7 @@ function active($url) {
     return $route['url'] == $url ? 'active' : '';
 }
 
+
 #
 # Try to navigate to and display the page
 #
