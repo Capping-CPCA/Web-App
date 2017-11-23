@@ -23,14 +23,19 @@
 		$this->route =$route;
 	}
 	public function addPage(){
+		$arr = null;
 		if($this::checkLength()){
-			echo "array is populated";
+			if($this::checkEntries()){
+				$arr = [$this->route['title'] => $this->route['url']];
+				$_SESSION['history'][] = $arr;
+			}else{
+				
+			}
 		}else{
-			echo "array is empty";
-		}
-		/*	$arr = [$route['title'] => $route['url']];
+			$arr = [$this->route['title'] => $this->route['url']];
 			$_SESSION['history'][] = $arr;
-		}else{
+		}
+		/*	
 		if($route['title'] != "Page not found!"  && $route['title'] != $this::getLastKey() ){
 			//$_SESSION['history'][] = $route['title'];
 			
@@ -66,8 +71,17 @@
 	}
 	
 	public function displayBreadcrumbs(){
-		print_r($_SESSION['history']);
-		print_r($this->route);
+			foreach($_SESSION['history'] as $keys =>$values){
+			if($keys == 0){
+				foreach($values as $names => $urls){
+						echo "<a class='cpca-link' href='$urls'> >".$names." </a>";
+				}
+			}else{
+				foreach($values as $names => $urls){
+						echo "<a class='cpca-link' href='$urls'> |".$names." </a>";
+				}
+			}
+		}
 	}
 	
 	public function checkDuplicates(){
@@ -81,6 +95,13 @@
 		}else{
 			return true;
 		}
+	}
+	public function checkEntries(){
+		if($this->route['title'] != "Page not found!"  && $this->route['title'] != $this::getLastKey() ){
+			return true;
+		}else{
+			return false;
+		}	
 	}
 	
 	public function clearHistory(){

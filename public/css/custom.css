@@ -37,10 +37,17 @@ html, body {
 .cpca-link{
 	text-decoration:none;
 	color:#5C629C;
+	padding-left:5px;
+	padding-right:5px;
+}
+.cpca-link-dark{
+	color:#808080!important;
 }
 .cpca-link:hover{
 	font-weight:bold;
 	color:#5C629C;
+	padding-left:5px;
+	padding-right:5px;
 }
 
 .navbar-left,

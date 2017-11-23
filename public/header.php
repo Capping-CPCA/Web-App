@@ -86,21 +86,21 @@
 			foreach($_SESSION['history'] as $keys =>$values){
 				if($keys == 0){
 					foreach($values as $names => $urls){
-							echo " > <a class='cpca-link' href='$urls'>".$names."</a> ";
+							echo " <a class='cpca-link p-1' href='$urls'> > ".$names." </a> ";
 					}
 				//	echo " > ".$values." ";
 				}else{
 					foreach($values as $names => $urls){
-							echo " | <a class='cpca-link' href='$urls'> ".$names." </a> ";
+							echo "<a class='cpca-link p-1' href='$urls'> | ".$names." </a> ";
 					}
 					//echo " | ".$values." ";
 				}
 			}
 			
 		}*/
-		//$breadcrumbs->displayBreadcrumbs();
 		//$breadcrumbs->clearHistory();
 		$breadcrumbs->setRoute($route);
 		$breadcrumbs->addPage();
+		$breadcrumbs->displayBreadcrumbs();
 		?>
 		</div>
