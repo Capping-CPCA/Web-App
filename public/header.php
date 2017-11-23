@@ -59,45 +59,8 @@
 		?>
 		
         <div id="main-content" class="d-flex flex-column">
-        <div class="row p-2">
+        <div class="row pb-3 pr-4">
 		<?php
-		/*$checkKey = null;
-		if(empty($_SESSION['history'])){
-			
-			$arr = [$route['title'] => $route['url']];
-			$_SESSION['history'][] = $arr;
-		}else{
-			$checkKey= key($_SESSION['history'][ (sizeof($_SESSION['history']) -1)]);
-		if($route['title'] != "Page not found!"  && $route['title'] != $checkKey){
-			//$_SESSION['history'][] = $route['title'];
-			
-			$arr = [$route['title'] => $route['url']];
-			//key($_SESSION['history'][sizeof($_SESSION['history'])]);
-			//print_r(key($_SESSION['history'][0]));
-			$_SESSION['history'][] = $arr;
-			
-			echo sizeof($_SESSION['history']);
-			
-			}
-			//$_SESSION['history'][] = $route['title'];
-			//$_SESSION['history']= array();
-			//var_dump($_SESSION['history']);
-			//print_r($_SESSION['history']);
-			foreach($_SESSION['history'] as $keys =>$values){
-				if($keys == 0){
-					foreach($values as $names => $urls){
-							echo " <a class='cpca-link p-1' href='$urls'> > ".$names." </a> ";
-					}
-				//	echo " > ".$values." ";
-				}else{
-					foreach($values as $names => $urls){
-							echo "<a class='cpca-link p-1' href='$urls'> | ".$names." </a> ";
-					}
-					//echo " | ".$values." ";
-				}
-			}
-			
-		}*/
 		//$breadcrumbs->clearHistory();
 		$breadcrumbs->setRoute($route);
 		$breadcrumbs->addPage();

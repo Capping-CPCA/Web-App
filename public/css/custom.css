@@ -39,6 +39,8 @@ html, body {
 	color:#5C629C;
 	padding-left:5px;
 	padding-right:5px;
+	border:none;
+	background-color:transparent;
 }
 .cpca-link-dark{
 	color:#808080!important;
@@ -48,6 +50,7 @@ html, body {
 	color:#5C629C;
 	padding-left:5px;
 	padding-right:5px;
+	cursor:pointer;
 }
 
 .navbar-left,

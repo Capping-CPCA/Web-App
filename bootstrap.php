@@ -36,4 +36,4 @@ $view = new View($viewLoader);
 $router = new Router();
 
 //load the breadcrumbs
-$breadcrumbs = new BreadCrumbs;
+$breadcrumbs = new BreadCrumbs();
