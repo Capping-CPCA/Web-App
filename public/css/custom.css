@@ -34,6 +34,14 @@ html, body {
     margin-top: -3px;
     transform: skew(45deg);
 }
+.cpca-link{
+	text-decoration:none;
+	color:#5C629C;
+}
+.cpca-link:hover{
+	font-weight:bold;
+	color:#5C629C;
+}
 
 .navbar-left,
 .navbar-center,

@@ -61,7 +61,7 @@
         <div id="main-content" class="d-flex flex-column">
         <div class="row p-2">
 		<?php
-		$checkKey = null;
+		/*$checkKey = null;
 		if(empty($_SESSION['history'])){
 			
 			$arr = [$route['title'] => $route['url']];
@@ -86,17 +86,21 @@
 			foreach($_SESSION['history'] as $keys =>$values){
 				if($keys == 0){
 					foreach($values as $names => $urls){
-							echo " > <a href='$urls'>".$names."</a> ";
+							echo " > <a class='cpca-link' href='$urls'>".$names."</a> ";
 					}
 				//	echo " > ".$values." ";
 				}else{
 					foreach($values as $names => $urls){
-							echo " | <a href='$urls'>".$names."</a> ";
+							echo " | <a class='cpca-link' href='$urls'> ".$names." </a> ";
 					}
 					//echo " | ".$values." ";
 				}
 			}
 			
-		}
+		}*/
+		//$breadcrumbs->displayBreadcrumbs();
+		//$breadcrumbs->clearHistory();
+		$breadcrumbs->setRoute($route);
+		$breadcrumbs->addPage();
 		?>
 		</div>

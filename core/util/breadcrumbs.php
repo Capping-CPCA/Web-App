@@ -17,23 +17,114 @@
  
  class BreadCrumbs{
 	 
+	//public $route = null;
 	
-	public function addPage($page){
-	//	 $_SESSION["history"]->append($page);
-		//return $this->historyArray;
+	public function setRoute($route){
+		$this->route =$route;
 	}
-	public function getArray(){
-		//print_r($this->$_SESSION["history"]);
+	public function addPage(){
+		if($this::checkLength()){
+			echo "array is populated";
+		}else{
+			echo "array is empty";
+		}
+		/*	$arr = [$route['title'] => $route['url']];
+			$_SESSION['history'][] = $arr;
+		}else{
+		if($route['title'] != "Page not found!"  && $route['title'] != $this::getLastKey() ){
+			//$_SESSION['history'][] = $route['title'];
+			
+			$arr = [$route['title'] => $route['url']];
+			//key($_SESSION['history'][sizeof($_SESSION['history'])]);
+			//print_r(key($_SESSION['history'][0]));
+			$_SESSION['history'][] = $arr;
+			
+			echo sizeof($_SESSION['history']);
+			
+			}
+			//$_SESSION['history'][] = $route['title'];
+			//$_SESSION['history']= array();
+			//var_dump($_SESSION['history']);
+			//print_r($_SESSION['history']);
+			foreach($_SESSION['history'] as $keys =>$values){
+				if($keys == 0){
+					foreach($values as $names => $urls){
+							echo " > <a class='cpca-link' href='$urls'>".$names."</a> ";
+					}
+				//	echo " > ".$values." ";
+				}else{
+					foreach($values as $names => $urls){
+							echo " | <a class='cpca-link' href='$urls'> ".$names." </a> ";
+					}
+					//echo " | ".$values." ";
+				}
+			}
+		}*/
 	}
+	public function getLastKey(){
+		return key($_SESSION['history'][ (sizeof($_SESSION['history']) -1)]);
+	}
+	
+	public function displayBreadcrumbs(){
+		print_r($_SESSION['history']);
+		print_r($this->route);
+	}
+	
+	public function checkDuplicates(){
+		$check = false;
+		return $check;
+	}
+	
+	public function checkLength(){
+		if(empty($_SESSION['history'])){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	
+	public function clearHistory(){
+		$_SESSION['history'] = array();
+	}
+	
 
 }
 
 
-/*
-if($route['title'] != "Page not found!"){
-			$_SESSION['history'][] = $route['title'];
+/*$checkKey = null;
+		if(empty($_SESSION['history'])){
+			
+			$arr = [$route['title'] => $route['url']];
+			$_SESSION['history'][] = $arr;
+		}else{
+			$checkKey= key($_SESSION['history'][ (sizeof($_SESSION['history']) -1)]);
+		if($route['title'] != "Page not found!"  && $route['title'] != $checkKey){
+			//$_SESSION['history'][] = $route['title'];
+			
+			$arr = [$route['title'] => $route['url']];
+			//key($_SESSION['history'][sizeof($_SESSION['history'])]);
+			//print_r(key($_SESSION['history'][0]));
+			$_SESSION['history'][] = $arr;
+			
+			echo sizeof($_SESSION['history']);
+			
 			}
 			//$_SESSION['history'][] = $route['title'];
-			$_SESSION['history']= array();
-			var_dump($_SESSION['history']);
-			*/
+			//$_SESSION['history']= array();
+			//var_dump($_SESSION['history']);
+			//print_r($_SESSION['history']);
+			foreach($_SESSION['history'] as $keys =>$values){
+				if($keys == 0){
+					foreach($values as $names => $urls){
+							echo " > <a class='cpca-link' href='$urls'>".$names."</a> ";
+					}
+				//	echo " > ".$values." ";
+				}else{
+					foreach($values as $names => $urls){
+							echo " | <a class='cpca-link' href='$urls'> ".$names." </a> ";
+					}
+					//echo " | ".$values." ";
+				}
+			}
+			
+		}*/
