@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $curriculumId = $_POST['id'];
     // Restore
     if (isset($_POST['restore'])) {
-        $restoreRes = $db->query("UPDATE curricula SET df = 0 WHERE curriculumid = $1", [$curriculumId]);
+        $restoreRes = $db->query("UPDATE curricula SET df = FALSE WHERE curriculumid = $1", [$curriculumId]);
         if ($restoreRes) {
             $success = true;
             $notificationMsg = 'Curriculum was successfully restored!';
@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$result = $db->query("SELECT * FROM curricula WHERE df = 1 ORDER BY curriculumname", []);
+$result = $db->query("SELECT * FROM curricula WHERE df IS TRUE ORDER BY curriculumname", []);
 
 include('header.php');
 ?>

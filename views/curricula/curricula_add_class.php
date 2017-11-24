@@ -21,11 +21,11 @@ $id = $params[1];
 
 $db->prepare("get_curr_classes", "SELECT * FROM classes, curriculumclasses ".
     "WHERE curriculumid = $1 AND classes.classid = curriculumclasses.classid ".
-    "AND classes.df = 0");
+    "AND classes.df IS FALSE");
 $db->prepare("get_other_classes",
     "SELECT * FROM classes WHERE classid NOT IN (" .
     "SELECT classid FROM curriculumclasses WHERE curriculumid = $1" .
-    ") AND df = 0 ORDER BY topicname");
+    ") AND df IS FALSE ORDER BY topicname");
 
 $topics = $db->execute("get_curr_classes", [$id]);
 $allTopics = $db->execute("get_other_classes", [$id]);

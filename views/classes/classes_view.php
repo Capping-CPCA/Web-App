@@ -44,8 +44,8 @@ include('header.php');
 		</div>
     <div class="form-wrapper card view-card">
         <h4 class="card-header text-left">
-            <?php echo $class['topicname'] . ($class['df'] != 0 ? ' <span class="badge badge-secondary">Deleted</span>' : '') ?>
-            <?php if (hasRole(Role::Coordinator) && $class['df'] == 0) { ?>
+            <?php echo $class['topicname'] . ($class['df'] ? ' <span class="badge badge-secondary">Deleted</span>' : '') ?>
+            <?php if (hasRole(Role::Coordinator) && !$class['df']) { ?>
                 <div class="float-right">
                     <a href="/classes/edit/<?= $id ?>"><button class="btn btn-outline-secondary btn-sm">Edit</button></a>
                     <a href="/classes/delete/<?= $id ?>"><button class="btn btn-outline-danger btn-sm">Delete</button></a>

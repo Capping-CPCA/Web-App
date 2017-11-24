@@ -33,7 +33,7 @@ pg_free_result($result);
 
 $topics = $db->query("SELECT * FROM curriculumclasses, classes WHERE curriculumid = $1 ".
     "AND curriculumclasses.classid = classes.classid ".
-    "AND classes.df = 0 ORDER BY classes.topicname", [$id]);
+    "AND classes.df IS FALSE ORDER BY classes.topicname", [$id]);
 $curriculaName = $curricula['curriculumname'];
 $site = pg_fetch_assoc($db->query("SELECT * FROM sites WHERE sitename = $1", [$curriculaName]));
 
