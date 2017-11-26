@@ -99,6 +99,15 @@ if (!empty($params) && $params[0] == 'view') {
                 </div>
                 <?php
             }
+            if (pg_num_rows($result) == 0) {
+                ?>
+                <div class="w-100 d-flex flex-column justify-content-center text-center">
+                    <h3 class="display-3 text-secondary" style="font-size: 40px;"><i
+                                class="fa fa-exclamation-circle"></i></h3>
+                    <h3 class="display-3 text-secondary" style="font-size: 40px;">No Current Locations.</h3>
+                </div>
+                <?php
+            }
             ?>
         </div>
     </div>

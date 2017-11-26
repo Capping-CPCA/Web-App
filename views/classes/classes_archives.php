@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $class = $_POST['class'];
     // Restore
     if (isset($_POST['restore'])) {
-        $restoreRes = $db->query("UPDATE classes SET df = 0 WHERE classid = $1", [$class]);
+        $restoreRes = $db->query("UPDATE classes SET df = FALSE WHERE classid = $1", [$class]);
         if ($restoreRes) {
             $success = true;
             $notificationMsg = 'Class was successfully restored!';
@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$result = $db->query("SELECT * FROM classes WHERE df = 1 ORDER BY topicname", []);
+$result = $db->query("SELECT * FROM classes WHERE df IS TRUE ORDER BY topicname", []);
 
 include('header.php');
 ?>
