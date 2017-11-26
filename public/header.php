@@ -24,6 +24,7 @@
     <script type="text/javascript" src="/js/jquery.mask.min.js"></script>
     <script type="text/javascript" src="/js/form_helpers.js"></script>
     <script type="text/javascript" src="/js/intake_helpers.js"></script>
+    <script type="text/javascript" src="/js/breadcrumbs.js"></script>
 
 </head>
 <body>
@@ -62,8 +63,8 @@
         <div class="row pb-3 pr-4">
 		<?php
 		//$breadcrumbs->clearHistory();
-		$breadcrumbs->setRoute($route);
+		/*$breadcrumbs->setRoute($route);
 		$breadcrumbs->addPage();
-		$breadcrumbs->displayBreadcrumbs();
+		$breadcrumbs->displayBreadcrumbs();*/
 		?>
 		</div>

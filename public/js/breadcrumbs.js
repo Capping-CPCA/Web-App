@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	var title = $("#page-title").text();
-	//console.log(title);
+	console.log(title);
 	var getNavs = $("a.nav-link.text-secondary").attr('class').split(/\s+/);
 	var breadcrumbObject = {};
 	for (var i =0; i < $("a.nav-link.text-secondary").length; i++){
@@ -23,5 +23,6 @@ $(document).ready(function(){
 			breadcrumbObject[nameOfLink.trim()] = $($("a.nav-link.text-secondary")[i]).text().trim();
 		}
 	}
-	console.log(breadcrumbObject);
+	//console.log(breadcrumbObject);
+	console.log(Object.keys(breadcrumbObject));
 });
