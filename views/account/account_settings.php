@@ -48,13 +48,13 @@ if (!empty($params) && $params[0] == 'modify') {
         $employee = pg_fetch_assoc($result);
         extract($employee);
 
-        $result = $db->query("SELECT facilitatorid " . "FROM facilitators WHERE facilitatorid = $1 AND df = 0", [$employeeid]);
+        $result = $db->query("SELECT facilitatorid FROM facilitators WHERE facilitatorid = $1 AND df = FALSE", [$employeeid]);
         $isFacilitator = pg_fetch_assoc($result);
         $employee['isFacilitator'] = $isFacilitator;
         if ($isFacilitator) {
-            $result = $db->query("SELECT lang " . "FROM facilitatorlanguage " . "WHERE facilitatorid = $1 AND level = 'PRIMARY'", [$employeeid]);
+            $result = $db->query("SELECT lang FROM facilitatorlanguage WHERE facilitatorid = $1 AND level = 'PRIMARY'", [$employeeid]);
             $primaryLang = pg_fetch_assoc($result);
-            $result = $db->query("SELECT lang " . "FROM facilitatorlanguage " . "WHERE facilitatorid = $1 AND level = 'SECONDARY'", [$employeeid]);
+            $result = $db->query("SELECT lang FROM facilitatorlanguage WHERE facilitatorid = $1 AND level = 'SECONDARY'", [$employeeid]);
             $secondaryLang = pg_fetch_all($result);
             $employee['primaryLang'] = $primaryLang;
             $employee['secondaryLang'] = $secondaryLang;
@@ -90,7 +90,7 @@ if (!empty($params) && $params[0] == 'modify') {
                     <hr>
                     <div class="pl-3">
                         <?php if ($isFacilitator) {?>
-                            <p class="account_languages"><b>Language(s): </b> <?=$primaryLang['lang']?> (Primary)<?php if ($secondaryLang) { foreach ($secondaryLang as $lang) { ?>, <?= $lang['lang']?> (Secondary) <?php } } ?></p>
+                            <p class="account_languages"><b>Language(s): </b> <?=$primaryLang['lang']?> (Primary)<?php if ($secondaryLang) { foreach ($secondaryLang as $lang) { ?>, <?= $lang['lang']?> (Secondary)<?php } } ?></p>
                         <?php } ?>
                         <p class="is_facilitator"><b>Facilitator:</b> <?= $isFacilitator ? 'Yes' : 'No' ?></p>
                         <p class="account_permission"><b>Type: </b><?= $permissionlevel ?></p>
