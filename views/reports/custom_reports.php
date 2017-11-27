@@ -19,11 +19,17 @@
 	
 	global $db;
 
-	$query = "SELECT DISTINCT(curriculumname), curriculumid FROM curricula;";
+	$query = "SELECT DISTINCT(curriculumname), curriculumid FROM curricula WHERE df IS FALSE;";
 	$currs = pg_fetch_all($db->query($query, []));
+	
+	$query = "SELECT DISTINCT(sitename) FROM sites;";
+	$sites = pg_fetch_all($db->query($query, []));
 
 	$query = "SELECT unnest(enum_range(NULL::race))  ";
 	$races = pg_fetch_all($db->query($query, []));
+	
+	$query = "SELECT unnest(enum_range(NULL::sex))  ";
+	$sexes = pg_fetch_all($db->query($query, []));
 
 	include('header.php');
 ?>
@@ -45,10 +51,55 @@
 			</div>
 			<!-- Multiple Checkboxes -->
 			<div id="custom-reports-checkboxes" class="form-group row">
+				<label class="col-md-2 col-form-label" for="sex[]"><b>Sex</b></label>
+				<div class="col-md-4">
+					<div>
+						<input type="button" class="btn btn-sm" id="sexSelectAll" value="Deselect All" onclick="onSelectAll('sexSelectAll', 'sexCheckBox')">
+						<hr>
+					</div>
+					<?php
+					for ($i=0; $i<count($sexes); $i++) {
+						$sex = $sexes[$i]["unnest"];
+						echo "<div class='checkbox'>
+							<label for='sex-$i'>
+							<input onclick=\"onCheckBoxChange('sexSelectAll','sexCheckBox')\" class='sexCheckBox' type='checkbox' name='sex[]' id='sex-$i' value=\"$sex\">
+							$sex
+							</label>
+						</div>";
+					} ?>
+				</div>
+			</div>
+			<br>
+			<!-- Multiple Checkboxes -->
+			<div id="custom-reports-checkboxes" class="form-group row">
+				<label class="col-md-2 col-form-label" for="sites[]"><b>Locations</b></label>
+				<div class="col-md-4">
+					<div>
+						<input type="button" class="btn btn-sm" id="sitesSelectAll" value="Deselect All" onclick="onSelectAll('sitesSelectAll', 'sitesCheckBox')">
+						<hr>
+					</div>
+					<?php
+						if ($sites[0]["sitename"] !== NULL) {
+							for ($i=0; $i<count($sites); $i++) {
+								$siteName = $sites[$i]["sitename"];
+								echo "<div class='checkbox'>
+									<label for='sites-$i'>
+									<input onclick=\"onCheckBoxChange('sitesSelectAll','sitesCheckBox')\" class='sitesCheckBox' type='checkbox' name='sites[]' id='sites-$i' value=\"$siteName\">
+									$siteName
+									</label>
+								</div>";
+							}
+						}
+					?>
+				</div>
+			</div>
+			<br>
+			<!-- Multiple Checkboxes -->
+			<div id="custom-reports-checkboxes" class="form-group row">
 				<label class="col-md-2 col-form-label" for="curricula[]"><b>Curricula</b></label>
 				<div class="col-md-4">
 					<div>
-						<input type="button" class="btn" id="currSelectAll" value="Select All" onclick="onCurrSelectAll()">
+						<input type="button" class="btn btn-sm" id="currSelectAll" value="Deselect All" onclick="onSelectAll('currSelectAll', 'currCheckBox')">
 						<hr>
 					</div>
 					<?php
@@ -58,7 +109,7 @@
 								$currId = $currs[$i]["curriculumid"];
 								echo "<div class='checkbox'>
 									<label for='curricula-$i'>
-									<input class='currCheckBox' type='checkbox' name='curricula[]' id='curricula-$i' value=\"$currId\">
+									<input onclick=\"onCheckBoxChange('currSelectAll','currCheckBox')\" class='currCheckBox' type='checkbox' name='curricula[]' id='curricula-$i' value=\"$currId\">
 									$currName
 									</label>
 								</div>";
@@ -73,7 +124,7 @@
 				<label class="col-md-2 col-form-label" for="race[]"><b>Race</b></label>
 				<div class="col-md-4">
 					<div>
-						<input type="button" class="btn" id="raceSelectAll" onclick="onRaceSelectAll()" value="Select All">
+						<input type="button" class="btn btn-sm" id="raceSelectAll" onclick="onSelectAll('raceSelectAll', 'raceCheckBox')" value="Deselect All">
 						<hr>
 					</div>
 					<?php
@@ -81,7 +132,7 @@
 						$race = $races[$i]["unnest"];
 						echo "<div class='checkbox'>
 							<label for='race-$i'>
-							<input class='raceCheckBox' type='checkbox' name='race[]' id='race-$i' value=\"$race\">
+							<input onclick=\"onCheckBoxChange('raceSelectAll','raceCheckBox')\" class='raceCheckBox' type='checkbox' name='race[]' id='race-$i' value=\"$race\">
 							$race
 							</label>
 						</div>";
@@ -150,16 +201,50 @@
 			endElem.value = startElem.value;
 			startElem.max = startElem.value;
 			endElem.max = endElem.value;
-			startDate.min = MIN_YEAR + "-" + month + "-" + day;
-			endDate.min = MIN_YEAR + "-" + month + "-" + day;
+			startDate.min = MIN_YEAR + "-01-01";
+			endDate.min = MIN_YEAR + "-01-01";
 		} else {
 			startElem.max = endElem.value;
 			endElem.min = startElem.value;
 			endElem.max = year + "-" + month + "-" + day;
-			startElem.min = MIN_YEAR + "-" + month + "-" + day;
+			startElem.min = MIN_YEAR + "-01-01";
 			minAgeChange()
 			maxAgeChange()
 		}
+		//Initialize 'Select All' btns
+		var checkboxes = document.querySelectorAll("input[type='checkbox']");
+		for (var i = 0; i < checkboxes.length; i++) {
+			if (!checkboxes[i].checked) {
+				className = checkboxes[i].className;
+				switch (className) {
+					case "sexCheckBox": 
+						document.getElementById("sexSelectAll").value = "Select All";
+						break;
+					case "sitesCheckBox": 
+						document.getElementById("sitesSelectAll").value = "Select All";
+						break;
+					case "currCheckBox": 
+						document.getElementById("currSelectAll").value = "Select All";
+						break;
+					case "raceCheckBox": 
+						document.getElementById("raceSelectAll").value = "Select All";
+						break;
+				}
+			}
+		}
+	}
+	
+	/*
+	* Enable Select All when checkbox is selected
+	*/
+	function onCheckBoxChange(btnId, className) {
+		btn = document.getElementById(btnId);
+		boxes = document.getElementsByClassName(className);
+		checked = true;
+		for (var i = 0; i < boxes.length; i++) {
+			if (!boxes[i].checked) checked = false;
+		}
+		btn.value = (checked) ? "Deselect All" : "Select All";
 	}
 	
 	/*
@@ -210,20 +295,13 @@
 		if (startElem.value > startElem.max) startElem.value = startElem.max;
 	}
 	
-	function onRaceSelectAll() {
-		raceButton = document.getElementById("raceSelectAll");
-		raceBoxes = document.getElementsByClassName("raceCheckBox");
-		for (i = 0; i < raceBoxes.length; i++){
-			raceBoxes[i].checked = true;
+	function onSelectAll(btnId, className) {
+		btn = document.getElementById(btnId);
+		boxes = document.getElementsByClassName(className);
+		for (i = 0; i < boxes.length; i++){
+			boxes[i].checked = btn.value == "Select All";
 		}
-	}
-	
-	function onCurrSelectAll() {
-		currButton = document.getElementById("currSelectAll");
-		currBoxes = document.getElementsByClassName("currCheckBox");
-		for (i = 0; i < currBoxes.length; i++){
-			currBoxes[i].checked = true;
-		}
+		btn.value = (btn.value == "Select All") ? "Deselect All" : "Select All";
 	}
 
 	//Display tutorials for page
