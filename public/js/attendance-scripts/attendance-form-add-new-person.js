@@ -106,15 +106,14 @@ function validateAge(age) {
     var ageNumber = parseInt(age);
     if(isNaN(ageNumber)) return false;
     if(typeof(ageNumber) !== "number") return false;
-    //returns true if age in valid range 18-100
-    return((ageNumber >= 18) && (ageNumber <= 100));
+    return (ageNumber >= 1);
 }
 
 function validateNumChildren(num) {
     var number = parseInt(num);
     if(isNaN(number)) return false;
     //returns true if a valid number of children
-    return((number >= 0) && (number <= 25))
+    return (number >= 0);
 }
 
 function validateZip(zip) {

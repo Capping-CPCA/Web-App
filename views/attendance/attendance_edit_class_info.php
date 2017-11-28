@@ -15,15 +15,9 @@
 
 global $db;
 
-//unset previous class session information
-if(isset($_SESSION['serializedInfo'])) {
-    unset($_SESSION['serializedInfo']);
-}
+include ('attendance_utilities.php');
 
-if(isset($_SESSION['attendance-info'])) {
-    unset($_SESSION['attendance-info']);
-}
-
+//form options
 $result_curriculum = $db->no_param_query("SELECT c.curriculumid, c.curriculumname FROM curricula c WHERE c.df IS FALSE ORDER BY c.curriculumname ASC;");
 
 $result_classes = $db->no_param_query("SELECT cc.curriculumid, topicname, cc.classid FROM curriculumclasses cc, classes WHERE classes.classid = cc.classid AND classes.df IS FALSE ORDER BY cc.curriculumid;");
@@ -40,6 +34,24 @@ $result_facilitators = $db->no_param_query("SELECT peop.firstname, peop.middlein
     "ORDER BY peop.lastname ASC;"
 );
 
+//previous inputs
+$attendanceInfo = $_SESSION['attendance-info'];
+
+$selected_class = $attendanceInfo['classes'];
+$selected_curr = $attendanceInfo['curr'];
+$selected_date = $attendanceInfo['date-input'];
+$selected_time = $attendanceInfo['time-input'];
+$selected_site = $attendanceInfo['site'];
+$selected_lang = $attendanceInfo['lang'];
+$selected_facilitator = $attendanceInfo['facilitator'];
+$selected_topic_id = $attendanceInfo['topic-id'];
+
+$selected_curr_id = $attendanceInfo['curr-id'];
+
+updateSessionClassInformation();
+
+
+
 include('header.php');
 
 ?>
@@ -55,6 +67,24 @@ include('header.php');
             }
             ?>
         ];
+
+        //input: none
+        //output: none
+        //description: function for setting the default class on the class information page
+        function setSelectedClass(){
+            var classSelected = parseInt(<?php echo $selected_topic_id; ?>);
+
+            console.log(classSelected);
+            var parent = document.getElementById('classes');
+
+            for(var i = 0; i < parent.childElementCount; i++){
+                console.log(parent.children[i].id + " : " + "top-" + classSelected);
+                if(parent.children[i].id === ("top-" + classSelected).toString()){
+                    parent.children[i].selected = true;
+                    return;
+                }
+            }
+        }
 
         //js for controlling the disabled selection of class section
         function enableSecondSelection() {
@@ -79,7 +109,6 @@ include('header.php');
             document.getElementById('curr-id').value = curriculumNumberSelected;
 
             //add new options
-
             var node = document.createElement("OPTION");
             node.selected = true;
             node.disabled = true;
@@ -90,18 +119,27 @@ include('header.php');
                 if(classesMatrix[i][0] === curriculumNumberSelected){ //same course number
                     var classNode = document.createElement("OPTION");
                     classNode.setAttribute('id', 'top-' + classesMatrix[i][2].toString());
-                    classNode.innerHTML = classesMatrix[i][1];
-                    classNode.dataset.id = classesMatrix[i][2];
+
+                    var classSelected = <?php echo $selected_topic_id ?>;
+                    if(classesMatrix[i][2] === classSelected){
+                        classNode.setAttribute('selected', 'selected');
+                    }
+                    classNode.innerHTML = classesMatrix[i][1]; //name
+                    classNode.dataset.id = classesMatrix[i][2]; //topic_id
                     classesElement.appendChild(classNode);
                 }
             }
 
         }
 
+
         //input: hour and time integers
         //output: option object
         function createTime(hour, minute, amORpm){
             var option = document.createElement('OPTION');
+            if((hour + ":" + minute + " " + amORpm) === "<?php echo $selected_time; ?>" ){
+                option.setAttribute('selected','selected');
+            }
             option.innerHTML = (hour + ":" + minute + " " + amORpm).toString();
 
             return option;
@@ -112,6 +150,10 @@ include('header.php');
         //description: enables the submit button
         function enableSubmitButton() {
             updateClassSelection();
+            document.getElementById("sub").disabled = false;
+        }
+
+        function enableSubmitButtonWithoutUpdate(){
             document.getElementById("sub").disabled = false;
         }
 
@@ -141,9 +183,8 @@ include('header.php');
 
     </script>
     <div class="container">
-
         <div class="jumbotron form-wrapper mb-3">
-            <h2 class="display-4 text-center" style="font-size: 34px">Class Information</h2>
+            <h2 class="display-4 text-center" style="font-size: 34px"> Class Information</h2>
 
             <form action="attendance-form" method="post">
                 <div class="form-group">
@@ -152,7 +193,13 @@ include('header.php');
                         <?php
                         //site options
                         while($row = pg_fetch_assoc($result_sites)){
-                            echo "<option>{$row['sitename']}</option>";
+                            //set default selected element
+                            if($row['sitename'] == $selected_site)
+                            {
+                                echo "<option selected='selected'>{$row['sitename']}</option>";
+                            } else{
+                                echo "<option>{$row['sitename']}</option>";
+                            }
                         }
                         ?>
                     </select>
@@ -165,7 +212,12 @@ include('header.php');
                         <?php
                         //curriculum options
                         while($row = pg_fetch_assoc($result_curriculum)){
-                            echo "<option id='cur-{$row['curriculumid']}' data-id='{$row['curriculumid']}'>{$row['curriculumname']}</option>";
+                            //set default selected
+                            if($row['curriculumid'] == $selected_curr_id){
+                                echo "<option id='cur-{$row['curriculumid']}' data-id='{$row['curriculumid']}' selected='selected'>{$row['curriculumname']}</option>";
+                            } else{
+                                echo "<option id='cur-{$row['curriculumid']}' data-id='{$row['curriculumid']}'>{$row['curriculumname']}</option>";
+                            }
                         }
                         ?>
                     </select>
@@ -186,7 +238,11 @@ include('header.php');
                         <?php
                         //language options
                         while($row = pg_fetch_assoc($result_languages)){
-                            echo "<option>{$row['lang']}</option>";
+                            if($row['lang'] == $selected_lang) {
+                                echo "<option selected='selected'>{$row['lang']}</option>";
+                            } else{
+                                echo "<option>{$row['lang']}</option>";
+                            }
                         }
                         ?>
                     </select>
@@ -201,17 +257,17 @@ include('header.php');
                         $defaultValueFacilitatorId = 0;
                         while($row = pg_fetch_assoc($result_facilitators)){
                             if($first){$first = false; $defaultValueFacilitatorId = $row['peopleid'];}
-                            $selected = "";
-                            //choose default facilitator
-                            if((isset($_SESSION['employeeid'])) && ($_SESSION['employeeid'] == $row['peopleid'])){
-                                $selected = "selected=\"selected\"";
-                                $defaultValueFacilitatorId = $row['peopleid'];
-                            }
 
                             $facilitatorId = $row['peopleid'];
 
                             $fullName = $row['firstname'] . " " . $row['middleinit'] . " " . $row['lastname'];
-                            echo "<option {$selected} id=\"{$facilitatorId}\">{$fullName}</option>";
+
+                            if($selected_facilitator == $facilitatorId){
+                                echo "<option selected ='selected' id=\"{$facilitatorId}\">{$fullName}</option>";
+                            }
+                            else{
+                                echo "<option id=\"{$facilitatorId}\">{$fullName}</option>";
+                            }
                         }
                         ?>
                     </select>
@@ -220,7 +276,7 @@ include('header.php');
                 <div class="row">
                     <div class="form-group col-6">
                         <label for="date-input">Date</label>
-                        <input class="form-control" type="date" value="<?php echo date('Y-m-d'); ?>" id="date-input" name = "date-input">
+                        <input class="form-control" type="date" value="<?php echo $selected_date; ?>" id="date-input" name = "date-input">
                     </div>
 
                     <div class="form-group col-6">
@@ -229,13 +285,15 @@ include('header.php');
                     </div>
                 </div>
 
-                <?php echo "<input type = \"hidden\" id=\"facilitator\" name=\"facilitator\" value=\"{$defaultValueFacilitatorId}\" />"  ?>
-                <input type = "hidden" id="topic-id" name="topic-id" value="" />
-                <input type = "hidden" id="curr-id" name="curr-id" value="" />
+                <?php echo "<input type = \"hidden\" id=\"facilitator\" name=\"facilitator\" value=\"{$selected_facilitator}\" />"  ?>
+                <input type = "hidden" id="topic-id" name="topic-id" value="<?php echo $selected_topic_id ?>" />
+                <input type = "hidden" id="curr-id" name="curr-id" value="<?php echo $selected_curr_id ?>" />
+                <input type = "hidden" id="fromEditClassInfo" name="fromEditClassInfo" value="0" />
+
 
                 <fieldset disabled="disabled" id="sub">
                     <div class="form-footer submit">
-                        <button type="submit" class="btn cpca">Create Attendance Sheet</button>
+                        <button type="submit" class="btn cpca">Change Attendance Sheet</button>
                     </div>
                 </fieldset>
 
@@ -247,6 +305,9 @@ include('header.php');
     <script>
         window.onload = function () {
             populateTimes();
+            enableSecondSelection();
+            enableSubmitButtonWithoutUpdate();
+            setSelectedClass();
         };
     </script>
 

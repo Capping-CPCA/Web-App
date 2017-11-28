@@ -15,9 +15,6 @@
  * @since [initial version number]
  */
 
-
-authorizedPage();
-
 global $db;
 require ('attendance_utilities.php');
 
@@ -79,10 +76,10 @@ for($i = 0; $i < count($attendanceInfo); $i++) {
         //peopleInsert
         //TODO: for next release implement Vallie's custom participant search
         $peopleInsertQuery = "SELECT peopleinsert( " .
-          "fname := \"{$attendanceInfo[$i]['fn']}\"::text, " .
-          "lname := \"{$attendanceInfo[$i]['ln']}\"::text, " .
-          "minit := \"{$attendanceInfo[$i]['mi']}\"::varchar " .
-        ");";
+            "fname := \"{$attendanceInfo[$i]['fn']}\"::text, " .
+            "lname := \"{$attendanceInfo[$i]['ln']}\"::text, " .
+            "minit := \"{$attendanceInfo[$i]['mi']}\"::varchar " .
+            ");";
 
         $resultInsert = $db->no_param_query($peopleInsertQuery);
 
