@@ -66,3 +66,6 @@ $router->add('/historical-class-search-results', 'attendance/historical_class_lo
 $router->add('/attendance-form-confirmed', 'attendance/attendance_form_confirmed.php', 'Attendance Confirmed');
 $router->add('/edit-participant', 'attendance/edit_participant.php', 'Edit Participant');
 //$router->add('/edit-participant-confirm', 'attendance/edit_participant_confirm.php', 'Confirm Participant Edit');
+
+# Surveys
+$router->add('/surveys', 'surveys/view_survey_results.php', 'Surveys');
