@@ -1,15 +1,9 @@
 <?php
 global $params, $route, $view;
-include ('../models/Notification.php');
-$pages = ['view','edit','create','delete','restore'];
-# Update page title to reflect route
-if (!empty($params) && in_array($params[0], $pages)) {
-	$newTitle = $params[0];
-	$route['title'] .= ' - ' . strtoupper($newTitle[0]) . strtolower(substr($newTitle, 1));
-}
+
 # Select page to display
 if (!empty($params) && $params[0] == 'view') {
-	$view->display('/view-survey-results.php');
+	$view->display('/view_survey_results.php');
 } else if (!empty($params) && $params[0] == 'results') {
     $view->display('surveys/results.php');
 } else {
@@ -17,13 +11,6 @@ if (!empty($params) && $params[0] == 'view') {
 	global $db;
 	$filter = "";
 	
-	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-		$filter = isset($_POST['filter']) ? "%" . $_POST['filter'] . "%" : "%%";
-		$result = $db->query("SELECT * FROM curricula WHERE LOWER(curriculumname::text) LIKE LOWER($1) " .
-			"OR LOWER(curriculumtype::text) LIKE LOWER($1) ORDER BY curriculumname", [$filter]);
-	} else {
-		//$result = $db->query("SELECT * FROM curricula ORDER BY curriculumname", []);
-	}
 	?>
 	<div style="width: 100%; height: 100%">
 		
@@ -32,8 +19,7 @@ if (!empty($params) && $params[0] == 'view') {
 		
 		<?php
 			function updateDB(){	
-				//$command = escapeshellcmd('py C:\Program Files (x86)\EasyPHP-Devserver-17\eds-www\views\surveys\pullAndParseSurveys.py');
-				$output = shell_exec('py "C:\Program Files (x86)\EasyPHP-Devserver-17\eds-www\views\surveys\pullAndParseSurveys.py"');
+				$output = shell_exec('py "../views/surveys/pullAndParseSurveys.py"');
 				echo("<script>alert('" . $output . "')</script>");
 				?>
 					<script>
@@ -99,10 +85,9 @@ if (!empty($params) && $params[0] == 'view') {
 		<select class="form-control" id="classes" name="classes" style="color: #5C639A;">
 			<option value="" disabled selected hidden>Class</option>
 			<?php
-			$db_connection = pg_connect("host=10.11.12.24 dbname=Actual user=postgres password=password");
-			$query = "SELECT topicname FROM classes";
-			$result = pg_query($db_connection,$query);
-			while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+			
+			$query = $db->query ("SELECT topicname FROM classes", [null, null]);
+			while ($line = pg_fetch_array($query, null, PGSQL_ASSOC)) {
 			
 				foreach ($line as $col_value) {
 					echo('<option value="' . $col_value . '">' . $col_value . '</option>');
@@ -193,32 +178,11 @@ if (!empty($params) && $params[0] == 'view') {
 		 }               
 		 echo '</select>';
 		 ?>
-		<!--<select class="form-control" name="Year" id="year">
-		<option selected disabled="disabled" value="">Year</option>
-			<option value="2017">2017</option>
-			<option value="2016">2016</option>
-			<option value="2015">2015</option>
-			<option value="2014">2014</option>
-			<option value="2013">2013</option>
-			<option value="2012">2012</option>
-			<option value="2011">2011</option>
-			<option value="2010">2010</option>
-			<option value="2009">2009</option>
-			<option value="2008">2008</option>
-			<option value="2007">2007</option>
-			<option value="2006">2006</option>
-			<option value="2005">2005</option>
-			<option value="2004">2004</option>
-			<option value="2003">2003</option>
-			<option value="2002">2002</option>
-			<option value="2001">2001</option>
-			<option value="2000">2000</option>
-		</select>-->
 		</div>
 		</div>
 		</div>
 		</div>
-			<input type="Submit" method = "POST" class="btn btn-primary" value="Search Surveys" style="background: #5C639A;">
+			<input type="Submit" method = "POST" class="btn cpca" value="Search Surveys">
 			</form>
 		
 		<p>
@@ -243,7 +207,7 @@ if (!empty($params) && $params[0] == 'view') {
 					</script>
 					<p>
 					<form method="POST">
-						<input name="updated" value="Update Surveys" type="Submit" class="btn btn-success" style="background: #5C639A;"/>
+						<input name="updated" value="Update Surveys" type="Submit" class="btn cpca"/>
 					</form>
 				</div>
 			</div>

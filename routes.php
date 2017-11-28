@@ -61,4 +61,4 @@ $router->add('/form-success', 'forms/form_success.php', 'Form Submitted');
 $router->add('/record-attendence', '/record-attendence/record-attendence.php', 'Record Attendence');
 
 #Survey Page
-$router->add('/surveys','surveys/view-survey-results.php', 'Survey Results');
+$router->add('/surveys','surveys/view_survey_results.php', 'Survey Results');
