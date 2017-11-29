@@ -18,7 +18,89 @@
 authorizedPage();
 global $db, $params, $route, $view;
 
+// Checks if the page has a people ID associated for updating/editing forms.
+if (isset($params[0]) && isset($params[1]) && isset($params[2])) {
+
+    $peopleid = $params[1];
+    $formID = $params[2];
+
+    // SELECT FROM VIEWS TO POPULATE FIELDS
+    $self_referral_view = $db->query("SELECT * FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
+    $self_referral_view_result = pg_fetch_assoc($self_referral_view);
+    // First Card (Participant Information)
+    $self_pers_firstname_result = $self_referral_view_result['firstname'];
+    $self_pers_lastname_result = $self_referral_view_result['lastname'];
+    $self_pers_middlein_result = $self_referral_view_result['middleinit'];
+
+    $self_pers_dob_edit = $db->query("SELECT SelfReferralInfo.PDoB FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
+    $self_pers_dob_result = pg_fetch_result($self_pers_dob_edit, 0);
+
+    $self_pers_race_edit = $db->query("SELECT SelfReferralInfo.PRace FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
+    $self_pers_race_result = pg_fetch_result($self_pers_race_edit, 0);
+
+    $self_pers_sex_edit = $db->query("SELECT SelfReferralInfo.PSex FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
+    $self_pers_sex_result = pg_fetch_result($self_pers_sex_edit, 0);
+
+    $self_pers_street_num_edit = $db->query("SELECT Addresses.addressNumber FROM Addresses WHERE addressID = $1;", [$formID]);
+    $self_pers_street_num_result = pg_fetch_result($self_pers_street_num_edit, 0);
+
+    $self_pers_street_name_edit = $db->query("SELECT Addresses.street FROM Addresses WHERE addressID = $1;", [$formID]);
+    $self_pers_street_name_result = pg_fetch_result($self_pers_street_name_edit, 0);
+
+    $self_pers_zip_edit = $db->query("SELECT Addresses.zipCode FROM Addresses WHERE addressID = $1;", [$formID]);
+    $self_pers_zip_result = pg_fetch_result($self_pers_zip_edit, 0);
+
+    $self_pers_state_edit = $db->query("SELECT ZipCodes.state FROM ZipCodes WHERE zipCode = $1;", [$self_pers_zip_result]);
+    $self_pers_state_result = pg_fetch_result($self_pers_state_edit, 0);
+
+    $self_pers_city_edit = $db->query("SELECT ZipCodes.city FROM ZipCodes WHERE zipCode = $1;", [$self_pers_zip_result]);
+    $self_pers_city_result = pg_fetch_result($self_pers_city_edit, 0);
+
+    $self_apt_info_edit = $db->query("SELECT Addresses.aptinfo FROM Addresses WHERE addressID = $1;", [$formID]);
+    $self_apt_info_result = pg_fetch_result($self_apt_info_edit, 0);
+
+    $self_pers_phone_edit = $db->query("SELECT FormPhoneNumbers.phoneNumber FROM FormPhoneNumbers WHERE formID = $1 AND phoneType = 'Primary';", [$formID]);
+    $self_pers_phone_result = pg_fetch_result($self_pers_phone_edit, 0);
+
+    // Second Card (Additional Information)
+    $self_involvement_edit = $db->query("SELECT SelfReferralInfo.hasInvolvementCPS FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
+    $self_involvement_result = pg_fetch_result($self_involvement_edit, 0);
+
+    $self_attended_edit = $db->query("SELECT SelfReferralInfo.hasAttendedPEP FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
+    $self_attended_result = pg_fetch_result($self_attended_edit, 0);
+
+    $self_ref_source_edit = $db->query("SELECT SelfReferralInfo.referralSource FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
+    $self_ref_source_result = pg_fetch_result($self_ref_source_edit, 0);
+
+    $reason_edit = $db->query("SELECT SelfReferralInfo.reasonAttendingPEP FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
+    $reason_result = pg_fetch_result($reason_edit, 0);
+
+    // Third Card (Office Information)
+    $self_office_firstCall_edit = $db->query("SELECT SelfReferralInfo.dateFirstCall FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
+    $self_office_firstCall_result = pg_fetch_result($self_office_firstCall_edit, 0);
+
+    $self_office_returnedCall_edit = $db->query("SELECT SelfReferralInfo.returnClientCallDate FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
+    $self_office_returnedCall_result = pg_fetch_result($self_office_returnedCall_edit, 0);
+
+    $self_tentative_start_edit = $db->query("SELECT SelfReferralInfo.tentativeStartDate FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
+    $self_tentative_start_result = pg_fetch_result($self_tentative_start_edit, 0);
+
+    $self_letter_mailed_edit = $db->query("SELECT SelfReferralInfo.introLetterMailedDate FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
+    $self_letter_mailed_result = pg_fetch_result($self_letter_mailed_edit, 0);
+
+    $self_assigned_to_edit = $db->query("SELECT SelfReferralInfo.classAssignedTo FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
+    $self_assigned_to_result = pg_fetch_result($self_assigned_to_edit, 0);
+
+    $notes_edit = $db->query("SELECT SelfReferralInfo.notes FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
+    $notes_result = pg_fetch_result($notes_edit, 0);
+    // END OF VIEW QUERIES
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    /*************
+     * VARIABLES *
+     *************/
 
     $form_type = "self referral";
 
@@ -36,20 +118,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $self_pers_street_num = NULL;
     $self_pers_street_name = NULL;
 
-        // Loop to parse through the address array ($self_address_info)
-        for($i = 0; $i < sizeOf($self_address_info); $i++){
-            if($i === 0){
-                if($self_address_info[$i] !== "") {
-                    if(is_numeric($self_address_info[$i])){
-                        $self_pers_street_num = $self_address_info[$i];
-                    } else {
-                        $self_pers_street_name .= " ".$self_address_info[$i];
-                    }
+    // Loop to parse through the address array ($self_address_info)
+    for ($i = 0; $i < sizeOf($self_address_info); $i++) {
+        if ($i === 0) {
+            if ($self_address_info[$i] !== "") {
+                if (is_numeric($self_address_info[$i])) {
+                    $self_pers_street_num = $self_address_info[$i];
+                } else {
+                    $self_pers_street_name .= " " . $self_address_info[$i];
                 }
-            } else {
-                $self_pers_street_name .= $self_address_info[$i] . " ";
             }
+        } else {
+            $self_pers_street_name .= $self_address_info[$i] . " ";
         }
+    }
 
     $self_pers_zip = !empty($_POST['self_pers_zip']) ? $_POST['self_pers_zip'] : 12601; // Default Zipcode is Poughkeepsie.
     $self_pers_state = !empty($_POST['self_pers_state']) ? $_POST['self_pers_state'] : "New York";
@@ -65,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $self_involvement = NULL;
     }
     // This is logic for if a user does NOT select Yes or No, the result in the DB will be NULL.
-    if(!empty($_POST['self_attended'])) {
+    if (!empty($_POST['self_attended'])) {
         $self_attended = $_POST['self_attended'] === "Yes" ? 1 : 0;
     } else {
         $self_attended = NULL;
@@ -83,13 +165,89 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $notes = !empty($_POST['notes']) ? trim($_POST['notes']) : NULL;
     $eID = $_SESSION['employeeid'];
 
-    // Stored Procedures
-    // Gets the participant ID related to the person who is filling out the form to associate it with the form ID.
-   
-        $pIDResult = checkForDuplicates($db, $self_pers_firstname, $self_pers_lastname, $self_pers_middlein);
 
-    // Inserts self referral form data into DB and associates the form with a participant ID.
-    $result = $db->query("SELECT addSelfReferral(  
+
+    if (isset($params[0]) && isset($params[1]) && isset($params[2])) {
+
+        /*************
+         *  UPDATES  *
+         *************/
+
+        $pID = $params[1];
+        $fID = $params[2];
+
+        $updatePeopleResult = $db->query("UPDATE
+                                    People
+                                    SET
+                                    firstName = $1,
+                                    lastName = $2,
+                                    middleInit = $3
+                                    WHERE 
+                                    peopleID = $4;", [$self_pers_firstname, $self_pers_lastname, $self_pers_middlein, $pID]);
+
+        $updateParticipantResult = $db->query("UPDATE 
+                                    Participants
+                                    SET 
+                                    dateOfBirth = $1,
+                                    race = $2,
+                                    sex = $3
+                                    WHERE 
+                                    participantID = $4;", [$self_pers_dob, $self_pers_race, $self_pers_sex, $pID]);
+
+        $newZip = $db->query("INSERT INTO ZipCodes VALUES($1, $2, $3);", [$self_pers_zip, $self_pers_city, $self_pers_state]);
+
+        $updateAddressResult = $db->query("UPDATE
+                                    Addresses
+                                    SET
+                                    addressNumber = $1,
+                                    aptInfo = $2,
+                                    street = $3,
+                                    zipCode = $4
+                                    WHERE
+                                    addressID = $5;", [$self_pers_street_num, $self_apt_info, $self_pers_street_name, $self_pers_zip, $fID]);
+
+        $updatePhoneResult = $db->query("UPDATE 
+                                    FormPhoneNumbers
+                                    SET 
+                                    phoneNumber = $1,
+                                    phoneType = $2
+                                    WHERE
+                                    formID = $3", [$self_pers_phone, 'Primary', $fID]);
+
+        $updateSelfReferralResult = $db->query("UPDATE 
+                            SelfReferral
+                                    SET 
+                                    referralSource = $1,
+                                    hasInvolvementCPS = $2,
+                                    hasAttendedPEP = $3,
+                                    reasonAttendingPEP = $4,
+                                    dateFirstCall = $5,
+                                    returnClientCallDate = $6,
+                                    tentativeStartDate = $7,
+                                    classAssignedTo = $8,
+                                    introLetterMailedDate = $9,
+                                    Notes = $10
+                                    WHERE
+                                    selfReferralID = $11;", [$self_ref_source,
+            $self_involvement, $self_attended, $reason, $self_office_firstCall,
+            $self_office_returnedCall, $self_tentative_start, $self_assigned_to,
+            $self_letter_mailed, $notes, $fID]);
+
+        header('Location: /ps-view-participant/'.$pID);
+        die();
+
+    } else {
+
+        /*********************
+         * STORED PROCEDURES *
+         *********************/
+
+        // Stored Procedures
+        // Gets the participant ID related to the person who is filling out the form to associate it with the form ID.
+
+        $pIDResult = checkForDuplicates($db, $self_pers_firstname, $self_pers_lastname, $self_pers_middlein);
+        // Inserts self referral form data into DB and associates the form with a participant ID.
+        $result = $db->query("SELECT addSelfReferral(  
                                     referralParticipantID := $1::INT,
                                     referralDOB := $2::DATE,
                                     referralRace := $3::RACE,
@@ -112,30 +270,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     extraNotes := $20::TEXT,
                                     eID := $21::INT
                                     );", [$pIDResult, $self_pers_dob, $self_pers_race, $self_pers_sex, $self_pers_street_num, $self_pers_street_name, $self_apt_info, $self_pers_zip, $self_pers_city,
-                                            $self_pers_state, $self_ref_source, $self_involvement, $self_attended, $reason, $self_office_firstCall,
-                                            $self_office_returnedCall, $self_tentative_start, $self_assigned_to, $self_letter_mailed, $notes, $eID]);
+            $self_pers_state, $self_ref_source, $self_involvement, $self_attended, $reason, $self_office_firstCall,
+            $self_office_returnedCall, $self_tentative_start, $self_assigned_to, $self_letter_mailed, $notes, $eID]);
 
-    $result = pg_fetch_result($result, 0);
+        $result = pg_fetch_result($result, 0);
 
-    if ($self_pers_phone !== NULL) {
-        $phoneResult = $db->query("INSERT INTO FormPhoneNumbers (formID, phoneNumber, phoneType)
-                                    VALUES ($1, $2, $3);", [$result, $self_pers_phone, 'Primary']);
-    }
+        if ($self_pers_phone !== NULL) {
+            $phoneResult = $db->query("INSERT INTO FormPhoneNumbers (formID, phoneNumber, phoneType)
+                                          VALUES ($1, $2, $3);", [$result, $self_pers_phone, 'Primary']);
+        }
 
-    if ($result) {
-        $state = pg_result_error_field($result, PGSQL_DIAG_SQLSTATE);
-        if ($state != 0) {
-            $_SESSION['form-error'] = true;
-            $_SESSION['error-state'] = $state;
+        if ($result) {
+            $state = pg_result_error_field($result, PGSQL_DIAG_SQLSTATE);
+            if ($state != 0) {
+                $_SESSION['form-error'] = true;
+                $_SESSION['error-state'] = $state;
+                header("Location: /form-success");
+                die();
+            }
+        }
+
+            $_SESSION['form-type'] = $form_type;
             header("Location: /form-success");
             die();
-        }
     }
 
-    // Redirect user to success page.
-    $_SESSION['form-type'] = $form_type;
-    header("Location: /form-success");
-    die();
 
 }
 
@@ -144,14 +303,21 @@ include('header.php');
 
     <!-- Page Content -->
     <div id="page-content-wrapper" style="width:100%">
-		<div class="container-fluid controls" align="right">
-			<button type="button" class="btn cpca" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+		<div class="container-fluid controls" style="height:30px;">
+            <button class="cpca btn" onclick="goBack()" style="float:left;"><i class="fa fa-arrow-left"></i> Back</button>
+			<button type="button" class="btn cpca" onclick="window.print()" style="float:right;"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
 		</div>
         <div class="container-fluid">
 
             <div class="dropdown">
 
-                <form id="self_participant_info" action="/self-referral-form" method="post" novalidate>
+                <?php
+                if (isset($params[1]) && isset($params[2]))
+                    echo '<form id="self_participant_info" action="/self-referral-form/'.$params[0].'/'.$params[1].'/'.$params[2].'" method="post" novalidate>';
+                else
+                    echo '<form id="self_participant_info" action="/self-referral-form" method="post" novalidate>';
+                ?>
+
                     <div id="accordion" role="tablist" aria-multiselectable="true">
                         <br>
                         <!-- first collapsible -->
@@ -169,26 +335,30 @@ include('header.php');
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="self_pers_firstname">Participant Name:</label>
                                         <div class="col-sm-2 col">
-                                            <input type="text" class="form-control" id="self_pers_firstname" name="self_pers_firstname" placeholder="First name" required>
+                                            <input type="text" class="form-control" id="self_pers_firstname" name="self_pers_firstname"
+                                                   value="<?= (isset($self_pers_firstname_result)) ? $self_pers_firstname_result : "" ?>" placeholder="First name" required>
                                             <div id="fname_error" class="invalid-feedback">Enter first name</div>
                                         </div>
 
                                         <label class="col-form-label col-sm-0 sr-only" for="self_pers_lastname">Last Name:</label>
                                         <div class="col-sm-2 col">
-                                            <input type="text" class="form-control" id="self_pers_lastname" name="self_pers_lastname" placeholder="Last name" required>
+                                            <input type="text" class="form-control" id="self_pers_lastname" name="self_pers_lastname"
+                                                   value="<?= (isset($self_pers_lastname_result)) ? $self_pers_lastname_result : "" ?>" placeholder="Last name" required>
                                             <div id="lname_error" class="invalid-feedback">Enter last name</div>
                                         </div>
 
                                         <label class="col-form-label col-sm-0 sr-only" for="self_pers_middlein">MInitial:</label>
                                         <div class="col-sm-1 col">
-                                            <input type="text" class="form-control" id="self_pers_middlein" name="self_pers_middlein" placeholder="Initial" maxlength="1">
+                                            <input type="text" class="form-control" id="self_pers_middlein" name="self_pers_middlein"
+                                                   value="<?= (isset($self_pers_middlein_result)) ? $self_pers_middlein_result : ""?>" placeholder="Initial" maxlength="1">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="self_pers_dob">Date of Birth:</label>
                                         <div class="col-sm-2 col">
-                                            <input type="date" class="form-control" id="self_pers_dob" name="self_pers_dob">
+                                            <input type="date" class="form-control" id="self_pers_dob" name="self_pers_dob"
+                                                   value="<?= (isset($self_pers_dob_result)) ? $self_pers_dob_result : "" ?>">
                                         </div>
                                     </div>
 
@@ -202,7 +372,7 @@ include('header.php');
                                                 while ($enumtype = pg_fetch_assoc($res)) {
                                                     $t = $enumtype ['type'];
                                                     ?>
-                                                    <option value="<?= $t ?>"><?= $t ?></option>
+                                                    <option value="<?= $t ?>" <?= (isset($self_pers_race_result) && $self_pers_race_result == $t) ? "selected" : "" ?>><?= $t ?></option>
                                                     <?php
                                                 }
                                                 ?>
@@ -220,7 +390,7 @@ include('header.php');
                                                 while ($enumtype = pg_fetch_assoc($res)) {
                                                     $t = $enumtype ['type'];
                                                     ?>
-                                                    <option value="<?= $t ?>"><?= $t ?></option>
+                                                    <option value="<?= $t ?>" <?= (isset($self_pers_sex_result) && $self_pers_sex_result == $t) ? "selected" : "" ?>><?= $t ?></option>
                                                     <?php
                                                 }
                                                 ?>
@@ -233,12 +403,14 @@ include('header.php');
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2 col-2" for="self_pers_address">Street Address:</label>
                                         <div class="col-sm-3 col">
-                                            <input type="text" class="form-control" id="self_pers_address" name="self_pers_address" placeholder="Street address">
+                                            <input type="text" class="form-control" id="self_pers_address" name="self_pers_address"
+                                                   value="<?= (isset($self_pers_street_name_result)) ? $self_pers_street_num_result . " " . $self_pers_street_name_result : "" ?>" placeholder="Street address">
                                         </div>
 
                                         <label class="col-form-label col-sm-1 col-2" for="self_apt_info">Apartment:</label>
                                         <div class="col-sm-2 col">
-                                            <input type="text" class="form-control" id="self_apt_info" name="self_apt_info" placeholder="Apartment Information">
+                                            <input type="text" class="form-control" id="self_apt_info" name="self_apt_info"
+                                                   value="<?= (isset($self_apt_info_result)) ? $self_apt_info_result : "" ?>" placeholder="Apartment Information">
                                         </div>
                                     </div>
 
@@ -252,7 +424,7 @@ include('header.php');
                                                 while ($enumtype = pg_fetch_assoc($res)) {
                                                     $t = $enumtype ['type'];
                                                     ?>
-                                                    <option value="<?= $t ?>"><?= $t ?></option>
+                                                    <option value="<?= $t ?>" <?= (isset($self_pers_state_result) && $self_pers_state_result == $t) ? "selected" : "" ?>><?= $t ?></option>
                                                     <?php
                                                 }
                                                 ?>
@@ -261,21 +433,24 @@ include('header.php');
 
                                         <label class="col-form-label col-sm-1 col-2" for="self_pers_city">City:</label>
                                         <div class="col-sm-2 col">
-                                            <input type="text" class="form-control" id="self_pers_city" name="self_pers_city" placeholder="City" data-error="Enter city.">
+                                            <input type="text" class="form-control" id="self_pers_city" name="self_pers_city"
+                                                   value="<?= (isset($self_pers_city_result)) ? $self_pers_city_result : ""?>" placeholder="City">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="self_pers_zip">ZIP:</label>
                                         <div class="col-sm-1 col">
-                                            <input type="text" class="form-control mask-zip" id="self_pers_zip" name="self_pers_zip" placeholder="Zip">
+                                            <input type="text" class="form-control mask-zip" id="self_pers_zip" name="self_pers_zip"
+                                                   value="<?= (isset($self_pers_zip_result)) ? $self_pers_zip_result : ""?>" placeholder="Zip">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="self_pers_phone">Phone Number:</label>
                                         <div class="col-sm-2 col">
-                                            <input type="tel" class="form-control mask-phone feedback-icon" id="self_pers_phone" name="self_pers_phone" placeholder="(999) 999-9999">
+                                            <input type="tel" class="form-control mask-phone feedback-icon" id="self_pers_phone" name="self_pers_phone"
+                                                   value="<?= (isset($self_pers_phone_result)) ? $self_pers_phone_result : ""?>" placeholder="(999) 999-9999">
                                         </div>
                                     </div>
                                 </div>
@@ -301,12 +476,14 @@ include('header.php');
                                             <label class="form-control-label"> Do you have any involvement with CPS/Protective/Foster Care?</label>
                                         </div>
                                         <label class="custom-control custom-radio" for="self_involvement_yes">
-                                            <input class="custom-control-input" type="radio" id="self_involvement_yes" name="self_involvement" value="Yes">
+                                            <input class="custom-control-input" type="radio" id="self_involvement_yes" name="self_involvement"
+                                                <?= (isset($self_involvement_result) && $self_involvement_result == "t") ? "checked" : "" ?> value="Yes">
                                             <span class="custom-control-indicator"></span>
                                             <span class="custom-control-description">Yes</span>
                                         </label>
                                         <label class="custom-control custom-radio" for="self_involvement_no">
-                                            <input class="custom-control-input" type="radio" id="self_involvement_no" name="self_involvement" value="No">
+                                            <input class="custom-control-input" type="radio" id="self_involvement_no" name="self_involvement"
+                                                <?= (isset($self_involvement_result) && $self_involvement_result == "f") ? "checked" : "" ?> value="No">
                                             <span class="custom-control-indicator"></span>
                                             <span class="custom-control-description">No</span>
                                         </label>
@@ -319,12 +496,14 @@ include('header.php');
                                             <label class="form-control-label"> Have you attended PEP parenting classes in the past?</label>
                                         </div>
                                         <label class="custom-control custom-radio" for="self_attended_yes">
-                                            <input class="custom-control-input" type="radio" id="self_attended_yes" name="self_attended" value="Yes">
+                                            <input class="custom-control-input" type="radio" id="self_attended_yes" name="self_attended"
+                                                <?php echo (isset($self_attended_result) && $self_attended_result === "t") ? "checked" : "" ?> value="Yes">
                                             <span class="custom-control-indicator"></span>
                                             <span class="custom-control-description">Yes</span>
                                         </label>
                                         <label class="custom-control custom-radio" for="self_attended_no">
-                                            <input class="custom-control-input" type="radio" id="self_attended_no" name="self_attended" value="No">
+                                            <input class="custom-control-input" type="radio" id="self_attended_no" name="self_attended"
+                                                <?php echo (isset($self_attended_result) && $self_attended_result === "f") ? "checked" : "" ?> value="No">
                                             <span class="custom-control-indicator"></span>
                                             <span class="custom-control-description">No</span>
                                         </label>
@@ -332,18 +511,19 @@ include('header.php');
                                     <!-- End Q: PEP classes in past -->
 
                                     <br>
-                                    
+
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2 col-3" for="self_ref_source">Referral Source:</label>
                                         <div class="col-sm-2 col">
-                                            <input type="text" class="form-control" id="self_ref_source" name="self_ref_source" placeholder="Referral Source">
+                                            <input type="text" class="form-control" id="self_ref_source" name="self_ref_source"
+                                                   value="<?= (isset($self_ref_source_result)) ? $self_ref_source_result : "" ?>" placeholder="Referral Source">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2 col-3" for="reason">Reason for attendance:</label>
                                         <div class="col-sm-3 col">
-                                            <textarea style="resize: none;" class="form-control" rows=4 id="reason" name="reason" placeholder="Reason for attending classes"></textarea>
+                                            <textarea style="resize: none;" class="form-control" rows=4 id="reason" name="reason" placeholder="Reason for attending classes"><?= (isset($reason_result)) ? $reason_result : "" ?></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -367,38 +547,43 @@ include('header.php');
                                 <div class="form-group row">
                                     <label class="col-form-label col-sm-2" for="self_office_firstCall">Date of First Call:</label>
                                     <div class="col-sm-2 col">
-                                        <input type="date" class="form-control" id="self_office_firstCall" name="self_office_firstCall">
+                                        <input type="date" class="form-control" id="self_office_firstCall" name="self_office_firstCall"
+                                               value="<?= (isset($self_office_firstCall_result)) ? $self_office_firstCall_result : "" ?>">
                                     </div>
 
                                     <label class="col-form-label col-sm-2" for="self_office_returnedCall">Returned Call:</label>
                                     <div class="col-sm-2 col">
-                                        <input type="date" class="form-control" id="self_office_returnedCall" name="self_office_returnedCall">
+                                        <input type="date" class="form-control" id="self_office_returnedCall" name="self_office_returnedCall"
+                                               value="<?= (isset($self_office_returnedCall_result)) ? $self_office_returnedCall_result : "" ?>">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label class="col-form-label col-sm-2" for="self_tentative_start">Tentative Start Date:</label>
                                     <div class="col-sm-2 col">
-                                        <input type="date" class="form-control" id="self_tentative_start" name="self_tentative_start">
+                                        <input type="date" class="form-control" id="self_tentative_start" name="self_tentative_start"
+                                               value="<?= (isset($self_tentative_start_result)) ? $self_tentative_start_result : "" ?>">
                                     </div>
 
                                     <label class="col-form-label col-sm-2" for="self_letter_mailed">Letter Mailed:</label>
                                     <div class="col-sm-2 col">
-                                        <input type="date" class="form-control" id="self_letter_mailed" name="self_letter_mailed">
+                                        <input type="date" class="form-control" id="self_letter_mailed" name="self_letter_mailed"
+                                               value="<?= (isset($self_letter_mailed_result)) ? $self_letter_mailed_result : "" ?>">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label class="col-form-label col-sm-2 col-3" for="self_assigned_to">Class Assigned to:</label>
                                     <div class="col-sm-2 col">
-                                        <input type="text" class="form-control" id="self_assigned_to" name="self_assigned_to" placeholder="Program">
+                                        <input type="text" class="form-control" id="self_assigned_to" name="self_assigned_to"
+                                               value="<?= (isset($self_assigned_to_result)) ? $self_assigned_to_result : "" ?>" placeholder="Program">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label class="col-form-label col-sm-2 col-auto" for="notes">Notes:</label>
                                     <div class="col-sm-3 col">
-                                        <textarea style="resize: none;" class="form-control" rows=5 id="notes" name="notes" placeholder="Enter any notes here"></textarea>
+                                        <textarea style="resize: none;" class="form-control" rows=5 id="notes" name="notes" placeholder="Enter any notes here"><?= (isset($notes_result)) ? $notes_result : "" ?></textarea>
                                     </div>
                                 </div>
 
@@ -407,9 +592,16 @@ include('header.php');
                     </div>
                 </form>
             </div>  <!-- panel group end -->
-            <br>
-            <?php include('form_duplicate_check.php')?>
 
+            <?php
+            if (isset($params[0]) && $params[0] == "edit")
+                echo '<button id="btnUpdate" onclick="submitAllSelf()" class="cpca btn">Update</button>';
+            else if(isset($params[0]) && $params[0] == "view")
+                echo '<a href="/ps-view-participant/'.$params[1].'"><button id="btnView" class="cpca btn">Back To Participant</button></a>';
+            else
+                include('form_duplicate_check.php');
+            ?>
+        <br><br>
         </div>  <!-- /#container -->
     </div>  <!-- /#container-fluid class -->
 <style>
@@ -614,4 +806,11 @@ include('header.php');
   }
 }
 </style>
-<?php include('footer.php'); ?>
+<?php
+if(isset($params[0]) && $params[0] == "view") { ?>
+    <script type="text/javascript">
+        disableFields();
+    </script>
+<?php }
+include('footer.php'); ?>
+?>

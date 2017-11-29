@@ -8,6 +8,10 @@ html, body {
 
 /* Nav Bar */
 
+a {
+    text-decoration: none!important;
+}
+
 .navbar {
     padding: 0;
     z-index: 5;

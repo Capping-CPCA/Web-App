@@ -391,9 +391,10 @@ include('header.php');
 
     <!-- Page Content -->
     <div id="page-content-wrapper" style="width:100%">
-		<div class="container-fluid controls" align="right">
-			<button type="button" class="btn cpca" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
-		</div>
+        <div class="container-fluid controls" style="height:30px;">
+            <button class="cpca btn" onclick="goBack()" style="float:left;"><i class="fa fa-arrow-left"></i> Back</button>
+            <button type="button" class="btn cpca" onclick="window.print()" style="float:right;"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+        </div>
         <div class="container-fluid">
 
             <div class="dropdown">

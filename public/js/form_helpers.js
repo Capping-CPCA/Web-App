@@ -31,6 +31,10 @@ function initMask(){
     $('.mask-phone').mask('(000) 000-0000');
 }
 
+function disableFields(){
+    $("#self_participant_info :input").prop("disabled", true);
+}
+
 // Javascript validation for Referral form.
 function submitAll(){
     var fname = document.getElementById("pers_firstname");
