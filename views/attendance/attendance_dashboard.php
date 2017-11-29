@@ -14,8 +14,6 @@
  * @since [initial version number]
  */
 
-authorizedPage();
-
 global $db;
 include('header.php');
 
@@ -23,17 +21,17 @@ $peopleid = $_SESSION['employeeid'];
 
 //TODO: add option to edit last class' attendance
 $dashboardClassesQuery =
-"select classes.topicname, fca.date, co.sitename " .
-"from facilitatorclassattendance fca, classoffering co, curriculumclasses, classes " .
-"where fca.classid = co.classid " .
-      "and fca.curriculumid = co.curriculumid " .
-      "and fca.sitename = co.sitename " .
-      "and fca.date = co.date " .
-      "and fca.facilitatorid = {$peopleid} " .
-      "and co.classid = curriculumclasses.classid " .
-      "and co.curriculumid = curriculumclasses.curriculumid " .
-      "and curriculumclasses.classid = classes.classid " .
-"order by fca.date desc limit 20; ";
+    "select classes.topicname, fca.date, co.sitename " .
+    "from facilitatorclassattendance fca, classoffering co, curriculumclasses, classes " .
+    "where fca.classid = co.classid " .
+    "and fca.curriculumid = co.curriculumid " .
+    "and fca.sitename = co.sitename " .
+    "and fca.date = co.date " .
+    "and fca.facilitatorid = {$peopleid} " .
+    "and co.classid = curriculumclasses.classid " .
+    "and co.curriculumid = curriculumclasses.curriculumid " .
+    "and curriculumclasses.classid = classes.classid " .
+    "order by fca.date desc limit 20; ";
 
 $result = $db->no_param_query($dashboardClassesQuery);
 
@@ -49,12 +47,12 @@ $result = $db->no_param_query($dashboardClassesQuery);
                     <form action = "historical-class-view" method="post" name="classView">
                         <table class="table table-striped">
                             <thead>
-                                <tr>
-                                    <th>Site Name</th>
-                                    <th>Class</th>
-                                    <th>Date/Time</th>
-                                    <th></th>
-                                </tr>
+                            <tr>
+                                <th>Site Name</th>
+                                <th>Class</th>
+                                <th>Date/Time</th>
+                                <th></th>
+                            </tr>
                             </thead>
                             <tbody id="result-pag">
                             <?php
@@ -63,13 +61,13 @@ $result = $db->no_param_query($dashboardClassesQuery);
                             //populate table with historical class information
                             while($row = pg_fetch_assoc($result)) {
                                 echo "<tr id='{$counter}'>";
-                                    echo "<td class='align-middle'>{$row['sitename']}</td>";
-                                    echo "<td class='align-middle'>{$row['topicname']}</td>";
-                                    $time = strtotime($row['date']);
-                                    $myFormatDate = date("m/d/y", $time);
-                                    $myFormatTime = date("h:i A", $time);
-                                    echo "<td class='align-middle'>{$myFormatDate} <em>{$myFormatTime}</em></td>";
-                                    echo "<td class='align-middle'><button href=\"\" class=\"btn outline-cpca\" type=\"submit\" onclick=\"changeHiddenFormFieldValue({$counter})\">More details...</button></td>";
+                                echo "<td class='align-middle'>{$row['sitename']}</td>";
+                                echo "<td class='align-middle'>{$row['topicname']}</td>";
+                                $time = strtotime($row['date']);
+                                $myFormatDate = date("m/d/y", $time);
+                                $myFormatTime = date("h:i A", $time);
+                                echo "<td class='align-middle'>{$myFormatDate} <em>{$myFormatTime}</em></td>";
+                                echo "<td class='align-middle'><button href=\"\" class=\"btn outline-cpca\" type=\"submit\" onclick=\"changeHiddenFormFieldValue({$counter})\">More details...</button></td>";
                                 echo "</tr>";
                                 $counter++;
                             }

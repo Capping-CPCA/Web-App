@@ -13,28 +13,26 @@
  * @since [initial version number]
  */
 
-authorizedPage();
-
 include('header.php');
 
 ?>
-<div class="container">
-    <div class="card" style="max-width: 700px; width: 100%; margin: 0 auto">
-        <div class="card-body">
-            <h4 class="card-title">Attendance Search</h4>
-            <hr style="margin-top: 0px!important;">
-            <form action="historical-class-search-results" method="post">
-                <div class="form-group" style="margin-left: 29.5%;">
-                    <label for="date-input">Class Date</label>
-                    <input class="form-control" style="width: 264.7px;" type="date" value="<?php echo date('Y-m-d'); ?>" id="date-input" name="date-input">
-                </div>
-                <div class="form-footer submit">
-                    <button type="submit" class="btn cpca">Find Attendance Records</button>
-                </div>
-            </form>
+    <div class="container">
+        <div class="card" style="max-width: 700px; width: 100%; margin: 0 auto">
+            <div class="card-body">
+                <h4 class="card-title">Attendance Search</h4>
+                <hr style="margin-top: 0px!important;">
+                <form action="historical-class-search-results" method="post">
+                    <div class="form-group" style="margin-left: 29.5%;">
+                        <label for="date-input">Class Date</label>
+                        <input class="form-control" style="width: 264.7px;" type="date" value="<?php echo date('Y-m-d'); ?>" id="date-input" name="date-input">
+                    </div>
+                    <div class="form-footer submit">
+                        <button type="submit" class="btn cpca">Find Attendance Records</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 <?php
 include('footer.php');
 ?>

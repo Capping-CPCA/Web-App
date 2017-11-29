@@ -13,8 +13,6 @@
  * @since [initial version number]
  */
 
-authorizedPage();
-
 global $db;
 
 require("attendance_utilities.php");
@@ -28,19 +26,19 @@ $whatPageWeCameFrom = null;
 
 //shared information we're grabbing
 $queryClass = "select classes.topicname, fca.date, co.sitename, peop.firstname, peop.middleinit, peop.lastname, cur.curriculumname " .
-                "from facilitatorclassattendance fca, classoffering co, " .
-                     "facilitators fac, employees emp, people peop, curriculumclasses cc, curricula cur, classes " .
-                "where fca.classid = co.classid " .
-                    "and fca.curriculumid = co.curriculumid " .
-                    "and fca.sitename = co.sitename " .
-                    "and fca.date = co.date " .
-                    "and fca.facilitatorid = fac.facilitatorid " .
-                    "and fac.facilitatorid = emp.employeeid " .
-                    "and emp.employeeid = peop.peopleid " .
-                    "and co.curriculumid = cc.curriculumid " .
-                    "and co.classid = cc.classid " .
-                    "and classes.classid = cc.classid ".
-                    "and cc.curriculumid = cur.curriculumid ";
+    "from facilitatorclassattendance fca, classoffering co, " .
+    "facilitators fac, employees emp, people peop, curriculumclasses cc, curricula cur, classes " .
+    "where fca.classid = co.classid " .
+    "and fca.curriculumid = co.curriculumid " .
+    "and fca.sitename = co.sitename " .
+    "and fca.date = co.date " .
+    "and fca.facilitatorid = fac.facilitatorid " .
+    "and fac.facilitatorid = emp.employeeid " .
+    "and emp.employeeid = peop.peopleid " .
+    "and co.curriculumid = cc.curriculumid " .
+    "and co.classid = cc.classid " .
+    "and classes.classid = cc.classid ".
+    "and cc.curriculumid = cur.curriculumid ";
 
 //additional parameters - check to see where the post came from
 if(isset ($_POST["whichButton"])) { //from attendance dashboard
@@ -48,8 +46,8 @@ if(isset ($_POST["whichButton"])) { //from attendance dashboard
     $classN = $_POST["whichButton"];
 
     $queryClass .= "and fca.facilitatorid = {$peopleid} " .
-                    "order by fca.date desc " .
-                    "limit 20; ";
+        "order by fca.date desc " .
+        "limit 20; ";
 }
 else if(isset($_POST["whichButtonHistoricalSearch"])){ //form historical search tool
     $whatPageWeCameFrom = "historicalLookup";
@@ -80,11 +78,11 @@ $facilitator_name = $row['firstname'] . " " . $row['middleinit'] . " " . $row['l
 $displayDate = formatSQLDate($class_date);
 
 $queryClassInformation = "select * " .
-        "from classattendancedetails " .
-        "where topicname = '" . escape_apostrophe($class_topic) ."' " .
-        "and sitename = '" . escape_apostrophe($site_name) ."' " .
-        "and date = '{$class_date}' " .
-        "order by lastname asc;";
+    "from classattendancedetails " .
+    "where topicname = '" . escape_apostrophe($class_topic) ."' " .
+    "and sitename = '" . escape_apostrophe($site_name) ."' " .
+    "and date = '{$class_date}' " .
+    "order by lastname asc;";
 
 $result = $db->no_param_query($queryClassInformation);
 
@@ -119,23 +117,23 @@ $result = $db->no_param_query($queryClassInformation);
                         <tbody>
 
                         <?php
-                            while($row = pg_fetch_assoc($result)) {
-                                echo "<tr class=\"m-0\">";
-                                    echo "<td>{$row['firstname']} {$row['middleinit']} {$row['lastname']}</td>";
-                                    $dob = $row['dateofbirth'];
-                                    $age = calculate_age($dob);
-                                    echo "<td>{$age}</td>";
-                                    echo "<td>{$row['zipcode']}</td>";
-                                    echo "<td>{$row['numchildren']}</td>";
-                                    echo "<td>{$row['comments']}</td>";
-                                    $tf = ($row['isnew'] == 't') ? $tf = "yes" : $tf = "no";
-                                    echo "<td>{$tf}</td>";
-                                    echo "<td>{$row['race']}</td>";
-                                    echo "<td>{$row['sex']}</td>";
-                                    echo "<td>{$dob}</td>";
+                        while($row = pg_fetch_assoc($result)) {
+                            echo "<tr class=\"m-0\">";
+                            echo "<td>{$row['firstname']} {$row['middleinit']} {$row['lastname']}</td>";
+                            $dob = $row['dateofbirth'];
+                            $age = calculate_age($dob);
+                            echo "<td>{$age}</td>";
+                            echo "<td>{$row['zipcode']}</td>";
+                            echo "<td>{$row['numchildren']}</td>";
+                            echo "<td>{$row['comments']}</td>";
+                            $tf = ($row['isnew'] == 't') ? $tf = "yes" : $tf = "no";
+                            echo "<td>{$tf}</td>";
+                            echo "<td>{$row['race']}</td>";
+                            echo "<td>{$row['sex']}</td>";
+                            echo "<td>{$dob}</td>";
 
-                                echo "</tr>";
-                            }
+                            echo "</tr>";
+                        }
 
                         ?>
                         </tbody>

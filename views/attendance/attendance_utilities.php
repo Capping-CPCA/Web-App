@@ -158,24 +158,24 @@ function validateRace($race) {
 }
 
 //input: age
-//output: true if numeric and [18 to 100]
+//output: true if numeric and positive
 function validateAge($age) {
     if(empty($age)){
         return false;
     } else{
-        //returns true if age in valid range 18-100
-        return( is_numeric($age) && (($age >= 18) && ($age <= 100)));
+        //returns true if age positive
+        return( is_numeric($age) && ($age >= 1));
     }
 }
 
 //input: number of children
-//output: true if not empty, numeric, and [0 to 25]
+//output: true if not empty, numeric
 function validateNumChildren($num) {
-    if(empty($num)){
+    if(empty($num) && ($num != 0)){
         return false;
     } else{
         //returns true if a valid number of children
-        return(is_numeric($num) && (($num >= 0) && ($num <= 25)));
+        return(is_numeric($num) && ($num >= 0));
     }
 
 }

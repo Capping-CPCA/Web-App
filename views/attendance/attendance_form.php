@@ -27,7 +27,7 @@ require "attendance_utilities.php";
 $pageInformation = isset($_SESSION['serializedInfo']) ? deserializeParticipantMatrix($_SESSION['serializedInfo']) : array();
 
 // Get attendance info from Session
-if (isset($_SESSION['attendance-info'])) {
+if (isset($_SESSION['attendance-info']) && !isset($_POST['fromEditClassInfo'])) {
     $attendanceInfo = $_SESSION['attendance-info'];
 
     $selected_class = $attendanceInfo['classes'];
@@ -60,7 +60,6 @@ else {
     die();
 }
 
-$successAddingPerson = false;
 $duplicatePerson = false;
 
 //if we have previous information passed to us from lookup form or add person form,
@@ -81,9 +80,9 @@ if(isset($_SESSION['serializedInfo'])) {
 
         //lookup most recent info from DB --either from class info or from intake packet
         $resultClassPastAttendance = $db->no_param_query(
-                "select * from classattendancedetails " .
-                "where participantid = {$lookupId} " .
-                "order by date desc; "
+            "select * from classattendancedetails " .
+            "where participantid = {$lookupId} " .
+            "order by date desc; "
         );
 
         $fn = $mi = $ln = $dob = $race = $zip = $nc = $isNew = null;
@@ -212,6 +211,8 @@ if(isset($_SESSION['serializedInfo'])) {
                 );
 
                 $successAddingPerson = true;
+            } else {
+                $successAddingPerson = false;
             }
         }
     }
@@ -285,44 +286,54 @@ include('header.php');
 ?>
     <div class="container">
         <form action="" method="post" id="whole-page-form">
-        <div class="flex-column">
-            <!-- Default container contents -->
-            <h3 class="text-center"><?= "$selected_site: $selected_class" ?></h3>
-            <h6 class="text-center text-secondary" style="font-weight: 200;"><?= "Class Time: $display_time - $display_date" ?></h6>
-            <br />
-            <?php
+            <div class="flex-column">
+                <!-- Default container contents -->
+                <h3 class="text-center"><?= "$selected_site: $selected_class" ?></h3>
+                <h6 class="text-center text-secondary" style="font-weight: 200;"><?= "Class Time: $display_time - $display_date" ?></h6>
+                <div class="flex-row">
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-link" style="text-align: center;" onclick="editClassDetails()">Edit Class Details</button>
+                    </div>
+                </div>
+                <br />
+                <?php
 
-            if($successAddingPerson){
-                $notification = new Notification('Success!', 'Participant added to list.', 'success');
-                $notification->display();
-            }
-            if($duplicatePerson){
-                $notification = new Notification('Warning!', 'Duplicate person or page has been refreshed.', 'warning');
-                $notification->display();
-            }
+                if(isset($successAddingPerson)){
+                    if ($successAddingPerson) {
+                        $notification = new Notification('Success!', 'Participant added to list.', 'success');
+                        $notification->display();
+                    } else {
+                        $notification = new Notification('Error!', 'Participant not added to list.', 'danger');
+                        $notification->display();
+                    }
+                }
+                if($duplicatePerson){
+                    $notification = new Notification('Warning!', 'Duplicate person or page has been refreshed.', 'warning');
+                    $notification->display();
+                }
 
-            ?>
+                ?>
 
-            <div id="insert-comment-alert-here"></div>
+                <div id="insert-comment-alert-here"></div>
 
-            <!-- Table -->
-            <h4 class="mb-3" style="font-weight: 200;">Current Participants</h4>
-            <div class="table-responsive">
-                <table class="table table-hover table-striped" id="class-list" style="border: 1px solid #EEE;">
-                    <thead>
-                    <tr>
-                        <th class="text-center">Present</th>
-                        <th>Name</th>
-                        <th>Age</th>
-                        <th>Zip</th>
-                        <th>Children Under 18</th>
-                        <th>Comments</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody id="attendance-table-body">
+                <!-- Table -->
+                <h4 class="mb-3" style="font-weight: 200;">Current Participants</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped" id="class-list" style="border: 1px solid #EEE;">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Present</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Zip</th>
+                            <th>Children Under 18</th>
+                            <th>Comments</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="attendance-table-body">
 
-                    <?php
+                        <?php
                         //loop through page information and populate table
                         for($i = 0; $i < count($pageInformation); $i++) {
                             //field names - unique field names for individuals which are checked upon post
@@ -331,13 +342,13 @@ include('header.php');
 
                             echo "<tr class=\"m-0\" id=\"{$i}\">";
                             echo "<td class='text-center'>";
-                                echo "<label class='custom-control custom-checkbox mr-0 pl-3'>";
-                                    //checkbox checked option
-                                    $checked = null;
-                                    $pageInformation[$i]['present'] ? $checked = "checked=\"checked\"" : $checked = "";
-                                    echo "<input type='checkbox' class='custom-control-input' {$checked} name='{$presentName}'>";
-                                    echo "<span class='custom-control-indicator'></span>";
-                                echo "</label>";
+                            echo "<label class='custom-control custom-checkbox mr-0 pl-3'>";
+                            //checkbox checked option
+                            $checked = null;
+                            $pageInformation[$i]['present'] ? $checked = "checked=\"checked\"" : $checked = "";
+                            echo "<input type='checkbox' class='custom-control-input' {$checked} name='{$presentName}'>";
+                            echo "<span class='custom-control-indicator'></span>";
+                            echo "</label>";
                             echo "</td>";
                             echo "<td>{$pageInformation[$i]['fn']} {$pageInformation[$i]['mi']} {$pageInformation[$i]['ln']}</td>";
 
@@ -346,15 +357,15 @@ include('header.php');
                             echo "<td>{$pageInformation[$i]['zip']}</td>";
                             echo "<td>{$pageInformation[$i]['numChildren']}</td>";
                             echo "<td>";
-                                echo "<div class='form-group'>";
-                                    //pre-fill comment if exists
-                                    $comment = null;
-                                    (is_null($pageInformation[$i]['comments'])) ? $comment = "" : $comment = $pageInformation[$i]['comments'];
-                                    echo "<textarea class='form-control' type='textarea' rows='2' placeholder='enter comments here...' name='{$commentName}'>{$comment}</textarea>";
-                                echo "</div>";
+                            echo "<div class='form-group'>";
+                            //pre-fill comment if exists
+                            $comment = null;
+                            (is_null($pageInformation[$i]['comments'])) ? $comment = "" : $comment = $pageInformation[$i]['comments'];
+                            echo "<textarea class='form-control' type='textarea' rows='2' placeholder='enter comments here...' name='{$commentName}'>{$comment}</textarea>";
+                            echo "</div>";
                             echo "</td>";
                             echo "<td>";
-                                echo "<button class='btn btn-outline-secondary' onclick='editPerson({$i})'>Edit</button>";
+                            echo "<button class='btn btn-outline-secondary' onclick='editPerson({$i})'>Edit</button>";
                             echo "</td>";
                             echo "</tr>";
                         }
@@ -364,56 +375,56 @@ include('header.php');
                         }
 
                         $_SESSION['serializedInfo'] = serializeParticipantMatrix($pageInformation);
-                    ?>
-                    </tbody>
-                </table>
-                <!-- /Table -->
+                        ?>
+                        </tbody>
+                    </table>
+                    <!-- /Table -->
+                </div>
+
+                <!-- helps identify if we've just added a person -->
+                <input type="hidden" id="fromAddPerson" name="fromAddPerson" value="0" />
+
+                <!-- edit button information -->
+                <input type="hidden" id="editButton" name="editButton" value="" />
             </div>
 
-            <!-- helps identify if we've just added a person -->
-            <input type="hidden" id="fromAddPerson" name="fromAddPerson" value="0" />
+            <br />
+            <div class="flex-column">
+                <h4 class="mb-3" style="font-weight: 200;">Add New Participants</h4>
+                <div id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="card">
+                        <div class="card-header" role="tab" id="headingOne">
+                            <h5 class="card-title mb-0">
+                                <a class="form-header" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    Search for Person
+                                </a>
+                            </h5>
+                        </div>
 
-            <!-- edit button information -->
-            <input type="hidden" id="editButton" name="editButton" value="" />
-        </div>
-
-        <br />
-        <div class="flex-column">
-            <h4 class="mb-3" style="font-weight: 200;">Add New Participants</h4>
-            <div id="accordion" role="tablist" aria-multiselectable="true">
-                <div class="card">
-                    <div class="card-header" role="tab" id="headingOne">
-                        <h5 class="card-title mb-0">
-                            <a class="form-header" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                Search for Person
-                            </a>
-                        </h5>
-                    </div>
-
-                    <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
-                        <div class="card-body" style="padding: 10px;">
-                            <p>
-                                If a person is not shown here but has already filled out the intake packet,
-                                please search for them here.
-                            </p>
-                            <div class="input-group" style="max-width: 700px; width: 100%; margin: 0 auto">
-                                <input type="text" class="form-control search-participants" name="searchquery"  placeholder="Enter a participant's name...">
-                                <span class="input-group-btn">
+                        <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="card-body" style="padding: 10px;">
+                                <p>
+                                    If a person is not shown here but has already filled out the intake packet,
+                                    please search for them here.
+                                </p>
+                                <div class="input-group" style="max-width: 700px; width: 100%; margin: 0 auto">
+                                    <input type="text" class="form-control search-participants" name="searchquery"  placeholder="Enter a participant's name...">
+                                    <span class="input-group-btn">
                                     <button type="button" class="btn cpca active-search">Search</button>
                                 </span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card">
-                    <div class="card-header" role="tab" id="headingTwo">
-                        <h5 class="mb-0">
-                            <a class="collapsed form-header" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                No Intake Form
-                            </a>
-                        </h5>
-                    </div>
-                    <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+                    <div class="card">
+                        <div class="card-header" role="tab" id="headingTwo">
+                            <h5 class="mb-0">
+                                <a class="collapsed form-header" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    No Intake Form
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
                             <div class="card-body" style="padding: 10px">
                                 <div class="form-group row" style="margin-left: 10px">
                                     <p>If a person has not filled out intake forms, please enter their information below.</p>
@@ -445,7 +456,7 @@ include('header.php');
                                 -->
                                 <div class="form-group row">
                                     <label for="race-select" class="col-3 col-form-label">Race <span style="color:red; display:inline">*</span></label>
-                                        <div class="col-9">
+                                    <div class="col-9">
                                         <select id="race-select" name="race-select" class="form-control">
                                             <option>Select Race...</option>
                                             <?php
@@ -490,32 +501,32 @@ include('header.php');
                                 <div class="form-footer submit">
                                     <button type="button" class="btn cpca" style="margin-left:15px" onclick="addPerson()">Add Person</button>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <br/>
-            <div class="form-footer submit">
-                <button type="button" class="btn cpca" onclick="submitAttendance()" >Submit Attendance</button>
+                <br/>
+                <div class="form-footer submit">
+                    <button type="button" class="btn cpca" onclick="submitAttendance()" >Submit Attendance</button>
+                </div>
             </div>
-        </div>
         </form>
     </div>
 
     <div class="modal fade w-100" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Add Participants to Attendence</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-          </div>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Participants to Attendence</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
     <script src="/js/attendance-scripts/attendance-form-add-new-person.js"></script>
@@ -546,7 +557,49 @@ include('header.php');
             //set form value to button value
             document.getElementById("editButton").value = buttonNumber;
 
-            setFormAction('edit-participant');
+            setFormAction('attendance-edit-participant');
+            document.getElementById(pageFormName).submit();
+        }
+
+        function editClassDetails(){
+            //set the form action to direct to edit class info
+            setFormAction('edit-class-info');
+            document.getElementById(pageFormName).submit();
+        }
+
+        function editClassDetails(){
+            //set the form action to direct to edit class info
+            setFormAction('edit-class-info');
+            document.getElementById(pageFormName).submit();
+        }
+
+        function editClassDetails(){
+            //set the form action to direct to edit class info
+            setFormAction('edit-class-info');
+            document.getElementById(pageFormName).submit();
+        }
+
+        function editClassDetails(){
+            //set the form action to direct to edit class info
+            setFormAction('edit-class-info');
+            document.getElementById(pageFormName).submit();
+        }
+
+        function editClassDetails(){
+            //set the form action to direct to edit class info
+            setFormAction('edit-class-info');
+            document.getElementById(pageFormName).submit();
+        }
+
+        function editClassDetails(){
+            //set the form action to direct to edit class info
+            setFormAction('edit-class-info');
+            document.getElementById(pageFormName).submit();
+        }
+
+        function editClassDetails(){
+            //set the form action to direct to edit class info
+            setFormAction('edit-class-info');
             document.getElementById(pageFormName).submit();
         }
 
@@ -659,15 +712,15 @@ include('header.php');
                                 //add the view to the modal
                                 $(".modal-body").append(
                                     "<form class=\"add-to-sheet\" method =\"POST\"action=\"\">"+
-                                        "<input type=\"hidden\" value="+peopleid+" name=\"pidLookup\">"+
-                                        "<div class='card'>" +
-                                            "<div class='card-body'>" +
-                                                "<h4 class='card-title'>" + sentNameList + "<input type='submit' name='lookupId' value='Add' class='btn cpca float-right submit-search' /></h4>" +
-                                            "</div>" +
-                                            "<div class='card-footer'>" +
-                                                details +
-                                            "</div>" +
-                                        "</div>" +
+                                    "<input type=\"hidden\" value="+peopleid+" name=\"pidLookup\">"+
+                                    "<div class='card'>" +
+                                    "<div class='card-body'>" +
+                                    "<h4 class='card-title'>" + sentNameList + "<input type='submit' name='lookupId' value='Add' class='btn cpca float-right submit-search' /></h4>" +
+                                    "</div>" +
+                                    "<div class='card-footer'>" +
+                                    details +
+                                    "</div>" +
+                                    "</div>" +
                                     "</form>");
                                 $("#exampleModal").modal();
                             }

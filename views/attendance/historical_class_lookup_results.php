@@ -13,8 +13,6 @@
  * @since [initial version number]
  */
 
-authorizedPage();
-
 global $db;
 require ('attendance_utilities.php');
 
@@ -60,7 +58,7 @@ include('header.php');
                 ?>
 
                 <?php if ($attendanceResults) { ?>
-                <h4 class="card-title" style="margin-top: 15px;">Classes On <?= $formatted_date ?></h4>
+                    <h4 class="card-title" style="margin-top: 15px;">Classes On <?= $formatted_date ?></h4>
                 <?php } ?>
                 <div class="table-responsive">
                     <form action = "historical-class-view" method="post" name="classView">
@@ -78,21 +76,21 @@ include('header.php');
                             </thead>
                             <tbody>
                             <?php
-                                $counter = 0;
-                                foreach ($attendanceResults as $result) {
-                                    echo "<tr>";
-                                    echo "<td>{$result['firstname']} {$result['lastname']}</td>";
-                                    echo "<td>{$result['curriculumname']}</td>";
-                                    echo "<td>{$result['topicname']}</td>";
-                                    echo "<td>{$result['sitename']}</td>";
-                                    $time = strtotime($result['date']);
-                                    $myFormatTime = date("h:i A", $time);
-                                    echo "<td><em>{$myFormatTime}</em></td>";
-                                    echo "<td><button href=\"#\" class=\"btn btn-outline-secondary\" type=\"submit\" onclick=\"changeHiddenFormFieldValue({$counter})\">More details...</button></td>";
-                                    echo "</tr>";
+                            $counter = 0;
+                            foreach ($attendanceResults as $result) {
+                                echo "<tr>";
+                                echo "<td>{$result['firstname']} {$result['lastname']}</td>";
+                                echo "<td>{$result['curriculumname']}</td>";
+                                echo "<td>{$result['topicname']}</td>";
+                                echo "<td>{$result['sitename']}</td>";
+                                $time = strtotime($result['date']);
+                                $myFormatTime = date("h:i A", $time);
+                                echo "<td><em>{$myFormatTime}</em></td>";
+                                echo "<td><button href=\"#\" class=\"btn btn-outline-secondary\" type=\"submit\" onclick=\"changeHiddenFormFieldValue({$counter})\">More details...</button></td>";
+                                echo "</tr>";
 
-                                    $counter++;
-                                }
+                                $counter++;
+                            }
                             } else { ?>
                                 <div class="w-100 d-flex flex-column justify-content-center text-center">
                                     <h3 class="display-3 text-secondary" style="font-size: 40px;"><i
