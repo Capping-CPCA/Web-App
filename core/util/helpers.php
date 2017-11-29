@@ -215,7 +215,18 @@ function valueOrEmpty($arr, $key) {
  * @param $string
  * @return string
  */
-
 function prettyPrintPhone($string) {
     return '('.substr($string, 0, 3).') '.substr($string, 3, 3).'-'.substr($string,6);
 }
+/**
+ * Takes in an object and casts it to a string type
+ * return array copy of the object that can be referenced in array['index'] format
+ * @param $object object The object that needs to be converted
+ * @return array the new array cast of the object
+ * @return $array the new array cast of the object
+**/
+function toString($object){
+	$array = (array) $object;
+	return $array;
+}	
+

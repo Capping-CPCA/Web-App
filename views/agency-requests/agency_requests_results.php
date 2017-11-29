@@ -11,22 +11,23 @@
  *
  * @author Vallie Joseph
  * @copyright 2017 Marist College
- * @version 0.3
+ * @version 0.7.1
  * @since 0.1
  */
 
 global $db, $params;
-
 #Search for user inputed name, check both first/last combination and last/first name combinations
-$searchquery = strtolower(rawurldecode(implode('/',$params)));
-$result = $db->query("SELECT  participants.participantid, participants.dateofbirth, participants.race, people.firstname, people.lastname, people.middleinit ".
-                        "FROM participants ".
-                        "INNER JOIN people ON participants.participantid = people.peopleid ".
-                        "WHERE LOWER(CONCAT(people.firstname, ' ' , people.middleinit , ' ' , people.lastname)) LIKE $1 ".
-                        "OR LOWER(CONCAT(people.lastname, ' ' , people.firstname, ' ',people.middleinit )) LIKE $1".
-						"OR LOWER(CONCAT(people.firstname, ' ' , people.lastname)) LIKE $1 ".
-                        "OR LOWER(CONCAT(people.lastname, ' ' , people.firstname)) LIKE $1",  ['%'.$searchquery.'%']);
 
+$searchquery = strtolower(rawurldecode(implode('/',$params)));
+$result = $db->query("SELECT participants.participantid, participants.dateofbirth, participants.race, people.firstname, 
+							people.lastname, people.middleinit , participants.sex 
+							FROM participants 
+							INNER JOIN people ON participants.participantid = people.peopleid
+							WHERE LOWER(CONCAT(people.firstname, ' ' , people.middleinit , ' ' , people.lastname)) LIKE $1
+							OR LOWER(CONCAT(people.lastname, ' ' , people.firstname, ' ',people.middleinit )) LIKE $1
+							OR LOWER(CONCAT(people.firstname, ' ' , people.lastname)) LIKE $1
+							OR LOWER(CONCAT(people.lastname, ' ' , people.firstname)) LIKE  $1 ",  ["%$searchquery%"]);
+							
 include('header.php');
 ?>
 <div class="w-100 d-flex flex-column">
@@ -38,30 +39,34 @@ include('header.php');
         #if query returns nothing, throw an error to the user
         if(pg_num_rows($result) == 0){
         ?>
-            <div class="alert alert-warning">
-                <strong>Sorry, did not return any results for </strong> <u><?php echo $searchquery ?></u>
-            </div>
+			<div class="w-100 d-flex flex-column justify-content-center text-center">
+				<h3 class="display-3 text-secondary" style="font-size: 40px;">
+					<i class="fa fa-exclamation-circle"></i>
+				</h3>
+				<h3 class="display-3 text-secondary" style="font-size: 40px;">No Participants Found.</h3>
+			</div>
         <?php
         }//end if
+		
         #check the result of query and loop through each row to display search results
         while ($row = pg_fetch_assoc($result)) {
-            ?>
-            <li class="list-group-item">
-                <button class="btn btn-outline-info advanced-info"><i class="fa fa-question" aria-hidden="true"></i></button>
-                <span>&nbsp;<?php echo $row['lastname'].", ".$row['firstname']. " ". $row['middleinit'];?></span>
-                <a class="float-right" href="/view-participant/<?= $row['participantid'] ?>">
-                    <button class="p-view btn cpca">
-                        View Record
-                    </button>
-                </a>
+		?>
+			<li class="list-group-item">
+				<button class="btn btn-outline-secondary advanced-info"><i class="fa fa-caret-right" aria-hidden="true"></i></button>
 
-                <ul class="list-group sublist">
-                    <li class="list-group-item ">
-                        <b>DOB: </b><?php echo $row['dateofbirth']. " | <b>Race: </b> ".  $row['race']?>
-                    </li>
-                </ul>
-            </li>
-            <?php
+				<span><?= $row['lastname'].", ".$row['firstname']. " ". $row['middleinit'];?></span>
+				
+				<a class="float-right" href="/ps-view-participant/<?= $row['participantid'] ?>">
+					<button class="p-view btn cpca">View Record</button>
+				</a>
+
+				<ul class="list-group sublist">
+					<li class="list-group-item ">
+						<?php= "<b>DOB: </b>".$row['dateofbirth']." | "."<b>Race: </b> ".$row['race'] ." | "."<b>Sex: </b> ".$row['sex']?>
+					</li>
+				</ul>
+			</li>
+		<?php
         }
         ?>
     </ul>

@@ -417,6 +417,12 @@ select.form-control {
 .search-participants{
     width:70%;
 }
+.badge-success{
+	background-color:#5C629C!important;
+}
+.badge-primary{
+	background-color:#868E96!important;
+}
 .top-search-row{
     margin-top: 5%;
     z-index: 10000;
@@ -457,6 +463,11 @@ select.form-control {
 
 .page-wrapper {
     flex: 1;
+}
+.alert-outline-success{
+    border-style: thin-solid;
+	border-color: #28A745;
+	color:#28A745;
 }
 
 /*Login*/
@@ -603,17 +614,18 @@ label[for=password] {
 	background-color:#5C629C;
 	color:white;
 }
-
-/* Referral Forms */
 .form-header {
     flex: 1;
     padding: 0.5rem 1rem 0.5rem 0;
     color: rgba(0,0,0,0.75);
     transition: font-weight 0.1s;
-    text-decoration: none !important;
+   text-decoration: none !important;
+}
+.edit-form{
+	background-color:lightgrey;
 }
 
-.form-header:hover {
+-.form-header:hover {
     color: #898EBB!important;
     color: rgba(0,0,0,0.20);
     font-weight: bold;
@@ -638,7 +650,6 @@ label[for=password] {
 .custom-control-input:checked~.custom-control-indicator:focus {
     outline: none;
 }
-
 /*When printing, display all of the main-content div, and nothing else.*/
 @media print{
 	#main-content {
