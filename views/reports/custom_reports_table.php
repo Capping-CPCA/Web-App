@@ -25,6 +25,8 @@
 	
 	$currs = isset($_POST['curricula']) ? $_POST['curricula'] : [];
 	$races = isset($_POST['race']) ? $_POST['race'] : [];
+	$sexes = isset($_POST['sex']) ? $_POST['sex'] : [];
+	$sites = isset($_POST['sites']) ? $_POST['sites'] : [];
 	$minAge = $_POST['minAge'];
 	$maxAge = $_POST['maxAge'];
 	
@@ -49,7 +51,24 @@
 		$raceQuery .= ")";
 	}
 	
-	if (count($races) > 0 && count($currs) > 0) {
+	$sexQuery = "";
+	if (count($sexes) > 0) {
+		$sexQuery = "(classattendancedetails.sex = '" . pg_escape_string($sexes[0]) . "' ";
+		for ($i = 1; $i < count($sexes); $i++) {
+			$sexQuery .= "OR classattendancedetails.sex = '" . pg_escape_string($sexes[$i]) . "' ";
+		}
+		$sexQuery .= ")";
+	}
+	
+	if (count($sites) > 0) {
+		$siteQuery = "(classattendancedetails.sitename = '" . pg_escape_string($sites[0]) . "' ";
+		for ($i = 1; $i < count($sites); $i++) {
+			$siteQuery .= "OR classattendancedetails.sitename = '" . pg_escape_string($sites[$i]) . "' ";
+		}
+		$siteQuery .= ")";
+	}
+	
+	if (count($races) > 0 && count($currs) > 0 && count($sexes) > 0 && count($sites) > 0) {
 		$ageQuery = "";
 		if ($minAge !== 'any') {
 			$ageQuery = "((date_part('year', AGE(classattendancedetails.dateOfBirth)) >= $minAge) ";
@@ -69,6 +88,8 @@
 		if ($currQuery !== "") $totalWhere .= "AND $currQuery ";
 		if ($raceQuery !== "") $totalWhere .= "AND $raceQuery ";
 		if ($ageQuery !== "") $totalWhere .= "AND $ageQuery ";
+		if ($sexQuery !== "") $totalWhere .= "AND $sexQuery ";
+		if ($siteQuery !== "") $totalWhere .= "AND $siteQuery ";
 		$newWhere = $totalWhere . "AND classattendancedetails.isnew = TRUE;";
 		$totalWhere .= ";";
 		
@@ -118,30 +139,55 @@
 					echo $sDateFormatted . " - " . $eDateFormatted;
 				}?></h2>
 		</div>
-		<div align="center">
+		<hr>
+		<div align="left">
 			<?php
+			#Display the chosen locations
+			echo "<p><b>Locations:</b> ";
+			if (count($sites) > 0) {
+				echo $sites[0];
+				for ($i = 1; $i < count($sites); $i++) {
+					echo ", " . $sites[$i];
+				}
+			} else {
+				echo "None";
+			}
+			echo "</p>";
+			
 			#Display the chosen curriculum
-			echo "<div><b>Curricula:</b> ";
+			echo "<p><b>Curricula:</b> ";
 			if ($currNames[0]["curriculumname"] !== NULL) {
 				echo $currNames[0]["curriculumname"];
 				for ($i = 1; $i < count($currNames); $i++) {
 					echo ", " . $currNames[$i]["curriculumname"];
 				}
-				echo "</div>";
 			} else {
-				echo "None</div>";
+				echo "None";
 			}
+			echo "</p>";
 			
 			#Display the chosen races
-			echo "<div><b>Races:</b> ";
+			echo "<p><b>Races:</b> ";
 			if (count($races) > 0) {
 				echo $races[0];
 				for ($i = 1; $i < count($races); $i++) {
 					echo ", " . $races[$i];
 				}
-				echo "</div>";
+				echo "</p>";
 			} else {
-				echo "None</div>";
+				echo "None</p>";
+			}
+			
+			#Display the chosen sexes
+			echo "<p><b>Sexes:</b> ";
+			if (count($sexes) > 0) {
+				echo $sexes[0];
+				for ($i = 1; $i < count($sexes); $i++) {
+					echo ", " . $sexes[$i];
+				}
+				echo "</p>";
+			} else {
+				echo "None</p>";
 			}
 			
 			#Display the chosen ages
@@ -163,6 +209,8 @@
 			?>
 		</div>
 	</div>
+	<hr>
+	<br>
 	<div class="container py-2">
 		<table class="table table-hover table-striped table-bordered">
 			<thead>
