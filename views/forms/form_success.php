@@ -11,7 +11,7 @@
  *
  * @author Christian Menk and Stephen Bohner
  * @copyright 2017 Marist College
- * @version 0.3.3
+ * @version 1.2.2
  * @since 0.3.2
  */
 include('header.php');
