@@ -108,7 +108,7 @@ include('header.php');
                             <a href="/referral-form/view/<?= $params[0] . "/" . $r['agencyreferralid']?>">
                                 <button class="btn outline-cpca btn-sm" style="margin-right: 5px">View</button>
                             </a>
-                            <a href="/referral-form/edit<?= $params[0] . "/" . $r['agencyreferralid']?>">
+                            <a href="/referral-form/edit/<?= $params[0] . "/" . $r['agencyreferralid']?>">
                                 <button class="btn btn-outline-secondary btn-sm">Edit</button>
                             </a>
                         </div>

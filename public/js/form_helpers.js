@@ -40,6 +40,7 @@ function disableFields(){
 
 // Javascript validation for Referral form.
 function submitAll(){
+    formChanged = false;
     var fname = document.getElementById("pers_firstname");
     var lname = document.getElementById("pers_lastname");
     var pers_zip = document.getElementById("pers_zip");
@@ -68,8 +69,19 @@ function submitAll(){
     }
 }
 
+function disableReferralFields(){
+    $("#participant_info :input").prop("disabled", true);
+    $('.agencybutton').addClass('hidden-field');
+    $('#collapse1').collapse('show');
+    $('#collapse2').collapse('show');
+    $('#collapse3').collapse('show');
+    $('#collapse4').collapse('show');
+    $('#collapse5').collapse('show');
+}
+
 // Javascript validation for Initial Contact / Self-Referral form.
 function submitAllSelf(){
+    formChanged = false;
     var self_fname = document.getElementById("self_pers_firstname");
     var self_lname = document.getElementById("self_pers_lastname");
     var self_pers_zip = document.getElementById("self_pers_zip");
