@@ -11,7 +11,7 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.6
+ * @version 1.0
  * @since 0.3.3
  */
 
@@ -66,22 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // remove class with foreign key issue
     else if (isset($_POST['full-delete']) && hasRole(Role::Superuser)) {
         $errorState = "";
-        // Delete from Participant Class Attendance
-        $res = $db->query("DELETE FROM participantclassattendance ".
-            "WHERE classid = $1 AND curriculumid = $2 ", [$classId, $id]);
-        $state = pg_result_error_field($res, PGSQL_DIAG_SQLSTATE);
-        if ($state != 0) {
-            $error = true;
-            $errorState .= $state . ":PCA ";
-        }
-        // Delete from Facilitator Class Attendance
-        $res = $db->query("DELETE FROM facilitatorclassattendance ".
-            "WHERE classid = $1 AND curriculumid = $2 ", [$classId, $id]);
-        $state = pg_result_error_field($res, PGSQL_DIAG_SQLSTATE);
-        if ($state != 0) {
-            $error = true;
-            $errorState .= $state . ":FCA ";
-        }
         // Delete from Class Offering
         $res = $db->query("DELETE FROM classoffering ".
             "WHERE classid = $1 AND curriculumid = $2 ", [$classId, $id]);
