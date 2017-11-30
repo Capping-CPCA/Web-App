@@ -86,10 +86,12 @@
 		#Gender Where clauses
 		$femaleWhere = "(sex = 'Female')";
 		$maleWhere = "(sex = 'Male')";
+		$otherWhere = "(sex = 'Other' OR sex IS NULL)";
 		
 		#Gender Queries
 		$queryBuild($maleWhere, $mMonthRes, $mNewRes, $mDupRes, $mYearRes);
 		$queryBuild($femaleWhere, $fMonthRes, $fNewRes, $fDupRes, $fYearRes);
+		$queryBuild($otherWhere, $oMonthRes, $oNewRes, $oDupRes, $oYearRes);
 		
 		#Age Where clauses
 		$_20Where = "(date_part('year', AGE(dateofbirth)) >= 20)
@@ -97,11 +99,13 @@
 		$_41Where = "(date_part('year', AGE(dateofbirth)) >= 41)
 				AND (date_part('year', AGE(dateofbirth)) <= 64)";
 		$_65Where = "(date_part('year', AGE(dateofbirth)) >= 65)";
+		$unknownAgeWhere = "(dateofbirth IS NULL)";
 		
 		#Age Queries
 		$queryBuild($_20Where, $_20MonthRes, $_20NewRes, $_20DupRes, $_20YearRes);
 		$queryBuild($_41Where, $_41MonthRes, $_41NewRes, $_41DupRes, $_41YearRes);
 		$queryBuild($_65Where, $_65MonthRes, $_65NewRes, $_65DupRes, $_65YearRes);
+		$queryBuild($unknownAgeWhere, $unAgeMonthRes, $unAgeNewRes, $unAgeDupRes, $unAgeYearRes);
 		
 		#Ethnicity Where clauses
 		$afAmWhere = " race = 'African American' ";
@@ -110,7 +114,7 @@
 		$caucWhere = " race = 'Caucasian' ";
 		$multRacWhere = " race = 'Multi Racial' ";
 		$latWhere = " race = 'Latino' ";
-		$otherRacWhere = " race = 'Other' ";
+		$otherRacWhere = "(race = 'Other' OR race IS NULL)";
 		
 		#Ethnicity Queries
 		$queryBuild($afAmWhere, $afAmMonthRes, $afAmNewRes, $afAmDupRes, $afAmYearRes);
@@ -327,9 +331,7 @@
 			<tbody>
 				<tr>
 					<td>
-						<b>
-				   Male
-				   </b>
+						<b>Male</b>
 					</td>
 					<td>
 						<?php if (isset($mMonthRes)) echo $mMonthRes; else echo "";?>
@@ -346,9 +348,7 @@
 				</tr>
 				<tr>
 					<td>
-						<b>
-				   Female
-				   </b>
+						<b>Female</b>
 					</td>
 					<td>
 						<?php if (isset($fMonthRes)) echo $fMonthRes; else echo "";?>
@@ -361,6 +361,23 @@
 					</td>
 					<td>
 						<?php if (isset($fYearRes)) echo $fYearRes; else echo "";?>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<b>Other</b>
+					</td>
+					<td>
+						<?php if (isset($oMonthRes)) echo $oMonthRes; else echo "";?>
+					</td>
+					<td>
+						<?php if (isset($oNewRes)) echo $oNewRes; else echo "";?>
+					</td>
+					<td>
+						<?php if (isset($oDupRes)) echo $oDupRes; else echo "";?>
+					</td>
+					<td>
+						<?php if (isset($oYearRes)) echo $oYearRes; else echo "";?>
 					</td>
 				</tr>
 			</tbody>
@@ -445,6 +462,23 @@
 					</td>
 					<td>
 						<?php if (isset($_65YearRes)) echo $_65YearRes; else echo "";?>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<b>Unknown</b>
+					</td>
+					<td>
+						<?php if (isset($unAgeMonthRes)) echo $unAgeMonthRes; else echo "";?>
+					</td>
+					<td>
+						<?php if (isset($unAgeNewRes)) echo $unAgeNewRes; else echo "";?>
+					</td>
+					<td>
+						<?php if (isset($unAgeDupRes)) echo $unAgeDupRes; else echo "";?>
+					</td>
+					<td>
+						<?php if (isset($unAgeYearRes)) echo $unAgeYearRes; else echo "";?>
 					</td>
 				</tr>
 			</tbody>

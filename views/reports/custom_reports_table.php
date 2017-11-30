@@ -32,8 +32,8 @@
 	
 	//Build queries based on POST data
 	$dateQuery = "(classattendancedetails.date::date >= '$startDate' AND classattendancedetails.date::date <= '$endDate')";
-	$currQuery = "";
 	
+	$currQuery = "";
 	if (count($currs) > 0) {
 		$currQuery = "(classattendancedetails.curriculumid = '" . pg_escape_string($currs[0]) . "' ";
 		for ($i = 1; $i < count($currs); $i++) {
@@ -46,7 +46,11 @@
 	if (count($races) > 0) {
 		$raceQuery = "(classattendancedetails.race = '" . pg_escape_string($races[0]) . "' ";
 		for ($i = 1; $i < count($races); $i++) {
-			$raceQuery .= "OR classattendancedetails.race = '" . pg_escape_string($races[$i]) . "' ";
+			if ($races[$i] === "Other") {
+				$raceQuery .= "OR classattendancedetails.race = 'Other' OR classattendancedetails.race IS NULL";
+			} else {
+				$raceQuery .= "OR classattendancedetails.race = '" . pg_escape_string($races[$i]) . "' ";
+			}
 		}
 		$raceQuery .= ")";
 	}
@@ -55,11 +59,16 @@
 	if (count($sexes) > 0) {
 		$sexQuery = "(classattendancedetails.sex = '" . pg_escape_string($sexes[0]) . "' ";
 		for ($i = 1; $i < count($sexes); $i++) {
-			$sexQuery .= "OR classattendancedetails.sex = '" . pg_escape_string($sexes[$i]) . "' ";
+			if ($sexes[$i] === "Other") {
+				$sexQuery .= "OR classattendancedetails.sex = 'Other' OR classattendancedetails.sex IS NULL ";
+			} else {
+				$sexQuery .= "OR classattendancedetails.sex = '" . pg_escape_string($sexes[$i]) . "' ";
+			}
 		}
 		$sexQuery .= ")";
 	}
 	
+	$siteQuery = "";
 	if (count($sites) > 0) {
 		$siteQuery = "(classattendancedetails.sitename = '" . pg_escape_string($sites[0]) . "' ";
 		for ($i = 1; $i < count($sites); $i++) {
