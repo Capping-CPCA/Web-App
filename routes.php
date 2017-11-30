@@ -70,3 +70,6 @@ $router->add('/edit-class-info', 'attendance/attendance_edit_class_info.php', 'C
 
 # Surveys
 $router->add('/surveys', 'surveys/view_survey_results.php', 'Surveys');
+
+#Calendar
+$router->add('/calendar','calendar/test_cal.php', 'Calendar');

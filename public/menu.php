@@ -129,6 +129,9 @@ $active = [
                 </a>
             <?php } ?>
         <?php } ?>
+		 <a class="nav-link text-secondary" href="/calendar">
+                    <i class="fa fa-users fa-fw" aria-hidden="true"></i>Calendar
+         </a>
     </nav>
 <!--    <a class="side-menu-welcome">Welcome, --><?//= $_SESSION["username"] ?><!--!</a>-->
 </div>
