@@ -88,8 +88,8 @@ $(function () {
 
     $('#btnDelMember').click(function () {
         // Confirmation dialog box. Works on all desktop browsers and iPhone.
-        if (confirm("Are you sure you wish to remove this family member? This cannot be undone."))
-        {
+        $("#memberModal").modal();
+        $('#memberConfirm').click(function () {
             var num = $('.clonedFamily').length;
             // how many "duplicatable" input fields we currently have
             $('#familyEntry_' + num).slideUp('slow', function () {$(this).remove();
@@ -98,7 +98,7 @@ $(function () {
                     $('#btnDelMember').attr('disabled', true);
                 // enable the "add" button
                 $('#btnAddMember').attr('disabled', false).prop('value', "add section");});
-        }
+        });
         return false; // Removes the last section you added
     });
     // Enable the "add" button
@@ -160,8 +160,8 @@ $(function () {
 
     $('#btnDelParty').click(function () {
         // Confirmation dialog box. Works on all desktop browsers and iPhone.
-        if (confirm("Are you sure you wish to remove this party? This cannot be undone."))
-        {
+        $("#agencyModal").modal();
+        $('#agencyConfirm').click(function () {
             var num = $('.clonedParty').length;
             // how many "duplicatable" input fields we currently have
             $('#partyEntry_' + num).slideUp('slow', function () {$(this).remove();
@@ -170,7 +170,7 @@ $(function () {
                     $('#btnDelParty').attr('disabled', true);
                 // enable the "add" button
                 $('#btnAddParty').attr('disabled', false).prop('value', "add section");});
-        }
+        });
         return false; // Removes the last section you added
     });
     // Enable the "add" button

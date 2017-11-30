@@ -1,3 +1,16 @@
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Form helping functions for form validation/submission/other logic
+ *
+ * This JS file is used to store functions needed for the forms to properly submit and display their data.
+ *
+ * @author Christian Menk and Stephen Bohner
+ * @copyright 2017 Marist College
+ * @version 0.3.3
+ * @since 0.3.2
+ */
+
 $(document).ready(function(){
     initMaskIntake();
     $('input:radio')
@@ -11,25 +24,35 @@ $(document).ready(function(){
         .on('focusout', function() {
             validationIntake($(this));
         });
+    $('.mask-zip')
+        .on('focusout', function() {
+            validateZip($(this));
+        })
 });
 
 function initMaskIntake(){
     $('.mask-zip').mask('00000');
     $('.mask-phone').mask('(000) 000-0000');
-    $('.mask-year-school').mask('0000');
 }
 
 function submitAllIntake(){
     var intake_firstname = document.getElementById("intake_firstname");
     var intake_lastname = document.getElementById("intake_lastname");
+    var intake_zip = document.getElementById("intake_zip");
     var intake_packet = document.getElementById("intake_packet");
+    var intake_card = document.getElementById("intake_participantInfo_title");
     // Handles all validation when the user hits the submit button.
     if (intake_packet.checkValidity() === false) {
-        document.getElementById("intake_participantInfo_title").focus();
-        if(intake_lastname.value.length === 0)
+        intake_card.focus();
+        if (intake_lastname.value.length === 0) {
             intake_lastname.focus();
-        if(intake_firstname.value.length === 0)
+        }
+        if (intake_firstname.value.length === 0) {
             intake_firstname.focus();
+        }
+    } else if (!validZip($('#intake_zip'))) {
+        intake_card.focus();
+        intake_zip.focus();
     } else {
         intake_packet.submit();
     }
@@ -41,6 +64,23 @@ function validationIntake(el){
         el.removeClass('is-invalid');
     } else {
         el.addClass('is-invalid');
+    }
+}
+
+// Validates zip code.
+function validateZip(el){
+    if (validZip(el)) {
+        el.removeClass('is-invalid');
+    } else {
+        el.addClass('is-invalid');
+    }
+}
+
+function validZip(el){
+    if (el.val().length === 5 || el.val().length === 0) {
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -133,8 +173,8 @@ $(function () {
 
     $('#btnDelChild').click(function () {
         // Confirmation dialog box. Works on all desktop browsers and iPhone.
-        if (confirm("Are you sure you wish to remove this child? This cannot be undone."))
-        {
+        $("#childModal").modal();
+        $('#childConfirm').click(function () {
             var num = $('.clonedChild').length;
             // how many "duplicatable" input fields we currently have
             $('#childEntry_' + num).slideUp('slow', function () {$(this).remove();
@@ -143,7 +183,7 @@ $(function () {
                     $('#btnDelChild').attr('disabled', true);
                 // enable the "add" button
                 $('#btnAddChild').attr('disabled', false).prop('value', "add section");});
-        }
+        });
         return false; // Removes the last section you added
     });
     // Enable the "add" button
