@@ -11,7 +11,7 @@
  *
  * @author Jack Grzechowiak
  * @copyright 2017 Marist College
- * @version 0.6
+ * @version 1.0
  * @since 0.3.3
  */
 
@@ -33,14 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Delete
     else if (isset($_POST['delete']) && hasRole(Role::Superuser)) {
         $confirmDelete = true;
-        $res = $db->query("SELECT * FROM participantclassattendance WHERE curriculumid = $1", [$curriculumId]);
-        if (pg_num_rows($res) > 0) {
-            $warning = true;
-        }
-        $res = $db->query("SELECT * FROM facilitatorclassattendance WHERE curriculumid = $1", [$curriculumId]);
-        if (pg_num_rows($res) > 0) {
-            $warning = true;
-        }
         $res = $db->query("SELECT * FROM classoffering WHERE curriculumid = $1", [$curriculumId]);
         if (pg_num_rows($res) > 0) {
             $warning = true;
@@ -53,22 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Confirm Delete
     else if (isset($_POST['full-delete']) && hasRole(Role::Superuser)) {
         $errorState = "";
-        // Delete from Participant Class Attendance
-        $res = $db->query("DELETE FROM participantclassattendance ".
-            "WHERE curriculumid = $1 ", [$curriculumId]);
-        $state = pg_result_error_field($res, PGSQL_DIAG_SQLSTATE);
-        if ($state != 0) {
-            $error = true;
-            $errorState .= $state . ":PCA ";
-        }
-        // Delete from Facilitator Class Attendance
-        $res = $db->query("DELETE FROM facilitatorclassattendance ".
-            "WHERE curriculumid = $1 ", [$curriculumId]);
-        $state = pg_result_error_field($res, PGSQL_DIAG_SQLSTATE);
-        if ($state != 0) {
-            $error = true;
-            $errorState .= $state . ":FCA ";
-        }
         // Delete from Class Offering
         $res = $db->query("DELETE FROM classoffering ".
             "WHERE curriculumid = $1 ", [$curriculumId]);

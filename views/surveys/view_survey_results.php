@@ -15,7 +15,7 @@ if (!empty($params) && $params[0] == 'results') {
 		<!------------------------ This is the update button ------------------------->
 		<?php
 			function updateDB(){
-				$surveyConfig = CONFIG['survey']
+				$surveyConfig = CONFIG['survey'];
 				$output = shell_exec('py "../views/surveys/pullAndParseSurveys.py" '
 					. $surveyConfig['database'] . ' ' . $surveyConfig['username'] . ' '
 					. $surveyConfig['password'] . ' ' . $surveyConfig['address'] . ' '
