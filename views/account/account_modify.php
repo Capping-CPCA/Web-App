@@ -191,7 +191,7 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
 
             if (hasRole(Role::Admin) && $isFacilitator && $setFacilitatorDF == 1) {
                 # Sets DF to 1
-                $db->query("UPDATE facilitators " . " SET df = 1 WHERE facilitatorid = $1", [$employeeid]);
+                $db->query("UPDATE facilitators SET df = TRUE WHERE facilitatorid = $1", [$employeeid]);
 
                 # Removes the employee's languages
                 $db->query("DELETE FROM facilitatorlanguage WHERE facilitatorid = $1 AND lang = $2 AND level = 'PRIMARY'", [$employeeid, $primaryLang['lang']]);
@@ -205,7 +205,7 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
             } else if (hasRole(Role::Admin) && !$isFacilitator && $setFacilitatorDF == 0) {
                 if ($isInFacilitatorTable) {
                     # Sets DF to 0
-                    $db->query("UPDATE facilitators " . " SET df = 0 WHERE facilitatorid = $1", [$employeeid]);
+                    $db->query("UPDATE facilitators SET df = FALSE WHERE facilitatorid = $1", [$employeeid]);
                 } else {
                     # Adds employee to the facilitators table
                     $db->query("INSERT INTO facilitators VALUES ($1)", [$employeeid]);

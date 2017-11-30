@@ -28,7 +28,7 @@ extract($person);
 
 # Restore data
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['restore'])) {
-    $restoreRes = $db->query("UPDATE employees SET df = 0 WHERE employeeid = $1", [$employeeid]);
+    $restoreRes = $db->query("UPDATE employees SET df = FALSE WHERE employeeid = $1", [$employeeid]);
 
     if ($restoreRes) {
         $success = true;

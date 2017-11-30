@@ -33,7 +33,7 @@ if (!empty($params) && $params[0] == 'restore') {
     $view->display('user/user_archives.php');
 } else {
     $res = $db->query("SELECT firstname, lastname, employeeid FROM people, employees ".
-        "WHERE employees.employeeid = people.peopleid AND employees.df = 0 ORDER BY lastname, firstname", []);
+        "WHERE employees.employeeid = people.peopleid AND employees.df = FALSE ORDER BY lastname, firstname", []);
     include('header.php');
     ?>
     <div style="width: 100%">
@@ -57,37 +57,38 @@ if (!empty($params) && $params[0] == 'restore') {
         </div>
         <br/>
         <form class="jumbotron form-wrapper mb-3">
-            <h3 class="text-center" style="font-weight: 300;color: #333">Current Users</h3>
-            <?php
-            # Displays the active users
-            while ($user = pg_fetch_assoc($res)) {
-                # Get if user is a superuser
-                $eId = $user['employeeid'];
-                $result = $db->query("SELECT superuserID FROM superusers WHERE superuserid = $1", [$eId]);
-                $isSuperUser = pg_fetch_assoc($result);
-                ?>
-                <div class="card mb-2 user-card">
-                    <div class="p-3 card-body d-flex flex-row justify-content-start">
-                        <p class="mb-0 align-self-center"
-                           style="flex: 1"><?= $user['lastname'] . ', ' . $user['firstname'] ?></p>
-                        <div class="text-right align-middle">
-                            <a href="/account-settings/<?= $user['employeeid'] ?>" style="text-decoration: none;">
-                                <button type='button' class="btn outline-cpca btn-sm ml-2">View</button>
-                            </a>
-                            <?php if (($user['employeeid'] != $_SESSION['employeeid']) &&
-                                        (($isSuperUser && hasRole(Role::Superuser)) ||
-                                            (!$isSuperUser && hasRole(Role::Admin)))) { ?>
-                                <a href="/account-settings/delete/<?= $user['employeeid']?>">
-                                    <button type='button' class="btn btn-outline-danger btn-sm ml-2">Delete</button >
-                                </a >
-                            <?php } ?>
+            <?php if (pg_num_rows($res) != 0) { ?>
+                <h3 class="text-center" style="font-weight: 300;color: #333">Current Users</h3>
+                <?php
+                # Displays the active users
+                while ($user = pg_fetch_assoc($res)) {
+                    # Get if user is a superuser
+                    $eId = $user['employeeid'];
+                    $result = $db->query("SELECT superuserID FROM superusers WHERE superuserid = $1", [$eId]);
+                    $isSuperUser = pg_fetch_assoc($result);
+                    ?>
+                    <div class="card mb-2 user-card">
+                        <div class="p-3 card-body d-flex flex-row justify-content-start">
+                            <p class="mb-0 align-self-center"
+                               style="flex: 1"><?= $user['lastname'] . ', ' . $user['firstname'] ?></p>
+                            <div class="text-right align-middle">
+                                <a href="/account-settings/<?= $user['employeeid'] ?>" style="text-decoration: none;">
+                                    <button type='button' class="btn outline-cpca btn-sm ml-2">View</button>
+                                </a>
+                                <?php if (($user['employeeid'] != $_SESSION['employeeid']) &&
+                                    (($isSuperUser && hasRole(Role::Superuser)) ||
+                                        (!$isSuperUser && hasRole(Role::Admin)))) { ?>
+                                    <a href="/account-settings/delete/<?= $user['employeeid'] ?>">
+                                        <button type='button' class="btn btn-outline-danger btn-sm ml-2">Delete</button>
+                                    </a>
+                                <?php } ?>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <?php
-            }
-            # Displays a pretty message if there are no users
-            if (pg_num_rows($res) == 0) { ?>
+                    <?php
+                }
+            } else { ?>
+            <!-- Displays a pretty message if there are no users -->
                 <div class="w-100 d-flex flex-column justify-content-center text-center">
                     <h3 class="display-3 text-secondary" style="font-size: 40px;"><i
                                 class="fa fa-exclamation-circle"></i></h3>

@@ -37,13 +37,13 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
 
     # Archive data
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete'])) {
-        $archiveRes = $db->query("UPDATE employees SET df = 1 WHERE employeeid = $1", [$employeeid]);
+        $archiveRes = $db->query("UPDATE employees SET df = TRUE WHERE employeeid = $1", [$employeeid]);
         $result = $db->query("SELECT facilitatorid FROM facilitators WHERE facilitatorid = $1", [$employeeid]);
         $isFacilitator = pg_fetch_assoc($result);
 
         # Check if the employee is also a facilitator so we can remove them from that table as well
         if ($isFacilitator) {
-            $facilitatorRes = $db->query("UPDATE facilitators SET df = 1 WHERE facilitatorid = $1", [$employeeid]);
+            $facilitatorRes = $db->query("UPDATE facilitators SET df = TRUE WHERE facilitatorid = $1", [$employeeid]);
         }
 
         $success = $archiveRes && (($isFacilitator && $facilitatorRes) || !$isFacilitator);
