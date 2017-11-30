@@ -85,7 +85,7 @@ if(isset($_SESSION['serializedInfo'])) {
             "order by date desc; "
         );
 
-        $fn = $mi = $ln = $dob = $race = $zip = $nc = $isNew = null;
+        $fn = $mi = $ln = $dob = $race = $zip = $nc = $isNew = $sex = null;
         //found past attendance history
         if(pg_num_rows($resultClassPastAttendance)){
             $row = pg_fetch_assoc($resultClassPastAttendance); //most recent row
@@ -97,10 +97,11 @@ if(isset($_SESSION['serializedInfo'])) {
             $zip = $row['zipcode'];
             $nc = $row['numchildren'];
             $isNew = false;
+            $sex = $row['sex'];
         } else{ //we didn't find that information find name and other info
             //grab info from intake packet
             $resultPersonLookup = $db->query(
-                "SELECT pe.firstname, pe.middleinit, pe.lastname, pa.dateofbirth, pa.race " .
+                "SELECT pe.firstname, pe.middleinit, pe.lastname, pa.dateofbirth, pa.race, pa.sex " .
                 "FROM people pe, participants pa " .
                 "WHERE pe.peopleid = pa.participantid " .
                 "AND pe.peopleid = $1;", [$lookupId]);
@@ -111,6 +112,7 @@ if(isset($_SESSION['serializedInfo'])) {
             $dob = $row['dateofbirth'];
             $race = $row['race'];
             $isNew = true;
+            $sex = $row['sex'];
         }
 
         //look for duplicates
@@ -136,7 +138,8 @@ if(isset($_SESSION['serializedInfo'])) {
                 "present"       => true,
                 "isNew"         => $isNew, //isNew field from DB
                 //people who haven't completed the intake forms and just filled out info in the "no intake form" section
-                "firstClass"    => false
+                "firstClass"    => false,
+                "sex"           => $sex
             );
         }
 
@@ -155,6 +158,7 @@ if(isset($_SESSION['serializedInfo'])) {
         $ageInput = $_POST['age-input'];
         $numC = $_POST['num-children-input'];
         $zipInput = $_POST['zip-input'];
+        $sexInput = $_POST['sex-select'];
 
         //ensure there are no duplicates
         $countP = count($pageInformation);
@@ -168,7 +172,8 @@ if(isset($_SESSION['serializedInfo'])) {
                 $pageInformation[$j]['race'] == $race &&
                 $pageInformation[$j]['dob'] == date_subtraction((string) $ageInput . " years") &&
                 $pageInformation[$j]['numChildren'] == $numC &&
-                $pageInformation[$j]['zip'] == $zipInput
+                $pageInformation[$j]['zip'] == $zipInput &&
+                $pageInformation[$j]['sex'] == $sexInput
             )
             {
                 $firstTimeSubmitting = false;
@@ -188,6 +193,7 @@ if(isset($_SESSION['serializedInfo'])) {
                 validateMiddle($mi) &&
                 validateName($ln) &&
                 validateRace($race) &&
+                validateSex($sexInput) &&
                 validateAge($ageInput) &&
                 validateNumChildren($numC) &&
                 validateZip($zipInput)
@@ -207,7 +213,8 @@ if(isset($_SESSION['serializedInfo'])) {
                     "present"       => true,
                     "isNew"         => true, //isNew field from DB
                     //people who haven't completed the intake forms and just filled out info in the "no intake form" section
-                    "firstClass"    => true
+                    "firstClass"    => true,
+                    "sex"           => $sexInput
                 );
 
                 $successAddingPerson = true;
@@ -262,7 +269,8 @@ else {
                 "present"       => false,
                 "isNew"         => false, //isNew field from DB
                 //people who haven't completed the intake forms and just filled out info in the "no intake form" section
-                "firstClass"    => false
+                "firstClass"    => false,
+                "sex"           => $row['sex']
             );
         }
 
@@ -273,6 +281,8 @@ else {
 
 
 $get_races = $db->no_param_query("SELECT unnest(enum_range(NULL::race));");
+
+$get_sexes = $db->no_param_query("SELECT unnest(enum_range(NULL::sex));");
 
 $convert_date = DateTime::createFromFormat('Y-m-d', $selected_date);
 $display_date = $convert_date->format('l, F jS');
@@ -451,9 +461,7 @@ include('header.php');
                                         <input class="form-control" type="text" value="" id="new-person-last" name="new-person-last" placeholder="enter last name...">
                                     </div>
                                 </div>
-                                <!-- race
-                                TODO: dynamically get races
-                                -->
+                                <!-- race -->
                                 <div class="form-group row">
                                     <label for="race-select" class="col-3 col-form-label">Race <span style="color:red; display:inline">*</span></label>
                                     <div class="col-9">
@@ -475,6 +483,30 @@ include('header.php');
                                         </select>
                                     </div>
                                 </div>
+
+                                <!-- Sex -->
+                                <div class="form-group row">
+                                    <label for="sex-select" class="col-3 col-form-label">Sex <span style="color:red; display:inline">*</span></label>
+                                    <div class="col-9">
+                                        <select id="sex-select" name="sex-select" class="form-control">
+                                            <option>Select Sex...</option>
+                                            <?php
+                                            //need to keep track of different races for form validation
+                                            $sex_array = array();
+
+                                            while($row = pg_fetch_assoc($get_sexes)){
+                                                $sexOption = $row['unnest'];
+                                                echo "<option>{$sexOption}</option>";
+                                                $sex_array[] = $sexOption;
+                                            }
+
+                                            //set a session variable so we can validate races after post
+                                            $_SESSION['sexes'] = $sex_array;
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <!-- Age -->
                                 <div class="form-group row">
                                     <label for="age-input" class="col-3 col-form-label">Age <span style="color:red; display:inline">*</span></label>
@@ -626,7 +658,7 @@ include('header.php');
             for(var i = 0; i < tableParent.childElementCount; i++){
                 //grab the contents of the textarea
                 var tableRow = tableParent.children[i];
-                var textArea = tableRow.children[(tableRow.childElementCount - 2)].children[0].children[0].children[0];
+                var textArea = tableRow.children[(tableRow.childElementCount - 2)].children[0].children[0];
 
                 var comment = textArea.value;
                 //not a valid comment
@@ -656,14 +688,15 @@ include('header.php');
             div.setAttribute("role", "alert");
             div.setAttribute("class", "alert alert-warning");
             div.innerHTML = "<strong>Oops! </strong>Error in comment for <strong><em>" + errorFor +  "</em></strong>: Please use only letters, numbers, periods, commas, " +
-                "spaces, and question marks in comments.";
+                "spaces, apostrophe's, exclamation points, quotes, and question marks in comments.";
 
             insertAlertHere.appendChild(div);
         }
 
         function validateComment(comment) {
-            //returns true if matched, validates for a-z A-Z spaces period or comma
-            return (/^[a-zA-Z0-9\s.,?]*$/.test(comment));
+            //returns true if matched, validates for a-z, A-Z,
+            //  spaces, period, comma, question mark, apostrophe, quotes, exclamation point
+            return (/^[a-zA-Z0-9\s.,'?!"]*$/.test(comment));
         }
     </script>
 
@@ -706,7 +739,8 @@ include('header.php');
                             if(sentURL != undefined) {
                                 var sentNameList = $(this).find("span").html();
                                 console.log(sentURL);
-                                var matched = sentURL.match( /\/view-participant\/(\d*)/);
+                                var matched = sentURL.match( /\/ps-view-participant\/(\d*)/);
+                                console.log(matched);
                                 var peopleid = matched[matched.length-1];
                                 var details = $(this).find(".sublist").text();
                                 //add the view to the modal

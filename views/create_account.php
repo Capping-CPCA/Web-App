@@ -30,6 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $mInit = valueOrEmpty($_POST, 'middleInit');
     $lname = valueOrEmpty($_POST, 'lastName');
     $phone = valueOrEmpty($_POST, 'primaryPhone');
+    if (!empty($phone)) {
+        $phone = phoneStrToNum($phone);
+    }
 
     // Create new employee / person
     $peopleRes = $db->query("SELECT PeopleInsert(

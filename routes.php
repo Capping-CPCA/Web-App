@@ -60,9 +60,10 @@ $router->add('/attendance', 'attendance/attendance_dashboard.php', 'Attendance D
 $router->add('/new-class', 'attendance/new_class.php', 'New Attendance Sheet');
 $router->add('/attendance-form', 'attendance/attendance_form.php', 'Attendance Form');
 $router->add('/attendance-form-confirmation', 'attendance/attendance_form_confirmation.php', 'Confirm Attendance');
-$router->add('/historical-class-view', 'attendance/historical_class_view.php', 'Historical Class View');
+$router->add('/historical-class-view', 'attendance/historical_class_view.php', 'Recent Class View');
 $router->add('/historical-class-search', 'attendance/historical_class_lookup.php', 'Search By Day');
-$router->add('/historical-class-search-results', 'attendance/historical_class_lookup_results.php', 'Historical Class Search Results');
+$router->add('/historical-class-search-results', 'attendance/historical_class_search_results.php', 'Historical Class Search Results');
+$router->add('/historical-class-search-view', 'attendance/historical_class_search_view.php', 'Historical Class View');
 $router->add('/attendance-form-confirmed', 'attendance/attendance_form_confirmed.php', 'Attendance Confirmed');
 $router->add('/attendance-edit-participant', 'attendance/edit_participant.php', 'Edit Participant');
 $router->add('/edit-class-info', 'attendance/attendance_edit_class_info.php', 'Change Class Information');

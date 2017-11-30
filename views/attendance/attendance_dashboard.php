@@ -15,7 +15,6 @@
  */
 
 global $db;
-include('header.php');
 
 $peopleid = $_SESSION['employeeid'];
 
@@ -23,9 +22,7 @@ $peopleid = $_SESSION['employeeid'];
 $dashboardClassesQuery =
     "select classes.topicname, fca.date, co.sitename " .
     "from facilitatorclassattendance fca, classoffering co, curriculumclasses, classes " .
-    "where fca.classid = co.classid " .
-    "and fca.curriculumid = co.curriculumid " .
-    "and fca.sitename = co.sitename " .
+    "where fca.sitename = co.sitename " .
     "and fca.date = co.date " .
     "and fca.facilitatorid = {$peopleid} " .
     "and co.classid = curriculumclasses.classid " .
@@ -35,9 +32,16 @@ $dashboardClassesQuery =
 
 $result = $db->no_param_query($dashboardClassesQuery);
 
+include('header.php');
+
 ?>
 
-    <script src="/js/attendance-scripts/historical-class-view.js"></script>
+    <script>
+        /* Attendance Historical Class View */
+        function changeHiddenFormFieldValue(buttonNumber) {
+            document.getElementById("whichButton").value = buttonNumber;
+        }
+    </script>
 
     <div class="container">
         <div class="card">
