@@ -149,7 +149,7 @@ include('header.php');
 
     <!-- Page Content -->
     <div id="page-content-wrapper" style="width:100%">
-		<div class="container-fluid" align="right">
+		<div class="container-fluid controls" align="right">
 			<button type="button" class="btn cpca" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
 		</div>
         <div class="container-fluid">
@@ -173,33 +173,33 @@ include('header.php');
                                     <br>
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="self_pers_firstname">Participant Name:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <input type="text" class="form-control" id="self_pers_firstname" name="self_pers_firstname" placeholder="First name" required>
                                             <div id="fname_error" class="invalid-feedback">Enter first name</div>
                                         </div>
 
                                         <label class="col-form-label col-sm-0 sr-only" for="self_pers_lastname">Last Name:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <input type="text" class="form-control" id="self_pers_lastname" name="self_pers_lastname" placeholder="Last name" required>
                                             <div id="lname_error" class="invalid-feedback">Enter last name</div>
                                         </div>
 
                                         <label class="col-form-label col-sm-0 sr-only" for="self_pers_middlein">MInitial:</label>
-                                        <div class="col-sm-1">
+                                        <div class="col-sm-1 col">
                                             <input type="text" class="form-control" id="self_pers_middlein" name="self_pers_middlein" placeholder="Initial" maxlength="1">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="self_pers_dob">Date of Birth:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <input type="date" class="form-control" id="self_pers_dob" name="self_pers_dob">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="self_pers_race">Race:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <select class="form-control select_sex" name="self_pers_race" id="intake_ethnicity">
                                                 <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                 <?php
@@ -217,7 +217,7 @@ include('header.php');
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="self_pers_sex">Sex:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <select class="form-control select_sex" name="self_pers_sex" id="intake_ethnicity">
                                                 <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                 <?php
@@ -236,20 +236,20 @@ include('header.php');
                                     <h5>Contact Information</h5>
                                     <br>
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="self_pers_address">Street Address:</label>
-                                        <div class="col-sm-3">
+                                        <label class="col-form-label col-sm-2 col-2" for="self_pers_address">Street Address:</label>
+                                        <div class="col-sm-3 col">
                                             <input type="text" class="form-control" id="self_pers_address" name="self_pers_address" placeholder="Street address">
                                         </div>
 
-                                        <label class="col-form-label col-sm-1" for="self_apt_info">Apartment:</label>
-                                        <div class="col-sm-2">
+                                        <label class="col-form-label col-sm-auto col-2" for="self_apt_info">Apartment:</label>
+                                        <div class="col-sm-2 col">
                                             <input type="text" class="form-control" id="self_apt_info" name="self_apt_info" placeholder="Apartment Information">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="self_pers_state">State:</label>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-3 col">
                                             <select class="form-control" id="self_pers_state" name="self_pers_state" >
                                                 <option value="" selected="selected" disabled="disabled">Choose a state</option>
                                                 <?php
@@ -264,22 +264,22 @@ include('header.php');
                                             </select>
                                         </div>
 
-                                        <label class="col-form-label col-sm-1" for="self_pers_city">City:</label>
-                                        <div class="col-sm-2">
+                                        <label class="col-form-label col-sm-1 col-2" for="self_pers_city">City:</label>
+                                        <div class="col-sm-2 col">
                                             <input type="text" class="form-control" id="self_pers_city" name="self_pers_city" placeholder="City" data-error="Enter city.">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="self_pers_zip">ZIP:</label>
-                                        <div class="col-sm-1">
+                                        <div class="col-sm-1 col">
                                             <input type="text" class="form-control mask-zip" id="self_pers_zip" name="self_pers_zip" placeholder="Zip">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="self_pers_phone">Phone Number:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <input type="tel" class="form-control mask-phone feedback-icon" id="self_pers_phone" name="self_pers_phone" placeholder="(999) 999-9999">
                                         </div>
                                     </div>
@@ -301,51 +301,47 @@ include('header.php');
                                     <br>
 
                                     <div class="form-group row">
-                                        <div class="col-sm-6">
-                                            <div class="form-check form-check-inline">
-                                                <label class="form-check-label">
-                                                    Do you have any involvement with CPS/Protective/Foster Care?
-                                                </label>
-                                                &emsp;
-                                                <label class="form-check-label" for="self_involvement_yes">
-                                                    <input class="form-check-input" type="radio" id="self_involvement_yes" name="self_involvement" value="Yes"> Yes
-                                                </label>
-                                                &nbsp;
-                                                <label class="form-check-label" for="self_involvement_no">
-                                                    <input class="form-check-input" type="radio" id="self_involvement_no" name="self_involvement" value="No"> No
-                                                </label>
-                                            </div>
+										<div class="form-check form-check-inline col">
+											<label class="form-check-label">
+												Do you have any involvement with CPS/Protective/Foster Care?
+											</label>
+											&emsp;
+											<label class="form-check-label" for="self_involvement_yes">
+												<input class="form-check-input" type="radio" id="self_involvement_yes" name="self_involvement" value="Yes"> Yes
+											</label>
+											&nbsp;
+											<label class="form-check-label" for="self_involvement_no">
+												<input class="form-check-input" type="radio" id="self_involvement_no" name="self_involvement" value="No"> No
+											</label>
+										</div>
+                                    </div>
+
+                                    <div class="form-group row">
+										<div class="form-check form-check-inline col">
+											<label class="form-check-label">
+												Have you attended PEP parenting classes in the past?
+											</label>
+											&emsp;
+											<label class="form-check-label" for="self_attended_yes">
+												<input class="form-check-input" type="radio" id="self_attended_yes" name="self_attended" value="Yes"> Yes
+											</label>
+											&nbsp;
+											<label class="form-check-label" for="self_attended_no">
+												<input class="form-check-input" type="radio" id="self_attended_no" name="self_attended" value="No"> No
+											</label>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <div class="col-sm-6">
-                                            <div class="form-check form-check-inline">
-                                                <label class="form-check-label">
-                                                    Have you attended PEP parenting classes in the past?
-                                                </label>
-                                                &emsp;
-                                                <label class="form-check-label" for="self_attended_yes">
-                                                    <input class="form-check-input" type="radio" id="self_attended_yes" name="self_attended" value="Yes"> Yes
-                                                </label>
-                                                &nbsp;
-                                                <label class="form-check-label" for="self_attended_no">
-                                                    <input class="form-check-input" type="radio" id="self_attended_no" name="self_attended" value="No"> No
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="self_ref_source">Referral Source:</label>
-                                        <div class="col-sm-2">
+                                        <label class="col-form-label col-sm-2 col-3" for="self_ref_source">Referral Source:</label>
+                                        <div class="col-sm-2 col">
                                             <input type="text" class="form-control" id="self_ref_source" name="self_ref_source" placeholder="Referral Source">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="reason">Reason for attendance:</label>
-                                        <div class="col-sm-3">
+                                        <label class="col-form-label col-sm-2 col-3" for="reason">Reason for attendance:</label>
+                                        <div class="col-sm-3 col">
                                             <textarea style="resize: none;" class="form-control" rows=4 id="reason" name="reason" placeholder="Reason for attending classes"></textarea>
                                         </div>
                                     </div>
@@ -369,38 +365,38 @@ include('header.php');
 
                                 <div class="form-group row">
                                     <label class="col-form-label col-sm-2" for="self_office_firstCall">Date of First Call:</label>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-2 col">
                                         <input type="date" class="form-control" id="self_office_firstCall" name="self_office_firstCall">
                                     </div>
 
                                     <label class="col-form-label col-sm-2" for="self_office_returnedCall">Returned Call:</label>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-2 col">
                                         <input type="date" class="form-control" id="self_office_returnedCall" name="self_office_returnedCall">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label class="col-form-label col-sm-2" for="self_tentative_start">Tentative Start Date:</label>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-2 col">
                                         <input type="date" class="form-control" id="self_tentative_start" name="self_tentative_start">
                                     </div>
 
                                     <label class="col-form-label col-sm-2" for="self_letter_mailed">Letter Mailed:</label>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-2 col">
                                         <input type="date" class="form-control" id="self_letter_mailed" name="self_letter_mailed">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-2" for="self_assigned_to">Class Assigned to:</label>
-                                    <div class="col-sm-2">
+                                    <label class="col-form-label col-sm-2 col-3" for="self_assigned_to">Class Assigned to:</label>
+                                    <div class="col-sm-2 col">
                                         <input type="text" class="form-control" id="self_assigned_to" name="self_assigned_to" placeholder="Program">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-2" for="notes">Notes:</label>
-                                    <div class="col-sm-3">
+                                    <label class="col-form-label col-sm-2 col-auto" for="notes">Notes:</label>
+                                    <div class="col-sm-3 col">
                                         <textarea style="resize: none;" class="form-control" rows=5 id="notes" name="notes" placeholder="Enter any notes here"></textarea>
                                     </div>
                                 </div>
@@ -412,7 +408,7 @@ include('header.php');
             </div>  <!-- panel group end -->
             <br>
 
-            <button id="btnRegister" onclick="submitAllSelf()" class="cpca btn" style="margin-bottom: 20px;">Submit</button>
+            <button id="btnRegister" onclick="submitAllSelf()" class="cpca btn controls" style="margin-bottom: 20px;">Submit</button>
 
         </div>  <!-- /#container -->
     </div>  <!-- /#container-fluid class -->
@@ -421,6 +417,9 @@ include('header.php');
   .collapse {
     display: block !important;
     height: auto !important
+  }
+  .controls {
+	  display: none !important;
   }
   .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
     float: left;

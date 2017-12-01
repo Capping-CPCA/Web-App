@@ -406,12 +406,12 @@ include('header.php');
 
     <!-- Page Content -->
     <div id="page-content-wrapper" style="width:100%">
-		<div class="container-fluid" align="right">
+		<div class="container-fluid controls" align="right">
 			<button type="button" class="btn cpca" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
 		</div>
         <div class="container-fluid">
-		
-		
+
+
 
             <div class="dropdown">
 
@@ -432,36 +432,36 @@ include('header.php');
 
                                     <h5>Personal Information</h5>
                                     <br>
-                                    <div class="form-group row ">
+                                    <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="pers_firstname">Participant Name:</label>
 
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <input type="text" class="form-control" tabindex="0" id="pers_firstname" name="pers_firstname" placeholder="First name" required>
                                             <div class="invalid-feedback">Enter first name</div>
                                         </div>
 
                                         <label class="col-form-label col-sm-0 sr-only" for="pers_lastname">Last Name:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <input type="text" class="form-control" id="pers_lastname" name="pers_lastname" placeholder="Last name" required>
                                             <div class="invalid-feedback">Enter last name</div>
                                         </div>
 
                                         <label class="col-form-label col-sm-0 sr-only" for="pers_middlein">MInitial:</label>
-                                        <div class="col-sm-1">
+                                        <div class="col-sm-1 col">
                                             <input type="text" class="form-control" maxlength="1" id="pers_middlein" name="pers_middlein" placeholder="Initial">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="pers_dob">Date of Birth:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <input type="date" class="form-control" name="pers_dob" id="pers_dob" placeholder="Enter DOB">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Race:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <select class="form-control " name="pers_race" id="pers_race">
                                                 <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                 <?php
@@ -479,7 +479,7 @@ include('header.php');
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Sex:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <select class="form-control" name="pers_sex" id="pers_sex">
                                                 <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                 <?php
@@ -498,19 +498,19 @@ include('header.php');
                                     <h5>Contact Information</h5>
                                     <br>
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="pers_address">Street Address:</label>
-                                        <div class="col-sm-3">
+                                        <label class="col-form-label col-sm-2 col-2" for="pers_address">Street Address:</label>
+                                        <div class="col-sm-3 col">
                                             <input type="text" class="form-control" name="pers_address" id="pers_address" placeholder="Street address">
                                         </div>
-                                        <label class="col-form-label col-sm-1" for="pers_apt_info">Apartment:</label>
-                                        <div class="col-sm-2">
+                                        <label class="col-form-label col-sm-auto col-2" for="pers_apt_info">Apartment:</label>
+                                        <div class="col-sm-2 col">
                                             <input type="text" class="form-control" name="pers_apt_info" id="pers_apt_info" placeholder="Apartment Information">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="pers_state">State:</label>
-                                        <div class="col-sm-3">
+                                        <label class="col-form-label col-sm-2 col-2" for="pers_state">State:</label>
+                                        <div class="col-sm-3 col">
                                             <select class="form-control" name="pers_state" id="pers_state" >
                                                 <option value="" selected="selected" disabled="disabled">Choose a state</option>
                                                 <?php
@@ -524,36 +524,36 @@ include('header.php');
                                                 ?>
                                             </select>
                                         </div>
-                                        <label class="col-form-label col-sm-1" for="pers_city">City:</label>
-                                        <div class="col-sm-2">
+                                        <label class="col-form-label col-sm-1 col-2" for="pers_city">City:</label>
+                                        <div class="col-sm-2 col">
                                             <input type="text" class="form-control" name="pers_city" id="pers_city" placeholder="City" data-error="Enter city.">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="pers_zip">ZIP:</label>
-                                        <div class="col-sm-1">
+                                        <label class="col-form-label col-sm-2 col-2" for="pers_zip">ZIP:</label>
+                                        <div class="col-sm-1 col">
                                             <input type="text" class="form-control mask-zip" name="pers_zip" id="pers_zip" placeholder="Zip">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="pers_primphone">Primary Phone:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <input type="tel" class="form-control mask-phone feedback-icon" name="pers_primphone" id="pers_primphone" placeholder="(999) 999-9999">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="pers_secphone">Secondary Phone:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <input type="tel" class="form-control mask-phone" name="pers_secphone" id="pers_secphone" placeholder="(999) 999-9999">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="comment">Reason for Referral:</label>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-3 col">
                                             <textarea style="resize: none;" class="form-control" rows=4 name="pers_reason" id="pers_reason" placeholder="Reason for referral"></textarea>
                                         </div>
                                     </div>
@@ -575,7 +575,7 @@ include('header.php');
                                     <br>
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="ref_party">Referring Party:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <select class="form-control" name="ref_party" id="ref_party" placeholder="Enter party">
                                                 <option value="" selected="selected" disabled="disabled">Choose a party</option>
                                                 <?php
@@ -591,7 +591,7 @@ include('header.php');
                                         </div>
 
                                         <label class="col-form-label col-sm-2" for="ref_date">Date of Referral:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <input type="date" class="form-control" name="ref_date" id="ref_date">
                                         </div>
                                     </div>
@@ -600,26 +600,26 @@ include('header.php');
                                     <br>
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="ref_firstname">Referring Party Name:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <input type="text" class="form-control" name="ref_firstname" id="ref_firstname" placeholder="First Name">
                                         </div>
 
                                         <label class="col-form-label col-sm-0 sr-only" for="ref_lastname">Last Name:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <input type="text" class="form-control" name="ref_lastname" id="ref_lastname" placeholder="Last Name">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="ref_phone">Phone Number:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <input type="text" class="form-control mask-phone" name="ref_phone" id="ref_phone" placeholder="(999) 999-9999">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="ref_email">Email:</label>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-2 col">
                                             <input type="email" class="form-control" name="ref_email" id="ref_email" placeholder="cpca@cpca.com">
                                         </div>
                                     </div>
@@ -663,29 +663,29 @@ include('header.php');
 
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label label_fn">Member Name:</label>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-2 col">
                                                 <input type="text" class="form-control input_fn" name="family_first_name_1" maxlength="255" placeholder="First name">
                                             </div>
                                             <label class="col-sm-0 col-form-label sr-only label_ln">Last Name:</label>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-2 col">
                                                 <input type="text" class="form-control input_ln" name="family_last_name_1" maxlength="255" placeholder="Last name">
                                             </div>
                                             <label class="col-sm-0 col-form-label sr-only label_mi">Middle Initial:</label>
-                                            <div class="col-sm-1">
+                                            <div class="col-sm-1 col">
                                                 <input type="text" class="form-control input_mi" name="family_mi_1" maxlength="1" placeholder="Initial">
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label label_dob" for="family_dob_1">Date of Birth:</label>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-2 col">
                                                 <input type="date" class="form-control input_dob" name="family_dob_1" id="family_dob_1" maxlength="255">
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label label_sex">Sex:</label>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-2 col">
                                                 <select class="form-control select_sex" name="family_sex_1" id="family_sex_1">
                                                     <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                     <?php
@@ -703,7 +703,7 @@ include('header.php');
 
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label label_race">Race:</label>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-2 col">
                                                 <select class="form-control select_race" name="family_race_1" id="family_race_1">
                                                     <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                     <?php
@@ -720,8 +720,8 @@ include('header.php');
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label label_relationship">Relationship:</label>
-                                            <div class="col-sm-2">
+                                            <label class="col-sm-2 col-form-label label_relationship col-3">Relationship:</label>
+                                            <div class="col-sm-2 col">
                                                 <select class="form-control select_relationship" name="family_relationship_1" id="family_relationship_1">
                                                     <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                     <?php
@@ -738,7 +738,7 @@ include('header.php');
                                         </div>
                                     </div>
 
-                                    <div class="form-group row">
+                                    <div class="form-group row controls">
                                         <label class="col-sm-2 col-form-label">Add Member:</label>
                                         <div class="col-sm-1">
                                             <button class="btn btn-default" type="button" id="btnAddMember"><span class="fa fa-plus"></span></button> <!-- every other dropdown on this form uses down arrows -->
@@ -746,7 +746,7 @@ include('header.php');
 
                                     </div>
 
-                                    <div class="form-group row">
+                                    <div class="form-group row controls">
                                         <label class="col-sm-2 col-form-label">Remove Member:</label>
                                         <div class="col-sm-1">
                                             <button class="btn btn-default" type="button" id="btnDelMember" disabled="disabled"><span class="fa fa-minus"></span></button> <!-- every other dropdown on this form uses down arrows -->
@@ -774,64 +774,75 @@ include('header.php');
 									<div class="row">
 										<div style="padding-left:100px;">
 											<div class="form-check">
-												<label class="form-check-label col-sm-3">
-													<input class="form-check-input" id="chkSpecialEd" name="chkSpecialEd" type="checkbox" value="">
-													Special Education/IEP/Resource Services
-												</label>
-												<label class="form-check-label col-sm-4">
-													<input class="form-check-input" id="chkCPS" name="chkCPS" type="checkbox" value="">
-													Involved with CPS/Foster Care/Preventive Services
-												</label>
-
+												<div class="row">
+													<label class="form-check-label  col">
+														<input class="form-check-input" id="chkSpecialEd" name="chkSpecialEd" type="checkbox" value="">
+														Special Education/IEP/Resource Services
+													</label>
+													<label class="form-check-label col">
+														<input class="form-check-input" id="chkCPS" name="chkCPS" type="checkbox" value="">
+														Involved with CPS/Foster Care/Preventive Services
+													</label>
+												</div>
 											</div>
 
 											<div class="form-check">
-												<label class="form-check-label col-sm-3">
-													<input class="form-check-input" id="chkSubAbuse" name="chkSubAbuse" type="checkbox" value="">
-													Substance Use/Abuse History
-												</label>
-												<label class="form-check-label col-sm-3">
-													<input class="form-check-input" id="chkMental" name="chkMental" type="checkbox" value="">
-													Mental Health/Dual Diagnosis
-												</label>
+												<div class="row">
+													<label class="form-check-label col">
+														<input class="form-check-input" id="chkSubAbuse" name="chkSubAbuse" type="checkbox" value="">
+														Substance Use/Abuse History
+													</label>
+													<label class="form-check-label col">
+														<input class="form-check-input" id="chkMental" name="chkMental" type="checkbox" value="">
+														Mental Health/Dual Diagnosis
+													</label>
+												</div>
 											</div>
 
 											<div class="form-check">
-												<label class="form-check-label col-sm-3">
-													<input class="form-check-input" id="chkPreg" name="chkPreg" type="checkbox" value="">
-													Pregnant
-												</label>
-												<label class="form-check-label col-sm-3">
-													<input class="form-check-input" id="chkIQ" name="chkIQ" type="checkbox" value="">
-													IQ Documentation
-												</label>
+												<div class="row">
+													<label class="form-check-label col">
+														<input class="form-check-input" id="chkPreg" name="chkPreg" type="checkbox" value="">
+														Pregnant
+													</label>
+													<label class="form-check-label col">
+														<input class="form-check-input" id="chkIQ" name="chkIQ" type="checkbox" value="">
+														IQ Documentation
+													</label>
+												</div>
 											</div>
 
 											<div class="form-check">
-												<label class="form-check-label col-sm-3">
-													<input class="form-check-input" id="chkViolence" name="chkViolence" type="checkbox" value="">
-													Domestic Violence History
-												</label>
-												<label class="form-check-label col-sm-4">
-													<input class="form-check-input" id="chkReside" name="chkReside" type="checkbox" value="">
-													Child/Children do not reside with Referred Individual
-												</label>
+												<div class="row">
+													<label class="form-check-label col">
+														<input class="form-check-input" id="chkViolence" name="chkViolence" type="checkbox" value="">
+														Domestic Violence History
+													</label>
+													<label class="form-check-label col">
+														<input class="form-check-input" id="chkReside" name="chkReside" type="checkbox" value="">
+														Child/Children do not reside with Referred Individual
+													</label>
+												</div>
 											</div>
 
 											<div class="form-check">
-												<label class="form-check-label col-sm-4">
-													<input class="form-check-input" id="chkSigned" name="chkSigned" type="checkbox" value="">
-													Signed consent form for release of information
-												</label>
+												<div class="row">
+													<label class="form-check-label col">
+														<input class="form-check-input" id="chkSigned" name="chkSigned" type="checkbox" value="">
+														Signed consent form for release of information
+													</label>
+												</div>
 											</div>
 										</div>
 										<br>
 									</div>
-                                    <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="comments">Additional Information:</label>
-                                        <div class="col-sm-3">
-                                            <textarea style="resize: none;" class="form-control" rows=5 name="additional_info" id="additional_info" placeholder="Enter any additional information"></textarea>
-                                        </div>
+                                    <div class="form-group">
+										<div class="row">
+											<label class="col-form-label col-sm-2 col-3" for="comments">Additional Information:</label>
+											<div class="col-sm-3 col">
+												<textarea style="resize: none;" class="form-control" rows=5 name="additional_info" id="additional_info" placeholder="Enter any additional information"></textarea>
+											</div>
+										</div>
                                     </div>
 
                                     <div id="partyEntry_1" class="clonedParty">
@@ -839,7 +850,7 @@ include('header.php');
                                         <br>
                                         <div class="form-group row">
                                             <label class="col-form-label col-sm-2 label_type" for="ag_name">Party Type:</label>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-2 col">
                                                 <select class="form-control select_type" name="party_type_1" id="party_type_1" placeholder="Enter party">
                                                     <option value="" selected="selected" disabled="disabled">Choose a party</option>
                                                     <?php
@@ -877,40 +888,40 @@ include('header.php');
 
                                         <div class="form-group row">
                                             <label class="col-form-label col-sm-2 label_fn" for="party_firstname_1">Contact Name:</label>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-2 col">
                                                 <input type="text" class="form-control input_fn" name="party_firstname_1" id="party_firstname_1" placeholder="First Name">
                                             </div>
 
                                             <label class="col-form-label col-sm-0 sr-only label_ln" for="party_lastname_1">Last Name:</label>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-2 col">
                                                 <input type="text" class="form-control input_ln" name="party_lastname_1" id="party_lastname_1" placeholder="Last Name">
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <label class="col-form-label col-sm-2 label_phone" for="party_phone_1">Contact Phone:</label>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-2 col">
                                                 <input type="text" class="form-control mask-phone input_phone" name="party_phone_1" id="party_phone_1" placeholder="(999) 999-9999">
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <label class="col-form-label col-sm-2 label_email" for="party_email_1">Contact Email:</label>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-2 col">
                                                 <input type="email" class="form-control input_email" name="party_email_1" id="party_email_1" placeholder="cpca@cpca.com">
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="form-group row">
+                                    <div class="form-group row controls">
                                         <label class="col-sm-2 col-form-label">Add Another Party:</label>
-                                        <div class="col-sm-1">
+                                        <div class="col-sm-1 col">
                                             <button class="btn btn-default" type="button" id="btnAddParty"><span class="fa fa-plus"></span></button>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    <div class="form-group row controls">
                                         <label class="col-sm-2 col-form-label">Remove Party:</label>
-                                        <div class="col-sm-1">
+                                        <div class="col-sm-1 col">
                                             <button class="btn btn-default" type="button" id="btnDelParty"><span class="fa fa-minus"></span></button>
                                         </div>
                                     </div>
@@ -933,34 +944,34 @@ include('header.php');
                                 <h5>For Office Use Only</h5>
                                 <br>
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-2" for="office_contact_date">Date of First Contact:</label>
-                                    <div class="col-sm-2">
+                                    <label class="col-form-label col-sm-2 col-3" for="office_contact_date">Date of First Contact:</label>
+                                    <div class="col-sm-2 col">
                                         <input type="date" class="form-control" name="office_contact_date" id="office_contact_date">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-2" for="office_means">Means of Contact:</label>
-                                    <div class="col-sm-2">
+                                    <label class="col-form-label col-sm-2 col-3" for="office_means">Means of Contact:</label>
+                                    <div class="col-sm-2 col">
                                         <input type="text" class="form-control" name="office_means" id="office_means" placeholder="Email, Phone, etc...">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-2" for="office_initial_date">Initial Meeting Info:</label>
-                                    <div class="col-sm-2">
+                                    <label class="col-form-label col-sm-2 col-3" for="office_initial_date">Initial Meeting Info:</label>
+                                    <div class="col-sm-2 col">
                                         <input type="date" class="form-control" name="office_initial_date" id="office_initial_date">
                                     </div>
 
                                     <label class="col-form-label col-sm-0 sr-only" for="office_location">Location:</label>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-2 col">
                                         <input type="text" class="form-control" name="office_location" id="office_location" placeholder="Location">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-2" for="comments">Comments:</label>
-                                    <div class="col-sm-3">
+                                    <label class="col-form-label col-sm-2 col-3" for="comments">Comments:</label>
+                                    <div class="col-sm-3 col">
                                         <textarea style="resize: none;" class="form-control" rows=5 name="comments" id="comments" placeholder="Enter any comments here"></textarea>
                                     </div>
                                 </div>
@@ -972,7 +983,7 @@ include('header.php');
             </div>  <!-- panel group end -->
             <br>
 
-            <button id="btnRegister" onclick="submitAll()" class="cpca btn" style="margin-bottom: 20px;">Submit</button>
+            <button id="btnRegister" onclick="submitAll()" class="cpca btn controls" style="margin-bottom: 20px;">Submit</button>
 
         </div>  <!-- /#container -->
     </div>  <!-- /#container-fluid class -->
@@ -981,6 +992,9 @@ include('header.php');
   .collapse {
     display: block !important;
     height: auto !important
+  }
+  .controls {
+	  display: none !important;
   }
   .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
     float: left;
