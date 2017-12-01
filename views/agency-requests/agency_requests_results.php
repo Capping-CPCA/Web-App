@@ -11,7 +11,7 @@
  *
  * @author Vallie Joseph
  * @copyright 2017 Marist College
- * @version 0.7.1
+ * @version 1.0
  * @since 0.1
  */
 
@@ -27,7 +27,19 @@ $result = $db->query("SELECT participants.participantid, participants.dateofbirt
 							OR LOWER(CONCAT(people.lastname, ' ' , people.firstname, ' ',people.middleinit )) LIKE $1
 							OR LOWER(CONCAT(people.firstname, ' ' , people.lastname)) LIKE $1
 							OR LOWER(CONCAT(people.lastname, ' ' , people.firstname)) LIKE  $1 ",  ["%$searchquery%"]);
-							
+/**
+ * Checks to see if the participants' details exist in the query
+ * @params $rowValue the string returned from the db query
+ * return either the result of the query or a 'no records found' string
+ */
+function checkEmpty($rowValue){
+	if($rowValue == ""){
+		return  "<i> No Records Found</i>";
+	}else{
+		return $rowValue;
+	}
+	
+}							
 include('header.php');
 ?>
 <div class="w-100 d-flex flex-column">
@@ -61,8 +73,7 @@ include('header.php');
 				</a>
 
 				<ul class="list-group sublist">
-					<li class="list-group-item ">
-						<?php= "<b>DOB: </b>".$row['dateofbirth']." | "."<b>Race: </b> ".$row['race'] ." | "."<b>Sex: </b> ".$row['sex']?>
+						<?= "<b>DOB: </b>".checkEmpty($row['dateofbirth'])." | "." <b>Program Start Date: </b> ".checkEmpty($row['tentativestartdate'])." | "."<b>Sex: </b> ".checkEmpty($row['sex']); ?>
 					</li>
 				</ul>
 			</li>
