@@ -17,6 +17,7 @@
 
 global $db;
 require ('attendance_utilities.php');
+include ('shared_queries.php');
 
 $success = true;
 $errorMsg = "";
@@ -39,31 +40,60 @@ $selected_facilitator = $attendanceInfo['facilitator'];
 $selected_topic_id = $attendanceInfo['topic-id'];
 $selected_curr_num = $attendanceInfo['curr-id'];
 
+//PHP Input Validation - final check for class information input in the DB
 {
-    /*
-    //TODO: PHP input validation
-    $result_curriculum = $db->no_param_query("SELECT c.curriculumname FROM curricula c ORDER BY c.curriculumname ASC;");
+    //run queries from new class page in case data changes
+    $result_curriculum = $db->no_param_query(SHARED_QUERY_CURRICULUM);
+    $result_classes = $db->no_param_query(SHARED_QUERY_CLASSES);
+    $result_sites = $db->no_param_query(SHARED_QUERY_SITES);
+    $result_languages = $db->no_param_query(SHARED_QUERY_LANGUAGES);
+    $result_facilitators = $db->no_param_query(SHARED_QUERY_FACILITATORS);
 
-    $result_classes = $db->no_param_query("SELECT cc.topicname from curriculumclasses cc ORDER BY cc.curriculumid;");
 
-    $result_sites = $db->no_param_query("select s.sitename from sites s;");
-
-    $result_languages = $db->no_param_query("select lang from languages;");
-
-    $result_facilitators = $db->no_param_query("select peop.firstname, peop.middleinit, peop.lastname, peop.peopleid " .
-        "from people peop, employees emp, facilitators f " .
-        "where peop.peopleid = emp.employeeid " .
-        "and emp.employeeid = f.facilitatorid " .
-        "order by peop.lastname asc;"
-    );
-
-    */
+    //check that all class info validations are true
+    if(!(
+            validateCurriculum($result_curriculum, $selected_curr_num) &&
+            validateClass($result_classes, $selected_topic_id) &&
+            validateSite($result_sites, $selected_site) &&
+            validateLanguage($result_languages, $selected_lang) &&
+            validateFacilitator($result_facilitators, $selected_facilitator)
+    )){
+        //if failed validation, die (either DB changed and invalidated class or malicious intent involved)
+        die();
+    }
 
 }
 
-
-
+$escaped_site_name = escape_apostrophe($selected_site);
 $timestamp = makeTimestamp($selected_date, $selected_time);
+
+//validate no duplicate class offering
+{
+    $duplicateClassOfferingQuery = "SELECT * FROM ClassOffering " .
+        "WHERE date = '{$timestamp}' and siteName = '{$escaped_site_name}'; ";
+
+    $resultsClassOfferingMatch = $db->no_param_query($duplicateClassOfferingQuery);
+
+    //matched a class so we have a duplicate class
+    if(pg_num_rows($resultsClassOfferingMatch) > 0){
+        include('header.php');
+
+        echo "<div class=\"container\">";
+            echo "<div class=\"card\">";
+                echo "<div class=\"card-block p-2\">";
+                    echo "<h4>Error: Duplicate Class Offering.</h4>";
+
+                    $errorTime = formatSQLDateShort($timestamp);
+                    echo "<p>There is already a class recorded at the site {$selected_site} at the time {$errorTime}. Please Edit The Class Information.</p>";
+                    echo "<a href='/edit-class-info'><button type=\"button\" class=\"btn btn-outline-secondary\">Edit Class Information</button></a>";
+                echo "</div>";
+            echo "</div>";
+        echo "</div>";
+        include ('footer.php');
+        die();
+    }
+}
+
 
 $serializedInfo = $_SESSION['serializedInfo'];
 $attendanceInfo = deserializeParticipantMatrix($serializedInfo);
@@ -74,12 +104,29 @@ for($i = 0; $i < count($attendanceInfo); $i++) {
         //run function to insert them into the system
 
         //peopleInsert
+
+//        $fname = validateName($attendanceInfo[$i]['fn']);
+//        $lname = validateName($attendanceInfo[$i]['ln']);
+//        $minit = validateMiddle($attendanceInfo[$i]['mi']);
+
+        $fname = $attendanceInfo[$i]['fn'];
+        $lname = $attendanceInfo[$i]['ln'];
+        $minit = $attendanceInfo[$i]['mi'];
+
+        //escape apostrophes and trim
+        $fname = sanitizeString($db->conn, $fname);
+        $lname = sanitizeString($db->conn, $lname);
+        $minit = sanitizeString($db->conn, $minit);
+
         //TODO: for next release implement Vallie's custom participant search
-        $peopleInsertQuery = "SELECT peopleinsert( " .
-            "fname := \"{$attendanceInfo[$i]['fn']}\"::text, " .
-            "lname := \"{$attendanceInfo[$i]['ln']}\"::text, " .
-            "minit := \"{$attendanceInfo[$i]['mi']}\"::varchar " .
-            ");";
+        $peopleInsertQuery =
+            "SELECT peopleinsert( " .
+            "fname := '{$fname}'::text, " .
+            "lname := '{$lname}'::text ";
+            if(!empty($minit)){
+                $peopleInsertQuery .= ", minit := '{$minit}'::varchar ";
+            }
+            $peopleInsertQuery .= ");";
 
         $resultInsert = $db->no_param_query($peopleInsertQuery);
 
@@ -95,7 +142,7 @@ for($i = 0; $i < count($attendanceInfo); $i++) {
             "outOfHouseParticipantId := {$personId}::int, " .
             "participantAge   := {$age}::int, " .
             "participantRace   := '{$attendanceInfo[$i]['race']}'::race, " .
-            //TODO: change default based on requirements
+            "participantSex    := '{$attendanceInfo[$i]['sex']}'::sex, " .
             "eID := 1::int " .
             "); ";
 
@@ -111,12 +158,12 @@ for($i = 0; $i < count($attendanceInfo); $i++) {
 
 //create one classOffering entry
 $classOfferingQuery =
-    "INSERT INTO classoffering(classid, curriculumid, date, sitename, lang) " .
+    "INSERT INTO classoffering(ClassID, CurriculumID, date, siteName, lang) " .
     "VALUES ( " .
     "{$selected_topic_id}, " .
     "{$selected_curr_num}, " .
     "'{$timestamp}', " . //declared above
-    "'{$selected_site}', " .
+    "'{$escaped_site_name}', " .
     "'{$selected_lang}'" .
     ");";
 
@@ -131,19 +178,15 @@ if ($res && $state != 0) {
 //create one facilitatorClassAttendance entry
 $facilitatorClassAttendanceQuery =
     "INSERT INTO facilitatorclassattendance( " .
-    "classid, ".
-    "curriculumid, ".
     "date, " .
-    "facilitatorId, " .
+    "facilitatorID, " .
     "siteName " .
     ") " .
 
     "VALUES (" .
-    "{$selected_topic_id}, " .
-    "{$selected_curr_num}, " .
     "'{$timestamp}', " .
     "{$selected_facilitator}, " .
-    "'{$selected_site}' " .
+    "'{$escaped_site_name}' " .
     ");";
 
 $res = $db -> no_param_query($facilitatorClassAttendanceQuery);
@@ -170,12 +213,13 @@ for($i = 0; $i < count($attendanceInfo); $i++) {
             $zipCodeValue = "12601";
         }
 
+        //sanitize string for DB input
+        $escaped_comments = sanitizeString($db->conn, $attendanceInfo[$i]['comments']);
+
         $insertClassAttendanceQuery =
             "INSERT INTO participantclassattendance( " .
-            "classid, " .
-            "curriculumid, " .
             "date, ".
-            "participantId, " .
+            "participantID, " .
             "siteName, ".
             "comments, ".
             "numChildren, ".
@@ -183,12 +227,10 @@ for($i = 0; $i < count($attendanceInfo); $i++) {
             "zipCode " .
             ") " .
             "VALUES(" .
-            "{$selected_topic_id}, ".
-            "{$selected_curr_num}, ".
             "'{$timestamp}', ".
             "{$attendanceInfo[$i]['pid']}, " .
-            "'{$selected_site}', " .
-            "'{$attendanceInfo[$i]['comments']}', " .
+            "'{$escaped_site_name}', " .
+            "'{$escaped_comments}', " .
             " {$numChildrenValue}, " .
             "'{$tfString}',  ".
             "{$zipCodeValue} " .
@@ -228,13 +270,8 @@ include('header.php');
                 }
 
                 //unset previous class session information
-                if(isset($_SESSION['serializedInfo'])) {
-                    unset($_SESSION['serializedInfo']);
-                }
-
-                if(isset($_SESSION['attendance-info'])) {
-                    unset($_SESSION['attendance-info']);
-                }
+                unset($_SESSION['serializedInfo']);
+                unset($_SESSION['attendance-info']);
                 ?>
 
 

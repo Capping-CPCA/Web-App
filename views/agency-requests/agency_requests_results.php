@@ -73,7 +73,11 @@ include('header.php');
 				</a>
 
 				<ul class="list-group sublist">
-						<?= "<b>DOB: </b>".checkEmpty($row['dateofbirth'])." | "." <b>Program Start Date: </b> ".checkEmpty($row['tentativestartdate'])." | "."<b>Sex: </b> ".checkEmpty($row['sex']); ?>
+						<?= "<b>DOB: </b>".(isset($row['dateofbirth']) ? checkEmpty($row['dateofbirth']) : '').
+                        " | "." <b>Program Start Date: </b> ".
+                        (isset($row['tentativestartdate']) ? checkEmpty($row['tentativestartdate']) : '').
+                        " | "."<b>Sex: </b> ".
+                        (isset($row['sex']) ? checkEmpty($row['sex']) : ''); ?>
 					</li>
 				</ul>
 			</li>

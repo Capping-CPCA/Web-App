@@ -58,6 +58,9 @@ $selected_person = $pageInformation[$selected_edit_num];
 include('header.php');
 ?>
 
+<!-- Grab the validate functions -->
+<script src="/js/attendance-scripts/attendance-form-add-new-person.js"></script>
+
     <script type="text/javascript">
 
         function setFormAction(pageFormName, action){
@@ -87,16 +90,16 @@ include('header.php');
                 return true;
             } else if(!validNC){
                 //make error box
-                createMessage(false, "Number of children is not valid");
+                createMessageEP(false, "Number of children is not valid");
                 return false;
             } else{ //zip not valid
                 //make error box
-                createMessage(false, "Zip code is not valid");
+                createMessageEP(false, "Zip code is not valid");
                 return false;
             }
         }
 
-        function createMessage(success, errorMessage) {
+        function createMessageEP(success, errorMessage) {
             var div = document.createElement("div");
             div.setAttribute("role", "alert");
 
@@ -113,25 +116,6 @@ include('header.php');
                 insertAlertHere.removeChild(insertAlertHere.lastChild);
             }
             insertAlertHere.appendChild(div);
-        }
-
-        function validateNumChildren(num) {
-            if (num === "")
-                return true;
-
-            var number = parseInt(num);
-            if(isNaN(number)) return false;
-            if(typeof(number) !== "number") return false;
-            //returns true if a valid number of children
-            return((num >= 0) && (num <= 25))
-        }
-
-        function validateZip(zip) {
-            if (zip === "")
-                return true;
-
-            //validate zip code (from stackoverflow)
-            return (/(^\d{5}$)/.test(zip));
         }
     </script>
 

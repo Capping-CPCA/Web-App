@@ -16,23 +16,18 @@
 global $db;
 
 include ('attendance_utilities.php');
+include ('shared_queries.php');
 
 //form options
-$result_curriculum = $db->no_param_query("SELECT c.curriculumid, c.curriculumname FROM curricula c WHERE c.df IS FALSE ORDER BY c.curriculumname ASC;");
+$result_curriculum = $db->no_param_query(SHARED_QUERY_CURRICULUM);
 
-$result_classes = $db->no_param_query("SELECT cc.curriculumid, topicname, cc.classid FROM curriculumclasses cc, classes WHERE classes.classid = cc.classid AND classes.df IS FALSE ORDER BY cc.curriculumid;");
+$result_classes = $db->no_param_query(SHARED_QUERY_CLASSES);
 
-$result_sites = $db->no_param_query("SELECT s.sitename FROM sites s;");
+$result_sites = $db->no_param_query(SHARED_QUERY_SITES);
 
-$result_languages = $db->no_param_query("SELECT * FROM languages;");
+$result_languages = $db->no_param_query(SHARED_QUERY_LANGUAGES);
 
-$result_facilitators = $db->no_param_query("SELECT peop.firstname, peop.middleinit, peop.lastname, peop.peopleid " .
-    "FROM people peop, employees emp, facilitators f " .
-    "WHERE peop.peopleid = emp.employeeid " .
-    "AND emp.employeeid = f.facilitatorid " .
-    "AND f.df IS FALSE " .
-    "ORDER BY peop.lastname ASC;"
-);
+$result_facilitators = $db->no_param_query(SHARED_QUERY_FACILITATORS);
 
 //previous inputs
 $attendanceInfo = $_SESSION['attendance-info'];
@@ -48,9 +43,10 @@ $selected_topic_id = $attendanceInfo['topic-id'];
 
 $selected_curr_id = $attendanceInfo['curr-id'];
 
-updateSessionClassInformation();
-
-
+//only update class info if coming from attendance sheet
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    updateSessionClassInformation();
+}
 
 include('header.php');
 

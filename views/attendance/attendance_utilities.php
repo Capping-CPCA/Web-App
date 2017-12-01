@@ -47,7 +47,7 @@ function calculate_age($raw_sqlDate) {
 
 }
 
-//input: ray sql timestamp
+//input: raw sql timestamp
 //output: nicely formatted date and time
 function formatSQLDate($sqlDate) {
     //for some reason, if a timestamp is H:i:s.000000, fetching the row drops the microseconds.
@@ -60,6 +60,23 @@ function formatSQLDate($sqlDate) {
 
     $convertDate = DateTime::createFromFormat('Y-m-d H:i:s.u', $sqlDateString);
     $formattedDate = $convertDate->format('l, F jS g:i A');
+
+    return $formattedDate;
+}
+
+//input: raw sql timestamp
+//output: nicely formatted date and time
+function formatSQLDateShort($sqlDate) {
+    //for some reason, if a timestamp is H:i:s.000000, fetching the row drops the microseconds.
+    //  this is a workaround
+    $sqlDateString = (string) $sqlDate;
+    if(strpos($sqlDateString, '.') == false) {
+        //period not found, must add
+        $sqlDateString .= ".000000";
+    }
+
+    $convertDate = DateTime::createFromFormat('Y-m-d H:i:s.u', $sqlDateString);
+    $formattedDate = $convertDate->format('m/d/Y g:i A');
 
     return $formattedDate;
 }
@@ -116,12 +133,11 @@ function updateSessionClassInformation(){
     $_SESSION['serializedInfo'] = $updatedInfoSerialize;
 }
 
-
 //================================================================
 //INPUT VALIDATION
 //================================================================
-//validation functions (occur after JS validation so
-// if they're not valid, it's malicious or they aren't running JS
+//validation functions (occurs after JS validation so
+// if they're not valid, it's malicious or they aren't running JS)
 
 
 //input: first or last name
@@ -154,6 +170,17 @@ function validateRace($race) {
     } else{
         $raceArray = $_SESSION['races'];
         return in_array($race, $raceArray);
+    }
+}
+
+//input: validateSex
+//output: true if valid sex
+function validateSex($sex) {
+    if(empty($sex)){
+        return false;
+    } else {
+        $sexArray = $_SESSION['sexes'];
+        return in_array($sex, $sexArray);
     }
 }
 
@@ -191,29 +218,54 @@ function validateZip($zip) {
     }
 }
 
+
+//input: resultSet of all classes from query; class to check
+//output: boolean - valid class
 function validateClass($results, $input){
     while($row = pg_fetch_assoc($results)){
-        if($input == $row['topicname']) return true;
+        if($input == $row['classid']) return true;
     }
     return false;
 }
 
+//input: resultSet of all curricula from query; curriculum to check
+//output: boolean - valid curriculum
 function validateCurriculum($results, $input){
     while($row = pg_fetch_assoc($results)){
-        if($input == $row['topicname']) return true;
+        if($input == $row['curriculumid']) return true;
     }
     return false;
 }
 
+//input: 'Y-m-d' (i.e. '2017-11-30')
+//output: boolean - valid date
 function validateDate($date){
-//TODO: v2 validate class info fields
+    $dateConversion = DateTime::createFromFormat('Y-m-d', $date);
+    if ($dateConversion !== false) {
+        //valid date
+        return true;
+    } else {
+        //invalid date
+        return false;
+    }
 }
 
+//input: 'g:i A' (i.e. '5:00 AM')
+//output: boolean - valid time
 function validateTime($time){
-//TODO: v2 validate class info fields
+    $timeConversion = DateTime::createFromFormat('g:i A', $time);
+    if ($timeConversion !== false) {
+        //valid time
+        return true;
+    } else {
+        //invalid time
+        return false;
+    }
 
 }
 
+//input: resultSet of all sites names from query; site name to check
+//output: boolean - valid site name
 function validateSite($results, $input){
     while($row = pg_fetch_assoc($results)){
         if($input == $row['sitename']) return true;
@@ -221,9 +273,28 @@ function validateSite($results, $input){
     return false;
 }
 
+//input: resultSet of all languages from query; language to check
+//output: boolean - valid language
 function validateLanguage($results, $input){
     while($row = pg_fetch_assoc($results)){
         if($input == $row['lang']) return true;
     }
     return false;
+}
+
+//input: resultSet of all facilitators from query; facilitatorNum to check
+//output: boolean - valid facilitatorNum
+function validateFacilitator($results, $input){
+    while($row = pg_fetch_assoc($results)){
+        if($input == $row['peopleid']) return true;
+    }
+    return false;
+}
+
+//input: string
+//output: SQL safe string
+function sanitizeString($conn, $string){
+    $string = trim($string);
+    $string = pg_escape_string($conn, $string);
+    return $string;
 }

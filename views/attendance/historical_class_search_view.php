@@ -5,7 +5,7 @@
  *
  * view attendance details for a class
  *
- * view class attendance information for any class via day or number on list
+ * view class attendance information for any day, curriculum, and/or class
  *
  * @author Scott Hansen
  * @copyright 2017 Marist College
@@ -17,62 +17,51 @@ global $db;
 
 require("attendance_utilities.php");
 
-include('header.php');
 
 $peopleid = $_SESSION['employeeid'];
 
 $classN = null;
-$whatPageWeCameFrom = null;
 
-//shared information we're grabbing
-$queryClass = "select classes.topicname, fca.date, co.sitename, peop.firstname, peop.middleinit, peop.lastname, cur.curriculumname " .
-    "from facilitatorclassattendance fca, classoffering co, " .
-    "facilitators fac, employees emp, people peop, curriculumclasses cc, curricula cur, classes " .
-    "where fca.sitename = co.sitename " .
-    "and fca.date = co.date " .
-    "and fca.facilitatorid = fac.facilitatorid " .
-    "and fac.facilitatorid = emp.employeeid " .
-    "and emp.employeeid = peop.peopleid " .
-    "and co.curriculumid = cc.curriculumid " .
-    "and co.classid = cc.classid " .
-    "and classes.classid = cc.classid ".
-    "and cc.curriculumid = cur.curriculumid ";
+$queryClass = null;
 
-//additional parameters - check to see where the post came from
-if(isset ($_POST["whichButton"])) { //from attendance dashboard
-    $whatPageWeCameFrom = "dashboard";
-    $classN = $_POST["whichButton"];
-
-    $queryClass .= "and fca.facilitatorid = {$peopleid} " .
-        "order by fca.date desc " .
-        "limit 20; ";
-}
-else if(isset($_POST["whichButtonHistoricalSearch"])){ //form historical search tool
-    $whatPageWeCameFrom = "historicalLookup";
-    $classN = $_POST["whichButtonHistoricalSearch"];
-    $classListDate = $_POST["input-date"];
-
-    $queryClass .= "and to_char(co.date, 'YYYY-MM-DD') = '{$classListDate}';";
-}
-else{ //shouldn't be here
+if(!isset($_SESSION['attendance-search-query'])){
     echo "<h1>Please use 'recent classes' or the 'historical attendance lookup tool' to access attendance history.</h1>";
-    die(); //on the Whirly Dirly
+    die();
 }
+else{
+    $queryClass = $_SESSION['attendance-search-query'];
+    //grab the specific class we clicked
+    $resultClassInfo = $db->no_param_query($queryClass);
 
-//grab the specific class we clicked
-$resultClassInfo = $db->no_param_query($queryClass);
+    //get what button we clicked
+    if(isset($_POST['numResult'])){
+        $classN = $_POST['numResult'];
+        $_SESSION['attendance-numResult'] = $classN;
+    }
+    else if(isset($_SESSION['attendance-numResult'])){
+        $classN = $_SESSION['attendance-numResult'];
+    }
+    else{
+        //shouldn't be here
+        die();
+    }
 
+}
 //loop through to desired result
 for($i = 0; $i < $classN; $i++){
     pg_fetch_assoc($resultClassInfo);
 }
+
 $row = pg_fetch_assoc($resultClassInfo); //actual row we want
+
+//make connection
 
 $class_topic = $row['topicname'];
 $class_curriculum = $row['curriculumname'];
 $site_name = $row['sitename'];
 $class_date = $row['date'];
-$facilitator_name = $row['firstname'] . " " . $row['middleinit'] . " " . $row['lastname'];
+$mi = isset($row['middleinit']) ? $row['middleinit'] : "";
+$facilitator_name = $row['firstname'] . " " . $mi . " " . $row['lastname'];
 $displayDate = formatSQLDate($class_date);
 
 $queryClassInformation = "select * " .
@@ -85,7 +74,7 @@ $queryClassInformation = "select * " .
 $result = $db->no_param_query($queryClassInformation);
 
 
-
+include('header.php');
 
 ?>
 
@@ -143,13 +132,9 @@ $result = $db->no_param_query($queryClassInformation);
 
         <div class="text-center" style="margin-bottom: 20px; margin-top: 15px;">
             <?php
-            //back to previous page depends on whether or not came from historical class lookup or dashboard
-            if($whatPageWeCameFrom == "dashboard"){
-                echo "<a href='/attendance'><button type=\"button\" class=\"btn btn-outline-secondary\">Back To Dashboard</button></a>";
-            } else { //historicalLookup
-                echo "<a href='/historical-class-search' class='mr-2'><button type=\"button\" class=\"btn cpca\">Search New Day</button></a>";
-                echo "<a href='/attendance'><button type=\"button\" class=\"btn btn-outline-secondary\">Back To Dashboard</button></a>";
-            }
+            //historicalLookup
+            echo "<a href='/historical-class-search' class='mr-2'><button type=\"button\" class=\"btn cpca\">New Search</button></a>";
+            echo "<a href='/attendance'><button type=\"button\" class=\"btn btn-outline-secondary\">Back To Dashboard</button></a>";
             ?>
         </div>
 

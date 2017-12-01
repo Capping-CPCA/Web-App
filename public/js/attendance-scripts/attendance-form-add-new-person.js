@@ -12,13 +12,14 @@
  */
 
 function jsValidateTable() {
-    var firstName, middleInitial, lastName, race, age, numChildren, zip;
+    var firstName, middleInitial, lastName, race, sex, age, numChildren, zip;
 
     //grab person's information from fields
     firstName = document.getElementById("new-person-first").value;
     middleInitial = document.getElementById("new-person-middle").value;
     lastName = document.getElementById("new-person-last").value;
     race = document.getElementById("race-select").value;
+    sex = document.getElementById("sex-select").value;
     age = document.getElementById("age-input").value;
     numChildren = document.getElementById("num-children-input").value;
     zip = document.getElementById("zip-input").value;
@@ -28,7 +29,7 @@ function jsValidateTable() {
     var errorMessage = null;
 
     //string (if failed) or bool(true if succeeded)
-    var validateResult = validateFields(firstName, middleInitial, lastName, race, age, numChildren, zip);
+    var validateResult = validateFields(firstName, middleInitial, lastName, race, sex, age, numChildren, zip);
     //failed validation?
     if(validateResult !== true){
         valid = false;
@@ -59,7 +60,7 @@ function createMessage(success, errorMessage) {
     return div;
 }
 
-function validateFields(first, middle, last, race, age, numChildren, zip){
+function validateFields(first, middle, last, race, sex, age, numChildren, zip){
     if(!validateName(first)){
         return "First name may only contain letters. Spaces, numbers, and other characters are not allowed.";
     }
@@ -71,6 +72,9 @@ function validateFields(first, middle, last, race, age, numChildren, zip){
     }
     if(!validateRace(race)){
         return "Please select a race from the drop-down."
+    }
+    if(!validateSex(sex)){
+        return "Please select a sex from the drop-down."
     }
     if(!validateAge(age)){
         return "Please enter a valid age."
@@ -100,6 +104,11 @@ function validateMiddle(middle) {
 function validateRace(race) {
     //returns true if not the default option
     return(race !== "Select Race...");
+}
+
+function validateSex(sex) {
+    //returns true if not the default option
+    return(sex !== "Select Sex...");
 }
 
 function validateAge(age) {
