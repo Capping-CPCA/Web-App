@@ -406,8 +406,12 @@ include('header.php');
 
     <!-- Page Content -->
     <div id="page-content-wrapper" style="width:100%">
-
+		<div class="container-fluid" align="right">
+			<button type="button" class="btn cpca" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+		</div>
         <div class="container-fluid">
+		
+		
 
             <div class="dropdown">
 
@@ -767,61 +771,62 @@ include('header.php');
                                     <h5>Additional Participant Information</h5>
                                     <span>Please check all that apply to the participant:</span>
                                     <br><br>
-                                    <div style="padding-left:100px;">
-                                        <div class="form-check">
-                                            <label class="form-check-label col-sm-3">
-                                                <input class="form-check-input" id="chkSpecialEd" name="chkSpecialEd" type="checkbox" value="">
-                                                Special Education/IEP/Resource Services
-                                            </label>
-                                            <label class="form-check-label col-sm-4">
-                                                <input class="form-check-input" id="chkCPS" name="chkCPS" type="checkbox" value="">
-                                                Involved with CPS/Foster Care/Preventive Services
-                                            </label>
+									<div class="row">
+										<div style="padding-left:100px;">
+											<div class="form-check">
+												<label class="form-check-label col-sm-3">
+													<input class="form-check-input" id="chkSpecialEd" name="chkSpecialEd" type="checkbox" value="">
+													Special Education/IEP/Resource Services
+												</label>
+												<label class="form-check-label col-sm-4">
+													<input class="form-check-input" id="chkCPS" name="chkCPS" type="checkbox" value="">
+													Involved with CPS/Foster Care/Preventive Services
+												</label>
 
-                                        </div>
+											</div>
 
-                                        <div class="form-check">
-                                            <label class="form-check-label col-sm-3">
-                                                <input class="form-check-input" id="chkSubAbuse" name="chkSubAbuse" type="checkbox" value="">
-                                                Substance Use/Abuse History
-                                            </label>
-                                            <label class="form-check-label col-sm-3">
-                                                <input class="form-check-input" id="chkMental" name="chkMental" type="checkbox" value="">
-                                                Mental Health/Dual Diagnosis
-                                            </label>
-                                        </div>
+											<div class="form-check">
+												<label class="form-check-label col-sm-3">
+													<input class="form-check-input" id="chkSubAbuse" name="chkSubAbuse" type="checkbox" value="">
+													Substance Use/Abuse History
+												</label>
+												<label class="form-check-label col-sm-3">
+													<input class="form-check-input" id="chkMental" name="chkMental" type="checkbox" value="">
+													Mental Health/Dual Diagnosis
+												</label>
+											</div>
 
-                                        <div class="form-check">
-                                            <label class="form-check-label col-sm-3">
-                                                <input class="form-check-input" id="chkPreg" name="chkPreg" type="checkbox" value="">
-                                                Pregnant
-                                            </label>
-                                            <label class="form-check-label col-sm-3">
-                                                <input class="form-check-input" id="chkIQ" name="chkIQ" type="checkbox" value="">
-                                                IQ Documentation
-                                            </label>
-                                        </div>
+											<div class="form-check">
+												<label class="form-check-label col-sm-3">
+													<input class="form-check-input" id="chkPreg" name="chkPreg" type="checkbox" value="">
+													Pregnant
+												</label>
+												<label class="form-check-label col-sm-3">
+													<input class="form-check-input" id="chkIQ" name="chkIQ" type="checkbox" value="">
+													IQ Documentation
+												</label>
+											</div>
 
-                                        <div class="form-check">
-                                            <label class="form-check-label col-sm-3">
-                                                <input class="form-check-input" id="chkViolence" name="chkViolence" type="checkbox" value="">
-                                                Domestic Violence History
-                                            </label>
-                                            <label class="form-check-label col-sm-4">
-                                                <input class="form-check-input" id="chkReside" name="chkReside" type="checkbox" value="">
-                                                Child/Children do not reside with Referred Individual
-                                            </label>
-                                        </div>
+											<div class="form-check">
+												<label class="form-check-label col-sm-3">
+													<input class="form-check-input" id="chkViolence" name="chkViolence" type="checkbox" value="">
+													Domestic Violence History
+												</label>
+												<label class="form-check-label col-sm-4">
+													<input class="form-check-input" id="chkReside" name="chkReside" type="checkbox" value="">
+													Child/Children do not reside with Referred Individual
+												</label>
+											</div>
 
-                                        <div class="form-check">
-                                            <label class="form-check-label col-sm-4">
-                                                <input class="form-check-input" id="chkSigned" name="chkSigned" type="checkbox" value="">
-                                                Signed consent form for release of information
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <br>
-
+											<div class="form-check">
+												<label class="form-check-label col-sm-4">
+													<input class="form-check-input" id="chkSigned" name="chkSigned" type="checkbox" value="">
+													Signed consent form for release of information
+												</label>
+											</div>
+										</div>
+										<br>
+									</div>
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="comments">Additional Information:</label>
                                         <div class="col-sm-3">
@@ -971,4 +976,203 @@ include('header.php');
 
         </div>  <!-- /#container -->
     </div>  <!-- /#container-fluid class -->
+<style>
+@media print{
+  .collapse {
+    display: block !important;
+    height: auto !important
+  }
+  .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
+    float: left;
+  }
+  .col-sm-12 {
+    width: 100%;
+  }
+  .col-sm-11 {
+    width: 91.66666667%;
+  }
+  .col-sm-10 {
+    width: 83.33333333%;
+  }
+  .col-sm-9 {
+    width: 75%;
+  }
+  .col-sm-8 {
+    width: 66.66666667%;
+  }
+  .col-sm-7 {
+    width: 58.33333333%;
+  }
+  .col-sm-6 {
+    width: 50%;
+  }
+  .col-sm-5 {
+    width: 41.66666667%;
+  }
+  .col-sm-4 {
+    width: 33.33333333%;
+  }
+  .col-sm-3 {
+    width: 25%;
+  }
+  .col-sm-2 {
+    width: 16.66666667%;
+  }
+  .col-sm-1 {
+    width: 8.33333333%;
+  }
+  .col-sm-pull-12 {
+    right: 100%;
+  }
+  .col-sm-pull-11 {
+    right: 91.66666667%;
+  }
+  .col-sm-pull-10 {
+    right: 83.33333333%;
+  }
+  .col-sm-pull-9 {
+    right: 75%;
+  }
+  .col-sm-pull-8 {
+    right: 66.66666667%;
+  }
+  .col-sm-pull-7 {
+    right: 58.33333333%;
+  }
+  .col-sm-pull-6 {
+    right: 50%;
+  }
+  .col-sm-pull-5 {
+    right: 41.66666667%;
+  }
+  .col-sm-pull-4 {
+    right: 33.33333333%;
+  }
+  .col-sm-pull-3 {
+    right: 25%;
+  }
+  .col-sm-pull-2 {
+    right: 16.66666667%;
+  }
+  .col-sm-pull-1 {
+    right: 8.33333333%;
+  }
+  .col-sm-pull-0 {
+    right: auto;
+  }
+  .col-sm-push-12 {
+    left: 100%;
+  }
+  .col-sm-push-11 {
+    left: 91.66666667%;
+  }
+  .col-sm-push-10 {
+    left: 83.33333333%;
+  }
+  .col-sm-push-9 {
+    left: 75%;
+  }
+  .col-sm-push-8 {
+    left: 66.66666667%;
+  }
+  .col-sm-push-7 {
+    left: 58.33333333%;
+  }
+  .col-sm-push-6 {
+    left: 50%;
+  }
+  .col-sm-push-5 {
+    left: 41.66666667%;
+  }
+  .col-sm-push-4 {
+    left: 33.33333333%;
+  }
+  .col-sm-push-3 {
+    left: 25%;
+  }
+  .col-sm-push-2 {
+    left: 16.66666667%;
+  }
+  .col-sm-push-1 {
+    left: 8.33333333%;
+  }
+  .col-sm-push-0 {
+    left: auto;
+  }
+  .col-sm-offset-12 {
+    margin-left: 100%;
+  }
+  .col-sm-offset-11 {
+    margin-left: 91.66666667%;
+  }
+  .col-sm-offset-10 {
+    margin-left: 83.33333333%;
+  }
+  .col-sm-offset-9 {
+    margin-left: 75%;
+  }
+  .col-sm-offset-8 {
+    margin-left: 66.66666667%;
+  }
+  .col-sm-offset-7 {
+    margin-left: 58.33333333%;
+  }
+  .col-sm-offset-6 {
+    margin-left: 50%;
+  }
+  .col-sm-offset-5 {
+    margin-left: 41.66666667%;
+  }
+  .col-sm-offset-4 {
+    margin-left: 33.33333333%;
+  }
+  .col-sm-offset-3 {
+    margin-left: 25%;
+  }
+  .col-sm-offset-2 {
+    margin-left: 16.66666667%;
+  }
+  .col-sm-offset-1 {
+    margin-left: 8.33333333%;
+  }
+  .col-sm-offset-0 {
+    margin-left: 0%;
+  }
+  .visible-xs {
+    display: none !important;
+  }
+  .hidden-xs {
+    display: block !important;
+  }
+  table.hidden-xs {
+    display: table;
+  }
+  tr.hidden-xs {
+    display: table-row !important;
+  }
+  th.hidden-xs,
+  td.hidden-xs {
+    display: table-cell !important;
+  }
+  .hidden-xs.hidden-print {
+    display: none !important;
+  }
+  .hidden-sm {
+    display: none !important;
+  }
+  .visible-sm {
+    display: block !important;
+  }
+  table.visible-sm {
+    display: table;
+  }
+  tr.visible-sm {
+    display: table-row !important;
+  }
+  th.visible-sm,
+  td.visible-sm {
+    display: table-cell !important;
+  }
+}
+</style>
 <?php include('footer.php'); ?>
