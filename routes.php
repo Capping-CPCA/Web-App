@@ -54,6 +54,9 @@ $router->add('/referral-form', 'forms/referral_form.php', 'Referral Form');
 $router->add('/self-referral-form', 'forms/self_referral_form.php', 'Initial Contact Form- Self-Referral');
 $router->add('/intake-packet', 'forms/intake_packet.php', 'Intake Packet');
 $router->add('/form-success', 'forms/form_success.php', 'Form Submitted');
+$router->add('/form-match', 'forms/form_match.php', 'Form Match');
+$router->add('/form-duplicate', 'forms/form_duplicate_check.php', 'Form Duplicate');
+$router->add('/forms-view', 'forms/forms_view.php', 'Forms');
 
 # Attendance Application
 $router->add('/attendance', 'attendance/attendance_dashboard.php', 'Attendance Dashboard');

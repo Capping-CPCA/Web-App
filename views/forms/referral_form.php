@@ -170,13 +170,8 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
      Participant PeopleInsert and main addAgencyReferral stored procedures
      Primary and Secondary phone inserts into phone table              */
 
-    $pIDResult = $db->query("SELECT PeopleInsert(
-                                       fName := $1::TEXT,
-                                       lName := $2::TEXT,
-                                       mInit := $3::VARCHAR
-                                       );", [$pers_firstname, $pers_lastname, $pers_middlein]);
-    $pIDResult = pg_fetch_result($pIDResult, 0);
-
+        $pIDResult = checkForDuplicates($db,$pers_firstname, $pers_lastname,  $pers_middlein );
+    
     // Run the main stored procedure
     $result = $db->query(
         'SELECT addAgencyReferral(
@@ -434,7 +429,6 @@ include('header.php');
                                     <br>
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="pers_firstname">Participant Name:</label>
-
                                         <div class="col-sm-2 col">
                                             <input type="text" class="form-control" tabindex="0" id="pers_firstname" name="pers_firstname" placeholder="First name" required>
                                             <div class="invalid-feedback">Enter first name</div>
@@ -1013,7 +1007,7 @@ include('header.php');
             </div>  <!-- panel group end -->
             <br>
 
-            <button id="btnRegister" onclick="submitAll()" class="cpca btn controls" style="margin-bottom: 20px;">Submit</button>
+			<?php include('form_duplicate_check.php')?>
 
         </div>  <!-- /#container -->
     </div>  <!-- /#container-fluid class -->

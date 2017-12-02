@@ -233,3 +233,18 @@ function toString($object){
 function phoneStrToNum($phoneNum) {
     return str_replace(['(',')',' ','-'], '', $phoneNum);
 }
+/**
+ * Checks to see if there are any duplicate PID's in the db, then returns a pid if already existing
+*/
+function checkForDuplicates($db, $pers_firstname,$pers_lastname,$pers_middlein){
+    if($_POST['selectedID'] != ""){
+        return $pIDResult = $_POST['selectedID'];
+    }else{
+        $pIDResult = $db->query("SELECT PeopleInsert(
+                                   fName := $1::TEXT,
+                                   lName := $2::TEXT,
+                                   mInit := $3::VARCHAR
+                                   );", [$pers_firstname, $pers_lastname, $pers_middlein]);
+        return $pIDResult = pg_fetch_result($pIDResult, 0);
+    }  
+}

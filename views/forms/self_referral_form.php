@@ -85,13 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Stored Procedures
     // Gets the participant ID related to the person who is filling out the form to associate it with the form ID.
-    $pIDResult = $db->query("SELECT PeopleInsert(
-                                       fName := $1::TEXT,
-                                       lName := $2::TEXT,
-                                       mInit := $3::VARCHAR
-                                       );", [$self_pers_firstname, $self_pers_lastname, $self_pers_middlein]);
-
-    $pIDResult = pg_fetch_result($pIDResult, 0);
+   
+        $pIDResult = checkForDuplicates($db, $self_pers_firstname, $self_pers_lastname, $self_pers_middlein);
 
     // Inserts self referral form data into DB and associates the form with a participant ID.
     $result = $db->query("SELECT addSelfReferral(  
@@ -413,8 +408,7 @@ include('header.php');
                 </form>
             </div>  <!-- panel group end -->
             <br>
-
-            <button id="btnRegister" onclick="submitAllSelf()" class="cpca btn controls" style="margin-bottom: 20px;">Submit</button>
+            <?php include('form_duplicate_check.php')?>
 
         </div>  <!-- /#container -->
     </div>  <!-- /#container-fluid class -->

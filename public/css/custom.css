@@ -665,3 +665,11 @@ label[for=password] {
 		display: none;
 	}
 }
+/* Form Match */
+.duplicate-entries:hover{
+    cursor:pointer;
+    background-color:light-grey;
+}
+.details{
+    background-color:#F7F7F7;
+}
