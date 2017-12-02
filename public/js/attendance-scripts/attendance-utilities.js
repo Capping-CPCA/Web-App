@@ -7,10 +7,14 @@
  *
  * @author Scott Hansen
  * @copyright 2017 Marist College
- * @version [version number]
- * @since [initial version number]
+ * @version 1.0
+ * @since 1.0
  */
 
+/**
+ * generates and appends time input for classes on the new class page
+ * and the edit class information page.
+ */
 function populateTimes() {
     var selectTime = document.getElementById('time-input');
 
@@ -26,6 +30,7 @@ function populateTimes() {
             } else{
                 hour = i;
             }
+            //append times to page
             selectTime.appendChild(createTime(hour, "00", amORpm));
             selectTime.appendChild(createTime(hour, "30", amORpm));
         }

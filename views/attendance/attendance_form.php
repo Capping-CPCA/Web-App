@@ -12,11 +12,9 @@
  * @author Scott Hansen
  * @author Vallie Joseph - participant search tool
  * @copyright 2017 Marist College
- * @version [version number]
- * @since [initial version number]
+ * @version 1.1
+ * @since 0.7
  */
-
-//generic db script copied and pasted
 
 global $db;
 
@@ -24,9 +22,11 @@ include ('../models/Notification.php');
 
 require "attendance_utilities.php";
 
+//if attendance has already started being recorded, grab that information from the session information
 $pageInformation = isset($_SESSION['serializedInfo']) ? deserializeParticipantMatrix($_SESSION['serializedInfo']) : array();
 
-// Get attendance info from Session
+/* Begin set class details */
+// Attendance has already started being recorded and we are not coming from edit class information page
 if (isset($_SESSION['attendance-info']) && !isset($_POST['fromEditClassInfo'])) {
     $attendanceInfo = $_SESSION['attendance-info'];
 
@@ -40,7 +40,7 @@ if (isset($_SESSION['attendance-info']) && !isset($_POST['fromEditClassInfo'])) 
     $selected_topic_id = $attendanceInfo['topic-id'];
     $selected_curr_id = $attendanceInfo['curr-id'];
 }
-// Get attendance info from POST
+// Coming from new class page or edit class page - get attendance info from POST
 else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $selected_class = $_POST['classes'];
     $selected_curr = $_POST['curr'];
@@ -59,22 +59,30 @@ else {
     header("Location: /new-class");
     die();
 }
+/* End set class details */
 
+//boolean used to ensure we do have a duplicate person on our form
+//   (i.e. someone refreshes the page after submitting a new person with no intake packet)
 $duplicatePerson = false;
 
+/* Begin Set Page Information */
 //if we have previous information passed to us from lookup form or add person form,
 //  then display this information instead of db information
 if(isset($_SESSION['serializedInfo'])) {
+    //from edit participant page
     if(isset($_POST['fromConfirmEditParticipant'])){
         $selected_edit_num = $_POST['editButton'];
         $changed_num_children = $_POST['num-children-input-change'];
         $changed_zip = $_POST['zip-input-change'];
 
+        //edit person's number of children and zip code
         $pageInformation[$selected_edit_num]['numChildren'] = $changed_num_children;
         $pageInformation[$selected_edit_num]['zip'] = $changed_zip;
 
+        //update person in session variable for page information
         $_SESSION['serializedInfo'] = serializeParticipantMatrix($pageInformation);
     }
+    //from participant search tool (on this page)
     else if(isset($_POST['lookupId'])){
         $lookupId = $_POST['pidLookup'];
 
@@ -82,7 +90,7 @@ if(isset($_SESSION['serializedInfo'])) {
         $resultClassPastAttendance = $db->no_param_query(
             "select * from classattendancedetails " .
             "where participantid = {$lookupId} " .
-            "order by date desc; "
+            "order by date desc; " //date desc because we want the most recent info
         );
 
         $fn = $mi = $ln = $dob = $race = $zip = $nc = $isNew = $sex = null;
@@ -115,9 +123,10 @@ if(isset($_SESSION['serializedInfo'])) {
             $sex = $row['sex'];
         }
 
-        //look for duplicates
+        //look for duplicates on page
         for($k = 0; $k < count($pageInformation); $k++){
             if($pageInformation[$k]['pid'] == $lookupId){
+                //found a duplicate person
                 $duplicatePerson = true;
                 $successAddingPerson = false;
             }
@@ -224,11 +233,13 @@ if(isset($_SESSION['serializedInfo'])) {
         }
     }
 }
+//no session information set, populate class attendance recommendations
 //else grab information from the db and format it into the associative array format
 else {
-
+    //how many weeks ago do we want in our participant recommendations
     $threeWeeksAgo = date_subtraction('22 days');
 
+    //participant recommendations for attendance form
     $fullQuery = "SELECT * FROM classattendancedetails " .
         "WHERE curriculumid = $1 " .
         "AND sitename = $2 " .
@@ -279,11 +290,13 @@ else {
 
 }
 
+/* End set page information */
 
+//enums for no intake packet editing
 $get_races = $db->no_param_query("SELECT unnest(enum_range(NULL::race));");
-
 $get_sexes = $db->no_param_query("SELECT unnest(enum_range(NULL::sex));");
 
+//Format the time and date for displaying class information
 $convert_date = DateTime::createFromFormat('Y-m-d', $selected_date);
 $display_date = $convert_date->format('l, F jS');
 
@@ -394,7 +407,7 @@ include('header.php');
                 <!-- helps identify if we've just added a person -->
                 <input type="hidden" id="fromAddPerson" name="fromAddPerson" value="0" />
 
-                <!-- edit button information -->
+                <!-- edit button information to know which person we selected -->
                 <input type="hidden" id="editButton" name="editButton" value="" />
             </div>
 
@@ -566,25 +579,32 @@ include('header.php');
     <script>
         //name of the only form on the page
         var pageFormName = 'whole-page-form';
-        //input: page the form redirects to
-        //output: none
+
+        /**
+         * sets the location the form submits to
+         *
+         * @param action{string} - page the form redirects to
+         *
+         */
         function setFormAction(action){
             document.getElementById(pageFormName).action = action;
         }
 
-        //input: none
-        //output: none
-        //description: submits the form if valid
+        /**
+         * submits the form if valid
+         */
         function submitAttendance() {
-            if(validateComments()){
-                setFormAction('attendance-form-confirmation');
-                document.getElementById(pageFormName).submit();
-            }
+            setFormAction('attendance-form-confirmation');
+            document.getElementById(pageFormName).submit();
+
         }
 
-        //input: the nth button clicked on the page
-        //output: none
-        //description: sets the form's action to edit participant clicked
+        /**
+         * sets the form's action to edit participant clicked
+         *
+         * @param buttonNumber{int} - the nth button clicked on the page
+         *
+         */
         function editPerson(buttonNumber){
             //set form value to button value
             document.getElementById("editButton").value = buttonNumber;
@@ -593,110 +613,24 @@ include('header.php');
             document.getElementById(pageFormName).submit();
         }
 
+        /**
+         * set the form action to direct to edit class info
+         */
         function editClassDetails(){
-            //set the form action to direct to edit class info
             setFormAction('edit-class-info');
             document.getElementById(pageFormName).submit();
         }
 
-        function editClassDetails(){
-            //set the form action to direct to edit class info
-            setFormAction('edit-class-info');
-            document.getElementById(pageFormName).submit();
-        }
-
-        function editClassDetails(){
-            //set the form action to direct to edit class info
-            setFormAction('edit-class-info');
-            document.getElementById(pageFormName).submit();
-        }
-
-        function editClassDetails(){
-            //set the form action to direct to edit class info
-            setFormAction('edit-class-info');
-            document.getElementById(pageFormName).submit();
-        }
-
-        function editClassDetails(){
-            //set the form action to direct to edit class info
-            setFormAction('edit-class-info');
-            document.getElementById(pageFormName).submit();
-        }
-
-        function editClassDetails(){
-            //set the form action to direct to edit class info
-            setFormAction('edit-class-info');
-            document.getElementById(pageFormName).submit();
-        }
-
-        function editClassDetails(){
-            //set the form action to direct to edit class info
-            setFormAction('edit-class-info');
-            document.getElementById(pageFormName).submit();
-        }
-
-        //input: none
-        //output: none
-        //description: calls function to validate table,
-        //  if submits the form to the same page
+        /**
+         * Calls function to validate table. If valid,
+         * submits the form to the same page
+         */
         function addPerson() {
             if(jsValidateTable() === true){
                 setFormAction('attendance-form');
                 document.getElementById('fromAddPerson').value = 1; //helps to identify that we just added someone
                 document.getElementById(pageFormName).submit();
             }
-        }
-
-        //input: none
-        //output: none
-        //description: loops through all comments and creates error box if invalid
-        function validateComments(){
-            //loop through table and verify each comment
-            var tableParent = document.getElementById('attendance-table-body');
-            //create alert box and report what record failed
-
-            for(var i = 0; i < tableParent.childElementCount; i++){
-                //grab the contents of the textarea
-                var tableRow = tableParent.children[i];
-                var textArea = tableRow.children[(tableRow.childElementCount - 2)].children[0].children[0];
-
-                var comment = textArea.value;
-                //not a valid comment
-                if(!(validateComment(comment))){
-                    var name = tableRow.children[1].innerHTML;
-                    createCommentErrorBox(name);
-                    return false;
-                }
-            }
-
-
-            return true;
-        }
-
-        //input: name of comment in person's text area that has special/forbidden characters
-        //output: none
-        //description: creates an error box if person submitted invalid comment
-        function createCommentErrorBox(errorFor){
-            var insertAlertHere = document.getElementById('insert-comment-alert-here');
-
-            while(insertAlertHere.hasChildNodes()) { //remove all children
-                insertAlertHere.removeChild(insertAlertHere.lastChild);
-            }
-
-            //create error box
-            var div = document.createElement("div");
-            div.setAttribute("role", "alert");
-            div.setAttribute("class", "alert alert-warning");
-            div.innerHTML = "<strong>Oops! </strong>Error in comment for <strong><em>" + errorFor +  "</em></strong>: Please use only letters, numbers, periods, commas, " +
-                "spaces, apostrophe's, exclamation points, quotes, and question marks in comments.";
-
-            insertAlertHere.appendChild(div);
-        }
-
-        function validateComment(comment) {
-            //returns true if matched, validates for a-z, A-Z,
-            //  spaces, period, comma, question mark, apostrophe, quotes, exclamation point
-            return (/^[a-zA-Z0-9\s.,'?!"]*$/.test(comment));
         }
     </script>
 
@@ -738,9 +672,7 @@ include('header.php');
                             var sentURL = $(this).find('a').attr("href");
                             if(sentURL != undefined) {
                                 var sentNameList = $(this).find("span").html();
-                                console.log(sentURL);
                                 var matched = sentURL.match( /\/ps-view-participant\/(\d*)/);
-                                console.log(matched);
                                 var peopleid = matched[matched.length-1];
                                 var details = $(this).find(".sublist").text();
                                 //add the view to the modal

@@ -9,18 +9,29 @@
  *
  * @author Scott Hansen
  * @copyright 2017 Marist College
- * @version [version number]
- * @since [initial version number]
+ * @version 1.1
+ * @since 0.7
  */
 
-//some curricula and other parts of the have apostrophe's
-// in their name that need to be escaped when using it for a query
+/**
+ * some curricula and other parts of the have apostrophe's
+ * in their name that need to be escaped when using it for a query
+ *
+ * @param $input{string}
+ * @return mixed
+ *
+ */
 function escape_apostrophe($input){
     return str_replace("'","''", $input);
 }
 
-//input: a specified time in the formats ('x days', or 'y years')
-//output: formatted date for sql subtracted day from now
+/**
+ * formatted date for sql subtracted day from now
+ *
+ * @param $sub_this_time{string} - a specified time in the formats ('x days', or 'y years')
+ * @return string
+ *
+ */
 function date_subtraction($sub_this_time){
     //date subtraction for view
     $today = new DateTime('now');
@@ -28,8 +39,15 @@ function date_subtraction($sub_this_time){
     return $sub_date->format('Y-m-d');
 }
 
-//input: raw sql date right from the DB in mm-dd-yyyy format
-//output: age of person born on that date
+/**
+ * age of person born on that date
+ *
+ * @param $raw_sqlDate{string} - raw sql date right
+ * from the DB in mm-dd-yyyy format
+ *
+ * @return false|int|mixed|string
+ *
+ */
 function calculate_age($raw_sqlDate) {
     if(!empty($raw_sqlDate)){
         //stack overflow next level stuff
@@ -47,8 +65,10 @@ function calculate_age($raw_sqlDate) {
 
 }
 
-//input: raw sql timestamp
-//output: nicely formatted date and time
+/**
+ * @param $sqlDate{string} - raw sql timestamp
+ * @return string - nicely formatted date and time
+ */
 function formatSQLDate($sqlDate) {
     //for some reason, if a timestamp is H:i:s.000000, fetching the row drops the microseconds.
     //  this is a workaround
@@ -64,8 +84,12 @@ function formatSQLDate($sqlDate) {
     return $formattedDate;
 }
 
-//input: raw sql timestamp
-//output: nicely formatted date and time
+/**
+ *
+ * @param $sqlDate{string} - raw sql timestamp
+ * @return string - nicely formatted short date and time
+ *
+ */
 function formatSQLDateShort($sqlDate) {
     //for some reason, if a timestamp is H:i:s.000000, fetching the row drops the microseconds.
     //  this is a workaround
@@ -81,9 +105,14 @@ function formatSQLDateShort($sqlDate) {
     return $formattedDate;
 }
 
-//input: date in 'Y-m-d' and time in 'H:i'
-//output: sql timestamp 'Y-m-d H:i:00.000000'
-//description: create timestamp from specific date format
+/**
+ * create timestamp from specific date format
+ *
+ * @param $inputDate{string} - date in 'Y-m-d' and time in 'H:i'
+ * @param $inputTime{string}
+ * @return string - sql timestamp 'Y-m-d H:i:00.000000'
+ *
+ */
 function makeTimestamp($inputDate, $inputTime){
     $convertDate = DateTime::createFromFormat('Y-m-d h:i A', (string)$inputDate . " " . $inputTime);
     //the one preserves the milliseconds for the function formatSQLDate(timestamp) to work properly
@@ -91,15 +120,33 @@ function makeTimestamp($inputDate, $inputTime){
     return $timestamp;
 }
 
-
+/**
+ * serializes array of page information into one large
+ * variable to be stored in the session
+ *
+ * @param $matrix{array}
+ * @return string - encoded object
+ *
+ */
 function serializeParticipantMatrix($matrix) {
     return base64_encode(serialize($matrix));
 }
 
+/**
+ * deserializes large session variable
+ *
+ * @param $encodedMatrix{string} - encoded object
+ * @return array
+ *
+ */
 function deserializeParticipantMatrix($encodedMatrix) {
     return unserialize(base64_decode($encodedMatrix));
 }
 
+/**
+ * @param $classInformation{array}
+ * @return array
+ */
 //input: class information matrix
 //output: updated class information matrix
 function handleAttendanceSheetInfo($classInformation){
@@ -111,15 +158,15 @@ function handleAttendanceSheetInfo($classInformation){
         $classInformation[$i]['comments'] = isset($_POST[((string)$i . "-comment")]) ? ($_POST[((string)$i . "-comment")]) : null ;
     }
 
-
-
     return $classInformation;
 }
 
-//input: none (from session variable)
-//output: none (updates session info)
-//description: deserializes session info, calls function to update,
-//  reserializes and sets session variable
+/**
+ * works on session variable of serializedClassInfo
+ *
+ * deserializes session info, calls function to update,
+ * reserializes and sets session variable
+ */
 function updateSessionClassInformation(){
     //get serialized class information
     $serializedClassInfo = $_SESSION['serializedInfo'];
@@ -139,9 +186,10 @@ function updateSessionClassInformation(){
 //validation functions (occurs after JS validation so
 // if they're not valid, it's malicious or they aren't running JS)
 
-
-//input: first or last name
-//output: (boolean)isValid
+/**
+ * @param $name{string} - first or last name
+ * @return bool|int
+ */
 function validateName($name) {
     if(empty($name)){
         return false;
@@ -151,8 +199,10 @@ function validateName($name) {
     }
 }
 
-//input: middle initial
-//output: true if empty or letter
+/**
+ * @param $middle{string} - middle initial
+ * @return bool|int
+ */
 function validateMiddle($middle) {
     if(empty($middle)){
         return true; //not required
@@ -162,8 +212,10 @@ function validateMiddle($middle) {
     }
 }
 
-//input: race
-//output: true if valid race
+/**
+ * @param $race{string} - race
+ * @return bool
+ */
 function validateRace($race) {
     if(empty($race)){
         return false;
@@ -173,8 +225,10 @@ function validateRace($race) {
     }
 }
 
-//input: validateSex
-//output: true if valid sex
+/**
+ * @param $sex{string} - sex
+ * @return bool
+ */
 function validateSex($sex) {
     if(empty($sex)){
         return false;
@@ -184,8 +238,10 @@ function validateSex($sex) {
     }
 }
 
-//input: age
-//output: true if numeric and positive
+/**
+ * @param $age{int} - age
+ * @return bool
+ */
 function validateAge($age) {
     if(empty($age)){
         return false;
@@ -195,8 +251,10 @@ function validateAge($age) {
     }
 }
 
-//input: number of children
-//output: true if not empty, numeric
+/**
+ * @param $num{int} - number of children
+ * @return bool
+ */
 function validateNumChildren($num) {
     if(empty($num) && ($num != 0)){
         return false;
@@ -204,11 +262,12 @@ function validateNumChildren($num) {
         //returns true if a valid number of children
         return(is_numeric($num) && ($num >= 0));
     }
-
 }
 
-//input: zip code
-//output: true if valid 5 digit US zip
+/**
+ * @param $zip{string} - zip code
+ * @return bool|int
+ */
 function validateZip($zip) {
     if(empty($zip)){
         return false;
@@ -218,9 +277,11 @@ function validateZip($zip) {
     }
 }
 
-
-//input: resultSet of all classes from query; class to check
-//output: boolean - valid class
+/**
+ * @param $results{resultSet} - all classes from query
+ * @param $input{string} - class to check
+ * @return bool
+ */
 function validateClass($results, $input){
     while($row = pg_fetch_assoc($results)){
         if($input == $row['classid']) return true;
@@ -228,8 +289,11 @@ function validateClass($results, $input){
     return false;
 }
 
-//input: resultSet of all curricula from query; curriculum to check
-//output: boolean - valid curriculum
+/**
+ * @param $results{resultSet} - all curricula from query
+ * @param $input{string} - curriculum to check
+ * @return bool
+ */
 function validateCurriculum($results, $input){
     while($row = pg_fetch_assoc($results)){
         if($input == $row['curriculumid']) return true;
@@ -237,8 +301,10 @@ function validateCurriculum($results, $input){
     return false;
 }
 
-//input: 'Y-m-d' (i.e. '2017-11-30')
-//output: boolean - valid date
+/**
+ * @param $date{string} - 'Y-m-d' (i.e. '2017-11-30')
+ * @return bool
+ */
 function validateDate($date){
     $dateConversion = DateTime::createFromFormat('Y-m-d', $date);
     if ($dateConversion !== false) {
@@ -250,8 +316,10 @@ function validateDate($date){
     }
 }
 
-//input: 'g:i A' (i.e. '5:00 AM')
-//output: boolean - valid time
+/**
+ * @param $time{string} - 'g:i A' (i.e. '5:00 AM')
+ * @return bool
+ */
 function validateTime($time){
     $timeConversion = DateTime::createFromFormat('g:i A', $time);
     if ($timeConversion !== false) {
@@ -264,8 +332,11 @@ function validateTime($time){
 
 }
 
-//input: resultSet of all sites names from query; site name to check
-//output: boolean - valid site name
+/**
+ * @param $results{resultSet} - all site names from query
+ * @param $input{string} - site name to check
+ * @return bool
+ */
 function validateSite($results, $input){
     while($row = pg_fetch_assoc($results)){
         if($input == $row['sitename']) return true;
@@ -273,8 +344,11 @@ function validateSite($results, $input){
     return false;
 }
 
-//input: resultSet of all languages from query; language to check
-//output: boolean - valid language
+/**
+ * @param $results{resultSet} - all languages from query
+ * @param $input{string} - language to check
+ * @return bool
+ */
 function validateLanguage($results, $input){
     while($row = pg_fetch_assoc($results)){
         if($input == $row['lang']) return true;
@@ -282,8 +356,11 @@ function validateLanguage($results, $input){
     return false;
 }
 
-//input: resultSet of all facilitators from query; facilitatorNum to check
-//output: boolean - valid facilitatorNum
+/**
+ * @param $results{resultSet} - all facilitators from query
+ * @param $input{int} - facilitatorID to check
+ * @return bool
+ */
 function validateFacilitator($results, $input){
     while($row = pg_fetch_assoc($results)){
         if($input == $row['peopleid']) return true;
@@ -291,8 +368,11 @@ function validateFacilitator($results, $input){
     return false;
 }
 
-//input: string
-//output: SQL safe string
+/**
+ * @param $conn{connection} - db connection
+ * @param $string{string} - string to sanitize
+ * @return string - SQL safe
+ */
 function sanitizeString($conn, $string){
     $string = trim($string);
     $string = pg_escape_string($conn, $string);

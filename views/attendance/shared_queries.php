@@ -8,8 +8,8 @@
  *
  * @author Scott Hansen
  * @copyright 2017 Marist College
- * @version [version number]
- * @since [initial version number]
+ * @version 1.1
+ * @since 1.1
  */
 
 define( "SHARED_QUERY_CURRICULUM" , "SELECT c.curriculumid, c.curriculumname FROM curricula c WHERE c.df IS FALSE ORDER BY c.curriculumname ASC;");

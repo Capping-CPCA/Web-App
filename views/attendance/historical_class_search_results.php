@@ -9,15 +9,15 @@
  *
  * @author Scott Hansen
  * @copyright 2017 Marist College
- * @version [version number]
- * @since [initial version number]
+ * @version 1.1
+ * @since 1.1
  */
 
 global $db;
 
-$result_curriculum = $db->no_param_query("SELECT c.curriculumid, c.curriculumname FROM curricula c WHERE c.df IS FALSE ORDER BY c.curriculumname ASC;");
-
-$result_classes = $db->no_param_query("SELECT cc.curriculumid, topicname, cc.classid FROM curriculumclasses cc, classes WHERE classes.classid = cc.classid AND classes.df IS FALSE ORDER BY cc.curriculumid;");
+//get all the classes and curriculum
+$result_curriculum = $db->no_param_query(SHARED_QUERY_CURRICULUM);
+$result_classes = $db->no_param_query(SHARED_QUERY_CLASSES);
 
 require ('attendance_utilities.php');
 
@@ -36,7 +36,7 @@ if(isset($_SESSION['attendance-search-query'])){
     if(isset($_SESSION['attendance-search-date'])) $selected_date = $_SESSION['attendance-search-date'];
 
 }
-// Get attendance info from POST
+// Get class info from POST
 else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if(!empty($_POST['curr-id'])){
@@ -105,7 +105,7 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //3. Set Session Variable With This Query
     $_SESSION['attendance-search-query'] = $query;
 }
-else {
+else { //shouldn't be on this page
     header("Location: /historical-class-search");
     die();
 }
@@ -120,6 +120,9 @@ include('header.php');
 
     <script>
         /* Attendance Historical Class View */
+        /**
+         * @param buttonNumber{int}
+         */
         function changeHiddenFormFieldValue(buttonNumber) {
             document.getElementById("numResult").value = buttonNumber;
         }
@@ -182,6 +185,7 @@ include('header.php');
                             </thead>
                             <tbody>
                             <?php
+                            //for selecting which class details to view
                             $counter = 0;
                             foreach ($attendanceResults as $result) {
                                 echo "<tr>";
@@ -216,6 +220,7 @@ include('header.php');
                             </tbody>
                         </table>
 
+                        <!-- Hidden field that keeps track of what result was clicked -->
                         <input type="hidden" id="numResult" name="numResult" value="" />
 
                     </form>

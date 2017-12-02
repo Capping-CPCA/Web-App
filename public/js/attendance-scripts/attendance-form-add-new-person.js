@@ -7,10 +7,16 @@
  *
  * @author Scott Hansen
  * @copyright 2017 Marist College
- * @version [version number]
- * @since [initial version number]
+ * @version 1.1
+ * @since 0.7
  */
 
+
+/**
+ * validates the fields in the new person field before they are added to the table
+ *
+ * @returns {boolean}
+ */
 function jsValidateTable() {
     var firstName, middleInitial, lastName, race, sex, age, numChildren, zip;
 
@@ -48,6 +54,15 @@ function jsValidateTable() {
 
 }
 
+/**
+ * creates an element that is used in feedback to the user
+ * on whether or not adding a person was successful and what went right/wrong
+ *
+ * @param success{boolean}
+ * @param errorMessage{string}
+ * @returns {Element}
+ *
+ */
 function createMessage(success, errorMessage) {
     var div = document.createElement("div");
     div.setAttribute("role", "alert");
@@ -60,6 +75,18 @@ function createMessage(success, errorMessage) {
     return div;
 }
 
+/**
+ *
+ * @param first{string}
+ * @param middle{string}
+ * @param last{string}
+ * @param race{string}
+ * @param sex{string}
+ * @param age{int}
+ * @param numChildren{int}
+ * @param zip{string}
+ * @returns {*} - errorMessage for createMessage (if any) - string, or the value true (if successful)
+ */
 function validateFields(first, middle, last, race, sex, age, numChildren, zip){
     if(!validateName(first)){
         return "First name may only contain letters. Spaces, numbers, and other characters are not allowed.";
@@ -89,28 +116,47 @@ function validateFields(first, middle, last, race, sex, age, numChildren, zip){
     return true;
 }
 
-//first or last name
+/**
+ * @param name{string} - first or last
+ * @returns {boolean}
+ */
 function validateName(name) {
     //returns true if matched, validates for a-z and A-Z
     return (/^[A-Za-z']+$/.test(name));
 }
 
+/**
+ * @param middle{string}
+ * @returns {boolean}
+ */
 function validateMiddle(middle) {
     if(middle === '') return true; //empty
     //returns true if matched, validates for a-z and A-Z max one character
     return (/^[A-Za-z]$/.test(middle));
 }
 
+/**
+ * @param race{string}
+ * @returns {boolean}
+ */
 function validateRace(race) {
     //returns true if not the default option
     return(race !== "Select Race...");
 }
 
+/**
+ * @param sex{string}
+ * @returns {boolean}
+ */
 function validateSex(sex) {
     //returns true if not the default option
     return(sex !== "Select Sex...");
 }
 
+/**
+ * @param age{int}
+ * @returns {boolean}
+ */
 function validateAge(age) {
     var ageNumber = parseInt(age);
     if(isNaN(ageNumber)) return false;
@@ -118,6 +164,10 @@ function validateAge(age) {
     return (ageNumber >= 1);
 }
 
+/**
+ * @param num{int}
+ * @returns {boolean}
+ */
 function validateNumChildren(num) {
     var number = parseInt(num);
     if(isNaN(number)) return false;
@@ -125,6 +175,10 @@ function validateNumChildren(num) {
     return (number >= 0);
 }
 
+/**
+ * @param zip{string}
+ * @returns {boolean}
+ */
 function validateZip(zip) {
     //validate zip code (from stackoverflow)
     return (/(^\d{5}$)/.test(zip));

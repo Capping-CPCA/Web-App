@@ -9,8 +9,8 @@
  *
  * @author Scott Hansen
  * @copyright 2017 Marist College
- * @version [version number]
- * @since [initial version number]
+ * @version 0.7
+ * @since 1.1
  */
 
 global $db;
@@ -43,7 +43,8 @@ include('header.php');
     <script type="text/javascript" src="/js/attendance-scripts/attendance-utilities.js"></script>
 
     <script>
-        //js for holding all the class choices
+
+        //matrix that holds all of the associated curriculum id's class id's and topicNames
         var classesMatrix = [
             <?php
             while($row = pg_fetch_assoc($result_classes)){
@@ -52,16 +53,18 @@ include('header.php');
             ?>
         ];
 
-        //js for controlling the disabled selection of class section
+        /**
+         * populates class selection after curriculum is selected
+         */
         function enableSecondSelection() {
 
             //disable submit button in case first class was changed
             document.getElementById("sub").disabled = true;
 
-            //enable selection
+            //enable class selection
             document.getElementById("classSelection").disabled = false;
 
-            /* Display the proper classes */
+            /* Begin display of proper classes */
 
             //clear the current class selection
             var classesElement = document.getElementById("classes");
@@ -91,11 +94,17 @@ include('header.php');
                     classesElement.appendChild(classNode);
                 }
             }
+            /* End display of proper classes */
 
         }
 
-        //input: hour and time integers
-        //output: option object
+        /**
+         *
+         * @param hour{int}
+         * @param minute{int}
+         * @param amORpm{string}
+         * @returns {Element}
+         */
         function createTime(hour, minute, amORpm){
             var option = document.createElement('OPTION');
             option.innerHTML = (hour + ":" + minute + " " + amORpm).toString();
@@ -103,22 +112,25 @@ include('header.php');
             return option;
         }
 
-        //input: none
-        //output: none
-        //description: enables the submit button
+        /**
+         * enables the submit button
+         */
         function enableSubmitButton() {
             updateClassSelection();
             document.getElementById("sub").disabled = false;
         }
 
-        //grabs the id of the selected option and sets it as value of hidden form field
+        /**
+         * grabs the id of the selected topic option and sets
+         * it's topicID as value of hidden form field
+         */
         function updateClassSelection(){
             document.getElementById('topic-id').value = $("#classes").find("option:selected").data("id");
         }
 
-        //input: none
-        //output: none
-        //description: sets the default facilitator to the one logged in
+        /**
+         * sets the default facilitator to the one logged in
+         */
         function setEmployeeIdField(){
             var formFac = document.getElementById('facilitator');
             var selection = document.getElementById('facilitator-name');
@@ -192,13 +204,14 @@ include('header.php');
                     <label for="facilitator-name">Facilitator</label>
                     <select id="facilitator-name" class="form-control" name="facilitator-name" onchange="setEmployeeIdField()">
                         <?php
-                        $counter = 0;
+                        //used in setting an initial value for the hidden form field
                         $first = true;
                         $defaultValueFacilitatorId = 0;
                         while($row = pg_fetch_assoc($result_facilitators)){
+                            //set a default value for the hidden form field
                             if($first){$first = false; $defaultValueFacilitatorId = $row['peopleid'];}
                             $selected = "";
-                            //choose default facilitator
+                            //choose default facilitator (if the employee session ID matches, he/she is the default)
                             if((isset($_SESSION['employeeid'])) && ($_SESSION['employeeid'] == $row['peopleid'])){
                                 $selected = "selected=\"selected\"";
                                 $defaultValueFacilitatorId = $row['peopleid'];
@@ -225,6 +238,7 @@ include('header.php');
                     </div>
                 </div>
 
+                <!-- Facilitator who is logged in or first on the list is the default facilitator -->
                 <?php echo "<input type = \"hidden\" id=\"facilitator\" name=\"facilitator\" value=\"{$defaultValueFacilitatorId}\" />"  ?>
                 <input type = "hidden" id="topic-id" name="topic-id" value="" />
                 <input type = "hidden" id="curr-id" name="curr-id" value="" />

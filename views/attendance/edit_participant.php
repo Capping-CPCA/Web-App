@@ -9,8 +9,8 @@
  *
  * @author Scott Hansen
  * @copyright 2017 Marist College
- * @version [version number]
- * @since [initial version number]
+ * @version 0.7
+ * @since 1.1
  */
 
 //after confirmation screen or if a facilitator chooses to edit a class
@@ -63,14 +63,28 @@ include('header.php');
 
     <script type="text/javascript">
 
+        /**
+         * sets the location the form directs to on submit
+         *
+         * @param pageFormName{string} - name of the form to change
+         * @param action - page to submit form to
+         *
+         */
         function setFormAction(pageFormName, action){
             document.getElementById(pageFormName).action = action;
         }
+
+        /**
+         * discards changes and returns to attendance form
+         */
         function cancelEdit() {
             setFormAction('participant-edit', 'attendance-form');
             document.getElementById('participant-edit').submit();
         }
 
+        /**
+         * runs validation and submits edit to attendance form
+         */
         function submitEdit() {
             var success = validateFieldsJS();
             if(success === true){
@@ -79,6 +93,13 @@ include('header.php');
             }
         }
 
+        /**
+         * validates all of the fields and creates an error box
+         * if something is invalid
+         *
+         * @returns {boolean} - all fields valid?
+         *
+         */
         function validateFieldsJS(){
             var childrenInput = document.getElementById("num-children-input-change").value;
             var zipInput = document.getElementById("zip-input-change").value;
@@ -99,6 +120,13 @@ include('header.php');
             }
         }
 
+        /**
+         * creates a success or failure message for the edit participant page
+         *
+         * @param success{boolean}
+         * @param errorMessage{string}
+         *
+         */
         function createMessageEP(success, errorMessage) {
             var div = document.createElement("div");
             div.setAttribute("role", "alert");
@@ -127,6 +155,7 @@ include('header.php');
             </div>
 
             <?php
+            //display person's information
             $fullName = $selected_person['fn'] . " " . $selected_person['mi'] . " " . $selected_person['ln'];
             ?>
 
