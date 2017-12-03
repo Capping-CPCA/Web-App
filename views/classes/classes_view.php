@@ -29,7 +29,7 @@ if (pg_num_rows($result) == 0) {
 $class = pg_fetch_assoc($result);
 pg_free_result($result);
 
-$topics = $db->query("SELECT * FROM curriculuminfo WHERE classid = $1", [$id]);
+$topics = $db->query("SELECT * FROM curriculuminfo WHERE classid = $1 AND curriculumdeleteflag IS FALSE", [$id]);
 
 include('header.php');
 ?>
@@ -44,8 +44,8 @@ include('header.php');
 		</div>
     <div class="form-wrapper card view-card">
         <h4 class="card-header text-left">
-            <?php echo $class['topicname'] . ($class['df'] ? ' <span class="badge badge-secondary">Deleted</span>' : '') ?>
-            <?php if (hasRole(Role::Coordinator) && !$class['df']) { ?>
+            <?php echo $class['topicname'] . ($class['df'] == 'f' ? '' : ' <span class="badge badge-secondary">Deleted</span>') ?>
+            <?php if (hasRole(Role::Coordinator) && $class['df'] == 'f') { ?>
                 <div class="float-right">
                     <a href="/classes/edit/<?= $id ?>"><button class="btn btn-outline-secondary btn-sm">Edit</button></a>
                     <a href="/classes/delete/<?= $id ?>"><button class="btn btn-outline-danger btn-sm">Delete</button></a>
