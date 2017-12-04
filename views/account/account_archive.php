@@ -63,10 +63,10 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
     <div class="page-wrapper">
         <form class="card warning-card" method="post" action="<?= $_SERVER['REQUEST_URI'] ?>">
             <h4 class="card-header card-title">
-                <?= $firstname . ' ' . $middleinit . ' ' . $lastname ?>
+                <?= ucwords($firstname . ' ' . $middleinit . ' ' . $lastname); ?>
             </h4>
             <div class="card-body">
-                You are about to delete user "<?= $firstname . ' ' . $middleinit . ' ' . $lastname ?>". Are you sure
+                You are about to delete user "<?= ucwords($firstname . ' ' . $middleinit . ' ' . $lastname); ?>". Are you sure
                 you want to delete this user?
             </div>
             <div class="card-footer text-right">

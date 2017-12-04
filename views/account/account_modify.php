@@ -269,7 +269,7 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
                     <div class="col-sm-5">
                         <label for="class-name" class=""><b>First Name</b></label>
                         <input type="text" class="form-control"
-                               value="<?= $firstname ?>" id="employee-firstname" name="firstname" required>
+                               value="<?= ucwords($firstname) ?>" id="employee-firstname" name="firstname" required>
                         <div class="invalid-feedback">
                             First Name cannot be empty.
                         </div>

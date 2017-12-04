@@ -70,7 +70,7 @@ if (!empty($params) && $params[0] == 'restore') {
                     <div class="card mb-2 user-card">
                         <div class="p-3 card-body d-flex flex-row justify-content-start">
                             <p class="mb-0 align-self-center"
-                               style="flex: 1"><?= $user['lastname'] . ', ' . $user['firstname'] ?></p>
+                               style="flex: 1"><?= ucwords($user['lastname'] . ', ' . $user['firstname']); ?></p>
                             <div class="text-right align-middle">
                                 <a href="/account-settings/<?= $user['employeeid'] ?>" style="text-decoration: none;">
                                     <button type='button' class="btn outline-cpca btn-sm ml-2">View</button>

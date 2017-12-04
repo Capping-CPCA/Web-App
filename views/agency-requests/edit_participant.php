@@ -207,7 +207,7 @@ function getPhoneNumbers($phoneTypes){
 <div class="form-group row">
                     <div class="col-sm-4">
                         <label for="class-name" class=""><b>First Name</b></label>
-                        <input type="text" class="form-control" value="<?= $participant['firstname']?>" id="fname-update" name="fname-update" required="">
+                        <input type="text" class="form-control" value="<?= ucwords($participant['firstname'])?>" id="fname-update" name="fname-update" required="">
                         <div class="invalid-feedback">
                             First Name cannot be empty.
                         </div>

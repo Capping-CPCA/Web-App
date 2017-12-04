@@ -206,7 +206,7 @@ include('header.php');
 
                             $facilitatorId = $row['peopleid'];
 
-                            $fullName = $row['firstname'] . " " . $row['middleinit'] . " " . $row['lastname'];
+                            $fullName = ucwords($row['firstname'] . " " . $row['middleinit'] . " " . $row['lastname']);
                             echo "<option {$selected} id=\"{$facilitatorId}\">{$fullName}</option>";
                         }
                         ?>

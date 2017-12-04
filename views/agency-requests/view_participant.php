@@ -156,7 +156,7 @@ function checkSet($value){
 ?>
     <div class="card" style="max-width: 700px; width: 100%; margin: 0 auto;">
         <div class="card-header">
-            <h4 class="modal-title"><?= $agencyResult['firstname']." ".$agencyResult['middleinit']." ".$agencyResult['lastname']." ".$buttonOptions?></h4>
+            <h4 class="modal-title"><?= ucwords($agencyResult['firstname']." ".$agencyResult['middleinit']." ".$agencyResult['lastname'])." ".$buttonOptions?></h4>
         </div>
         <div class="card-body">
             <div class="w-100 text-center">
@@ -167,7 +167,7 @@ function checkSet($value){
             <div class="pl-3">
 				<div class="participant_detailed row pb-2">
 				<div class="col-sm-4">
-                <p class="participant_name"><b>Name: </b> <?= $agencyResult['firstname']." ".$agencyResult['middleinit']." ".$agencyResult['lastname'] ?></p>
+                <p class="participant_name"><b>Name: </b> <?= ucwords($agencyResult['firstname']." ".$agencyResult['middleinit']." ".$agencyResult['lastname']);?></p>
 				</div>
 				<div class="col-sm-8">
                 <p class="participant_status"><b>Status: </b> <span class="<?=$statuses['class']?>"><?=$statuses['status']?></p>
