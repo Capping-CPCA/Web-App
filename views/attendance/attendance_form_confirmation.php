@@ -9,8 +9,8 @@
  *
  * @author Scott Hansen
  * @copyright 2017 Marist College
- * @version [version number]
- * @since [initial version number]
+ * @version 0.7
+ * @since 0.7
  */
 
 require ('attendance_utilities.php');
@@ -54,16 +54,29 @@ include('header.php');
 ?>
 
     <script>
+        /**
+         * sets the location the form submits to
+         *
+         * @param formID{string}
+         * @param action{string}
+         *
+         */
         function setFormAction(formID, action){
             document.getElementById(formID).action = action;
         }
 
+        /**
+         * set the form to submit to confirmed page
+         */
         function submitAttendance() {
             //set page to go to that
             setFormAction('attendance-sheet', 'attendance-form-confirmed');
             document.getElementById('attendance-sheet').submit();
         }
 
+        /**
+         * set the form to submit to edit class details page
+         */
         function editAttendance(){
             setFormAction('attendance-sheet', 'attendance-form');
             document.getElementById('attendance-sheet').submit();

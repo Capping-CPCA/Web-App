@@ -9,8 +9,8 @@
  *
  * @author Scott Hansen
  * @copyright 2017 Marist College
- * @version [version number]
- * @since [initial version number]
+ * @version 1.1
+ * @since 1.1
  */
 
 global $db;
@@ -24,6 +24,7 @@ $classN = null;
 
 $queryClass = null;
 
+//shouldn't be on this page
 if(!isset($_SESSION['attendance-search-query'])){
     echo "<h1>Please use 'recent classes' or the 'historical attendance lookup tool' to access attendance history.</h1>";
     die();
@@ -52,10 +53,10 @@ for($i = 0; $i < $classN; $i++){
     pg_fetch_assoc($resultClassInfo);
 }
 
-$row = pg_fetch_assoc($resultClassInfo); //actual row we want
+//actual row we want
+$row = pg_fetch_assoc($resultClassInfo);
 
 //make connection
-
 $class_topic = $row['topicname'];
 $class_curriculum = $row['curriculumname'];
 $site_name = $row['sitename'];
@@ -113,6 +114,7 @@ include('header.php');
                             echo "<td>{$row['zipcode']}</td>";
                             echo "<td>{$row['numchildren']}</td>";
                             echo "<td>{$row['comments']}</td>";
+                            //convert boolean to string
                             $tf = ($row['isnew'] == 't') ? $tf = "yes" : $tf = "no";
                             echo "<td>{$tf}</td>";
                             echo "<td>{$row['race']}</td>";

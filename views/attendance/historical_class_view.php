@@ -9,8 +9,8 @@
  *
  * @author Scott Hansen
  * @copyright 2017 Marist College
- * @version [version number]
- * @since [initial version number]
+ * @version 1.1
+ * @since 0.7
  */
 
 global $db;
@@ -124,6 +124,7 @@ $result = $db->no_param_query($queryClassInformation);
                             echo "<td>{$row['zipcode']}</td>";
                             echo "<td>{$row['numchildren']}</td>";
                             echo "<td>{$row['comments']}</td>";
+                            //convert boolean to string
                             $tf = ($row['isnew'] == 't') ? $tf = "yes" : $tf = "no";
                             echo "<td>{$tf}</td>";
                             echo "<td>{$row['race']}</td>";

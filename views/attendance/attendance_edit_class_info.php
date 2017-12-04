@@ -9,8 +9,8 @@
  *
  * @author Scott Hansen
  * @copyright 2017 Marist College
- * @version [version number]
- * @since [initial version number]
+ * @version 1.0
+ * @since 1.0
  */
 
 global $db;
@@ -40,10 +40,9 @@ $selected_site = $attendanceInfo['site'];
 $selected_lang = $attendanceInfo['lang'];
 $selected_facilitator = $attendanceInfo['facilitator'];
 $selected_topic_id = $attendanceInfo['topic-id'];
-
 $selected_curr_id = $attendanceInfo['curr-id'];
 
-//only update class info if coming from attendance sheet
+//only update class info if coming from attendance sheet (if duplicate classOffering can come from confirmed page)
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     updateSessionClassInformation();
 }
@@ -55,7 +54,7 @@ include('header.php');
     <script type="text/javascript" src="/js/attendance-scripts/attendance-utilities.js"></script>
 
     <script>
-        //js for holding all the class choices
+        //matrix that holds all of the associated curriculum id's class id's and topicNames
         var classesMatrix = [
             <?php
             while($row = pg_fetch_assoc($result_classes)){
@@ -64,17 +63,15 @@ include('header.php');
             ?>
         ];
 
-        //input: none
-        //output: none
-        //description: function for setting the default class on the class information page
+        /**
+         * sets the default class on the class information page
+        */
         function setSelectedClass(){
             var classSelected = parseInt(<?php echo $selected_topic_id; ?>);
 
-            console.log(classSelected);
             var parent = document.getElementById('classes');
 
             for(var i = 0; i < parent.childElementCount; i++){
-                console.log(parent.children[i].id + " : " + "top-" + classSelected);
                 if(parent.children[i].id === ("top-" + classSelected).toString()){
                     parent.children[i].selected = true;
                     return;
@@ -82,16 +79,19 @@ include('header.php');
             }
         }
 
-        //js for controlling the disabled selection of class section
+
+        /**
+         * populates class selection after curriculum is selected
+         */
         function enableSecondSelection() {
 
             //disable submit button in case first class was changed
             document.getElementById("sub").disabled = true;
 
-            //enable selection
+            //enable class selection
             document.getElementById("classSelection").disabled = false;
 
-            /* Display the proper classes */
+            /* Begin display of proper classes */
 
             //clear the current class selection
             var classesElement = document.getElementById("classes");
@@ -125,14 +125,24 @@ include('header.php');
                     classesElement.appendChild(classNode);
                 }
             }
+            /* End display of proper classes */
 
         }
 
 
-        //input: hour and time integers
-        //output: option object
+        /**
+         * appends list of times to time input selection
+         *
+         * @param hour{int}
+         * @param minute{int}
+         * @param amORpm{string}
+         * @returns {Element}
+         *
+         */
         function createTime(hour, minute, amORpm){
             var option = document.createElement('OPTION');
+
+            //set current set time as the time selected
             if((hour + ":" + minute + " " + amORpm) === "<?php echo $selected_time; ?>" ){
                 option.setAttribute('selected','selected');
             }
@@ -141,26 +151,34 @@ include('header.php');
             return option;
         }
 
-        //input: none
-        //output: none
-        //description: enables the submit button
+
+        /**
+         * enables the submit button
+         */
         function enableSubmitButton() {
             updateClassSelection();
             document.getElementById("sub").disabled = false;
         }
 
+        /**
+         * enables the submit button by default if they
+         * don't want to change any class info
+         */
         function enableSubmitButtonWithoutUpdate(){
             document.getElementById("sub").disabled = false;
         }
 
-        //grabs the id of the selected option and sets it as value of hidden form field
+        /**
+         * grabs the id of the selected topic option and
+         * sets it's topicID as value of hidden form field
+         */
         function updateClassSelection(){
             document.getElementById('topic-id').value = $("#classes").find("option:selected").data("id");
         }
 
-        //input: none
-        //output: none
-        //description: sets the default facilitator to the one logged in
+        /**
+         * sets the default facilitator to the one logged in
+         */
         function setEmployeeIdField(){
             var formFac = document.getElementById('facilitator');
             var selection = document.getElementById('facilitator-name');
@@ -248,16 +266,15 @@ include('header.php');
                     <label for="facilitator-name">Facilitator</label>
                     <select id="facilitator-name" class="form-control" name="facilitator-name" onchange="setEmployeeIdField()">
                         <?php
-                        $counter = 0;
-                        $first = true;
-                        $defaultValueFacilitatorId = 0;
+
+                        //populate facilitator options
                         while($row = pg_fetch_assoc($result_facilitators)){
-                            if($first){$first = false; $defaultValueFacilitatorId = $row['peopleid'];}
 
                             $facilitatorId = $row['peopleid'];
 
                             $fullName = ucwords($row['firstname'] . " " . $row['middleinit'] . " " . $row['lastname']);
 
+                            //set previous facilitator selected as the default person selected
                             if($selected_facilitator == $facilitatorId){
                                 echo "<option selected ='selected' id=\"{$facilitatorId}\">{$fullName}</option>";
                             }
@@ -281,12 +298,14 @@ include('header.php');
                     </div>
                 </div>
 
+                <!-- Hidden form field values -->
                 <?php echo "<input type = \"hidden\" id=\"facilitator\" name=\"facilitator\" value=\"{$selected_facilitator}\" />"  ?>
                 <input type = "hidden" id="topic-id" name="topic-id" value="<?php echo $selected_topic_id ?>" />
                 <input type = "hidden" id="curr-id" name="curr-id" value="<?php echo $selected_curr_id ?>" />
                 <input type = "hidden" id="fromEditClassInfo" name="fromEditClassInfo" value="0" />
 
 
+                <!-- Submit Button -->
                 <fieldset disabled="disabled" id="sub">
                     <div class="form-footer submit">
                         <button type="submit" class="btn cpca">Change Attendance Sheet</button>

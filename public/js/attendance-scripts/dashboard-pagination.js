@@ -7,8 +7,8 @@
  *
  * @author Scott Hansen
  * @copyright 2017 Marist College
- * @version [version number]
- * @since [initial version number]
+ * @version 0.7
+ * @since 0.7
  */
 
 window.onload = function () {
@@ -19,6 +19,11 @@ window.onload = function () {
 var tableContent;
 var rowsParent = document.getElementById('result-pag');
 
+/**
+ * takes original page query result on page and uses javascript to
+ * hide some of these elements and to create buttons to navigate
+ * the available recent classes to see.
+ */
 function handlePagination() {
 
     var numResults = rowsParent.childElementCount;
@@ -45,6 +50,12 @@ function handlePagination() {
 
 }
 
+/**
+ * creates a numbered button and then appends it to the page
+ *
+ * @param num{int} - the number to be displayed on the button
+ *
+ */
 function createPaginationListElement(num){
     var btnParent = document.getElementById('button-nav');
 
@@ -60,6 +71,11 @@ function createPaginationListElement(num){
 
 }
 
+/**
+ *
+ * @param selectionNum{int} - what number button was clicked
+ *
+ */
 function selectButton(selectionNum){
     switch (selectionNum){
         case 1:
@@ -85,6 +101,14 @@ function selectButton(selectionNum){
     }
 }
 
+/**
+ * takes in the number of button which is to be changed to selected
+ * and resets the other button colors, then adds a class to indicate
+ * it was selected
+ *
+ * @param num{int} - the number button to be changed
+ *
+ */
 function changeButton(num) {
     resetButtonColors();
     var clickedButton = document.getElementById("btn-pag-" + num.toString());
@@ -93,7 +117,9 @@ function changeButton(num) {
     clickedButton.classList.add('btn-dark');
 }
 
-//set all buttons to secondary
+/**
+ * set all buttons to secondary class
+ */
 function resetButtonColors() {
     var btnGroup = document.getElementsByName("btn-pag");
     for(var i = 0; i < btnGroup.length; i++){
@@ -103,6 +129,14 @@ function resetButtonColors() {
     }
 }
 
+/**
+ * controls which rows will be generated in attendance
+ * dashboard table generation
+ *
+ * @param min{int} - bottom number of range of class rows to show
+ * @param max{int} - top number of range of class row to show
+ *
+ */
 function showSelectedChildren(min, max){
     //remove all elements
     rowsParent.innerHTML = tableContent;

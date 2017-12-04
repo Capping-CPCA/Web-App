@@ -11,8 +11,8 @@
  *
  * @author Scott Hansen
  * @copyright 2017 Marist College
- * @version [version number]
- * @since [initial version number]
+ * @version 1.1
+ * @since 0.7
  */
 
 global $db;
@@ -28,6 +28,7 @@ if(!isset($_SESSION['serializedInfo']) && !isset($_SESSION['attendance-info'])) 
     die(); //slow and painful
 }
 
+//get the class information
 $attendanceInfo = $_SESSION['attendance-info'];
 
 $selected_class = $attendanceInfo['classes'];
@@ -67,7 +68,7 @@ $selected_curr_num = $attendanceInfo['curr-id'];
 $escaped_site_name = escape_apostrophe($selected_site);
 $timestamp = makeTimestamp($selected_date, $selected_time);
 
-//validate no duplicate class offering
+//validate class offering - ensure there is no duplicate class offering
 {
     $duplicateClassOfferingQuery = "SELECT * FROM ClassOffering " .
         "WHERE date = '{$timestamp}' and siteName = '{$escaped_site_name}'; ";
@@ -94,7 +95,7 @@ $timestamp = makeTimestamp($selected_date, $selected_time);
     }
 }
 
-
+//get the attendance information from the session
 $serializedInfo = $_SESSION['serializedInfo'];
 $attendanceInfo = deserializeParticipantMatrix($serializedInfo);
 
@@ -105,10 +106,6 @@ for($i = 0; $i < count($attendanceInfo); $i++) {
 
         //peopleInsert
 
-//        $fname = validateName($attendanceInfo[$i]['fn']);
-//        $lname = validateName($attendanceInfo[$i]['ln']);
-//        $minit = validateMiddle($attendanceInfo[$i]['mi']);
-
         $fname = $attendanceInfo[$i]['fn'];
         $lname = $attendanceInfo[$i]['ln'];
         $minit = $attendanceInfo[$i]['mi'];
@@ -118,7 +115,6 @@ for($i = 0; $i < count($attendanceInfo); $i++) {
         $lname = sanitizeString($db->conn, $lname);
         $minit = sanitizeString($db->conn, $minit);
 
-        //TODO: for next release implement Vallie's custom participant search
         $peopleInsertQuery =
             "SELECT peopleinsert( " .
             "fname := '{$fname}'::text, " .
@@ -154,7 +150,6 @@ for($i = 0; $i < count($attendanceInfo); $i++) {
         }
     }
 }
-//loop through attendanceInfo and insert records into the database
 
 //create one classOffering entry
 $classOfferingQuery =

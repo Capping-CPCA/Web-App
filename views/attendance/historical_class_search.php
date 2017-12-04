@@ -9,17 +9,17 @@
  *
  * @author Scott Hansen
  * @copyright 2017 Marist College
- * @version [version number]
- * @since [initial version number]
+ * @version 1.1
+ * @since 0.7
  */
 
 include('header.php');
 
 global $db;
 
-$result_curriculum = $db->no_param_query("SELECT c.curriculumid, c.curriculumname FROM curricula c WHERE c.df IS FALSE ORDER BY c.curriculumname ASC;");
-
-$result_classes = $db->no_param_query("SELECT cc.curriculumid, topicname, cc.classid FROM curriculumclasses cc, classes WHERE classes.classid = cc.classid AND classes.df IS FALSE ORDER BY cc.curriculumid;");
+//get all of th curriculum and class options
+$result_curriculum = $db->no_param_query(SHARED_QUERY_CURRICULUM);
+$result_classes = $db->no_param_query(SHARED_QUERY_CLASSES);
 
 //clear search criteria
 unset($_SESSION['attendance-search-curr']);
@@ -34,12 +34,14 @@ unset($_SESSION['attendance-numResult']);
 
     <script>
 
-        //grabs the id of the selected option and sets it as value of hidden form field
+        /**
+         * grabs the id of the selected option and sets it as value of hidden form field
+         */
         function updateClassSelection(){
             document.getElementById('topic-id').value = $("#classes").find("option:selected").data("id");
         }
 
-        //js for holding all the class choices
+        //matrix that holds all of the associated curriculum id's class id's and topicNames
         var classesMatrix = [
             <?php
             while($row = pg_fetch_assoc($result_classes)){
@@ -48,13 +50,16 @@ unset($_SESSION['attendance-numResult']);
             ?>
         ];
 
-        //js for controlling the disabled selection of class section
+        /**
+         * populates class selection after curriculum is selected and
+         * enables the submit button after a curriculum is selected
+         */
         function enableSecondSelection() {
 
             //enable selection
             document.getElementById("classSelection").disabled = false;
 
-            /* Display the proper classes */
+            /* Begin display of proper classes */
 
             //clear the current class selection
             var classesElement = document.getElementById("classes");
@@ -84,12 +89,13 @@ unset($_SESSION['attendance-numResult']);
                     classesElement.appendChild(classNode);
                 }
             }
+            /* End display of proper classes */
 
         }
 
-        //input: none
-        //output: none
-        //description: ensures that at least one option was selected before submitting the form
+        /**
+         * ensures that at least one option was selected before submitting the form
+         */
         function enableSubmit() {
             document.getElementById("submit-search").disabled = false;
         }
