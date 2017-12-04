@@ -173,33 +173,42 @@ include('header.php');
                                     <br>
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="self_pers_firstname">Participant Name:</label>
-                                        <div class="col-sm-2 col">
+                                        <!-- Begin First Name -->
+                                        <div class="col-sm-4 col">
                                             <input type="text" class="form-control" id="self_pers_firstname" name="self_pers_firstname" placeholder="First name" required>
                                             <div id="fname_error" class="invalid-feedback">Enter first name</div>
                                         </div>
+                                        <!-- End First Name -->
 
+                                        <!-- Begin Last Name -->
                                         <label class="col-form-label col-sm-0 sr-only" for="self_pers_lastname">Last Name:</label>
-                                        <div class="col-sm-2 col">
+                                        <div class="col-sm-4 col">
                                             <input type="text" class="form-control" id="self_pers_lastname" name="self_pers_lastname" placeholder="Last name" required>
                                             <div id="lname_error" class="invalid-feedback">Enter last name</div>
                                         </div>
+                                        <!-- End Last Name -->
 
+                                        <!-- Begin Middle Initial -->
                                         <label class="col-form-label col-sm-0 sr-only" for="self_pers_middlein">MInitial:</label>
-                                        <div class="col-sm-1 col">
+                                        <div class="col-sm-2 col">
                                             <input type="text" class="form-control" id="self_pers_middlein" name="self_pers_middlein" placeholder="Initial" maxlength="1">
                                         </div>
+                                        <!-- End Middle Initial -->
                                     </div>
 
+                                    <!-- Begin Date of Birth -->
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="self_pers_dob">Date of Birth:</label>
-                                        <div class="col-sm-2 col">
+                                        <div class="col-sm-4 col">
                                             <input type="date" class="form-control" id="self_pers_dob" name="self_pers_dob">
                                         </div>
                                     </div>
+                                    <!-- End Date of Birth -->
 
+                                    <!-- Begin Race -->
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="self_pers_race">Race:</label>
-                                        <div class="col-sm-2 col">
+                                        <div class="col-sm-4 col">
                                             <select class="form-control select_sex" name="self_pers_race" id="intake_ethnicity">
                                                 <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                 <?php
@@ -214,10 +223,12 @@ include('header.php');
                                             </select>
                                         </div>
                                     </div>
+                                    <!-- End Race -->
 
+                                    <!-- Begin Sex -->
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="self_pers_sex">Sex:</label>
-                                        <div class="col-sm-2 col">
+                                        <div class="col-sm-4 col">
                                             <select class="form-control select_sex" name="self_pers_sex" id="intake_ethnicity">
                                                 <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                 <?php
@@ -232,24 +243,41 @@ include('header.php');
                                             </select>
                                         </div>
                                     </div>
+                                    <!-- End Sex -->
 
                                     <h5>Contact Information</h5>
                                     <br>
+                                    <!-- Begin Street Address -->
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2 col-2" for="self_pers_address">Street Address:</label>
-                                        <div class="col-sm-3 col">
+                                        <label class="col-form-label col-sm-3 col-3" for="self_pers_address">Street Address:</label>
+                                        <div class="col-sm-4 col">
                                             <input type="text" class="form-control" id="self_pers_address" name="self_pers_address" placeholder="Street address">
                                         </div>
+                                    </div>
+                                    <!-- End Street Address -->
 
-                                        <label class="col-form-label col-sm-auto col-2" for="self_apt_info">Apartment:</label>
-                                        <div class="col-sm-2 col">
+                                    <!-- Begin Apartment Information -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-3 col-3" for="self_apt_info">Apartment:</label>
+                                        <div class="col-sm-4 col">
                                             <input type="text" class="form-control" id="self_apt_info" name="self_apt_info" placeholder="Apartment Information">
                                         </div>
                                     </div>
+                                    <!-- End Apartment Information -->
 
+                                    <!-- Begin City -->
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="self_pers_state">State:</label>
-                                        <div class="col-sm-3 col">
+                                        <label class="col-form-label col-sm-3 col-3" for="self_pers_city">City:</label>
+                                        <div class="col-sm-4 col">
+                                            <input type="text" class="form-control" id="self_pers_city" name="self_pers_city" placeholder="City" data-error="Enter city.">
+                                        </div>
+                                    </div>
+                                    <!-- End City -->
+
+                                    <!-- Begin State -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-3" for="self_pers_state">State:</label>
+                                        <div class="col-sm-4 col">
                                             <select class="form-control" id="self_pers_state" name="self_pers_state" >
                                                 <option value="" selected="selected" disabled="disabled">Choose a state</option>
                                                 <?php
@@ -263,26 +291,26 @@ include('header.php');
                                                 ?>
                                             </select>
                                         </div>
-
-                                        <label class="col-form-label col-sm-1 col-2" for="self_pers_city">City:</label>
-                                        <div class="col-sm-2 col">
-                                            <input type="text" class="form-control" id="self_pers_city" name="self_pers_city" placeholder="City" data-error="Enter city.">
-                                        </div>
                                     </div>
+                                    <!-- End State -->
 
+                                    <!-- Begin Zip -->
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="self_pers_zip">ZIP:</label>
-                                        <div class="col-sm-1 col">
+                                        <label class="col-form-label col-sm-3" for="self_pers_zip">ZIP:</label>
+                                        <div class="col-sm-2 col">
                                             <input type="text" class="form-control mask-zip" id="self_pers_zip" name="self_pers_zip" placeholder="Zip">
                                         </div>
                                     </div>
+                                    <!-- End Zip -->
 
+                                    <!-- Begin Phone Number -->
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="self_pers_phone">Phone Number:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-sm-3" for="self_pers_phone">Phone Number:</label>
+                                        <div class="col-sm-3 col">
                                             <input type="tel" class="form-control mask-phone feedback-icon" id="self_pers_phone" name="self_pers_phone" placeholder="(999) 999-9999">
                                         </div>
                                     </div>
+                                    <!-- End Phone Number -->
                                 </div>
                             </div>
                         </div> <!-- 1st collapsible end -->
@@ -300,51 +328,67 @@ include('header.php');
                                     <h5>Additional Participant Information</h5>
                                     <br>
 
+                                    <!-- Begin Q: Involvement with CPS/Protective/Foster Care -->
                                     <div class="form-group row">
 										<div class="form-check form-check-inline col">
-											<label class="form-check-label">
+											<label class="form-check-label col-sm-9 col-9">
 												Do you have any involvement with CPS/Protective/Foster Care?
 											</label>
 											&emsp;
-											<label class="form-check-label" for="self_involvement_yes">
-												<input class="form-check-input" type="radio" id="self_involvement_yes" name="self_involvement" value="Yes"> Yes
+											<label class="custom-control custom-radio" for="self_involvement_yes">
+												<input class="custom-control-input" type="radio" id="self_involvement_yes" name="self_involvement" value="Yes">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description">Yes</span>
 											</label>
 											&nbsp;
-											<label class="form-check-label" for="self_involvement_no">
-												<input class="form-check-input" type="radio" id="self_involvement_no" name="self_involvement" value="No"> No
+											<label class="custom-control custom-radio" for="self_involvement_no">
+												<input class="custom-control-input" type="radio" id="self_involvement_no" name="self_involvement" value="No">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description">No</span>
 											</label>
 										</div>
                                     </div>
+                                    <!-- End Q: Involvement with CPS/Protective/Foster Care -->
 
+                                    <!-- Begin Q: PEP classes in past -->
                                     <div class="form-group row">
 										<div class="form-check form-check-inline col">
-											<label class="form-check-label">
+											<label class="form-check-label col-sm-9 col-9">
 												Have you attended PEP parenting classes in the past?
 											</label>
 											&emsp;
-											<label class="form-check-label" for="self_attended_yes">
-												<input class="form-check-input" type="radio" id="self_attended_yes" name="self_attended" value="Yes"> Yes
+											<label class="custom-control custom-radio" for="self_attended_yes">
+												<input class="custom-control-input" type="radio" id="self_attended_yes" name="self_attended" value="Yes">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description">Yes</span>
 											</label>
 											&nbsp;
-											<label class="form-check-label" for="self_attended_no">
-												<input class="form-check-input" type="radio" id="self_attended_no" name="self_attended" value="No"> No
+											<label class="custom-control custom-radio" for="self_attended_no">
+												<input class="custom-control-input" type="radio" id="self_attended_no" name="self_attended" value="No">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description">No</span>
 											</label>
                                         </div>
                                     </div>
+                                    <!-- End Q: PEP classes in past -->
 
+                                    <!-- Begin Referral Source -->
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2 col-3" for="self_ref_source">Referral Source:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-sm-3 col-3" for="self_ref_source">Referral Source:</label>
+                                        <div class="col-sm-5 col">
                                             <input type="text" class="form-control" id="self_ref_source" name="self_ref_source" placeholder="Referral Source">
                                         </div>
                                     </div>
+                                    <!-- End Referral Source -->
 
+                                    <!-- Begin reason for attendance -->
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2 col-3" for="reason">Reason for attendance:</label>
-                                        <div class="col-sm-3 col">
+                                        <label class="col-form-label col-sm-3 col-3" for="reason">Reason for attendance:</label>
+                                        <div class="col-sm-8 col">
                                             <textarea style="resize: none;" class="form-control" rows=4 id="reason" name="reason" placeholder="Reason for attending classes"></textarea>
                                         </div>
                                     </div>
+                                    <!-- End reason for attendance -->
                                 </div>
                             </div>
                         </div>  <!-- 2nd collapsable end -->
@@ -363,43 +407,51 @@ include('header.php');
                                 <h5>For Office Use Only</h5>
                                 <br>
 
+                                <!-- Begin Date of First Call -->
                                 <div class="form-group row">
                                     <label class="col-form-label col-sm-2" for="self_office_firstCall">Date of First Call:</label>
-                                    <div class="col-sm-2 col">
+                                    <div class="col-sm-4 col">
                                         <input type="date" class="form-control" id="self_office_firstCall" name="self_office_firstCall">
                                     </div>
 
                                     <label class="col-form-label col-sm-2" for="self_office_returnedCall">Returned Call:</label>
-                                    <div class="col-sm-2 col">
+                                    <div class="col-sm-4 col">
                                         <input type="date" class="form-control" id="self_office_returnedCall" name="self_office_returnedCall">
                                     </div>
                                 </div>
+                                <!-- End Date of First Call -->
 
+                                <!-- Begin Start Date/ Letter Mailed-->
                                 <div class="form-group row">
                                     <label class="col-form-label col-sm-2" for="self_tentative_start">Tentative Start Date:</label>
-                                    <div class="col-sm-2 col">
+                                    <div class="col-sm-4 col">
                                         <input type="date" class="form-control" id="self_tentative_start" name="self_tentative_start">
                                     </div>
 
                                     <label class="col-form-label col-sm-2" for="self_letter_mailed">Letter Mailed:</label>
-                                    <div class="col-sm-2 col">
+                                    <div class="col-sm-4 col">
                                         <input type="date" class="form-control" id="self_letter_mailed" name="self_letter_mailed">
                                     </div>
                                 </div>
+                                <!-- End Start Date/ Letter Mailed -->
 
+                                <!-- Begin Class Assigned To-->
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 col-3" for="self_assigned_to">Class Assigned to:</label>
-                                    <div class="col-sm-2 col">
+                                    <label class="col-form-label col-sm-3 col-3" for="self_assigned_to">Class Assigned to:</label>
+                                    <div class="col-sm-4 col">
                                         <input type="text" class="form-control" id="self_assigned_to" name="self_assigned_to" placeholder="Program">
                                     </div>
                                 </div>
+                                <!-- End Class Assigned To-->
 
+                                <!-- Begin Notes -->
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 col-auto" for="notes">Notes:</label>
-                                    <div class="col-sm-3 col">
+                                    <label class="col-form-label col-sm-3 col" for="notes">Notes:</label>
+                                    <div class="col-sm-8 col">
                                         <textarea style="resize: none;" class="form-control" rows=5 id="notes" name="notes" placeholder="Enter any notes here"></textarea>
                                     </div>
                                 </div>
+                                <!-- End Notes -->
 
                             </div>
                         </div>   <!-- 3rd collapsible end -->

@@ -89,26 +89,24 @@ function validZip(el){
 // Had to use classes and not ID's because of the possibility of multiple fields being shown for one radio button
 // Classes answer_yes and answer_no determine which radio button will display the hidden field (for situational questions)
 function showFields(el){
-    var fieldName = el.name + "_div";
+    var fieldNameYes = el.name + "_div_yes";
+    var fieldNameNo = el.name + "_div_no";
 
-    if($('.' + fieldName).hasClass('answer_yes')) {
+    if($('.' + fieldNameYes).hasClass('answer_yes')) {
         if (el.value === "Yes") {
-            $('.' + fieldName).removeClass('hidden-field');
+            $('.' + fieldNameYes).removeClass('hidden-field').css({opacity: 0}).animate({opacity:1},600);
         } else {
-            $('.' + fieldName).addClass('hidden-field');
+            $('.' + fieldNameYes).addClass('hidden-field');
         }
-
-
     }
 
-    if($('.' + fieldName).hasClass('answer_no')) {
+    if($('.' + fieldNameNo).hasClass('answer_no')) {
         if (el.value === "No") {
-            $('.' + fieldName).removeClass('hidden-field');
+            $('.' + fieldNameNo).removeClass('hidden-field').css({opacity: 0}).animate({opacity:1},600);
         } else {
-            $('.' + fieldName).addClass('hidden-field');
+            $('.' + fieldNameNo).addClass('hidden-field');
         }
     }
-
 }
 
 $(function () {

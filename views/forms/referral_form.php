@@ -18,7 +18,7 @@
 authorizedPage();
 global $db, $params, $route, $view;
 
-if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $form_type = "agency referral";
 
@@ -287,8 +287,8 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
                                        lName := $2::TEXT,
                                        mInit := $3::VARCHAR
                                        );", [$ref_firstname,
-                                            $ref_lastname,
-                                            NULL]);
+            $ref_lastname,
+            NULL]);
         // Get the main agency PID
         $pIDMainAgency = pg_fetch_result($pIDMainAgency, 0);
 
@@ -301,11 +301,11 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
                                 isMain := $5::BOOLEAN,
                                 arID := $6::INT
                                 );", [$pIDMainAgency,
-                                    $ref_party,
-                                    $ref_phone,
-                                    $ref_email,
-                                    TRUE,
-                                    $formID]);
+            $ref_party,
+            $ref_phone,
+            $ref_email,
+            TRUE,
+            $formID]);
 
         // ADDITIONAL REFERRING AGENCIES
 
@@ -323,8 +323,8 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
                                            lName := $2::TEXT,
                                            mInit := $3::VARCHAR
                                            );", [$$prt_first_name,
-                                                $$prt_last_name,
-                                                NULL]);
+                    $$prt_last_name,
+                    NULL]);
                 $pidParty = pg_fetch_result($pidParty, 0);
 
                 $formatted_phone = phoneStrToNum($$prt_phone);
@@ -337,11 +337,11 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
                                 isMain := $5::boolean,
                                 arID := $6::int
                                 );", [$pidParty,
-                                    $$prt_type,
-                                    $formatted_phone,
-                                    $$prt_email,
-                                    0,
-                                    $formID]);
+                    $$prt_type,
+                    $formatted_phone,
+                    $$prt_email,
+                    0,
+                    $formID]);
             }
         }
     }
@@ -406,9 +406,9 @@ include('header.php');
 
     <!-- Page Content -->
     <div id="page-content-wrapper" style="width:100%">
-		<div class="container-fluid controls" align="right">
-			<button type="button" class="btn cpca" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
-		</div>
+        <div class="container-fluid controls" align="right">
+            <button type="button" class="btn cpca" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+        </div>
         <div class="container-fluid">
 
 
@@ -432,37 +432,42 @@ include('header.php');
 
                                     <h5>Personal Information</h5>
                                     <br>
+                                    <!-- Begin Participant Name -->
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="pers_firstname">Participant Name:</label>
 
-                                        <div class="col-sm-2 col">
+                                        <div class="col-sm-4 col">
                                             <input type="text" class="form-control" tabindex="0" id="pers_firstname" name="pers_firstname" placeholder="First name" required>
                                             <div class="invalid-feedback">Enter first name</div>
                                         </div>
 
                                         <label class="col-form-label col-sm-0 sr-only" for="pers_lastname">Last Name:</label>
-                                        <div class="col-sm-2 col">
+                                        <div class="col-sm-4 col">
                                             <input type="text" class="form-control" id="pers_lastname" name="pers_lastname" placeholder="Last name" required>
                                             <div class="invalid-feedback">Enter last name</div>
                                         </div>
 
                                         <label class="col-form-label col-sm-0 sr-only" for="pers_middlein">MInitial:</label>
-                                        <div class="col-sm-1 col">
+                                        <div class="col-sm-2 col">
                                             <input type="text" class="form-control" maxlength="1" id="pers_middlein" name="pers_middlein" placeholder="Initial">
                                         </div>
                                     </div>
+                                    <!-- End Participant Name-->
 
+                                    <!-- Begin Date Of Birth -->
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="pers_dob">Date of Birth:</label>
-                                        <div class="col-sm-2 col">
+                                        <div class="col-sm-4 col">
                                             <input type="date" class="form-control" name="pers_dob" id="pers_dob" placeholder="Enter DOB">
                                         </div>
                                     </div>
+                                    <!-- End Date Of Birth -->
 
+                                    <!-- Begin Sex -->
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Race:</label>
-                                        <div class="col-sm-2 col">
-                                            <select class="form-control " name="pers_race" id="pers_race">
+                                        <label class="col-sm-2 col-form-label">Sex:</label>
+                                        <div class="col-sm-3 col">
+                                            <select class="form-control" name="pers_sex" id="pers_sex">
                                                 <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                 <?php
                                                 $res = $db->query("SELECT unnest(enum_range(NULL::race)) AS type", []);
@@ -476,11 +481,13 @@ include('header.php');
                                             </select>
                                         </div>
                                     </div>
+                                    <!-- End Sex -->
 
+                                    <!-- Begin Race -->
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Sex:</label>
-                                        <div class="col-sm-2 col">
-                                            <select class="form-control" name="pers_sex" id="pers_sex">
+                                        <label class="col-sm-2 col-form-label">Race:</label>
+                                        <div class="col-sm-3 col">
+                                            <select class="form-control " name="pers_race" id="pers_race">
                                                 <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                 <?php
                                                 $res = $db->query("SELECT unnest(enum_range(NULL::sex)) AS type", []);
@@ -494,23 +501,42 @@ include('header.php');
                                             </select>
                                         </div>
                                     </div>
+                                    <!-- End Race -->
 
                                     <h5>Contact Information</h5>
                                     <br>
-                                    <div class="form-group row">
-                                        <label class="col-form-label col-sm-2 col-2" for="pers_address">Street Address:</label>
-                                        <div class="col-sm-3 col">
+
+                                    <!-- Begin Street Address -->
+                                    <div class = "form-group row">
+                                        <label class="col-form-label col-sm-3" for="pers_address">Street Address:</label>
+                                        <div class="col-sm-4 col">
                                             <input type="text" class="form-control" name="pers_address" id="pers_address" placeholder="Street address">
                                         </div>
-                                        <label class="col-form-label col-sm-auto col-2" for="pers_apt_info">Apartment:</label>
-                                        <div class="col-sm-2 col">
+                                    </div>
+                                    <!-- End Street Address -->
+
+                                    <!-- Begin Apartment Info -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-3" for="pers_apt_info">Apartment Info:</label>
+                                        <div class="col-sm-4 col">
                                             <input type="text" class="form-control" name="pers_apt_info" id="pers_apt_info" placeholder="Apartment Information">
                                         </div>
                                     </div>
+                                    <!-- End Apartment Info -->
 
+                                    <!-- Begin City -->
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2 col-2" for="pers_state">State:</label>
-                                        <div class="col-sm-3 col">
+                                        <label class="col-form-label col-sm-3 col-3" for="pers_city">City:</label>
+                                        <div class="col-sm-4 col">
+                                            <input type="text" class="form-control" name="pers_city" id="pers_city" placeholder="City" data-error="Enter city.">
+                                        </div>
+                                    </div>
+                                    <!-- End City -->
+
+                                    <!-- Begin State -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-3" for="pers_state">State:</label>
+                                        <div class="col-sm-4">
                                             <select class="form-control" name="pers_state" id="pers_state" >
                                                 <option value="" selected="selected" disabled="disabled">Choose a state</option>
                                                 <?php
@@ -524,39 +550,45 @@ include('header.php');
                                                 ?>
                                             </select>
                                         </div>
-                                        <label class="col-form-label col-sm-1 col-2" for="pers_city">City:</label>
-                                        <div class="col-sm-2 col">
-                                            <input type="text" class="form-control" name="pers_city" id="pers_city" placeholder="City" data-error="Enter city.">
-                                        </div>
-                                    </div>
 
+                                    </div>
+                                    <!-- End State -->
+
+                                    <!-- Begin Zip -->
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2 col-2" for="pers_zip">ZIP:</label>
-                                        <div class="col-sm-1 col">
+                                        <label class="col-form-label col-sm-3" for="pers_zip">ZIP:</label>
+                                        <div class="col-sm-2 col">
                                             <input type="text" class="form-control mask-zip" name="pers_zip" id="pers_zip" placeholder="Zip">
                                         </div>
                                     </div>
+                                    <!-- End Zip -->
 
+                                    <!-- Begin Primary Phone -->
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="pers_primphone">Primary Phone:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-sm-3" for="pers_primphone">Primary Phone:</label>
+                                        <div class="col-sm-3 col">
                                             <input type="tel" class="form-control mask-phone feedback-icon" name="pers_primphone" id="pers_primphone" placeholder="(999) 999-9999">
                                         </div>
                                     </div>
+                                    <!-- End Primary Phone -->
 
+                                    <!-- Begin Secondary Phone -->
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="pers_secphone">Secondary Phone:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-sm-3" for="pers_secphone">Secondary Phone:</label>
+                                        <div class="col-sm-3 col">
                                             <input type="tel" class="form-control mask-phone" name="pers_secphone" id="pers_secphone" placeholder="(999) 999-9999">
                                         </div>
                                     </div>
+                                    <!-- End Secondary Phone -->
 
+                                    <!-- Begin Reason For Referral -->
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="comment">Reason for Referral:</label>
-                                        <div class="col-sm-3 col">
+                                        <label class="col-form-label col-sm-3" for="comment">Reason for Referral:</label>
+                                        <div class="col-sm-9 col">
                                             <textarea style="resize: none;" class="form-control" rows=4 name="pers_reason" id="pers_reason" placeholder="Reason for referral"></textarea>
                                         </div>
                                     </div>
+                                    <!-- End Reason Fro Referral -->
                                 </div>
                             </div>
                         </div>
@@ -573,9 +605,11 @@ include('header.php');
                                 <div class="card-body">
                                     <h5>Referral Information</h5>
                                     <br>
+
+                                    <!-- Begin Referring Party/Date Of Referral -->
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2" for="ref_party">Referring Party:</label>
-                                        <div class="col-sm-2 col">
+                                        <div class="col-sm-4 col">
                                             <select class="form-control" name="ref_party" id="ref_party" placeholder="Enter party">
                                                 <option value="" selected="selected" disabled="disabled">Choose a party</option>
                                                 <?php
@@ -591,35 +625,43 @@ include('header.php');
                                         </div>
 
                                         <label class="col-form-label col-sm-2" for="ref_date">Date of Referral:</label>
-                                        <div class="col-sm-2 col">
+                                        <div class="col-sm-4 col">
                                             <input type="date" class="form-control" name="ref_date" id="ref_date">
                                         </div>
                                     </div>
+                                    <!-- End Referring Party/Date Of Referral -->
+
                                     <br>
                                     <h5>Referring Party Contact Information</h5>
                                     <br>
+
+                                    <!-- Begin Referring Party Name -->
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="ref_firstname">Referring Party Name:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-sm-4" for="ref_firstname">Referring Party Name:</label>
+                                        <div class="col-sm-3 col">
                                             <input type="text" class="form-control" name="ref_firstname" id="ref_firstname" placeholder="First Name">
                                         </div>
 
                                         <label class="col-form-label col-sm-0 sr-only" for="ref_lastname">Last Name:</label>
-                                        <div class="col-sm-2 col">
+                                        <div class="col-sm-3 col">
                                             <input type="text" class="form-control" name="ref_lastname" id="ref_lastname" placeholder="Last Name">
                                         </div>
                                     </div>
+                                    <!-- End Referring Party Name -->
 
+                                    <!-- Begin Phone Number -->
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="ref_phone">Phone Number:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-sm-4" for="ref_phone">Phone Number:</label>
+                                        <div class="col-sm-3 col">
                                             <input type="text" class="form-control mask-phone" name="ref_phone" id="ref_phone" placeholder="(999) 999-9999">
                                         </div>
                                     </div>
+                                    <!-- End Phone Number -->
+
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="ref_email">Email:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-sm-4" for="ref_email">Email:</label>
+                                        <div class="col-sm-6 col">
                                             <input type="email" class="form-control" name="ref_email" id="ref_email" placeholder="cpca@cpca.com">
                                         </div>
                                     </div>
@@ -661,31 +703,36 @@ include('header.php');
                                         <h5 class="heading-reference">Household Member 1</h5>
                                         <br>
 
+                                        <!-- Begin Member Name -->
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label label_fn">Member Name:</label>
-                                            <div class="col-sm-2 col">
+                                            <div class="col-sm-4 col">
                                                 <input type="text" class="form-control input_fn" name="family_first_name_1" maxlength="255" placeholder="First name">
                                             </div>
                                             <label class="col-sm-0 col-form-label sr-only label_ln">Last Name:</label>
-                                            <div class="col-sm-2 col">
+                                            <div class="col-sm-4 col">
                                                 <input type="text" class="form-control input_ln" name="family_last_name_1" maxlength="255" placeholder="Last name">
                                             </div>
                                             <label class="col-sm-0 col-form-label sr-only label_mi">Middle Initial:</label>
-                                            <div class="col-sm-1 col">
+                                            <div class="col-sm-2 col">
                                                 <input type="text" class="form-control input_mi" name="family_mi_1" maxlength="1" placeholder="Initial">
                                             </div>
                                         </div>
+                                        <!-- End Member Name -->
 
+                                        <!-- Begin Date of Birth -->
                                         <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label label_dob" for="family_dob_1">Date of Birth:</label>
-                                            <div class="col-sm-2 col">
+                                            <label class="col-sm-3 col-form-label label_dob" for="family_dob_1">Date of Birth:</label>
+                                            <div class="col-sm-4 col">
                                                 <input type="date" class="form-control input_dob" name="family_dob_1" id="family_dob_1" maxlength="255">
                                             </div>
                                         </div>
+                                        <!-- End Date of Birth -->
 
+                                        <!-- Begin Sex -->
                                         <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label label_sex">Sex:</label>
-                                            <div class="col-sm-2 col">
+                                            <label class="col-sm-3 col-form-label label_sex">Sex:</label>
+                                            <div class="col-sm-4 col">
                                                 <select class="form-control select_sex" name="family_sex_1" id="family_sex_1">
                                                     <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                     <?php
@@ -700,10 +747,12 @@ include('header.php');
                                                 </select>
                                             </div>
                                         </div>
+                                        <!-- End Sex -->
 
+                                        <!-- Begin Race -->
                                         <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label label_race">Race:</label>
-                                            <div class="col-sm-2 col">
+                                            <label class="col-sm-3 col-form-label label_race">Race:</label>
+                                            <div class="col-sm-4 col">
                                                 <select class="form-control select_race" name="family_race_1" id="family_race_1">
                                                     <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                     <?php
@@ -718,10 +767,12 @@ include('header.php');
                                                 </select>
                                             </div>
                                         </div>
+                                        <!-- End Race -->
 
+                                        <!-- Begin Relationship -->
                                         <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label label_relationship col-3">Relationship:</label>
-                                            <div class="col-sm-2 col">
+                                            <label class="col-sm-3 col-form-label label_relationship col-3">Relationship:</label>
+                                            <div class="col-sm-4 col">
                                                 <select class="form-control select_relationship" name="family_relationship_1" id="family_relationship_1">
                                                     <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                     <?php
@@ -736,20 +787,21 @@ include('header.php');
                                                 </select>
                                             </div>
                                         </div>
+                                        <!-- End Relationship -->
                                     </div>
 
                                     <div class="form-group row controls">
-                                        <label class="col-sm-2 col-form-label">Add Member:</label>
+                                        <label class="col-sm-3 col-form-label">Add Member:</label>
                                         <div class="col-sm-1">
-                                            <button class="btn btn-default" type="button" id="btnAddMember"><span class="fa fa-plus"></span></button> <!-- every other dropdown on this form uses down arrows -->
+                                            <button class="btn btn-default" type="button" id="btnAddMember"><i class="fa fa-plus" aria-hidden="true"></i></button> <!-- every other dropdown on this form uses down arrows -->
                                         </div>
 
                                     </div>
 
                                     <div class="form-group row controls">
-                                        <label class="col-sm-2 col-form-label">Remove Member:</label>
+                                        <label class="col-sm-3 col-form-label">Remove Member:</label>
                                         <div class="col-sm-1">
-                                            <button class="btn btn-default" type="button" id="btnDelMember" disabled="disabled"><span class="fa fa-minus"></span></button> <!-- every other dropdown on this form uses down arrows -->
+                                            <button class="btn btn-default" type="button" id="btnDelMember" disabled="disabled"><i class="fa fa-minus" aria-hidden="true"></i></button> <!-- every other dropdown on this form uses down arrows -->
                                         </div>
                                     </div>
 
@@ -771,86 +823,117 @@ include('header.php');
                                     <h5>Additional Participant Information</h5>
                                     <span>Please check all that apply to the participant:</span>
                                     <br><br>
-									<div class="row">
-										<div style="padding-left:100px;">
-											<div class="form-check">
-												<div class="row">
-													<label class="form-check-label  col">
-														<input class="form-check-input" id="chkSpecialEd" name="chkSpecialEd" type="checkbox" value="">
-														Special Education/IEP/Resource Services
-													</label>
-													<label class="form-check-label col">
-														<input class="form-check-input" id="chkCPS" name="chkCPS" type="checkbox" value="">
-														Involved with CPS/Foster Care/Preventive Services
-													</label>
-												</div>
-											</div>
+                                    <div style="padding-left:100px;">
 
-											<div class="form-check">
-												<div class="row">
-													<label class="form-check-label col">
-														<input class="form-check-input" id="chkSubAbuse" name="chkSubAbuse" type="checkbox" value="">
-														Substance Use/Abuse History
-													</label>
-													<label class="form-check-label col">
-														<input class="form-check-input" id="chkMental" name="chkMental" type="checkbox" value="">
-														Mental Health/Dual Diagnosis
-													</label>
-												</div>
-											</div>
+                                        <!-- Begin Row 1 -->
+                                        <div class="form-check">
 
-											<div class="form-check">
-												<div class="row">
-													<label class="form-check-label col">
-														<input class="form-check-input" id="chkPreg" name="chkPreg" type="checkbox" value="">
-														Pregnant
-													</label>
-													<label class="form-check-label col">
-														<input class="form-check-input" id="chkIQ" name="chkIQ" type="checkbox" value="">
-														IQ Documentation
-													</label>
-												</div>
-											</div>
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-5">
+                                                <input class="custom-control-input" id="chkSpecialEd" name="chkSpecialEd" type="checkbox" value="">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    Special Education/IEP/Resource Services
+                                                </span>
+                                            </label>
 
-											<div class="form-check">
-												<div class="row">
-													<label class="form-check-label col">
-														<input class="form-check-input" id="chkViolence" name="chkViolence" type="checkbox" value="">
-														Domestic Violence History
-													</label>
-													<label class="form-check-label col">
-														<input class="form-check-input" id="chkReside" name="chkReside" type="checkbox" value="">
-														Child/Children do not reside with Referred Individual
-													</label>
-												</div>
-											</div>
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-6">
+                                                <input class="custom-control-input" id="chkCPS" name="chkCPS" type="checkbox" value="">
+                                                <span class='custom-control-indicator'></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    Involved with CPS/Foster Care/Preventive Services
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <!-- End Row 1 -->
 
-											<div class="form-check">
-												<div class="row">
-													<label class="form-check-label col">
-														<input class="form-check-input" id="chkSigned" name="chkSigned" type="checkbox" value="">
-														Signed consent form for release of information
-													</label>
-												</div>
-											</div>
-										</div>
-										<br>
-									</div>
-                                    <div class="form-group">
-										<div class="row">
-											<label class="col-form-label col-sm-2 col-3" for="comments">Additional Information:</label>
-											<div class="col-sm-3 col">
-												<textarea style="resize: none;" class="form-control" rows=5 name="additional_info" id="additional_info" placeholder="Enter any additional information"></textarea>
-											</div>
-										</div>
+                                        <!-- Begin Row 2 -->
+                                        <div class="form-check">
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-5">
+                                                <input class="custom-control-input" id="chkSubAbuse" name="chkSubAbuse" type="checkbox" value="">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    Substance Use/Abuse History
+                                                </span>
+                                            </label>
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-6">
+                                                <input class="custom-control-input" id="chkMental" name="chkMental" type="checkbox" value="">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    Mental Health/Dual Diagnosis
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <!-- End Row 2 -->
+
+                                        <!-- Begin Row 3 -->
+                                        <div class="form-check">
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-5">
+                                                <input class="custom-control-input" id="chkPreg" name="chkPreg" type="checkbox" value="">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    Pregnant
+                                                </span>
+                                            </label>
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-6">
+                                                <input class="custom-control-input" id="chkIQ" name="chkIQ" type="checkbox" value="">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    IQ Documentation
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <!-- End Row 3 -->
+
+                                        <!-- Begin Row 4 -->
+                                        <div class="form-check">
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-5">
+                                                <input class="custom-control-input" id="chkViolence" name="chkViolence" type="checkbox" value="">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    Domestic Violence History
+                                                </span>
+                                            </label>
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-6">
+                                                <input class="custom-control-input" id="chkReside" name="chkReside" type="checkbox" value="">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    Child/Children do not reside with Referred Individual
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <!-- End Row 4 -->
+
+                                        <!-- Begin Row 5 -->
+                                        <div class="form-check">
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-5">
+                                                <input class="custom-control-input" id="chkSigned" name="chkSigned" type="checkbox" value="">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    Signed consent form for release of information
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <!-- End Row 5 -->
                                     </div>
+                                    <br>
+
+                                    <!-- Begin Additional Information -->
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-2" for="comments">Additional Information:</label>
+                                        <div class="col-sm-10">
+                                            <textarea style="resize: none;" class="form-control" rows=5 name="additional_info" id="additional_info" placeholder="Enter any additional information"></textarea>
+                                        </div>
+                                    </div>
+                                    <!-- End Additional Information -->
+
 
                                     <div id="partyEntry_1" class="clonedParty">
                                         <h5 class="heading-reference">Additional Parties Involved</h5>
                                         <br>
+                                        <!-- Begin Party Type -->
                                         <div class="form-group row">
-                                            <label class="col-form-label col-sm-2 label_type" for="ag_name">Party Type:</label>
-                                            <div class="col-sm-2 col">
+                                            <label class="col-form-label col-sm-3 label_type" for="ag_name">Party Type:</label>
+                                            <div class="col-sm-4 col">
                                                 <select class="form-control select_type" name="party_type_1" id="party_type_1" placeholder="Enter party">
                                                     <option value="" selected="selected" disabled="disabled">Choose a party</option>
                                                     <?php
@@ -865,7 +948,9 @@ include('header.php');
                                                 </select>
                                             </div>
                                         </div>
+                                        <!-- End Party Type -->
 
+                                        <!-- Begin Remove Party-->
                                         <div class="modal fade" id="agencyModal" tabindex="-1" role="dialog" aria-labelledby="agencyModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
@@ -885,46 +970,58 @@ include('header.php');
                                                 </div>
                                             </div>
                                         </div>
+                                        <!-- End Remove Party -->
 
+                                        <!-- Begin Contact Name -->
                                         <div class="form-group row">
-                                            <label class="col-form-label col-sm-2 label_fn" for="party_firstname_1">Contact Name:</label>
-                                            <div class="col-sm-2 col">
+                                            <label class="col-form-label col-sm-3 label_fn" for="party_firstname_1">Contact Name:</label>
+                                            <div class="col-sm-4 col">
                                                 <input type="text" class="form-control input_fn" name="party_firstname_1" id="party_firstname_1" placeholder="First Name">
                                             </div>
 
                                             <label class="col-form-label col-sm-0 sr-only label_ln" for="party_lastname_1">Last Name:</label>
-                                            <div class="col-sm-2 col">
+                                            <div class="col-sm-4 col">
                                                 <input type="text" class="form-control input_ln" name="party_lastname_1" id="party_lastname_1" placeholder="Last Name">
                                             </div>
                                         </div>
+                                        <!-- End Contact Name -->
 
+                                        <!-- Begin Contact Phone -->
                                         <div class="form-group row">
-                                            <label class="col-form-label col-sm-2 label_phone" for="party_phone_1">Contact Phone:</label>
-                                            <div class="col-sm-2 col">
+                                            <label class="col-form-label col-sm-3 label_phone" for="party_phone_1">Contact Phone:</label>
+                                            <div class="col-sm-3 col">
                                                 <input type="text" class="form-control mask-phone input_phone" name="party_phone_1" id="party_phone_1" placeholder="(999) 999-9999">
                                             </div>
                                         </div>
+                                        <!-- End Contact Phone -->
 
+                                        <!-- Begin Contact Email -->
                                         <div class="form-group row">
-                                            <label class="col-form-label col-sm-2 label_email" for="party_email_1">Contact Email:</label>
-                                            <div class="col-sm-2 col">
+                                            <label class="col-form-label col-sm-3 label_email" for="party_email_1">Contact Email:</label>
+                                            <div class="col-sm-5 col">
                                                 <input type="email" class="form-control input_email" name="party_email_1" id="party_email_1" placeholder="cpca@cpca.com">
                                             </div>
                                         </div>
+                                        <!-- End Contact Email -->
                                     </div>
 
-                                    <div class="form-group row controls">
-                                        <label class="col-sm-2 col-form-label">Add Another Party:</label>
+                                    <!-- Begin Add Another Party -->
+                                    <div class="form-group row">
+                                        <label class="col-3 col-sm-form-label">Add Another Party:</label>
                                         <div class="col-sm-1 col">
-                                            <button class="btn btn-default" type="button" id="btnAddParty"><span class="fa fa-plus"></span></button>
+                                            <button class="btn btn-default" type="button" id="btnAddParty"><i class="fa fa-plus" aria-hidden="true"></i></button>
                                         </div>
                                     </div>
-                                    <div class="form-group row controls">
-                                        <label class="col-sm-2 col-form-label">Remove Party:</label>
+                                    <!-- End Add Another Party -->
+
+                                    <!-- Begin Remove Party -->
+                                    <div class="form-group row">
+                                        <label class="col-3 col-sm-form-label">Remove Party:</label>
                                         <div class="col-sm-1 col">
-                                            <button class="btn btn-default" type="button" id="btnDelParty"><span class="fa fa-minus"></span></button>
+                                            <button class="btn btn-default" type="button" id="btnDelParty"><i class="fa fa-minus" aria-hidden="true"></i></button>
                                         </div>
                                     </div>
+                                    <!-- End Remove Party-->
 
                                 </div>
                             </div>
@@ -943,38 +1040,48 @@ include('header.php');
                             <div class="card-body">
                                 <h5>For Office Use Only</h5>
                                 <br>
+
+                                <!-- Begin Date Of First Contact -->
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 col-3" for="office_contact_date">Date of First Contact:</label>
-                                    <div class="col-sm-2 col">
+                                    <label class="col-form-label col-sm-4" for="office_contact_date">Date of First Contact:</label>
+                                    <div class="col-sm-4 col">
                                         <input type="date" class="form-control" name="office_contact_date" id="office_contact_date">
                                     </div>
                                 </div>
+                                <!-- End Date Of First Contact -->
 
+
+                                <!-- Begin Means Of Contact -->
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 col-3" for="office_means">Means of Contact:</label>
-                                    <div class="col-sm-2 col">
+                                    <label class="col-form-label col-sm-4" for="office_means">Means of Contact:</label>
+                                    <div class="col-sm-4 col">
                                         <input type="text" class="form-control" name="office_means" id="office_means" placeholder="Email, Phone, etc...">
                                     </div>
                                 </div>
+                                <!-- End Means Of Contact -->
 
+                                <!-- Begin Initial Meeting Info / Location -->
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 col-3" for="office_initial_date">Initial Meeting Info:</label>
-                                    <div class="col-sm-2 col">
+                                    <label class="col-form-label col-sm-4" for="office_initial_date">Initial Meeting Info:</label>
+                                    <div class="col-sm-4 col">
                                         <input type="date" class="form-control" name="office_initial_date" id="office_initial_date">
                                     </div>
 
                                     <label class="col-form-label col-sm-0 sr-only" for="office_location">Location:</label>
-                                    <div class="col-sm-2 col">
+                                    <div class="col-sm-4 col">
                                         <input type="text" class="form-control" name="office_location" id="office_location" placeholder="Location">
                                     </div>
                                 </div>
+                                <!-- End Initial Meeting Info / Location -->
 
+                                <!-- Begin Comments -->
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 col-3" for="comments">Comments:</label>
-                                    <div class="col-sm-3 col">
+                                    <label class="col-form-label col-sm-4" for="comments">Comments:</label>
+                                    <div class="col-sm-8 col">
                                         <textarea style="resize: none;" class="form-control" rows=5 name="comments" id="comments" placeholder="Enter any comments here"></textarea>
                                     </div>
                                 </div>
+                                <!-- End Comments -->
 
                             </div>
                         </div>
@@ -987,206 +1094,206 @@ include('header.php');
 
         </div>  <!-- /#container -->
     </div>  <!-- /#container-fluid class -->
-<style>
-@media print{
-  .collapse {
-    display: block !important;
-    height: auto !important
-  }
-  .controls {
-	  display: none !important;
-  }
-  .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
-    float: left;
-  }
-  .col-sm-12 {
-    width: 100%;
-  }
-  .col-sm-11 {
-    width: 91.66666667%;
-  }
-  .col-sm-10 {
-    width: 83.33333333%;
-  }
-  .col-sm-9 {
-    width: 75%;
-  }
-  .col-sm-8 {
-    width: 66.66666667%;
-  }
-  .col-sm-7 {
-    width: 58.33333333%;
-  }
-  .col-sm-6 {
-    width: 50%;
-  }
-  .col-sm-5 {
-    width: 41.66666667%;
-  }
-  .col-sm-4 {
-    width: 33.33333333%;
-  }
-  .col-sm-3 {
-    width: 25%;
-  }
-  .col-sm-2 {
-    width: 16.66666667%;
-  }
-  .col-sm-1 {
-    width: 8.33333333%;
-  }
-  .col-sm-pull-12 {
-    right: 100%;
-  }
-  .col-sm-pull-11 {
-    right: 91.66666667%;
-  }
-  .col-sm-pull-10 {
-    right: 83.33333333%;
-  }
-  .col-sm-pull-9 {
-    right: 75%;
-  }
-  .col-sm-pull-8 {
-    right: 66.66666667%;
-  }
-  .col-sm-pull-7 {
-    right: 58.33333333%;
-  }
-  .col-sm-pull-6 {
-    right: 50%;
-  }
-  .col-sm-pull-5 {
-    right: 41.66666667%;
-  }
-  .col-sm-pull-4 {
-    right: 33.33333333%;
-  }
-  .col-sm-pull-3 {
-    right: 25%;
-  }
-  .col-sm-pull-2 {
-    right: 16.66666667%;
-  }
-  .col-sm-pull-1 {
-    right: 8.33333333%;
-  }
-  .col-sm-pull-0 {
-    right: auto;
-  }
-  .col-sm-push-12 {
-    left: 100%;
-  }
-  .col-sm-push-11 {
-    left: 91.66666667%;
-  }
-  .col-sm-push-10 {
-    left: 83.33333333%;
-  }
-  .col-sm-push-9 {
-    left: 75%;
-  }
-  .col-sm-push-8 {
-    left: 66.66666667%;
-  }
-  .col-sm-push-7 {
-    left: 58.33333333%;
-  }
-  .col-sm-push-6 {
-    left: 50%;
-  }
-  .col-sm-push-5 {
-    left: 41.66666667%;
-  }
-  .col-sm-push-4 {
-    left: 33.33333333%;
-  }
-  .col-sm-push-3 {
-    left: 25%;
-  }
-  .col-sm-push-2 {
-    left: 16.66666667%;
-  }
-  .col-sm-push-1 {
-    left: 8.33333333%;
-  }
-  .col-sm-push-0 {
-    left: auto;
-  }
-  .col-sm-offset-12 {
-    margin-left: 100%;
-  }
-  .col-sm-offset-11 {
-    margin-left: 91.66666667%;
-  }
-  .col-sm-offset-10 {
-    margin-left: 83.33333333%;
-  }
-  .col-sm-offset-9 {
-    margin-left: 75%;
-  }
-  .col-sm-offset-8 {
-    margin-left: 66.66666667%;
-  }
-  .col-sm-offset-7 {
-    margin-left: 58.33333333%;
-  }
-  .col-sm-offset-6 {
-    margin-left: 50%;
-  }
-  .col-sm-offset-5 {
-    margin-left: 41.66666667%;
-  }
-  .col-sm-offset-4 {
-    margin-left: 33.33333333%;
-  }
-  .col-sm-offset-3 {
-    margin-left: 25%;
-  }
-  .col-sm-offset-2 {
-    margin-left: 16.66666667%;
-  }
-  .col-sm-offset-1 {
-    margin-left: 8.33333333%;
-  }
-  .col-sm-offset-0 {
-    margin-left: 0%;
-  }
-  .visible-xs {
-    display: none !important;
-  }
-  .hidden-xs {
-    display: block !important;
-  }
-  table.hidden-xs {
-    display: table;
-  }
-  tr.hidden-xs {
-    display: table-row !important;
-  }
-  th.hidden-xs,
-  td.hidden-xs {
-    display: table-cell !important;
-  }
-  .hidden-xs.hidden-print {
-    display: none !important;
-  }
-  .hidden-sm {
-    display: none !important;
-  }
-  .visible-sm {
-    display: block !important;
-  }
-  table.visible-sm {
-    display: table;
-  }
-  tr.visible-sm {
-    display: table-row !important;
-  }
-  th.visible-sm,
-  td.visible-sm {
-    display: table-cell !important;
-  }
-}
-</style>
+    <style>
+        @media print{
+            .collapse {
+                display: block !important;
+                height: auto !important
+            }
+            .controls {
+                display: none !important;
+            }
+            .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
+                float: left;
+            }
+            .col-sm-12 {
+                width: 100%;
+            }
+            .col-sm-11 {
+                width: 91.66666667%;
+            }
+            .col-sm-10 {
+                width: 83.33333333%;
+            }
+            .col-sm-9 {
+                width: 75%;
+            }
+            .col-sm-8 {
+                width: 66.66666667%;
+            }
+            .col-sm-7 {
+                width: 58.33333333%;
+            }
+            .col-sm-6 {
+                width: 50%;
+            }
+            .col-sm-5 {
+                width: 41.66666667%;
+            }
+            .col-sm-4 {
+                width: 33.33333333%;
+            }
+            .col-sm-3 {
+                width: 25%;
+            }
+            .col-sm-2 {
+                width: 16.66666667%;
+            }
+            .col-sm-1 {
+                width: 8.33333333%;
+            }
+            .col-sm-pull-12 {
+                right: 100%;
+            }
+            .col-sm-pull-11 {
+                right: 91.66666667%;
+            }
+            .col-sm-pull-10 {
+                right: 83.33333333%;
+            }
+            .col-sm-pull-9 {
+                right: 75%;
+            }
+            .col-sm-pull-8 {
+                right: 66.66666667%;
+            }
+            .col-sm-pull-7 {
+                right: 58.33333333%;
+            }
+            .col-sm-pull-6 {
+                right: 50%;
+            }
+            .col-sm-pull-5 {
+                right: 41.66666667%;
+            }
+            .col-sm-pull-4 {
+                right: 33.33333333%;
+            }
+            .col-sm-pull-3 {
+                right: 25%;
+            }
+            .col-sm-pull-2 {
+                right: 16.66666667%;
+            }
+            .col-sm-pull-1 {
+                right: 8.33333333%;
+            }
+            .col-sm-pull-0 {
+                right: auto;
+            }
+            .col-sm-push-12 {
+                left: 100%;
+            }
+            .col-sm-push-11 {
+                left: 91.66666667%;
+            }
+            .col-sm-push-10 {
+                left: 83.33333333%;
+            }
+            .col-sm-push-9 {
+                left: 75%;
+            }
+            .col-sm-push-8 {
+                left: 66.66666667%;
+            }
+            .col-sm-push-7 {
+                left: 58.33333333%;
+            }
+            .col-sm-push-6 {
+                left: 50%;
+            }
+            .col-sm-push-5 {
+                left: 41.66666667%;
+            }
+            .col-sm-push-4 {
+                left: 33.33333333%;
+            }
+            .col-sm-push-3 {
+                left: 25%;
+            }
+            .col-sm-push-2 {
+                left: 16.66666667%;
+            }
+            .col-sm-push-1 {
+                left: 8.33333333%;
+            }
+            .col-sm-push-0 {
+                left: auto;
+            }
+            .col-sm-offset-12 {
+                margin-left: 100%;
+            }
+            .col-sm-offset-11 {
+                margin-left: 91.66666667%;
+            }
+            .col-sm-offset-10 {
+                margin-left: 83.33333333%;
+            }
+            .col-sm-offset-9 {
+                margin-left: 75%;
+            }
+            .col-sm-offset-8 {
+                margin-left: 66.66666667%;
+            }
+            .col-sm-offset-7 {
+                margin-left: 58.33333333%;
+            }
+            .col-sm-offset-6 {
+                margin-left: 50%;
+            }
+            .col-sm-offset-5 {
+                margin-left: 41.66666667%;
+            }
+            .col-sm-offset-4 {
+                margin-left: 33.33333333%;
+            }
+            .col-sm-offset-3 {
+                margin-left: 25%;
+            }
+            .col-sm-offset-2 {
+                margin-left: 16.66666667%;
+            }
+            .col-sm-offset-1 {
+                margin-left: 8.33333333%;
+            }
+            .col-sm-offset-0 {
+                margin-left: 0%;
+            }
+            .visible-xs {
+                display: none !important;
+            }
+            .hidden-xs {
+                display: block !important;
+            }
+            table.hidden-xs {
+                display: table;
+            }
+            tr.hidden-xs {
+                display: table-row !important;
+            }
+            th.hidden-xs,
+            td.hidden-xs {
+                display: table-cell !important;
+            }
+            .hidden-xs.hidden-print {
+                display: none !important;
+            }
+            .hidden-sm {
+                display: none !important;
+            }
+            .visible-sm {
+                display: block !important;
+            }
+            table.visible-sm {
+                display: table;
+            }
+            tr.visible-sm {
+                display: table-row !important;
+            }
+            th.visible-sm,
+            td.visible-sm {
+                display: table-cell !important;
+            }
+        }
+    </style>
 <?php include('footer.php'); ?>
