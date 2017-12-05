@@ -17,7 +17,7 @@
 
 global $db;
 require ('attendance_utilities.php');
-include ('shared_queries.php');
+require ('shared_queries.php');
 
 $success = true;
 $errorMsg = "";
@@ -44,11 +44,11 @@ $selected_curr_num = $attendanceInfo['curr-id'];
 //PHP Input Validation - final check for class information input in the DB
 {
     //run queries from new class page in case data changes
-    $result_curriculum = $db->no_param_query(SHARED_QUERY_CURRICULUM);
-    $result_classes = $db->no_param_query(SHARED_QUERY_CLASSES);
-    $result_sites = $db->no_param_query(SHARED_QUERY_SITES);
-    $result_languages = $db->no_param_query(SHARED_QUERY_LANGUAGES);
-    $result_facilitators = $db->no_param_query(SHARED_QUERY_FACILITATORS);
+    $result_curriculum = $db->execute('shared_query_curriculum',[]);
+    $result_classes = $db->execute('shared_query_classes',[]);
+    $result_sites = $db->execute('shared_query_sites',[]);
+    $result_languages = $db->execute('shared_query_languages',[]);
+    $result_facilitators = $db->execute('shared_query_facilitators',[]);
 
 
     //check that all class info validations are true

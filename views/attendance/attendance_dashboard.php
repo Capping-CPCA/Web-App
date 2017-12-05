@@ -41,7 +41,7 @@ include('header.php');
          * @param buttonNumber{int}
          */
         function changeHiddenFormFieldValue(buttonNumber) {
-            document.getElementById("whichButton").value = buttonNumber;
+            document.getElementById("recentClass").value = buttonNumber;
         }
     </script>
 
@@ -50,7 +50,7 @@ include('header.php');
             <div class="card-body">
                 <h4 class="card-title" style="margin-top: 15px;">My Recent Classes</h4>
                 <div class="table-responsive">
-                    <form action = "historical-class-view" method="post" name="classView">
+                    <form action = "/recent-class-view" method="post" name="classView">
                         <table class="table table-striped">
                             <thead>
                             <tr>
@@ -87,7 +87,7 @@ include('header.php');
                         </table>
 
                         <!-- The hidden field responsible for submitting what recent class was clicked -->
-                        <input type="hidden" id="whichButton" name="whichButton" value="" />
+                        <input type="hidden" id="recentClass" name="recentClass" value="" />
                     </form>
 
                     <!-- Pagination buttons -->

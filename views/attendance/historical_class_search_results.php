@@ -15,11 +15,12 @@
 
 global $db;
 
-//get all the classes and curriculum
-$result_curriculum = $db->no_param_query(SHARED_QUERY_CURRICULUM);
-$result_classes = $db->no_param_query(SHARED_QUERY_CLASSES);
-
 require ('attendance_utilities.php');
+require ('shared_queries.php');
+
+//get all the classes and curriculum
+$result_curriculum = $db->execute('shared_query_curriculum',[]);
+$result_classes = $db->execute('shared_query_classes',[]);
 
 $query = "";
 

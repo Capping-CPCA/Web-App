@@ -15,7 +15,7 @@
 
 global $db;
 
-include ('shared_queries.php');
+require ('shared_queries.php');
 
 //unset previous class session information
 if(isset($_SESSION['serializedInfo'])) {
@@ -26,15 +26,15 @@ if(isset($_SESSION['attendance-info'])) {
     unset($_SESSION['attendance-info']);
 }
 
-$result_curriculum = $db->no_param_query(SHARED_QUERY_CURRICULUM);
+$result_curriculum = $db->execute('shared_query_curriculum', []);
 
-$result_classes = $db->no_param_query(SHARED_QUERY_CLASSES);
+$result_classes = $db->execute('shared_query_classes', []);
 
-$result_sites = $db->no_param_query(SHARED_QUERY_SITES);
+$result_sites = $db->execute('shared_query_sites', []);
 
-$result_languages = $db->no_param_query(SHARED_QUERY_LANGUAGES);
+$result_languages = $db->execute('shared_query_languages', []);
 
-$result_facilitators = $db->no_param_query(SHARED_QUERY_FACILITATORS);
+$result_facilitators = $db->execute('shared_query_facilitators',[]);
 
 include('header.php');
 

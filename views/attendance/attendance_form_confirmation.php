@@ -41,7 +41,8 @@ if(isset($_SESSION['serializedInfo'])) {
     updateSessionClassInformation();
     $pageInformation = deserializeParticipantMatrix($_SESSION['serializedInfo']);
 } else { //you shouldn't be here
-    die; //quick and painful
+    header("Location: /attendance");
+    die(); //quick and painful
 }
 
 $convert_date = DateTime::createFromFormat('Y-m-d', $selected_date);

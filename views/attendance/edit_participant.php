@@ -27,23 +27,28 @@ if (!isset($_SESSION['attendance-info'])) {
 //1. deserialize and update session info
 //update class information from previous form
 
-//if we're not from the confirm edit page, update page information with attendance form post fields
-if(!isset($_POST['fromConfirmEditParticipant'])){
-    updateSessionClassInformation();
-}
 $pageInformation = deserializeParticipantMatrix($_SESSION['serializedInfo']);
 
 $checkPageInfo = deserializeParticipantMatrix($_SESSION['serializedInfo']);
 
-//2. grab the post to see which person we clicked to edit
-//shouldn't be on this page if POST not set
+$selected_edit_num = null;
 
-if(!isset($_POST['editButton'])){
-    echo "<h5>Error you must choose a participant to edit.</h5>";
-    die(); //from a juggling accident
+//2. grab the post to see which person we clicked to edit
+if(isset($_SESSION['edit-participant-details-num'])){
+    $selected_edit_num = $_SESSION['edit-participant-details-num'];
+}
+else if (isset($_POST['editButton'])){
+    $selected_edit_num = $_POST['editButton'];
+    $_SESSION['edit-participant-details-num'] = $selected_edit_num;
+
+    updateSessionClassInformation();
+}
+else{ //shouldn't be here
+    header("Location: /attendance-form");
+    die();
 }
 
-$selected_edit_num = $_POST['editButton'];
+
 //3. grab person's session info
 $selected_person = $pageInformation[$selected_edit_num];
 
@@ -195,8 +200,8 @@ include('header.php');
 
                     <!-- edit button information -->
                     <input type="hidden" id="editButton" name="editButton" value="<?= $selected_edit_num ?>" />
-                    
-                    <input type="hidden" id="fromConfirmPage" name="fromConfirmEditParticipant" value="1" />
+
+                    <input type="hidden" id="fromConfirmEditParticipant" name="fromConfirmEditParticipant" value="1" />
 
                     <div class="form-footer submit">
                         <a href="/attendance-form">
