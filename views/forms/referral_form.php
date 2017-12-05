@@ -502,7 +502,7 @@ include('header.php');
                                         <div class="col-sm-3 col">
                                             <input type="text" class="form-control" name="pers_address" id="pers_address" placeholder="Street address">
                                         </div>
-                                        <label class="col-form-label col-sm-auto col-2" for="pers_apt_info">Apartment:</label>
+                                        <label class="col-form-label col-sm-1 col-2" for="pers_apt_info">Apartment:</label>
                                         <div class="col-sm-2 col">
                                             <input type="text" class="form-control" name="pers_apt_info" id="pers_apt_info" placeholder="Apartment Information">
                                         </div>
@@ -771,71 +771,101 @@ include('header.php');
                                     <h5>Additional Participant Information</h5>
                                     <span>Please check all that apply to the participant:</span>
                                     <br><br>
-									<div class="row">
-										<div style="padding-left:100px;">
-											<div class="form-check">
-												<div class="row">
-													<label class="form-check-label  col">
-														<input class="form-check-input" id="chkSpecialEd" name="chkSpecialEd" type="checkbox" value="">
-														Special Education/IEP/Resource Services
-													</label>
-													<label class="form-check-label col">
-														<input class="form-check-input" id="chkCPS" name="chkCPS" type="checkbox" value="">
-														Involved with CPS/Foster Care/Preventive Services
-													</label>
-												</div>
-											</div>
+                                    <div style="padding-left:100px;">
 
-											<div class="form-check">
-												<div class="row">
-													<label class="form-check-label col">
-														<input class="form-check-input" id="chkSubAbuse" name="chkSubAbuse" type="checkbox" value="">
-														Substance Use/Abuse History
-													</label>
-													<label class="form-check-label col">
-														<input class="form-check-input" id="chkMental" name="chkMental" type="checkbox" value="">
-														Mental Health/Dual Diagnosis
-													</label>
-												</div>
-											</div>
+                                        <!-- Begin Row 1 -->
+                                        <div class="form-check">
 
-											<div class="form-check">
-												<div class="row">
-													<label class="form-check-label col">
-														<input class="form-check-input" id="chkPreg" name="chkPreg" type="checkbox" value="">
-														Pregnant
-													</label>
-													<label class="form-check-label col">
-														<input class="form-check-input" id="chkIQ" name="chkIQ" type="checkbox" value="">
-														IQ Documentation
-													</label>
-												</div>
-											</div>
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-5">
+                                                <input class="custom-control-input" id="chkSpecialEd" name="chkSpecialEd" type="checkbox" value="">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    Special Education/IEP/Resource Services
+                                                </span>
+                                            </label>
 
-											<div class="form-check">
-												<div class="row">
-													<label class="form-check-label col">
-														<input class="form-check-input" id="chkViolence" name="chkViolence" type="checkbox" value="">
-														Domestic Violence History
-													</label>
-													<label class="form-check-label col">
-														<input class="form-check-input" id="chkReside" name="chkReside" type="checkbox" value="">
-														Child/Children do not reside with Referred Individual
-													</label>
-												</div>
-											</div>
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-6">
+                                                <input class="custom-control-input" id="chkCPS" name="chkCPS" type="checkbox" value="">
+                                                <span class='custom-control-indicator'></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    Involved with CPS/Foster Care/Preventive Services
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <!-- End Row 1 -->
 
-											<div class="form-check">
-												<div class="row">
-													<label class="form-check-label col">
-														<input class="form-check-input" id="chkSigned" name="chkSigned" type="checkbox" value="">
-														Signed consent form for release of information
-													</label>
-												</div>
-											</div>
-										</div>
-										<br>
-									</div>
+                                        <!-- Begin Row 2 -->
+                                        <div class="form-check">
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-5">
+                                                <input class="custom-control-input" id="chkSubAbuse" name="chkSubAbuse" type="checkbox" value="">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    Substance Use/Abuse History
+                                                </span>
+                                            </label>
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-6">
+                                                <input class="custom-control-input" id="chkMental" name="chkMental" type="checkbox" value="">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    Mental Health/Dual Diagnosis
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <!-- End Row 2 -->
+
+                                        <!-- Begin Row 3 -->
+                                        <div class="form-check">
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-5">
+                                                <input class="custom-control-input" id="chkPreg" name="chkPreg" type="checkbox" value="">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    Pregnant
+                                                </span>
+                                            </label>
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-6">
+                                                <input class="custom-control-input" id="chkIQ" name="chkIQ" type="checkbox" value="">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    IQ Documentation
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <!-- End Row 3 -->
+
+                                        <!-- Begin Row 4 -->
+                                        <div class="form-check">
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-5">
+                                                <input class="custom-control-input" id="chkViolence" name="chkViolence" type="checkbox" value="">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    Domestic Violence History
+                                                </span>
+                                            </label>
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-6">
+                                                <input class="custom-control-input" id="chkReside" name="chkReside" type="checkbox" value="">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    Child/Children do not reside with Referred Individual
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <!-- End Row 4 -->
+
+                                        <!-- Begin Row 5 -->
+                                        <div class="form-check">
+                                            <label class="custom-control custom-checkbox mr-0 pl-3 col-sm-5">
+                                                <input class="custom-control-input" id="chkSigned" name="chkSigned" type="checkbox" value="">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description" style="margin-left:5px">
+                                                    Signed consent form for release of information
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <!-- End Row 5 -->
+                                    </div>
+
+                                    <br>
+
                                     <div class="form-group">
 										<div class="row">
 											<label class="col-form-label col-sm-2 col-3" for="comments">Additional Information:</label>

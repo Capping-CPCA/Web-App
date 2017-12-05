@@ -747,222 +747,299 @@ include('header.php');
                                         <div class="col-sm-4">
                                             <label class="form-control-label">Do you now, or have you ever had a problem with drug/alcohol abuse?</label>
                                         </div>
-                                        <label class="form-check-label" for="drug_alcohol_abuse_yes">
-                                            <input type="radio" id="drug_alcohol_abuse_yes" name="drug_alcohol_abuse" value="Yes"> Yes
+                                        <label class="custom-control custom-radio" for="drug_alcohol_abuse_yes">
+                                            <input type="radio" id="drug_alcohol_abuse_yes" name="drug_alcohol_abuse" class="custom-control-input" value="Yes">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">Yes</span>
                                         </label>
-                                        <label class="form-check-label" for="drug_alcohol_abuse_no">
-                                            <input type="radio" id="drug_alcohol_abuse_no" name="drug_alcohol_abuse" value="No"> No
+                                        <label class="custom-control custom-radio" for="drug_alcohol_abuse_no">
+                                            <input type="radio" id="drug_alcohol_abuse_no" name="drug_alcohol_abuse" class="custom-control-input" value="No">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">No</span>
                                         </label>
                                     </div>
+                                    <!-- End Q: Drug/Alcohol Abuse -->
 
-                                    <div class="form-group hidden-field row drug_alcohol_abuse_div answer_yes">
+                                    <div class="form-group hidden-field row drug_alcohol_abuse_div_yes answer_yes">
                                         <label class="col-form-label col-sm-2" for="drug_alcohol_abuse_explain">Please explain:</label>
                                         <div class="col-sm-5">
-                                            <input type="text" class="form-control" id="drug_alcohol_abuse_explain" name="drug_alcohol_abuse_explain" placeholder="Please explain...">
+                                            <input type="text" class="form-control" id="drug_alcohol_abuse_explain" name="drug_alcohol_abuse_explain" placeholder="Please describe your past with drug/alcohol abuse">
                                         </div>
                                     </div>
 
+                                    <!-- Begin Q: Live With Children -->
                                     <div class="form-group radio-group row">
                                         <div class="col-sm-4">
                                             <label class="form-control-label">Do you currently live with your child(ren)?</label>
                                         </div>
-                                        <label class="form-check-label" for="live_with_children_yes">
-                                            <input  type="radio" id="live_with_children_yes" name="live_with_children" value="Yes"> Yes
+                                        <label class="custom-control custom-radio" for="live_with_children_yes">
+                                            <input  type="radio" id="live_with_children_yes" name="live_with_children" class="custom-control-input" value="Yes">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">Yes</span>
                                         </label>
-                                        <label class="form-check-label" for="live_with_children_no">
-                                            <input type="radio" id="live_with_children_no" name="live_with_children" value="No"> No
+                                        <label class="custom-control custom-radio" for="live_with_children_no">
+                                            <input type="radio" id="live_with_children_no" name="live_with_children" class="custom-control-input" value="No">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">No</span>
                                         </label>
                                     </div>
+                                    <!-- End Q: Live With Children -->
 
                                     <div class="form-group hidden-field row live_with_children_div answer_no">
-                                            <label class="col-form-label col-sm-2" for="live_with_children_separated">Length of Separation:</label>
-                                            <div class="col-sm-5">
-                                                <input type="text" class="form-control" id="live_with_children_separated" name="live_with_children_separated" placeholder="For how long have you been separated from your child(ren)?">
-                                            </div>
+                                        <label class="col-form-label col-sm-4" for="live_with_children_separated">Length of Separation:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="live_with_children_separated" name="live_with_children_separated" placeholder="For how long have you been separated from your child(ren)?">
+                                        </div>
                                     </div>
 
+                                    <!-- Begin Q: Separated With Children -->
                                     <div class="form-group radio-group row">
                                         <div class="col-sm-4">
                                             <label class="form-control-label">Are you separated with your child(ren)'s other biological parent?</label>
                                         </div>
-                                        <label class="form-check-label" for="parent_separated_yes">
-                                            <input  type="radio" id="parent_separated_yes" name="parent_separated" value="Yes"> Yes
+                                        <label class="custom-control custom-radio" for="parent_separated_yes">
+                                            <input  type="radio" id="parent_separated_yes" name="parent_separated" class="custom-control-input" value="Yes">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">Yes</span>
                                         </label>
-                                        <label class="form-check-label" for="parent_separated_no">
-                                            <input type="radio" id="parent_separated_no" name="parent_separated" value="No"> No
+                                        <label class="custom-control custom-radio" for="parent_separated_no">
+                                            <input type="radio" id="parent_separated_no" name="parent_separated" class="custom-control-input" value="No">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">No</span>
                                         </label>
                                     </div>
+                                    <!-- End Q: Separated With Children-->
 
-                                    <div class="form-group hidden-field row parent_separated_div answer_yes">
+                                    <div class="form-group hidden-field row parent_separated_div_yes answer_yes">
                                         <label class="col-form-label col-sm-2" for="separated_length">Please explain:</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="separated_length" name="separated_length" placeholder="For how long have you been separated?">
                                         </div>
                                     </div>
 
-                                    <div  class="form-group hidden-field row parent_separated_div answer_yes">
+                                    <div  class="form-group hidden-field row parent_separated_div_yes answer_yes">
                                         <label class="col-form-label col-sm-2" for="relationship">Relationship status:</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="relationship" name="relationship" placeholder="What is your relationship like?">
                                         </div>
                                     </div>
 
+                                    <!-- Begin Q: Parent Together -->
                                     <div class="form-group radio-group row">
                                         <div class="col-sm-4">
                                             <label class="form-control-label">Have you and your child(ren)'s parent been able to parent together?</label>
                                         </div>
-                                        <label class="form-check-label" for="parenting_yes">
-                                            <input  type="radio" id="parenting_yes" name="parenting" value="Yes"> Yes
+                                        <label class="custom-control custom-radio" for="parenting_yes">
+                                            <input  type="radio" id="parenting_yes" name="parenting" class="custom-control-input" value="Yes">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">Yes</span>
                                         </label>
-                                        <label class="form-check-label" for="parenting_no">
-                                            <input type="radio" id="parenting_no" name="parenting" value="No"> No
+                                        <label class="custom-control custom-radio" for="parenting_no">
+                                            <input type="radio" id="parenting_no" name="parenting" class="custom-control-input" value="No">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">No</span>
                                         </label>
                                     </div>
+                                    <!-- End Q: Parent Together -->
 
+                                    <!-- Begin Q: Currently involved CPS -->
                                     <div class="form-group radio-group row">
                                         <div class="col-sm-4">
                                             <label class="form-control-label">Are you involved with Child Protective Services?</label>
                                         </div>
-                                        <label class="form-check-label" for="child_protective_yes">
-                                            <input  type="radio" id="child_protective_yes" name="child_protective" value="Yes"> Yes
+                                        <label class="custom-control custom-radio" for="child_protective_yes">
+                                            <input  type="radio" id="child_protective_yes" name="child_protective" class="custom-control-input" value="Yes">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">Yes</span>
                                         </label>
-                                        <label class="form-check-label" for="child_protective_no">
-                                            <input type="radio" id="child_protective_no" name="child_protective" value="No"> No
+                                        <label class="custom-control custom-radio" for="child_protective_no">
+                                            <input type="radio" id="child_protective_no" name="child_protective" class="custom-control-input" value="No">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">No</span>
                                         </label>
                                     </div>
+                                    <!-- End Q: Currently involved CPS
 
+                                    <!-- Begin Q: Previously involved CPS -->
                                     <div class="form-group radio-group row">
                                         <div class="col-sm-4">
                                             <label class="form-control-label">Have you previously been involved with Child Protective Services?</label>
                                         </div>
-                                        <label class="form-check-label" for="previous_child_protective_yes">
-                                            <input  type="radio" id="previous_child_protective_yes" name="previous_child_protective" value="Yes"> Yes
+                                        <label class="custom-control custom-radio" for="previous_child_protective_yes">
+                                            <input  type="radio" id="previous_child_protective_yes" name="previous_child_protective" class="custom-control-input" value="Yes">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">Yes</span>
                                         </label>
-                                        <label class="form-check-label" for="previous_child_protective_no">
-                                            <input type="radio" id="previous_child_protective_no" name="previous_child_protective" value="No"> No
+                                        <label class="custom-control custom-radio" for="previous_child_protective_no">
+                                            <input type="radio" id="previous_child_protective_no" name="previous_child_protective" class="custom-control-input" value="No">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">No</span>
                                         </label>
                                     </div>
+                                    <!-- End Q: Previously Involved CPS -->
 
-
+                                    <!-- Begin Q: Mandated To Take Class -->
                                     <div class="form-group radio-group row">
                                         <div class="col-sm-4">
                                             <label class="form-control-label">Have you been mandated to take this class?</label>
                                         </div>
-                                        <label class="form-check-label" for="mandated_yes">
-                                            <input  type="radio" id="mandated_yes" name="mandated" value="Yes"> Yes
+                                        <label class="custom-control custom-radio" for="mandated_yes">
+                                            <input  type="radio" id="mandated_yes" name="mandated" class="custom-control-input" value="Yes">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">Yes</span>
                                         </label>
-                                        <label class="form-check-label" for="mandated_no">
-                                            <input type="radio" id="mandated_no" name="mandated" value="No"> No
+                                        <label class="custom-control custom-radio" for="mandated_no">
+                                            <input type="radio" id="mandated_no" name="mandated" class="custom-control-input" value="No">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">No</span>
                                         </label>
                                     </div>
+                                    <!-- End Q: Mandated To Take Class -->
 
-                                    <div  class="form-group hidden-field row mandated_div answer_yes">
+                                    <div  class="form-group hidden-field row mandated_div_yes answer_yes">
                                         <label class="col-form-label col-sm-2" for="mandated_by">Mandated by:</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="mandated_by" name="mandated_by" placeholder="Who mandated you?">
                                         </div>
                                     </div>
 
-                                    <div  class="form-group hidden-field row mandated_div answer_yes">
+                                    <div  class="form-group hidden-field row mandated_div_yes answer_yes">
                                         <label class="col-form-label col-sm-2" for="reason_mandated">Mandate Reason:</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="reason_mandated" name="reason_mandated" placeholder="Reason you were mandated (be specific)">
                                         </div>
                                     </div>
 
-                                    <div  class="form-group hidden-field row mandated_div answer_yes">
+                                    <div class="form-group hidden-field row mandated_div_no answer_no">
                                         <label class="col-form-label col-sm-2" for="reason_for_taking_class">Reason For Taking Class:</label>
                                         <div class="col-sm-5">
-                                            <input type="text" class="form-control" id="reason_for_taking_class" name="reason_for_taking_class" placeholder="Reason you are taking classes">
+                                            <input type="text" class="form-control" id="reason_for_taking_class" name="reason_for_taking_class" placeholder="Please explain...">
                                         </div>
                                     </div>
 
+                                    <!-- Begin Q: Other Parenting Classes -->
                                     <div class="form-group radio-group row">
                                         <div class="col-sm-4">
                                             <label class="form-control-label">Have you attended any other parenting classes?</label>
                                         </div>
-                                        <label class="form-check-label" for="other_classes_yes">
-                                            <input  type="radio" id="other_classes_yes" name="other_classes" value="Yes"> Yes
+                                        <label class="custom-control custom-radio" for="other_classes_yes">
+                                            <input  type="radio" id="other_classes_yes" name="other_classes" class="custom-control-input" value="Yes">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">Yes</span>
                                         </label>
-                                        <label class="form-check-label" for="other_classes_no">
-                                            <input type="radio" id="other_classes_no" name="other_classes" value="No"> No
+                                        <label class="custom-control custom-radio" for="other_classes_no">
+                                            <input type="radio" id="other_classes_no" name="other_classes" class="custom-control-input" value="No">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">No</span>
                                         </label>
                                     </div>
+                                    <!-- End Q: Other Parenting Classes -->
 
-                                    <div  class="form-group hidden-field row other_classes_div answer_yes">
+                                    <div  class="form-group hidden-field row other_classes_div_yes answer_yes">
                                         <label class="col-form-label col-sm-2" for="other_classes_where_when">Please explain:</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="other_classes_where_when" name="other_classes_where_when" placeholder="Where did you take classes and how long ago?">
                                         </div>
                                     </div>
 
+                                    <!-- Begin Q: The Victim Of Abuse Or Neglect -->
                                     <div class="form-group radio-group row">
                                         <div class="col-sm-4">
                                             <label class="form-control-label">Were you the victim of abuse or neglect in your own childhood?</label>
                                         </div>
-                                        <label class="form-check-label" for="victim_of_abuse_yes">
-                                            <input  type="radio" id="victim_of_abuse_yes" name="victim_of_abuse" value="Yes"> Yes
+                                        <label class="custom-control custom-radio" for="victim_of_abuse_yes">
+                                            <input  type="radio" id="victim_of_abuse_yes" name="victim_of_abuse" class="custom-control-input" value="Yes">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">Yes</span>
                                         </label>
-                                        <label class="form-check-label" for="victim_of_abuse_no">
-                                            <input type="radio" id="victim_of_abuse_no" name="victim_of_abuse" value="No"> No
+                                        <label class="custom-control custom-radio" for="victim_of_abuse_no">
+                                            <input type="radio" id="victim_of_abuse_no" name="victim_of_abuse" class="custom-control-input" value="No">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">No</span>
                                         </label>
                                     </div>
+                                    <!-- End Q: The Victim Of Abuse Or Neglect -->
 
-                                    <div  class="form-group hidden-field row victim_of_abuse_div answer_yes">
+                                    <div  class="form-group hidden-field row victim_of_abuse_div_yes answer_yes">
                                         <label class="col-form-label col-sm-2" for="form_of_abuse">Please explain:</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="form_of_abuse" name="form_of_abuse" placeholder="What form of abuse did you take?">
                                         </div>
                                     </div>
 
+                                    <!-- Begin Q: Abuse In Therapy -->
                                     <div class="form-group radio-group row">
                                         <div class="col-sm-4">
                                             <label class="form-control-label">Did you ever deal with your abuse in therapy?</label>
                                         </div>
-                                        <label class="form-check-label" for="abuse_therapy_yes">
-                                            <input  type="radio" id="abuse_therapy_yes" name="abuse_therapy" value="Yes"> Yes
+                                        <label class="custom-control custom-radio" for="abuse_therapy_yes">
+                                            <input  type="radio" id="abuse_therapy_yes" name="abuse_therapy" class="custom-control-input" value="Yes">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">Yes</span>
                                         </label>
-                                        <label class="form-check-label" for="abuse_therapy_no">
-                                            <input type="radio" id="abuse_therapy_no" name="abuse_therapy" value="No"> No
+                                        <label class="custom-control custom-radio" for="abuse_therapy_no">
+                                            <input type="radio" id="abuse_therapy_no" name="abuse_therapy" class="custom-control-input" value="No">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">No</span>
                                         </label>
                                     </div>
+                                    <!-- End Q: Abuse In Therapy -->
 
+                                    <!-- Begin Q: Issues Relating To Your Childhood Abuse -->
                                     <div class="form-group radio-group row">
                                         <div class="col-sm-4">
                                             <label class="form-control-label">Do you feel you still have some issues relating to childhood abuse?</label>
                                         </div>
-                                        <label class="form-check-label" for="childhood_abuse_relating_yes">
-                                            <input  type="radio" id="childhood_abuse_relating_yes" name="childhood_abuse_relating" value="Yes"> Yes
+                                        <label class="custom-control custom-radio" for="childhood_abuse_relating_yes">
+                                            <input  type="radio" id="childhood_abuse_relating_yes" name="childhood_abuse_relating" class="custom-control-input" value="Yes">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">Yes</span>
                                         </label>
-                                        <label class="form-check-label" for="childhood_abuse_relating_no">
-                                            <input type="radio" id="childhood_abuse_relating_no" name="childhood_abuse_relating" value="No"> No
+                                        <label class="custom-control custom-radio" for="childhood_abuse_relating_no">
+                                            <input type="radio" id="childhood_abuse_relating_no" name="childhood_abuse_relating" class="custom-control-input" value="No">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">No</span>
                                         </label>
                                     </div>
+                                    <!-- End Q: Issues Relating To Your Childhood Abuse -->
 
                                     <br>
                                     <h5>Class Questions</h5>
                                     <br>
 
+                                    <!-- Begin Class Participation -->
+                                    <div class="row">
+                                        <label class="col-form-label col-sm-12 col-12" for="class_participation" style="text-align: left">What do you need from this class to feel safe and fully participate?</label>
+                                    </div>
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2 col-3" for="class_participation">Class Participation:</label>
-                                        <div class="col-sm-5 col">
-                                            <input type="text" class="form-control" id="class_participation" name="class_participation" placeholder="What do you need from this class to feel safe and fully participate?">
+                                        <div class="col-sm-8 col-8">
+                                            <input type="text" class="form-control" id="class_participation" name="class_participation" placeholder="Please explain...">
                                         </div>
                                     </div>
+                                    <!-- End Class participation -->
 
-                                    <div class="form-group row">
-                                        <label class="col-form-label col-sm-2 col-3" for="parenting_opinion">Parenting:</label>
-                                        <div class="col-sm-5 col">
-                                            <input type="text" class="form-control" id="parenting_opinion" name="parenting_opinion" placeholder="What behaviors would keep you from voicing your opinion on your parenting style?">
-                                        </div>
+                                    <!-- Begin Parenting -->
+                                    <div class="row">
+                                        <label class="col-form-label col-sm-12 col-12" for="parenting_opinion" style="text-align: left;">What behaviors would keep you from voicing your opinion on your parenting style?</label>
                                     </div>
+                                    <div class="form-group row">
 
-                                    <div class="form-group row">
-                                        <label class="col-form-label col-sm-2 col-3" for="class_takeaway">Class Takeaway:</label>
-                                        <div class="col-sm-5 col">
-                                            <input type="text" class="form-control" id="class_takeaway" name="class_takeaway" placeholder="What is the most important thing you would like to learn from this class?">
+                                        <div class="col-sm-8 col-8">
+                                            <input type="text" class="form-control" id="parenting_opinion" name="parenting_opinion" placeholder="Please explain...">
                                         </div>
                                     </div>
+                                    <!-- End Parenting -->
+
+                                    <!-- Begin Class Takeaway -->
+                                    <div class="row">
+                                        <label class="col-form-label col-sm-12 col-12" for="class_takeaway" style="text-align: left;">What is the most important thing you would like to learn from this class?</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-8 col-8">
+                                            <input type="text" class="form-control" id="class_takeaway" name="class_takeaway" placeholder="Please explain...">
+                                        </div>
+                                    </div>
+                                    <!-- End Class Takeaway -->
 
                                 </div>
                             </div>
@@ -981,155 +1058,213 @@ include('header.php');
                             <div class="card-body">
                                 <h5>Additional Participant Information</h5>
                                 <br>
+                                <!-- Begin Q: Domestic Violence -->
                                 <div class="form-group radio-group row">
                                     <div class="col-sm-4">
                                         <label class="form-control-label">Have you ever had any involvement with domestic violence?</label>
                                     </div>
-                                    <label class="form-check-label" for="domestic_violence_yes">
-                                        <input  type="radio" id="domestic_violence_yes" name="domestic_violence" value="Yes"> Yes
+                                    <label class="custom-control custom-radio" for="domestic_violence_yes">
+                                        <input  type="radio" id="domestic_violence_yes" name="domestic_violence" class="custom-control-input" value="Yes">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Yes</span>
                                     </label>
-                                    <label class="form-check-label" for="domestic_violence_no">
-                                        <input type="radio" id="domestic_violence_no" name="domestic_violence" value="No"> No
+                                    <label class="custom-control custom-radio" for="domestic_violence_no">
+                                        <input type="radio" id="domestic_violence_no" name="domestic_violence" class="custom-control-input" value="No">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">No</span>
                                     </label>
                                 </div>
+                                <!-- End Q: Domestic Violence -->
 
-                                <div  class="form-group hidden-field radio-group row domestic_violence_div answer_yes">
+                                <div  style="margin-right: 20%" class="form-group hidden-field radio-group row domestic_violence_div_yes answer_yes">
                                     <div class="col-sm-4">
                                         <label class="form-control-label">Have you discussed it with someone?</label>
                                     </div>
-                                    <label class="form-check-label" for="domestic_violence_discussed_yes">
-                                        <input  type="radio" id="domestic_violence_discussed_yes" name="domestic_violence_discussed" value="Yes"> Yes
+                                    <label class="custom-control custom-radio" for="domestic_violence_discussed_yes">
+                                        <input  type="radio" id="domestic_violence_discussed_yes" name="domestic_violence_discussed" class="custom-control-input" value="Yes">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Yes</span>
                                     </label>
-                                    <label class="form-check-label" for="domestic_violence_discussed_no">
-                                        <input type="radio" id="domestic_violence_discussed_no" name="domestic_violence_discussed" value="No"> No
+                                    <label class="custom-control custom-radio" for="domestic_violence_discussed_no">
+                                        <input type="radio" id="domestic_violence_discussed_no" name="domestic_violence_discussed" class="custom-control-input" value="No">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">No</span>
                                     </label>
                                 </div>
 
+                                <!-- Begin Q: History Of Family Violence -->
                                 <div class="form-group radio-group row">
                                     <div class="col-sm-4">
                                         <label class="form-control-label">Is there any history of violence in your family of origin?</label>
                                     </div>
-                                    <label class="form-check-label" for="history_violence_family_yes">
-                                        <input  type="radio" id="history_violence_family_yes" name="history_violence_family" value="Yes"> Yes
+                                    <label class="custom-control custom-radio" for="history_violence_family_yes">
+                                        <input  type="radio" id="history_violence_family_yes" name="history_violence_family" class="custom-control-input" value="Yes">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Yes</span>
                                     </label>
-                                    <label class="form-check-label" for="history_violence_family_no">
-                                        <input type="radio" id="history_violence_family_no" name="history_violence_family" value="No"> No
+                                    <label class="custom-control custom-radio" for="history_violence_family_no">
+                                        <input type="radio" id="history_violence_family_no" name="history_violence_family" class="custom-control-input" value="No">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">No</span>
                                     </label>
                                 </div>
+                                <!-- End Q: History Of Family Violence -->
 
+                                <!-- Begin Q: Nuclear Family Violence -->
                                 <div class="form-group radio-group row">
                                     <div class="col-sm-4">
                                         <label class="form-control-label">Is there any history of violence in your nuclear family?</label>
                                     </div>
-                                    <label class="form-check-label" for="history_violence_nuclear_yes">
-                                        <input  type="radio" id="history_violence_nuclear_yes" name="history_violence_nuclear" value="Yes"> Yes
+                                    <label class="custom-control custom-radio" for="history_violence_nuclear_yes">
+                                        <input  type="radio" id="history_violence_nuclear_yes" name="history_violence_nuclear" class="custom-control-input" value="Yes">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Yes</span>
                                     </label>
-                                    <label class="form-check-label" for="history_violence_nuclear_no">
-                                        <input type="radio" id="history_violence_nuclear_no" name="history_violence_nuclear" value="No"> No
+                                    <label class="custom-control custom-radio" for="history_violence_nuclear_no">
+                                        <input type="radio" id="history_violence_nuclear_no" name="history_violence_nuclear" class="custom-control-input" value="No">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">No</span>
                                     </label>
                                 </div>
+                                <!-- End Q: Nuclear Family Violence -->
 
+                                <!-- Begin Q: Protection Orders -->
                                 <div class="form-group radio-group row">
                                     <div class="col-sm-4">
                                         <label class="form-control-label">Are there any orders of protection involved?</label>
                                     </div>
-                                    <label class="form-check-label" for="protection_order_yes">
-                                        <input  type="radio" id="protection_order_yes" name="protection_order" value="Yes"> Yes
+                                    <label class="custom-control custom-radio" for="protection_order_yes">
+                                        <input  type="radio" id="protection_order_yes" name="protection_order" class="custom-control-input" value="Yes">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Yes</span>
                                     </label>
-                                    <label class="form-check-label" for="protection_order_no">
-                                        <input type="radio" id="protection_order_no" name="protection_order" value="No"> No
+                                    <label class="custom-control custom-radio" for="protection_order_no">
+                                        <input type="radio" id="protection_order_no" name="protection_order" class="custom-control-input" value="No">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">No</span>
                                     </label>
                                 </div>
+                                <!-- End Q: Protection Orders-->
 
-                                <div  class="form-group hidden-field row protection_order_div answer_yes">
+                                <div  class="form-group hidden-field row protection_order_div_yes answer_yes">
                                     <label class="col-form-label col-sm-2" for="protection_order_explain">Please explain:</label>
                                     <div class="col-sm-5">
                                         <input type="text" class="form-control" id="protection_order_explain" name="protection_order_explain" placeholder="Why and who are they against?">
                                     </div>
                                 </div>
 
+                                <!-- Begin Q: Arrested For A Crime -->
                                 <div class="form-group radio-group row">
                                     <div class="col-sm-4">
                                         <label class="form-control-label">Have you ever been arrested for a crime?</label>
                                     </div>
-                                    <label class="form-check-label" for="crime_arrested_yes">
-                                        <input  type="radio" id="crime_arrested_yes" name="crime_arrested" value="Yes"> Yes
+                                    <label class="custom-control custom-radio" for="crime_arrested_yes">
+                                        <input  type="radio" id="crime_arrested_yes" name="crime_arrested" class="custom-control-input" value="Yes">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Yes</span>
                                     </label>
-                                    <label class="form-check-label" for="crime_arrested_no">
-                                        <input type="radio" id="crime_arrested_no" name="crime_arrested" value="No"> No
+                                    <label class="custom-control custom-radio" for="crime_arrested_no">
+                                        <input type="radio" id="crime_arrested_no" name="crime_arrested" class="custom-control-input" value="No">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">No</span>
                                     </label>
                                 </div>
+                                <!-- End Q: Arrested For A Crime -->
 
+                                <!-- Begin Q: Convicted For A Crime -->
                                 <div class="form-group radio-group row">
                                     <div class="col-sm-4">
                                         <label class="form-control-label">Have you ever been convicted for a crime?</label>
                                     </div>
-                                    <label class="form-check-label" for="crime_convicted_yes">
-                                        <input  type="radio" id="crime_convicted_yes" name="crime_convicted" value="Yes"> Yes
+                                    <label class="custom-control custom-radio" for="crime_convicted_yes">
+                                        <input  type="radio" id="crime_convicted_yes" name="crime_convicted" class="custom-control-input" value="Yes">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Yes</span>
                                     </label>
-                                    <label class="form-check-label" for="crime_convicted_no">
-                                        <input type="radio" id="crime_convicted_no" name="crime_convicted" value="No"> No
+                                    <label class="custom-control custom-radio" for="crime_convicted_no">
+                                        <input type="radio" id="crime_convicted_no" name="crime_convicted" class="custom-control-input" value="No">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">No</span>
                                     </label>
                                 </div>
+                                <!-- End Q: Convicted For A Crime -->
 
-                                <div  class="form-group hidden-field row crime_convicted_div answer_yes">
+                                <div  class="form-group hidden-field row crime_convicted_div_yes answer_yes">
                                     <label class="col-form-label col-sm-2" for="crime_explain">Please explain:</label>
                                     <div class="col-sm-5">
                                         <input type="text" class="form-control" id="crime_explain" name="crime_explain" placeholder="Please provide an explanation">
                                     </div>
                                 </div>
 
+                                <!-- Begin Q: Jail Or Prison Record -->
                                 <div class="form-group radio-group row">
                                     <div class="col-sm-4">
                                         <label class="form-control-label">Do you have a jail and/or prison record?</label>
                                     </div>
-                                    <label class="form-check-label" for="jail_prison_record_yes">
-                                        <input  type="radio" id="jail_prison_record_yes" name="jail_prison_record" value="Yes"> Yes
+                                    <label class="custom-control custom-radio" for="jail_prison_record_yes">
+                                        <input  type="radio" id="jail_prison_record_yes" name="jail_prison_record" class="custom-control-input" value="Yes">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Yes</span>
                                     </label>
-                                    <label class="form-check-label" for="jail_prison_record_no">
-                                        <input type="radio" id="jail_prison_record_no" name="jail_prison_record" value="No"> No
+                                    <label class="custom-control custom-radio" for="jail_prison_record_no">
+                                        <input type="radio" id="jail_prison_record_no" name="jail_prison_record" class="custom-control-input" value="No">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">No</span>
                                     </label>
                                 </div>
+                                <!-- End Q: Jail Or Prison Record -->
 
-                                <div  class="form-group hidden-field row jail_prison_record_div answer_yes">
+                                <div  class="form-group hidden-field row jail_prison_record_div_yes answer_yes">
                                     <label class="col-form-label col-sm-2" for="jail_prison_explain">Please explain:</label>
                                     <div class="col-sm-5">
                                         <input type="text" class="form-control" id="jail_prison_explain" name="jail_prison_explain" placeholder="When were you in jail/prison and for what offense?">
                                     </div>
                                 </div>
 
+                                <!-- Begin Q: Parole Or Probation -->
                                 <div class="form-group radio-group row">
                                     <div class="col-sm-4">
                                         <label class="form-control-label">Are you currently on parole or probation?</label>
                                     </div>
-                                    <label class="form-check-label" for="parole_probation_yes">
-                                        <input  type="radio" id="parole_probation_yes" name="parole_probation" value="Yes"> Yes
+                                    <label class="custom-control custom-radio" for="parole_probation_yes">
+                                        <input  type="radio" id="parole_probation_yes" name="parole_probation" class="custom-control-input" value="Yes">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Yes</span>
                                     </label>
-                                    <label class="form-check-label" for="parole_probation_no">
-                                        <input type="radio" id="parole_probation_no" name="parole_probation" value="No"> No
+                                    <label class="custom-control custom-radio" for="parole_probation_no">
+                                        <input type="radio" id="parole_probation_no" name="parole_probation" class="custom-control-input" value="No">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">No</span>
                                     </label>
                                 </div>
+                                <!-- End Q: Parole Or Probation -->
 
-                                <div  class="form-group hidden-field row parole_probation_div answer_yes">
+                                <div  class="form-group hidden-field row parole_probation_div_yes answer_yes">
                                     <label class="col-form-label col-sm-2" for="parole_probation_explain">Please explain:</label>
                                     <div class="col-sm-5">
                                         <input type="text" class="form-control" id="parole_probation_explain" name="parole_probation_explain" placeholder="For what offense?">
                                     </div>
                                 </div>
 
+                                <!-- Begin Q: Other Family Members Attending Class-->
                                 <div class="form-group radio-group row">
                                     <div class="col-sm-4">
                                         <label class="form-control-label">Are there any other members of your family taking a parenting class with this agency?</label>
                                     </div>
-                                    <label class="form-check-label" for="family_members_taking_class_yes">
-                                        <input  type="radio" id="family_members_taking_class_yes" name="family_members_taking_class" value="Yes"> Yes
+                                    <label class="custom-control custom-radio" for="family_members_taking_class_yes">
+                                        <input  type="radio" id="family_members_taking_class_yes" name="family_members_taking_class" class="custom-control-input" value="Yes">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Yes</span>
                                     </label>
-                                    <label class="form-check-label" for="family_members_taking_class_no">
-                                        <input type="radio" id="family_members_taking_class_no" name="family_members_taking_class" value="No"> No
+                                    <label class="custom-control custom-radio" for="family_members_taking_class_no">
+                                        <input type="radio" id="family_members_taking_class_no" name="family_members_taking_class" class="custom-control-input" value="No">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">No</span>
                                     </label>
                                 </div>
+                                <!-- End Q: Other Family Members Attending Class -->
 
-                                <div  class="form-group hidden-field row family_members_taking_class_div answer_yes">
+                                <div  class="form-group hidden-field row family_members_taking_class_div_yes answer_yes">
                                     <label class="col-form-label col-sm-2" for="family_members">Family Members:</label>
                                     <div class="col-sm-5">
                                         <input type="text" class="form-control" id="family_members" name="family_members" placeholder="Please list their name(s)">

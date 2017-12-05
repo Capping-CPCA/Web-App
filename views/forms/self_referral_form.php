@@ -241,7 +241,7 @@ include('header.php');
                                             <input type="text" class="form-control" id="self_pers_address" name="self_pers_address" placeholder="Street address">
                                         </div>
 
-                                        <label class="col-form-label col-sm-auto col-2" for="self_apt_info">Apartment:</label>
+                                        <label class="col-form-label col-sm-1 col-2" for="self_apt_info">Apartment:</label>
                                         <div class="col-sm-2 col">
                                             <input type="text" class="form-control" id="self_apt_info" name="self_apt_info" placeholder="Apartment Information">
                                         </div>
@@ -300,38 +300,44 @@ include('header.php');
                                     <h5>Additional Participant Information</h5>
                                     <br>
 
-                                    <div class="form-group row">
-										<div class="form-check form-check-inline col">
-											<label class="form-check-label">
-												Do you have any involvement with CPS/Protective/Foster Care?
-											</label>
-											&emsp;
-											<label class="form-check-label" for="self_involvement_yes">
-												<input class="form-check-input" type="radio" id="self_involvement_yes" name="self_involvement" value="Yes"> Yes
-											</label>
-											&nbsp;
-											<label class="form-check-label" for="self_involvement_no">
-												<input class="form-check-input" type="radio" id="self_involvement_no" name="self_involvement" value="No"> No
-											</label>
-										</div>
-                                    </div>
-
-                                    <div class="form-group row">
-										<div class="form-check form-check-inline col">
-											<label class="form-check-label">
-												Have you attended PEP parenting classes in the past?
-											</label>
-											&emsp;
-											<label class="form-check-label" for="self_attended_yes">
-												<input class="form-check-input" type="radio" id="self_attended_yes" name="self_attended" value="Yes"> Yes
-											</label>
-											&nbsp;
-											<label class="form-check-label" for="self_attended_no">
-												<input class="form-check-input" type="radio" id="self_attended_no" name="self_attended" value="No"> No
-											</label>
+                                    <!-- Begin Q: Involvement with CPS/Protective/Foster Care -->
+                                    <div class="form-group radio-group row">
+                                        <div class="col-sm-4">
+                                            <label class="form-control-label"> Do you have any involvement with CPS/Protective/Foster Care?</label>
                                         </div>
+                                        <label class="custom-control custom-radio" for="self_involvement_yes">
+                                            <input class="custom-control-input" type="radio" id="self_involvement_yes" name="self_involvement" value="Yes">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">Yes</span>
+                                        </label>
+                                        <label class="custom-control custom-radio" for="self_involvement_no">
+                                            <input class="custom-control-input" type="radio" id="self_involvement_no" name="self_involvement" value="No">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">No</span>
+                                        </label>
                                     </div>
+                                    <!-- End Q: Involvement with CPS/Protective/Foster Care -->
 
+                                    <!-- Begin Q: PEP classes in past -->
+                                    <div class="form-group radio-group row">
+                                        <div class="col-sm-4">
+                                            <label class="form-control-label"> Have you attended PEP parenting classes in the past?</label>
+                                        </div>
+                                        <label class="custom-control custom-radio" for="self_attended_yes">
+                                            <input class="custom-control-input" type="radio" id="self_attended_yes" name="self_attended" value="Yes">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">Yes</span>
+                                        </label>
+                                        <label class="custom-control custom-radio" for="self_attended_no">
+                                            <input class="custom-control-input" type="radio" id="self_attended_no" name="self_attended" value="No">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">No</span>
+                                        </label>
+                                    </div>
+                                    <!-- End Q: PEP classes in past -->
+
+                                    <br>
+                                    
                                     <div class="form-group row">
                                         <label class="col-form-label col-sm-2 col-3" for="self_ref_source">Referral Source:</label>
                                         <div class="col-sm-2 col">
