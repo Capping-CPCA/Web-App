@@ -30,6 +30,7 @@ $router->add('/agency-requests', 'agency-requests/agency_requests.php', 'Agency 
 $router->add('/participant-search', 'agency-requests/agency_requests_results.php', 'Search Results');
 $router->add('/ps-view-participant', 'agency-requests/view_participant.php', 'View Participant');
 $router->add('/ps-edit-participant', 'agency-requests/edit_participant.php', 'Edit Participant');
+$router->add('/participant-notes', 'agency-requests/notes.php', 'Notes');
 
 # Manage Curricula & Classes
 $router->add('/curricula', 'curricula/curricula.php', 'Curricula');
