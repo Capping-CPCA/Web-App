@@ -31,38 +31,41 @@
 	<input type="hidden" value="" id ="apt"  name="apt">
 	<input id="btnRegister" type="submit" name="namecheck" class="cpca btn" style="margin-bottom: 20px;">
 </form>
-		
-<div class="modal fade modal-larger" id="matchModal" tabindex="-1" role="dialog" aria-labelledby="matchModal" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content" style="width: 50rem;">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Are You Sure This is a New Participant?</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-	  <div class="container">
-      <div class="modal-body row " >
-			<div class="col">
-                <div class=" sticky-top">
-                    <i>Information Currently Entered:</i>
-                    <div class="followNameHolder">
+
+<div class="modal fade modal-larger" id="matchModal" tabindex="-1" role="dialog" aria-labelledby="matchModal"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 50rem;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are You Sure This is a New Participant?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="container">
+                <div class="modal-body row ">
+                    <div class="col">
+                        <div class=" sticky-top">
+                            <i>Information Currently Entered:</i>
+                            <div class="followNameHolder">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col namesCol">
+                        <div class="sticky-top" style="background-color:white;">
+                            <i>Click to select a participant.</i>
+                        </div>
+                        <div class="nameCol">
+                        </div>
                     </div>
                 </div>
-			</div>
-			<div class="col namesCol">
-            <div class="sticky-top" style="background-color:white;">
-                    <i>Click to select a participant.</i>
             </div>
-				<div class="nameCol">
-				</div>
-			</div>
-      </div>
-	  </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary cancel" data-dismiss="modal">Yes, this is a new participant</button>
-        <button type="button" class="btn cpca">Go Back</button>
-      </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary cancel" data-dismiss="modal">Yes, this is a new
+                    participant
+                </button>
+                <button type="button" class="btn cpca" onclick="$('.close').click();">Go Back</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

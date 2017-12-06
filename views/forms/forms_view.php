@@ -42,6 +42,7 @@ $agencyReferral = pg_fetch_all($result);
 include('header.php');
 ?>
     <div style="width: 100%">
+        <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
         <?php
         // Displays result of edit or delete
         if (isset($_SESSION['notification'])) {
