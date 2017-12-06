@@ -20,6 +20,8 @@ global $db, $route, $params, $view;
 
 # Get employee id from the route parameters
 $employeeid = $params[1];
+
+# Get person information
 $result = $db->query("SELECT firstname, middleinit, lastname " .
     "FROM people
     WHERE peopleid = $1", [$employeeid]);
@@ -36,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['restore'])) {
         $success = false;
     }
 
-    # If the restore is successful display a notification on the manage-users page
+    # Display notification on the manage-users page upon successful or unsuccessful restoration
     $note['title'] = ($success ? 'Success!' : 'Error!');
     $note['msg'] = ($success ? 'The user has been restored.' : 'The user wasn\'t restored.');
     $note['type'] = ($success ? 'success' : 'danger');

@@ -19,11 +19,12 @@ global $db, $route, $params, $view;
 
 # Get employee id from the route parameters
 $employeeid = $params[1];
-# Get if user is a superuser
+
+# Get if employee is a superuser
 $result = $db->query("SELECT superuserID FROM superusers WHERE superuserid = $1", [$employeeid]);
 $isSuperUser = pg_fetch_assoc($result);
 
-# Checks if the user trying to edit their own account or if they are an admin/superuser
+# Checks if the user is trying to edit their own account or if they are an admin/superuser
 if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
     ($isSuperUser && !(hasRole(Role::Superuser)))) {
     header('Location: /dashboard');
@@ -41,11 +42,12 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
         $result = $db->query("SELECT facilitatorid FROM facilitators WHERE facilitatorid = $1", [$employeeid]);
         $isFacilitator = pg_fetch_assoc($result);
 
-        # Check if the employee is also a facilitator so we can remove them from that table as well
+        # Check if the employee is also a facilitator so we can remove them from the Facilitators table as well
         if ($isFacilitator) {
             $facilitatorRes = $db->query("UPDATE facilitators SET df = TRUE WHERE facilitatorid = $1", [$employeeid]);
         }
 
+        # Make sure if the employee is a facilitator that they were successfully removed from the Facilitators table as well
         $success = $archiveRes && (($isFacilitator && $facilitatorRes) || !$isFacilitator);
 
         # If the archive is successful display a notification on the manage-users page
