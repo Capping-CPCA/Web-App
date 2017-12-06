@@ -249,13 +249,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Stored Procedures
     // Gets the participant ID related to the person who is filling out the form to associate it with the form ID.
-    $pIDResult = $db->query("SELECT PeopleInsert(
-                                           fName := $1::TEXT,
-                                           lName := $2::TEXT,
-                                           mInit := $3::VARCHAR
-                                           );", [$intake_firstname, $intake_lastname, $intake_middlein]);
-
-    $pIDResult = pg_fetch_result($pIDResult, 0);
+   
+        $pIDResult = checkForDuplicates($db, $intake_firstname, $intake_lastname, $intake_middlein);
 
     // Inserts the intake packet data into the database and associates the form with a participant ID.
     $formID = $db->query("SELECT registerParticipantIntake(
@@ -1277,8 +1272,7 @@ include('header.php');
                 </form>
             </div>  <!-- panel group end -->
             <br>
-
-            <button id="btnRegister" onclick="submitAllIntake()" class="cpca btn controls">Submit</button>
+            <?php include('form_duplicate_check.php')?>
 
         </div>  <!-- /#container -->
     </div>  <!-- /#container-fluid class -->

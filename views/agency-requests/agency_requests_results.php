@@ -20,7 +20,7 @@ global $db, $params;
 
 $searchquery = strtolower(rawurldecode(implode('/',$params)));
 $result = $db->query("SELECT participants.participantid, participants.dateofbirth, participants.race, people.firstname, 
-							people.lastname, people.middleinit , participants.sex 
+							people.lastname, people.middleinit , participants.sex
 							FROM participants 
 							INNER JOIN people ON participants.participantid = people.peopleid
 							WHERE LOWER(CONCAT(people.firstname, ' ' , people.middleinit , ' ' , people.lastname)) LIKE $1
@@ -62,6 +62,7 @@ include('header.php');
 		
         #check the result of query and loop through each row to display search results
         while ($row = pg_fetch_assoc($result)) {
+           
 		?>
 			<li class="list-group-item">
 				<button class="btn btn-outline-secondary advanced-info"><i class="fa fa-caret-right" aria-hidden="true"></i></button>
@@ -73,11 +74,27 @@ include('header.php');
 				</a>
 
 				<ul class="list-group sublist">
-						<?= "<b>DOB: </b>".(isset($row['dateofbirth']) ? checkEmpty($row['dateofbirth']) : '').
-                        " | "." <b>Program Start Date: </b> ".
-                        (isset($row['tentativestartdate']) ? checkEmpty($row['tentativestartdate']) : '').
-                        " | "."<b>Sex: </b> ".
-                        (isset($row['sex']) ? checkEmpty($row['sex']) : ''); ?>
+						<?php
+                        $formInfo = $db->query("SELECT  
+                                                formid, selfreferralid, intakeinformationid, agencyreferralid,
+                                                tentativestartdate,
+                                                participants.participantid, participants.sex, participants.dateofbirth
+                                                FROM forms
+                                                INNER JOIN participants ON forms.participantid = participants.participantid
+                                                LEFT JOIN selfreferral ON forms.formid = selfreferral.selfreferralid
+                                                LEFT JOIN intakeinformation ON forms.formid = intakeinformation.intakeinformationid
+                                                LEFT JOIN agencyreferral ON forms.formid = agencyreferral.agencyreferralid
+                                                WHERE participants.participantid= $1",[$row['participantid']]);
+                        while($formResults  = pg_fetch_assoc($formInfo)){
+                            ?>   
+                            <div>
+                                <b>DOB: </b><?=checkEmpty($formResults['dateofbirth']);?> |  
+                                <b>Program Start Date: </b> <?=checkEmpty($formResults['tentativestartdate']);?> | 
+                                <b>Sex: </b> <?=checkEmpty($formResults['sex']); ?>
+                            </div>
+                            <?php
+                        }
+                        ?>
 					</li>
 				</ul>
 			</li>

@@ -317,8 +317,8 @@ function checkSet($value){
             </table>
         </div>
         <div class="card-footer text-center">
-            <a href="/intake-packet/<?= $notes['participantid'] ?>">
-                <button class="btn btn-outline-secondary">View Intake Packet </button>
+            <a href="/forms-view/<?= $params[0] ?>">
+                <button class="btn btn-outline-secondary">View Forms</button>
             </a>
             <a href="#">
                 <button class="btn btn-outline-secondary">View Attendence Record</button>
@@ -326,6 +326,7 @@ function checkSet($value){
             <a href="#">
                 <button class="btn btn-outline-secondary">View Current Assigned Curriculum</button>
             </a>
+
         </div>
     </div>
 </div>
