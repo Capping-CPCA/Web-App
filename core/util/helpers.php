@@ -234,7 +234,8 @@ function phoneStrToNum($phoneNum) {
     return str_replace(['(',')',' ','-'], '', $phoneNum);
 }
 /**
- * Checks to see if there are any duplicate PID's in the db, then returns a pid if already existing
+ * Checks to see if there are any duplicate PID's in the db
+ * then returns a pid if already existing
  * @param $db database object
  * @param $pers_firstname string first name of participant in form input field
  * @param $pers_lastname string last name of participant in form input field

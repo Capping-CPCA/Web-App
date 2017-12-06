@@ -13,12 +13,10 @@
  * @since 0.6.2
  */
 
-include('header.php');
-global $db, $params ,$formid;
-?>
+include ('../models/Notification.php');
 
-<div class="d-flex flex-column w-100" style="height: fit-content;">
-<?php
+global $db, $params ,$formid;
+
 // Get people id from params
 $peopleid = rawurldecode(implode('/', $params));
 
@@ -30,21 +28,20 @@ $db->prepare("get-participant-form", "SELECT *
 				WHERE participants.participantid = $1 ");
 $result = $db->execute("get-participant-form", [$peopleid]);
 $participant = pg_fetch_assoc($result);
-
 extract($participant);
 
-//grab address information
-$db->prepare("get-participant-addresses", "SELECT * 
-				FROM participants
-				INNER JOIN people ON participants.participantid = people.peopleid
-				LEFT JOIN forms as fo ON participants.participantid = fo.participantid
-				LEFT JOIN addresses ON  fo.addressid = addresses.addressid
-				LEFT JOIN zipcodes ON zipcodes.zipcode =addresses.zipcode
-				WHERE participants.participantid = $1");
+// Grab address information
+$db->prepare("get-participant-addresses", "	SELECT * 
+											FROM participants
+											INNER JOIN people ON participants.participantid = people.peopleid
+											LEFT JOIN forms as fo ON participants.participantid = fo.participantid
+											LEFT JOIN addresses ON  fo.addressid = addresses.addressid
+											LEFT JOIN zipcodes ON zipcodes.zipcode =addresses.zipcode
+											WHERE participants.participantid =  $1 ORDER BY employeesigneddate DESC LIMIT 1");
 $result = $db->execute("get-participant-addresses",[$peopleid]);
 $address = pg_fetch_assoc($result);
-
 extract($address);
+
 
 /**
  * Checks the value parameter 
@@ -55,7 +52,7 @@ function checkValue($rowValue){
 	if($rowValue ==""){
 		echo " placeholder = 'No info on file' ";
 	}else{
-		echo "value = '$rowValue' ";
+		echo " value = '$rowValue' ";
 	}
 }
 
@@ -100,37 +97,25 @@ function getPhoneNumbers($phoneTypes){
 
 
  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
+     
+    // Count any failed queries
+	$error = 0;
+    
+    // Participant Name Information
 	$firstname = $_POST['fname-update'];
 	$lastname = $_POST['lname-update'];
 	$middleinit = $_POST['mname-update'];
 	
-	//makes sure the middle name is only 1 character
-	if(strlen($middleinit) <= 1 ){
-		$res = $db->query("UPDATE people SET firstname = $1, lastname = $2, middleinit =$3 ".
-                "WHERE peopleid = $4", [$firstname, $lastname, $middleinit, $peopleid]);
-			if(!$res){
-			?>
-				<div class="alert alert-success alert-dismissible fade show" role="alert">
-					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<strong>Participant Update Success</strong> Participant name information has been updated.
-				</div>
-
-			<?php
-			}
-		
-	}else{
-		?>
-			<div class="alert alert-danger alert-dismissible fade show" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-			</button>
-				<strong>Error: </strong> Participant name information update has failed. Only 1 character allowed for middle name initial
-			</div>
-			  <?php
-	}
+    // Forces the middle name is only 1 character
+    if(strlen($middleinit) <= 1 ){
+        $res = $db->query("UPDATE people SET firstname = $1, lastname = $2, middleinit =$3 ".
+                            "WHERE peopleid = $4", [$firstname, $lastname, $middleinit, $peopleid]);
+        if(!$res){
+            $error++;
+        }
+    }else {
+        $error++;
+    }
 	
 	/**
 	 * Checks to see if the updated phone number already exists or 
@@ -161,43 +146,55 @@ function getPhoneNumbers($phoneTypes){
 		}
 		
 		
-		if($error == 0){
-		?>
-			
-			<div class="alert alert-success alert-dismissible fade show" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-			</button>
-				<strong>Success: </strong> Participant information has updated 
-			</div>
-			<div class="">
-				<span class="cpca btn"> 
-				<i class="fa fa-arrow-left"></i><a style="text-decoration:none; color:white;"href="/ps-view-participant/<?=$peopleid?>">
-				 Back to View Participant</a>
-				</span>
-			</div>
-			
-			  <?php
-		}
 	}
 	if(!empty($_POST['form'])){
 		updateInsert($db, $formid);
 	}
 	
-	//Currently waiting on stored procedure
-	/*$addressid = $_POST['addressid'];
-	$streetnumber = $_POST['house-update'];
+                                     
+	$addressid = $_POST['addressid'];
+	$streetnumber =$_POST['house-update'];
 	$streetaddress = $_POST['street-update'];
 	$aptinfo = $_POST['apt-update'];
 	$city = $_POST['city-update'];
-	$state = $_POST['street-update'];
+	$state = $_POST['state-update'];
 	$zip = $_POST['zip-update'];
-	
-	$addressupdate = $db->query("UPDATE addresses SET addressnumber = $2, aptinfo = $3, street = $4, zipcode =$5 WHERE addressid = $1",
-								[$addressid, $streetnumber, $aptinfo, $streetaddress, $zip]);*/
-}
 
-?>
+                                                    
+    $res = $db->query('SELECT addressUpdate(
+                        pID := $1::INT,
+                        newAddressNumber := $2::INT,
+                        newAptInfo := $3::TEXT,
+                        newStreet := $4::TEXT,
+                        newZipcode := $5::VARCHAR(5),
+                        newCity := $6::TEXT,
+                        newState := $7::STATES)',array($peopleid, $streetnumber, $aptinfo, $streetaddress, $zip, $city, $state));
+    if(!$res){
+        $error++;
+    }
+    
+    if($error > 0){
+        $notification = new Notification('Participant Update Failed','There were issues in submitting the participant updates.','danger');
+        $notification->display();
+    }else{
+        $notification = new Notification('Participant Update Success','Participant information has been updated.','success');
+        $notification->display();
+       
+        
+        header("Location: /ps-view-participant/" . $peopleid);
+        die();
+        }
+
+    }
+    include('header.php');
+    ?>
+    <div class="page-wrapper">
+<div class="">
+    <span class="cpca btn"> 
+    <i class="fa fa-arrow-left"></i><a style="text-decoration:none; color:white;"href="/ps-view-participant/<?=$peopleid?>">
+     Back to View Participant</a>
+    </span>
+</div>
 
 <div class="d-flex justify-content-center">
 <form class="jumbotron form-wrapper mb-3" method="POST" action= "" >
@@ -233,45 +230,45 @@ function getPhoneNumbers($phoneTypes){
 	?>
 	
   <div class="form-group row">
-	<div class="col-sm-4">
-		<label for="class-name" class=""><b>Primary Phone</b></label>
-		<input type="phone" class="form-control mask-phone" id="pphone-update" name="pphone-update" 
-		<?php
-			$phone = getPhoneNumbers("primary");
-			if($phone['whatwegot'] !=0){
-				echo "required=''";
-			}
-			echo $phone['readOnly'];
-		?> >
-		<div class="invalid-feedback">
-			Primary Phone cannot be empty.
-		</div>
-	</div>
-	<div class="col-sm-4">
-		<label for="class-name" class=""><b>Secondary Phone</b></label>
-		<input type="phone" class="form-control mask-phone" id="sphone-update" name="sphone-update"
-		<?php
-			$phone = getPhoneNumbers("secondary");
-			echo $phone['readOnly'];
-		?> >
-	</div>
-	<div class="col-sm-4">
-		<label for="class-name" class=""><b>Day Phone</b></label>
-		<input type="phone" class="form-control mask-phone"   id="dphone-update" name="dphone-update" 
-		<?php
-			$phone = getPhoneNumbers("day");
-			echo $phone['readOnly'];
-		?> >
-	</div>
-	<div class="col-sm-4">
-		<label for="class-name" class=""><b>Evening Phone</b></label>
-		<input type="phone" class="form-control mask-phone"  id="ephone-update" name="ephone-update" 
-		<?php
-			$phone = getPhoneNumbers("evening");
-			echo $phone['readOnly'];
-		?> >
-	</div>
-</div>
+    <div class="col-sm-4">
+        <label for="class-name" class=""><b>Primary Phone</b></label>
+        <input type="phone" class="form-control mask-phone" id="pphone-update" name="pphone-update" 
+        <?php
+            $phone = getPhoneNumbers("primary");
+            if($phone['whatwegot'] !=0){
+                echo "required=''";
+            }
+            echo $phone['readOnly'];
+        ?> >
+        <div class="invalid-feedback">
+            Primary Phone cannot be empty.
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="class-name" class=""><b>Secondary Phone</b></label>
+        <input type="phone" class="form-control mask-phone" id="sphone-update" name="sphone-update"
+        <?php
+            $phone = getPhoneNumbers("secondary");
+            echo $phone['readOnly'];
+        ?> >
+    </div>
+    <div class="col-sm-4">
+        <label for="class-name" class=""><b>Day Phone</b></label>
+        <input type="phone" class="form-control mask-phone"   id="dphone-update" name="dphone-update" 
+        <?php
+            $phone = getPhoneNumbers("day");
+            echo $phone['readOnly'];
+        ?> >
+    </div>
+    <div class="col-sm-4">
+        <label for="class-name" class=""><b>Evening Phone</b></label>
+        <input type="phone" class="form-control mask-phone"  id="ephone-update" name="ephone-update" 
+        <?php
+            $phone = getPhoneNumbers("evening");
+            echo $phone['readOnly'];
+        ?> >
+    </div>
+    </div>
 	<?php
 	//if there is no form associated with the participant, prompt user to create one
 	}else{
@@ -288,31 +285,41 @@ function getPhoneNumbers($phoneTypes){
 	if($addressid!==null){
 		?>
 			<div class="form-group row"> 
-				<div class="col-sm-3">
+				<div class="col-sm-4">
 					<label for="class-name" class=""><b>House Number</b></label>
 					<input type="text" class="form-control" <?=checkValue($address['addressnumber'])?> id="house-update" name="house-update" >
 				</div>
 				<div class="col-sm-4">
-					<label for="class-name" class=""><b>Street Address</b></label>
+					<label for="class-name" class=""><b>Street</b></label>
 					<input type="text" class="form-control" <?=checkValue($address['street'])?> id="street-update" name="street-update" >
 				</div>
-				<div class="col-sm-2">
+				<div class="col-sm-4">
 					<label for="class-name" class=""><b>Apt </b></label>
 					<input type="text" class="form-control" <?=checkValue($address['aptinfo'])?> id="apt-update" name="apt-update" >
 				</div>
 			</div>
 			<div class="form-group row"> 
-				<div class="col-sm-3">
+				<div class="col-sm-4">
 					<label for="class-name" class=""><b>City</b></label>
-					<input type="text" class="form-control" readonly <?=checkValue($address['city'])?> id="city-update" name="city-update" >
+					<input type="text" class="form-control"  <?=checkValue($address['city'])?> id="city-update" name="city-update" >
 				</div>
 				<div class="col-sm-4">
 					<label for="class-name" class=""><b>State</b></label>
-					<input type="text" class="form-control" readonly <?=checkValue($address['state'])?> id="state-update" maxlength="2" name="state-update" >
+                        <select class="form-control" name="state-update" id="state-update" >
+                            <?php
+                            $res = $db->query("SELECT unnest(enum_range(NULL::states)) AS type", []);
+                            while ($enumtype = pg_fetch_assoc($res)) {
+                            $t = $enumtype ['type'];
+                            ?>
+                            <option value="<?= $t ?>" <?php echo (isset($address['state']) && $address['state'] == $t) ? "selected" : "" ?>><?= $t ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
 				</div>
 				<div class="col-sm-2">
 					<label for="class-name" class=""><b>Zip Code</b></label>
-					<input type="text" class="form-control" readonly <?=checkValue($address['zipcode'])?> id="zip-update" maxlength="6" name="zip-update" >
+					<input type="text" class="form-control"  <?=checkValue($address['zipcode'])?> id="zip-update" maxlength="6" name="zip-update" >
 				</div>
 			</div>
 		<?php
@@ -326,7 +333,10 @@ function getPhoneNumbers($phoneTypes){
 	</div>
   <input type='hidden' name='addressid' value='<?=$addressid?>'>
   <input type='hidden' name='form' value='<?=$formid?>'>
-  <input type="submit" name="update" value="Update Information" class="btn cpca">
+    <div class="form-footer submit">
+        <button type="submit" class="btn cpca">Submit New Changes</button>
+        <a href="/ps-view-participant/<?=$peopleid?>"  class="btn btn-secondary" onclick="goBack()">Cancel</a>
+    </div>
 </form>	
 </div>
 
