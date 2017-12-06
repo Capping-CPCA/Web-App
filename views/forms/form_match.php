@@ -20,8 +20,8 @@ global $db, $params;
 include ("header.php");
 
 // Grab info passed from hidden for mfields
-$firstName = trim($_GET['firstname']);
-$lastName = trim($_GET['lastname']);
+$firstName = ucwords(trim($_GET['firstname']));
+$lastName = ucwords(trim($_GET['lastname']));
 
 // Query the db to find any duplicate entries
 $db->prepare("get-duplicate-data", "SELECT DISTINCT ON (peopleid) *
