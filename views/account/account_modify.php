@@ -20,21 +20,22 @@
 
 global $db, $route, $params, $view;
 
+# Get employee id from the route parameters
 $employeeid = $params[1];
 
-# Get if user is a superuser
+# Get if employee is a superuser
 $result = $db->query("SELECT superuserID FROM superusers WHERE superuserid = $1", [$employeeid]);
 $isSuperUser = pg_fetch_assoc($result);
 
-# Checks if the user trying to edit their own account or if they are an admin/superuser
+# Checks if the user is trying to edit their own account or if they are an admin/superuser and trying to edit another superuser
 if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
-        ($isSuperUser && !(hasRole(Role::Superuser)))) {
+    ($isSuperUser && !(hasRole(Role::Superuser)))) {
     header('Location: /dashboard');
     die();
 } else {
     $loggedInUserRole = $_SESSION['role'];
 
-    # Get employee/people information
+    # Get employee information
     $db->prepare("get-employee-info", "SELECT people.firstname, people.middleinit, people.lastname, employees.email, employees.primaryphone, employees.permissionlevel " .
         "FROM employees " .
         "LEFT JOIN people ON employees.employeeid = people.peopleid " .
@@ -48,14 +49,14 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
     $result = $db->execute("get-permissions", []);
     $permissions = pg_fetch_all($result);
 
-    # Prepare query to get languages
-    $db->prepare("get-languages", "SELECT languages.lang FROM languages ");
-    $db->prepare("get-facilitator-languages", "SELECT lang " . "FROM facilitatorlanguage " . "WHERE facilitatorid = $1 AND level = $2");
-
     # Check if the user is a facilitator
-    $db->prepare("get-is-facilitator", "SELECT facilitatorid " . "FROM facilitators WHERE facilitatorid = $1 AND df = $2");
+    $db->prepare("get-is-facilitator", "SELECT facilitatorid FROM facilitators WHERE facilitatorid = $1 AND df = $2");
     $result = $db->execute("get-is-facilitator", [$employeeid, 0]);
     $isFacilitator = pg_fetch_assoc($result);
+
+    # Prepare query to get languages
+    $db->prepare("get-languages", "SELECT languages.lang FROM languages ");
+    $db->prepare("get-facilitator-languages", "SELECT lang FROM facilitatorlanguage WHERE facilitatorid = $1 AND level = $2");
 
     # If the user is a facilitator, get his/her languages
     if ($isFacilitator) {
@@ -65,7 +66,7 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
         $primaryLang = pg_fetch_assoc($result);
         $result = $db->execute("get-facilitator-languages", [$employeeid, "SECONDARY"]);
         $secondaryLang = pg_fetch_all($result);
-        # Otherwise, check if the user is in the facilitator table at all
+        # Otherwise, check if the user is in the facilitator table at all so we know whether to insert or update later
     } else {
         $result = $db->execute("get-is-facilitator", [$employeeid, 1]);
         $isInFacilitatorTable = pg_fetch_assoc($result);
@@ -100,12 +101,12 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
         $valid = true;
         $success = true;
 
-        if (empty($firstname) || !ctype_alpha($firstname)) {
+        if (empty($firstname) || !ctype_alpha(str_replace(' ', '', $firstname))) {
             $errors['firstname'] = true;
             $errorMsg = "The employee first name could not be updated.";
             $valid = false;
         }
-        if (empty($lastname) || !ctype_alpha($lastname)) {
+        if (empty($lastname) || !ctype_alpha(str_replace(' ', '', $lastname))) {
             $errors['lastname'] = true;
             $errorMsg = "The employee last name could not be updated.";
             $valid = false;
@@ -118,6 +119,7 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
         }
 
         if ($valid) {
+            # Update name
             $res1 = $db->query("UPDATE people SET firstname = $1, middleinit = $2, lastname = $3 " .
                 "WHERE peopleid = $4", [$firstname, $middleinit, $lastname, $employeeid]);
             if ($res1) {
@@ -133,6 +135,7 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
                 $errorMsg = "The employee name could not be updated.";
             }
 
+            # If the user is a facilitator, update their languages
             if ($isFacilitator) {
                 $res2 = $db->query("UPDATE facilitatorlanguage SET lang = $1 " .
                     "WHERE facilitatorid = $2 AND level=$3", [$primaryLang['lang'], $employeeid, "PRIMARY"]);
@@ -146,7 +149,20 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
                     $success = false;
                     $errorMsg = "The facilitator language could not be updated.";
                 }
+
+                # If there are new languages, insert them into the facilitator languages table
+                foreach ($newLanguages as $l) {
+                    $db->query("INSERT INTO facilitatorlanguage VALUES ($1, $2, $3)", [$employeeid, $l, "SECONDARY"]);
+                }
+
+                foreach ($removedLanguages as $r) {
+                    $db->query("DELETE FROM facilitatorlanguage WHERE facilitatorid = $1 AND lang = $2 AND level = $3",
+                        [$employeeid, $r, "SECONDARY"]);
+                }
+
             }
+
+            # Update phone number
             $res3 = $db->query("UPDATE employees SET primaryphone = $1 " .
                 "WHERE employeeid = $2", [$primaryphone, $employeeid]);
             if ($res3) {
@@ -160,17 +176,9 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
                 $errorMsg = "The primary phone could not be updated.";
             }
 
-            if ($isFacilitator) {
-                foreach ($newLanguages as $l) {
-                    $db->query("INSERT INTO facilitatorlanguage VALUES ($1, $2, $3)", [$employeeid, $l, "SECONDARY"]);
-                }
 
-                foreach ($removedLanguages as $r) {
-                    $db->query("DELETE FROM facilitatorlanguage WHERE facilitatorid = $1 AND lang = $2 AND level = $3",
-                        [$employeeid, $r, "SECONDARY"]);
-                }
-            }
-
+            # Update permission level if signed in employee is an Admin, and the employee being updated is not a Superuser
+            # Superusers do not have permission levels
             if (hasRole(Role::Admin) && !$isSuperUser) {
                 $res4 = $db->query("UPDATE employees SET permissionlevel = $1 " .
                     "WHERE employeeid = $2", [$permissionlevel, $employeeid]);
@@ -189,8 +197,10 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
                 }
             }
 
+            # If the logged in user is an Admin and the employee being updated is currently a facilitator,
+            # "delete" them from the facilitator table by setting the delete flag to TRUE
             if (hasRole(Role::Admin) && $isFacilitator && $setFacilitatorDF == 1) {
-                # Sets DF to 1
+                # Sets DF to TRUE
                 $db->query("UPDATE facilitators SET df = TRUE WHERE facilitatorid = $1", [$employeeid]);
 
                 # Removes the employee's languages
@@ -204,7 +214,7 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
                 }
             } else if (hasRole(Role::Admin) && !$isFacilitator && $setFacilitatorDF == 0) {
                 if ($isInFacilitatorTable) {
-                    # Sets DF to 0
+                    # Sets DF to FALSE
                     $db->query("UPDATE facilitators SET df = FALSE WHERE facilitatorid = $1", [$employeeid]);
                 } else {
                     # Adds employee to the facilitators table
@@ -256,8 +266,9 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
     <div class="page-wrapper">
         <div class="jumbotron form-wrapper mb-3">
             <?php
+            # Display error message if any updates failed
             if (isset($success)) {
-                if (!$success) { // == false, prevents == null from being true
+                if (!$success) {
                     $notification = new Notification('Error!', isset($errorMsg) ? $errorMsg : ('Uh oh! an error occurred and the account information wasn\'t updated.'), 'danger');
                     $notification->display();
                 }
@@ -277,12 +288,12 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
                     <div class="col-sm-2">
                         <label for="class-name" class=""><b>Middle</b></label>
                         <input type="text" class="form-control"
-                               value="<?= $middleinit ?>" id="employee-middleinit" name="middleinit">
+                               value="<?= ucwords($middleinit) ?>" id="employee-middleinit" name="middleinit">
                     </div>
                     <div class="col-sm-5">
                         <label for="class-name" class=""><b>Last Name</b></label>
                         <input type="text" class="form-control"
-                               value="<?= $lastname ?>" id="employee-lastname" name="lastname" required>
+                               value="<?= ucwords($lastname) ?>" id="employee-lastname" name="lastname" required>
                         <div class="invalid-feedback">
                             Last Name cannot be empty.
                         </div>
@@ -317,11 +328,11 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
                                         <select class="form-control" id="primaryLanguage-selector"
                                                 style="margin-left: 200px; height: 45px; width: 220px;">
                                             <?php if ($languages) { ?>
-                                            <option selected disabled>Choose a language...</option>
-                                            <?php foreach ($languages as $language) { ?>
-                                                <option value="<?= $language['lang'] ?>"><?= $language['lang'] ?></option>
-                                            <?php } } else { ?>
-                                            <option selected disabled>No languages available</option>
+                                                <option selected disabled>Choose a language...</option>
+                                                <?php foreach ($languages as $language) { ?>
+                                                    <option value="<?= $language['lang'] ?>"><?= $language['lang'] ?></option>
+                                                <?php } } else { ?>
+                                                <option selected disabled>No languages available</option>
                                             <?php } ?>
                                         </select>
                                     </td>
@@ -444,6 +455,10 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
         </div>
     </div>
     <script>
+        /**
+         * Function to remove a language from the secondary languages table.
+         * @param el - the corresponding language row 'Remove' button
+         */
         function removeLanguage(el) {
             // Remove language from table
             var language = $($(el).closest('td').prev('td').children('span').get(0)).text();
@@ -534,7 +549,7 @@ if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
             var originalVal = $('#employee-primaryLanguage').text();
             const val = $('#primaryLanguage-selector').val();
 
-            // Add the original value back into the select
+            // Add the original value back into the selects
             $('#primaryLanguage-selector').append($('<option/>', {
                 value: originalVal,
                 text: originalVal

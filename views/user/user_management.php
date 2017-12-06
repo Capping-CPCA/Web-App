@@ -32,12 +32,15 @@ if (!empty($params) && $params[0] == 'restore') {
 } else if (!empty($params) && $params[0] == 'archives'){
     $view->display('user/user_archives.php');
 } else {
+    include('header.php');
+
+    # Get all current employee names and ids
     $res = $db->query("SELECT firstname, lastname, employeeid FROM people, employees ".
         "WHERE employees.employeeid = people.peopleid AND employees.df = FALSE ORDER BY lastname, firstname", []);
-    include('header.php');
     ?>
     <div style="width: 100%">
         <?php
+        # Displays a notification if modification or deletion (archive) was successful
         if (isset($_SESSION['notification'])) {
             $note = $_SESSION['notification'];
             $notification = new Notification($note['title'], $note['msg'], $note['type']);
@@ -47,7 +50,7 @@ if (!empty($params) && $params[0] == 'restore') {
         ?>
         <div id="curriculum-btn-group" class="input-group">
             <?php
-            # Make sure the logged in user is a Superuser
+            # Only show Archive button if the logged in user is a Superuser
             if (hasRole(Role::Superuser)) {
                 ?>
                 <a id="restore-curriculum-btn" class="ml-3" href="/manage-users/archives">
@@ -60,7 +63,7 @@ if (!empty($params) && $params[0] == 'restore') {
             <?php if (pg_num_rows($res) != 0) { ?>
                 <h3 class="text-center" style="font-weight: 300;color: #333">Current Users</h3>
                 <?php
-                # Displays the active users
+                # Displays the current employees
                 while ($user = pg_fetch_assoc($res)) {
                     # Get if user is a superuser
                     $eId = $user['employeeid'];
@@ -70,11 +73,14 @@ if (!empty($params) && $params[0] == 'restore') {
                     <div class="card mb-2 user-card">
                         <div class="p-3 card-body d-flex flex-row justify-content-start">
                             <p class="mb-0 align-self-center"
-                               style="flex: 1"><?= ucwords($user['lastname'] . ', ' . $user['firstname']); ?></p>
+                               style="flex: 1"><?= ucwords($user['lastname'] . ', ' . $user['firstname']) ?></p>
                             <div class="text-right align-middle">
                                 <a href="/account-settings/<?= $user['employeeid'] ?>" style="text-decoration: none;">
                                     <button type='button' class="btn outline-cpca btn-sm ml-2">View</button>
                                 </a>
+                                <!--If the row contains the logged in employee's own account,
+                                    if the row contains a superuser and the logged in employee is not a superuser,
+                                    or if the logged in employee is not an Admin, do not display the Delete button-->
                                 <?php if (($user['employeeid'] != $_SESSION['employeeid']) &&
                                     (($isSuperUser && hasRole(Role::Superuser)) ||
                                         (!$isSuperUser && hasRole(Role::Admin)))) { ?>
@@ -87,8 +93,8 @@ if (!empty($params) && $params[0] == 'restore') {
                     </div>
                     <?php
                 }
+                # Displays a pretty message if there are no users
             } else { ?>
-            <!-- Displays a pretty message if there are no users -->
                 <div class="w-100 d-flex flex-column justify-content-center text-center">
                     <h3 class="display-3 text-secondary" style="font-size: 40px;"><i
                                 class="fa fa-exclamation-circle"></i></h3>

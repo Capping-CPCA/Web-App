@@ -15,8 +15,10 @@
  */
 
 global $db, $route, $params, $view;
+
+# Get all archived employee names and ids
 $res = $db->query("SELECT firstname, lastname, employeeid FROM people, employees ".
-    "WHERE employees.employeeid = people.peopleid AND employees.df = 1 ORDER BY lastname, firstname", []);
+    "WHERE employees.employeeid = people.peopleid AND employees.df = TRUE ORDER BY lastname, firstname", []);
 include ('header.php');
 ?>
     <div style="width: 100%">
