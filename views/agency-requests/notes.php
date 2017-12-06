@@ -121,10 +121,10 @@ function checkSet($value){
             <hr>
 				<table class="table table-striped">
 					<tr>
-						<th>Name</th>
-						<th>Relationship</th>
-						<th>DOB</th>
-						<th>Sex</th>
+						<th>Topic</th>
+						<th>Note</th>
+						<th>Date</th>
+						<th>Author</th>
 					</tr>			
 					<?php
 					#if query returns nothing, throw an error to the user
