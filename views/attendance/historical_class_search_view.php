@@ -26,7 +26,7 @@ $queryClass = null;
 
 //shouldn't be on this page
 if(!isset($_SESSION['attendance-search-query'])){
-    echo "<h1>Please use 'recent classes' or the 'historical attendance lookup tool' to access attendance history.</h1>";
+    header("Location: /historical-class-search");
     die();
 }
 else{
@@ -44,6 +44,7 @@ else{
     }
     else{
         //shouldn't be here
+        header("Location: /attendance");
         die();
     }
 

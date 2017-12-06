@@ -20,10 +20,16 @@ global $db;
 
 include ('../models/Notification.php');
 
-require "attendance_utilities.php";
+require ("attendance_utilities.php");
+require ("shared_queries.php");
 
 //if attendance has already started being recorded, grab that information from the session information
 $pageInformation = isset($_SESSION['serializedInfo']) ? deserializeParticipantMatrix($_SESSION['serializedInfo']) : array();
+
+//participant's number to edit from edit participant page
+if(isset($_SESSION['edit-participant-details-num'])) {
+    unset($_SESSION['edit-participant-details-num']);
+}
 
 /* Begin set class details */
 // Attendance has already started being recorded and we are not coming from edit class information page
@@ -293,8 +299,8 @@ else {
 /* End set page information */
 
 //enums for no intake packet editing
-$get_races = $db->no_param_query("SELECT unnest(enum_range(NULL::race));");
-$get_sexes = $db->no_param_query("SELECT unnest(enum_range(NULL::sex));");
+$get_races = $db->execute('shared_query_race_enum',[]);
+$get_sexes = $db->execute('shared_query_sex_enum',[]);
 
 //Format the time and date for displaying class information
 $convert_date = DateTime::createFromFormat('Y-m-d', $selected_date);

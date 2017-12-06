@@ -15,11 +15,13 @@
 
 include('header.php');
 
+require ('shared_queries.php');
+
 global $db;
 
 //get all of th curriculum and class options
-$result_curriculum = $db->no_param_query(SHARED_QUERY_CURRICULUM);
-$result_classes = $db->no_param_query(SHARED_QUERY_CLASSES);
+$result_curriculum = $db->execute('shared_query_curriculum',[]);
+$result_classes = $db->execute('shared_query_classes',[]);
 
 //clear search criteria
 unset($_SESSION['attendance-search-curr']);

@@ -60,7 +60,7 @@ $router->add('/attendance', 'attendance/attendance_dashboard.php', 'Attendance D
 $router->add('/new-class', 'attendance/new_class.php', 'New Attendance Sheet');
 $router->add('/attendance-form', 'attendance/attendance_form.php', 'Attendance Form');
 $router->add('/attendance-form-confirmation', 'attendance/attendance_form_confirmation.php', 'Confirm Attendance');
-$router->add('/historical-class-view', 'attendance/historical_class_view.php', 'Recent Class View');
+$router->add('/recent-class-view', 'attendance/recent_class_view.php', 'Recent Class View');
 $router->add('/historical-class-search', 'attendance/historical_class_search.php', 'Historical Class Search');
 $router->add('/historical-class-search-results', 'attendance/historical_class_search_results.php', 'Historical Class Search Results');
 $router->add('/historical-class-search-view', 'attendance/historical_class_search_view.php', 'Historical Class View');

@@ -31,7 +31,7 @@ who require attendance to be recorded.
 8.  historical_class_search.php
 9.  historical_class_search_results.php
 10. historical_class_search_view.php
-11. historical_class_view.php
+11. recent_class_view.php
 12. new_class.php
 13. shared_queries.php
 
