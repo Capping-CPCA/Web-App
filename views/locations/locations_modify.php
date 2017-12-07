@@ -39,8 +39,8 @@ if ($isEdit) {
     pg_free_result($result);
 }
 
-$name = isset($site) ? $site['sitename'] : '';
-$type = isset($site) ? $site['sitetype'] : '';
+$name = isset($site) ? htmlentities($site['sitename']) : '';
+$type = isset($site) ? htmlentities($site['sitetype']) : '';
 
 # Used to track POST errors
 $errors = [
@@ -51,8 +51,8 @@ $errors = [
 # Validate form information, display errors if needed
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $oldName = $name;
-    $name = isset($_POST['name']) ? $_POST['name'] : $name;
-    $type = isset($_POST['type']) ? $_POST['type'] : $type;
+    $name = isset($_POST['name']) ? htmlentities($_POST['name']) : $name;
+    $type = isset($_POST['type']) ? htmlentities($_POST['type']) : $type;
 
     $valid = true;
 

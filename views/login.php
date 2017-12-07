@@ -27,12 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Initialize LDAP credentials
     $ldap_usr_dom = $ldap_config['user_domain'];
-    $ldaprdn = $_POST['username'];
+    $ldaprdn = htmlentities($_POST['username']);
     if (!endsWith($ldaprdn, $ldap_usr_dom)) {
         $ldaprdn .= $ldap_usr_dom;
     }
     $ldaprdn_no_domain = substr($ldaprdn, 0, strpos($ldaprdn, '@'));
-    $ldappass = $_POST['password'];
+    $ldappass = htmlentities($_POST['password']);
 
     // Connect to LDAP server
     $ldapconn = ldap_connect($ldap_config['host'], $ldap_config['port']);
@@ -137,9 +137,9 @@ include('header.php');
             ?>
             <form class="form" method="post" action="/login">
                 <label for="username">Username</label>
-                <input class="form-control username" type="text" name="username" value="<?= isset($_POST['username']) ? $_POST['username'] : '' ?>">
+                <input class="form-control username" type="text" name="username" value="<?= isset($ldaprdn) ? htmlentities($_POST['username']) : '' ?>">
                 <label for="password">Password</label>
-                <input class="form-control password" type="password" name="password" value="<?= isset($_POST['password']) ? $_POST['password'] : '' ?>">
+                <input class="form-control password" type="password" name="password" value="<?= isset($ldappass) ? $ldappass : '' ?>">
                 <div class="form-footer submit">
                     <button type="submit" class="btn cpca">Submit</button>
                 </div>

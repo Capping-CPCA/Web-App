@@ -19,7 +19,7 @@ global $params, $db;
 $isEdit = $params[0] == 'edit';
 
 # Get topic name from params
-$id = isset($params[1]) ? $params[1] : '';
+$id = isset($params[1]) ? htmlentities($params[1]) : '';
 
 # Prepare SQL statements for later use
 $db->prepare("get_curriculum", "SELECT * FROM curricula WHERE curriculumid = $1");
@@ -39,8 +39,8 @@ if ($isEdit) {
 }
 
 # Store table columns in variable
-$name = isset($curricula) ? $curricula['curriculumname'] : '';
-$miss = isset($curricula) ? $curricula['missnumber'] : '';
+$name = isset($curricula) ? htmlentities($curricula['curriculumname']) : '';
+$miss = isset($curricula) ? htmlentities($curricula['missnumber']) : '';
 
 # Used to track POST errors
 $errors = [
@@ -50,8 +50,8 @@ $errors = [
 
 # Validate form information, display errors if needed
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = isset($_POST['name']) ? trim($_POST['name']) : $name;
-    $miss = isset($_POST['miss']) ? $_POST['miss'] : $miss;
+    $name = isset($_POST['name']) ? htmlentities(trim($_POST['name'])) : $name;
+    $miss = isset($_POST['miss']) ? htmlentities($_POST['miss']) : $miss;
 
     $valid = true;
 

@@ -37,8 +37,8 @@ if ($isEdit) {
     pg_free_result($result);
 }
 
-$name = isset($class) ? $class['topicname'] : '';
-$desc = isset($class) ? $class['description'] : '';
+$name = isset($class) ? htmlentities($class['topicname']) : '';
+$desc = isset($class) ? htmlentities($class['description']) : '';
 
 # Used to track POST errors
 $errors = [
@@ -48,8 +48,8 @@ $errors = [
 
 # Validate form information, display errors if needed
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = isset($_POST['name']) ? trim($_POST['name']) : $name;
-    $desc = isset($_POST['desc']) ? trim($_POST['desc']) : $desc;
+    $name = isset($_POST['name']) ? htmlentities(trim($_POST['name'])) : $name;
+    $desc = isset($_POST['desc']) ? htmlentities(trim($_POST['desc'])) : $desc;
 
     $valid = true;
 
