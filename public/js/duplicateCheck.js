@@ -37,6 +37,10 @@ $(document).ready(function(){
     var race;
     var sex;
 
+    function toTitleCase(str){
+        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    }
+    
     /**
     * Checking the page route to see what page the
     * user is on; this will tell the modal what js function
@@ -142,9 +146,9 @@ $(document).ready(function(){
         $(".aptt").text();
 
         // Sets the left side of the omdal to hold a fixed view of entered information
-        $(".followNameHolder").html("<p><b>First Name:</b> "+firstNameValue+"</p>"+
-            "<p><b>Middle Name:</b> "+middleinit+"</p>"+
-            "<p><b>Last Name:</b> "+lastname+"</p>"+
+        $(".followNameHolder").html("<p><b>First Name:</b> "+toTitleCase(firstNameValue)+"</p>"+
+            "<p><b>Middle Name:</b> "+toTitleCase(middleinit)+"</p>"+
+            "<p><b>Last Name:</b> "+toTitleCase(lastname)+"</p>"+
             "<p><b>DOB:</b> "+dob+"</p>"+
             "<p><b>Race:</b> "+(race == null ? " ": race)+"</p>"+
             "<p><b>Sex:</b> "+(sex == undefined ? " ":sex)+"</p>"+
@@ -154,7 +158,7 @@ $(document).ready(function(){
             "<p><b>Zip:</b> "+zip+"</p>");
 
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             url: '/form-match/',
             data: $('form').serialize(),
             dataType: 'text',

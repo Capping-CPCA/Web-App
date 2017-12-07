@@ -20,13 +20,13 @@ global $db, $params;
 include ("header.php");
 
 // Grab info passed from hidden for mfields
-$firstName = ucwords(trim($_GET['firstname']));
-$lastName = ucwords(trim($_GET['lastname']));
+$firstName = ucwords(trim($_POST['firstname']));
+$lastName = ucwords(trim($_POST['lastname']));
 
 // Query the db to find any duplicate entries
 $db->prepare("get-duplicate-data", "SELECT DISTINCT ON (peopleid) *
                                     FROM ParticipantModal
-                                    WHERE firstname = $1 AND lastname = $2 LIMIT 10");
+                                    WHERE firstname = LOWER($1) AND lastname = LOWER($2) LIMIT 10");
 $result = $db->execute("get-duplicate-data", [$firstName, $lastName]);
 
 function checkEmpty($string){
@@ -44,7 +44,7 @@ function checkEmpty($string){
     while($row = pg_fetch_assoc($result)){
     ?>
          <li class="list-group-item duplicate-entries mt-1 mb-1" id="<?=$row['peopleid']?>">
-                <?= $row['lastname'].", ".$row['firstname']. " ". $row['middleinit'];?>
+                <?= ucwords($row['lastname']).", ".ucwords($row['firstname']). " ". ucwords($row['middleinit']);?>
             <div class='details'>
                 <?= " <div><b>DOB: </b>".$row['dateofbirth']." </div> ".
                 "<div> <b>Address: </b> ".$row['addressnumber'].$row['aptinfo']." ".$row['street']. " ".$row['city']. " ".$row['state']. " ".$row['zipcode']." </div> ".
