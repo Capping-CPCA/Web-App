@@ -604,6 +604,18 @@ include('header.php');
         <br><br>
         </div>  <!-- /#container -->
     </div>  <!-- /#container-fluid class -->
+<script>
+	formChanged = false;
+	$("select,input,textarea").change(function () {formChanged = true;});
+	
+	<!--Adds the "Are you sure you want to leave?" pop-up to page-->
+	window.onbeforeunload = function() {
+		if (formChanged)
+			return true;
+		else
+			return null;
+	};
+</script>
 <style>
 @media print{
   .collapse {
