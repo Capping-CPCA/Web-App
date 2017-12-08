@@ -153,8 +153,8 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
     $form_type = "agency referral";
 
     // First card (Participant Information)
-    $pers_firstname = !empty($_POST['pers_firstname']) ? strtolower((trim($_POST['pers_firstname']))) : NULL;
-    $pers_lastname = !empty($_POST['pers_lastname']) ? strtolower((trim($_POST['pers_lastname']))) : NULL;
+   $pers_firstname = !empty($_POST['pers_firstname']) ? (trim($_POST['pers_firstname'])) : NULL;
+    $pers_lastname = !empty($_POST['pers_lastname']) ? (trim($_POST['pers_lastname'])) : NULL;
     $pers_middlein = !empty($_POST['pers_middlein']) ? trim($_POST['pers_middlein']) : NULL;
     $pers_dob = !empty($_POST['pers_dob']) ? trim($_POST['pers_dob']) : NULL;
     $pers_sex = !empty($_POST['pers_sex']) ? trim($_POST['pers_sex']) : NULL;

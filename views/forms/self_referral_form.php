@@ -105,8 +105,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form_type = "self referral";
 
     // First Card (Participant Information)
-    $self_pers_firstname = !empty($_POST['self_pers_firstname']) ? strtolower((trim($_POST['self_pers_firstname']))) : NULL;
-    $self_pers_lastname = !empty($_POST['self_pers_lastname']) ? strtolower((trim($_POST['self_pers_lastname']))) : NULL;
+    $self_pers_firstname = !empty($_POST['self_pers_firstname']) ? trim($_POST['self_pers_firstname']) : NULL;
+    $self_pers_lastname = !empty($_POST['self_pers_lastname']) ? trim($_POST['self_pers_lastname']) : NULL;
     $self_pers_middlein = !empty($_POST['self_pers_middlein']) ? trim($_POST['self_pers_middlein']) : NULL;
     $self_pers_dob = !empty($_POST['self_pers_dob']) ? $_POST['self_pers_dob'] : NULL;
     $self_pers_race = !empty($_POST['self_pers_race']) ? $_POST['self_pers_race'] : NULL;

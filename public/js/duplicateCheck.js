@@ -36,11 +36,12 @@ $(document).ready(function(){
     var dob ;
     var race;
     var sex;
+    var formData;
 
     function toTitleCase(str){
         return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     }
-    
+
     /**
     * Checking the page route to see what page the
     * user is on; this will tell the modal what js function
@@ -78,6 +79,7 @@ $(document).ready(function(){
             dob = $("#pers_dob").val();
             race = $("#pers_race").val();
             sex = $("#pers_sex").val();
+            formData = $("#participant_info").serialize();
         } else if( pathN == "/self-referral-form"){
             firstNameValue = $("#self_pers_firstname").val();
             middleinit = $("#self_pers_middlein").val();
@@ -91,6 +93,7 @@ $(document).ready(function(){
             dob = $("#self_pers_dob").val();
             race = $("#self_pers_race").val();
             sex = $("#self_pers_sex").val();
+            formData = $("#self_participant_info").serialize();
         } else if( pathN == "/intake-packet"){
             firstNameValue = $("#intake_firstname").val();
             middleinit = $("#intake_middlein").val();
@@ -104,6 +107,7 @@ $(document).ready(function(){
             dob = $("#intake_dob").val();
             race = $("#intake_ethnicity").val();
             sex = $("#intake_sex").val();
+            formData = $("#intake_packet").serialize();
         }
     }
 
@@ -113,11 +117,8 @@ $(document).ready(function(){
     * the hidden form that is used to query against the db for matches
     * @param e event object that prevents default form handling
     */     
-        $(".checkingName").submit(function(e){
-
-        //prevent page from redirecting
-        e.preventDefault();
-        $(".nameCol").empty();
+    $(".checkingName").submit(function(){
+        
         // Getting all values of all referral packet inputs to find matches against db
         $("form").prepend("<input type='hidden' name='selectedID' id='selectedID'>")
         createVars(pathname);
@@ -135,89 +136,11 @@ $(document).ready(function(){
         $("#dob").val(dob);
         $("#race").val(race);
         $("#sex").val(sex);
-
-        // Setting form vars for the match query to match the vars in the referral packet
-        $('.fname').text(firstNameValue);
-        $('.lname').text(lastname);
-        $('.addr').text(address);
-        $('.sx').text(sex);
-        $(".city").text();
-        $(".state").text();
-        $(".aptt").text();
-
-        // Sets the left side of the omdal to hold a fixed view of entered information
-        $(".followNameHolder").html("<p><b>First Name:</b> "+toTitleCase(firstNameValue)+"</p>"+
-            "<p><b>Middle Name:</b> "+toTitleCase(middleinit)+"</p>"+
-            "<p><b>Last Name:</b> "+toTitleCase(lastname)+"</p>"+
-            "<p><b>DOB:</b> "+dob+"</p>"+
-            "<p><b>Race:</b> "+(race == null ? " ": race)+"</p>"+
-            "<p><b>Sex:</b> "+(sex == undefined ? " ":sex)+"</p>"+
-            "<p><b>Address:</b> "+ (address == undefined ? " ":address)+ " "+(apt == undefined ? " ":apt) +"</p>"+
-            "<p><b>City:</b> "+city+"</p>"+
-            "<p><b>State:</b> "+(state == null ? " ": state)+"</p>"+
-            "<p><b>Zip:</b> "+zip+"</p>");
-
-        $.ajax({
-            type: 'POST',
-            url: '/form-match/',
-            data: $('form').serialize(),
-            dataType: 'text',
-            success:function(data){
-                //hold all returned list items
-                var data1 = $(data).find(".list-group-item");
-
-                //only display modal if there are matches
-                if(data1.length >= 1){
-
-                    //call modal into view
-                    $("#matchModal").modal();
-
-                    //for each list item, create a list item in the modal display
-                    for(var i =0; i < data1.length; i++){
-
-                        //grab only the data within the list items
-                        $(".nameCol").append(data1.get(i));
-
-                        //when user clicks on a list item, submit the person id/ participant id associated with it and set the hidden input field equal to the ID
-                        $(data1.get(i)).click(function(){
-                            //set the hidden form field value to the id of the selected participant
-                            $("#selectedID").val($(this).attr("id"));
-
-                            //submit the form to the appropriate form helper fn
-                            routePage(pathname);
-
-                            //close out of modal after selection
-                            $("#matchModal").modal('toggle');
-
-                            //convey completed action to the user
-                            $(".container-fluid").before("<div class='alert alert-success alert-dismissible fade show' role='alert'>"+
-                                                        "<strong>Creating record for already Stored Participant</strong>"+
-                                                        "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
-                                                        "<span aria-hidden='true'>&times;</span>"+
-                                                        "</button>"+
-                                                        "</div>");         
-                        });
-
-                }
-                //Diaply the entered inputs for comparison view against db matched entries
-                var data2 = $(data).find(".user-inputs");
-                $(".iholdstuff").html(data2.html());	
-
-                //Submit if user does not select a match
-                $(".cancel").click(function(){
-                    routePage(pathname);
-                });
-                }else{
-                    routePage(pathname);
-                }
-
-            }
-
-        });
-
-
-    });//end request
-
+        $("#pageFrom").val(pathname);
+        
+        // This holds all form data entered by the user - prevents info loss during duplicate selection
+        $("#prevFormData").val(formData);
+    });
 });
 
 
