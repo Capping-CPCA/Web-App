@@ -38,8 +38,8 @@ function checkEmpty($rowValue){
 	}else{
 		return $rowValue;
 	}
-	
-}							
+
+}
 include('header.php');
 ?>
 <div class="w-100 d-flex flex-column">

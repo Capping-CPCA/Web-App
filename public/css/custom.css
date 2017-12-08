@@ -625,7 +625,7 @@ label[for=password] {
     transition: font-weight 0.1s;
    text-decoration: none !important;
 }
-.edit-form{
+.edit-form {
 	background-color:lightgrey;
 }
 

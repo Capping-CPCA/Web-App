@@ -7,7 +7,7 @@
  *
  * @author Christian Menk and Stephen Bohner
  * @copyright 2017 Marist College
- * @version 0.3.3
+ * @version 1.2.2
  * @since 0.3.2
  */
 
@@ -33,6 +33,9 @@ function initMask(){
 
 function disableFields(){
     $("#self_participant_info :input").prop("disabled", true);
+    $('#collapse2').collapse('show');
+    $('#collapse3').collapse('show');
+    $('#collapse4').collapse('show');
 }
 
 // Javascript validation for Referral form.

@@ -7,7 +7,7 @@
  *
  * @author Christian Menk and Stephen Bohner
  * @copyright 2017 Marist College
- * @version 0.3.3
+ * @version 1.2.2
  * @since 0.3.2
  */
 
@@ -27,7 +27,9 @@ $(document).ready(function(){
     $('.mask-zip')
         .on('focusout', function() {
             validateZip($(this));
-        })
+        });
+
+    initRadios();
 });
 
 function initMaskIntake(){
@@ -56,6 +58,24 @@ function submitAllIntake(){
     } else {
         intake_packet.submit();
     }
+}
+
+function initRadios(){
+    var radios = document.getElementsByTagName("input");
+    for (var i = 0; i < radios.length; i++) {
+        if(radios[i].type == "radio" && radios[i].checked) {
+            radios[i].click();
+        }
+    }
+}
+
+function disableIntakeFields(){
+    $("#intake_packet :input").prop("disabled", true);
+    $('.childbutton').addClass('hidden-field');
+    $('#collapse1').collapse('show');
+    $('#collapse2').collapse('show');
+    $('#collapse3').collapse('show');
+    $('#collapse4').collapse('show');
 }
 
 // Hides or displays the error message accordingly.
@@ -109,64 +129,65 @@ function showFields(el){
     }
 }
 
+function addChild () {
+    var num     = $('.clonedChild').length, // Checks to see how many "duplicatable" input fields we currently have
+        newNum  = new Number(num + 1),      // The numeric ID of the new input field being added, increasing by 1 each time
+        newElem = $('#childEntry_' + num).clone().attr('id', 'childEntry_' + newNum).hide().fadeIn('slow'); // create the new element via clone(), and manipulate it's ID using newNum value
+
+    /*  This is where we manipulate the name/id values of the input inside the new, cloned element
+        Below are examples of what forms elements you can clone, but not the only ones.
+        There are 2 basic structures below: one for an H2, and one for form elements.
+        To make more, you can copy the one for form elements and simply update the classes for its label and input.
+        Keep in mind that the .val() method is what clears the element when it gets cloned. Radio and checkboxes need .val([]) instead of .val('').
+    */
+    // Section header
+    newElem.find('.heading-reference').attr('id', 'ID' + newNum + '_reference').attr('name', 'ID' + newNum + '_reference').html('Child ' + newNum);
+
+    // First name - text
+    newElem.find('.label_fn').attr('for', 'child_first_name_' + newNum);
+    newElem.find('.input_fn').attr('id', 'child_first_name_' + newNum).attr('name', 'child_first_name_' + newNum).val('');
+
+    // Last name - text
+    newElem.find('.label_ln').attr('for', 'child_last_name_' + newNum );
+    newElem.find('.input_ln').attr('id', 'child_last_name_' + newNum).attr('name', 'child_last_name_' + newNum).val('');
+
+    // Middle initial - text
+    newElem.find('.label_mi').attr('for', 'child_mi_' + newNum );
+    newElem.find('.input_mi').attr('id', 'child_mi_' + newNum).attr('name', 'child_mi_' + newNum).val('');
+
+    // dob - text
+    newElem.find('.label_dob').attr('for', 'child_dob_' + newNum);
+    newElem.find('.input_dob').attr('id', 'child_dob_' + newNum).attr('name', 'child_dob_' + newNum).val('');
+
+    // Sex
+    newElem.find('.label_sex').attr('for', 'child_sex_' + newNum);
+    newElem.find('.select_sex').attr('id', 'child_sex_' + newNum).attr('name', 'child_sex_' + newNum).val('');
+
+    // Race
+    newElem.find('.label_race').attr('for', 'child_race_' + newNum);
+    newElem.find('.select_race').attr('id', 'child_race_' + newNum).attr('name', 'child_race_' + newNum).val('');
+
+    // Live
+    newElem.find('.label_live').attr('for', 'child_live_' + newNum);
+    newElem.find('.input_live').attr('id', 'child_live_' + newNum).attr('name', 'child_live_' + newNum).val('');
+
+    // Custody
+    newElem.find('.label_custody').attr('for', 'child_custody_' + newNum);
+    newElem.find('.input_custody').attr('id', 'child_custody_' + newNum).attr('name', 'child_custody_' + newNum).val('');
+
+    // Insert the new element after the last "duplicatable" input field
+    $('#childEntry_' + num).after(newElem);
+    $('#ID' + newNum + '_title').focus();
+    initMask();
+
+    // Enable the "remove" button. This only shows once you have a duplicated section.
+    $('#btnDelChild').attr('disabled', false);
+    $('.clonedChild').attr('style', 'opacity: 100%');
+}
+
 $(function () {
     $('#btnAddChild').click(function () {
-        var num     = $('.clonedChild').length, // Checks to see how many "duplicatable" input fields we currently have
-            newNum  = new Number(num + 1),      // The numeric ID of the new input field being added, increasing by 1 each time
-            newElem = $('#childEntry_' + num).clone().attr('id', 'childEntry_' + newNum).hide().fadeIn('slow'); // create the new element via clone(), and manipulate it's ID using newNum value
-
-        /*  This is where we manipulate the name/id values of the input inside the new, cloned element
-            Below are examples of what forms elements you can clone, but not the only ones.
-            There are 2 basic structures below: one for an H2, and one for form elements.
-            To make more, you can copy the one for form elements and simply update the classes for its label and input.
-            Keep in mind that the .val() method is what clears the element when it gets cloned. Radio and checkboxes need .val([]) instead of .val('').
-        */
-        // Section header
-        newElem.find('.heading-reference').attr('id', 'ID' + newNum + '_reference').attr('name', 'ID' + newNum + '_reference').html('Child ' + newNum);
-
-        // First name - text
-        newElem.find('.label_fn').attr('for', 'child_first_name_' + newNum);
-        newElem.find('.input_fn').attr('id', 'child_first_name_' + newNum).attr('name', 'child_first_name_' + newNum).val('');
-
-        // Last name - text
-        newElem.find('.label_ln').attr('for', 'child_last_name_' + newNum );
-        newElem.find('.input_ln').attr('id', 'child_last_name_' + newNum).attr('name', 'child_last_name_' + newNum).val('');
-
-        // Middle initial - text
-        newElem.find('.label_mi').attr('for', 'child_mi_' + newNum );
-        newElem.find('.input_mi').attr('id', 'child_mi_' + newNum).attr('name', 'child_mi_' + newNum).val('');
-
-        // dob - text
-        newElem.find('.label_dob').attr('for', 'child_dob_' + newNum);
-        newElem.find('.input_dob').attr('id', 'child_dob_' + newNum).attr('name', 'child_dob_' + newNum).val('');
-
-        // Sex
-        newElem.find('.label_sex').attr('for', 'child_sex_' + newNum);
-        newElem.find('.select_sex').attr('id', 'child_sex_' + newNum).attr('name', 'child_sex_' + newNum).val('');
-
-        // Race
-        newElem.find('.label_race').attr('for', 'child_race_' + newNum);
-        newElem.find('.select_race').attr('id', 'child_race_' + newNum).attr('name', 'child_race_' + newNum).val('');
-
-        // Live
-        newElem.find('.label_live').attr('for', 'child_live_' + newNum);
-        newElem.find('.input_live').attr('id', 'child_live_' + newNum).attr('name', 'child_live_' + newNum).val('');
-
-        // Custody
-        newElem.find('.label_custody').attr('for', 'child_custody_' + newNum);
-        newElem.find('.input_custody').attr('id', 'child_custody_' + newNum).attr('name', 'child_custody_' + newNum).val('');
-
-        // Insert the new element after the last "duplicatable" input field
-        $('#childEntry_' + num).after(newElem);
-        $('#ID' + newNum + '_title').focus();
-        initMask();
-
-        // Enable the "remove" button. This only shows once you have a duplicated section.
-        $('#btnDelChild').attr('disabled', false);
-
-        // Right now you can only add 4 sections, for a total of 5. Change '5' below to the max number of sections you want to allow.
-        if (newNum == 5)
-            $('#btnAddChild').attr('disabled', true).prop('value', "You've reached the limit"); // value here updates the text in the 'add' button when the limit is reached
+        addChild();
     });
 
     $('#btnDelChild').click(function () {
@@ -186,6 +207,4 @@ $(function () {
     });
     // Enable the "add" button
     $('#btnAddChild').attr('disabled', false);
-    // Disable the "remove" button
-    $('#btnDelChild').attr('disabled', true);
 });

@@ -11,7 +11,7 @@
  *
  * @author Stephen Bohner
  * @copyright 2017 Marist College
- * @version 0.3.3
+ * @version 1.2.2
  * @since 0.3.2
  */
 
@@ -214,6 +214,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     WHERE
                                     formID = $3", [$self_pers_phone, 'Primary', $fID]);
 
+        $updatePhoneInsert = $db->query("INSERT INTO 
+                                                  FormPhoneNumbers (formID, phoneNumber, phoneType)
+                                                  SELECT $1, $2, $3
+                                                  WHERE NOT EXISTS (SELECT 1 FROM FormPhoneNumbers WHERE formID = $1 AND phoneType = $3);", [$params[2], $self_pers_phone, 'Primary']);
+
         $updateSelfReferralResult = $db->query("UPDATE 
                             SelfReferral
                                     SET 
@@ -366,7 +371,7 @@ include('header.php');
                                         <label class="col-form-label col-sm-2" for="self_pers_race">Race:</label>
                                         <div class="col-sm-2 col">
                                             <select class="form-control select_sex" name="self_pers_race" id="intake_ethnicity">
-                                                <option value="" selected="selected" disabled="disabled">Choose one</option>
+                                                <option value="" selected="selected">Choose one</option>
                                                 <?php
                                                 $res = $db->query("SELECT unnest(enum_range(NULL::race)) AS type", []);
                                                 while ($enumtype = pg_fetch_assoc($res)) {
@@ -384,7 +389,7 @@ include('header.php');
                                         <label class="col-form-label col-sm-2" for="self_pers_sex">Sex:</label>
                                         <div class="col-sm-2 col">
                                             <select class="form-control select_sex" name="self_pers_sex" id="intake_ethnicity">
-                                                <option value="" selected="selected" disabled="disabled">Choose one</option>
+                                                <option value="" selected="selected">Choose one</option>
                                                 <?php
                                                 $res = $db->query("SELECT unnest(enum_range(NULL::sex)) AS type", []);
                                                 while ($enumtype = pg_fetch_assoc($res)) {
@@ -418,7 +423,7 @@ include('header.php');
                                         <label class="col-form-label col-sm-2" for="self_pers_state">State:</label>
                                         <div class="col-sm-3 col">
                                             <select class="form-control" id="self_pers_state" name="self_pers_state" >
-                                                <option value="" selected="selected" disabled="disabled">Choose a state</option>
+                                                <option value="" selected="selected">Choose a state</option>
                                                 <?php
                                                 $res = $db->query("SELECT unnest(enum_range(NULL::states)) AS type", []);
                                                 while ($enumtype = pg_fetch_assoc($res)) {
@@ -825,4 +830,3 @@ if(isset($params[0]) && $params[0] == "view") { ?>
     </script>
 <?php }
 include('footer.php'); ?>
-?>
