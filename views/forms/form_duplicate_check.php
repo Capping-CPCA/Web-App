@@ -29,7 +29,7 @@
 	<input type="hidden" value="" id ="state"  name="state">
 	<input type="hidden" value="" id ="city"  name="city">
 	<input type="hidden" value="" id ="apt"  name="apt">
-	<input id="btnRegister" type="submit" name="namecheck" class="cpca btn" style="margin-bottom: 20px;">
+	<input id="btnRegister" type="submit" name="namecheck" class="cpca btn" onclick="formChanged = false;" style="margin-bottom: 20px;">
 </form>
 
 <div class="modal fade modal-larger" id="matchModal" tabindex="-1" role="dialog" aria-labelledby="matchModal"
