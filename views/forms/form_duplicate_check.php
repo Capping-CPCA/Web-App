@@ -16,7 +16,7 @@
  * 
 */
 ?>
-<form class="checkingName" method='GET' action="/form-match">
+<form class="checkingName" method='GET' action="/form-match" id="dup-form">
 	<input type="hidden" value="" id ="firstname" name="firstname">
 	<input type="hidden" value="" id ="middleinit"  name="middleinit">
 	<input type="hidden" value="" id ="lastname"  name="lastname">
@@ -29,7 +29,7 @@
 	<input type="hidden" value="" id ="state"  name="state">
 	<input type="hidden" value="" id ="city"  name="city">
 	<input type="hidden" value="" id ="apt"  name="apt">
-	<input id="btnRegister" type="submit" name="namecheck" class="cpca btn" onclick="formChanged = false;" style="margin-bottom: 20px;">
+	<input id="btnRegister" type="button" name="namecheck" class="cpca btn" onclick="submitForm()" style="margin-bottom: 20px;" value="Submit">
 </form>
 
 <div class="modal fade modal-larger" id="matchModal" tabindex="-1" role="dialog" aria-labelledby="matchModal"
@@ -69,3 +69,10 @@
         </div>
     </div>
 </div>
+
+<script>
+    function submitForm() {
+        formChanged = false;
+        $("#dup-form").submit();
+    }
+</script>

@@ -38,6 +38,7 @@ function initMaskIntake(){
 }
 
 function submitAllIntake(){
+    formChanged = false;
     var intake_firstname = document.getElementById("intake_firstname");
     var intake_lastname = document.getElementById("intake_lastname");
     var intake_zip = document.getElementById("intake_zip");
