@@ -422,10 +422,10 @@ select.form-control {
     width:70%;
 }
 .badge-success{
-	background-color:#5C629C!important;
+    background-color:#5C629C!important;
 }
 .badge-primary{
-	background-color:#868E96!important;
+    background-color:#868E96!important;
 }
 .top-search-row{
     margin-top: 5%;
@@ -470,8 +470,8 @@ select.form-control {
 }
 .alert-outline-success{
     border-style: thin-solid;
-	border-color: #28A745;
-	color:#28A745;
+    border-color: #28A745;
+    color:#28A745;
 }
 
 /*Login*/
@@ -606,7 +606,7 @@ label[for=password] {
     padding-top: 8px;
 }
 .add-participant{
-	display:hidden;
+    display:hidden;
 }
 
 /* end attendance project */
@@ -614,9 +614,9 @@ label[for=password] {
 /* Results for Live Search */
 .search-result:focus,
 .search-result:hover {
-	cursor:pointer!important;
-	background-color:#5C629C;
-	color:white;
+    cursor:pointer!important;
+    background-color:#5C629C;
+    color:white;
 }
 .form-header {
     flex: 1;
@@ -626,10 +626,10 @@ label[for=password] {
    text-decoration: none !important;
 }
 .edit-form {
-	background-color:lightgrey;
+    background-color:lightgrey;
 }
 
--.form-header:hover {
+.form-header:hover {
     color: #898EBB!important;
     color: rgba(0,0,0,0.20);
     font-weight: bold;
@@ -639,6 +639,50 @@ label[for=password] {
     text-align: right;
 }
 
+/* Help */
+#help-section {
+    overflow-y: auto;
+}
+#help-section h4 {
+    color: #5C629C;
+    font-size: 2rem;
+}
+#help-section h5 {
+    color: #343A40;
+    font-size: 1.5rem;
+}
+#help-section a {
+    color: #5C629C;
+}
+
+#toc {
+    border-left: 1px solid #E9ECEF;
+    overflow-y: auto;
+    width: 260px;
+}
+
+@media (max-width: 991px) {
+    #toc {
+        display: none;
+    }
+}
+
+#toc nav {
+    padding-left: 25px;
+}
+.toc-entry {
+    color: #868E96;
+    padding: 2px 1rem;
+}
+.toc-entry:hover {
+    color: #5C629C;
+    cursor: pointer;
+}
+
+.toc-entry.active {
+    color: #5C629C;
+    font-weight: bold;
+}
 .radio-group {
     text-align: right;
 }
@@ -656,18 +700,18 @@ label[for=password] {
 }
 /*When printing, display all of the main-content div, and nothing else.*/
 @media print{
-	#main-content {
-		overflow: visible;
-	}
-	body{
-		overflow: visible;
-	}
-	.navbar {
-		display: none;
-	}
-	.side-menu {
-		display: none;
-	}
+    #main-content {
+        overflow: visible;
+    }
+    body{
+        overflow: visible;
+    }
+    .navbar {
+        display: none;
+    }
+    .side-menu {
+        display: none;
+    }
 }
 /* Form Match */
 .duplicate-entries:hover{

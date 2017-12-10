@@ -20,10 +20,10 @@ global $router;
 
 $router->add('/', 'dashboard.php', 'Home');
 $router->add('/dashboard', 'dashboard.php', 'Home');
-
 $router->add('/login', 'login.php', 'Login');
 $router->add('/logout', 'logout.php', '');
 $router->add('/create-account', 'create_account.php', 'Create Account');
+$router->add('/help', 'help.php', 'Help');
 
 # Agency Requests
 $router->add('/agency-requests', 'agency-requests/agency_requests.php', 'Agency Requests');
