@@ -212,8 +212,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form_type = "intake packet";
 
     // First Card (Participant Information)
-    $intake_firstname = !empty($_POST['intake_firstname']) ? strtolower((trim($_POST['intake_firstname']))) : NULL;
-    $intake_lastname = !empty($_POST['intake_lastname']) ? strtolower((trim($_POST['intake_lastname']))) : NULL;
+    $intake_firstname = !empty($_POST['intake_firstname']) ? trim($_POST['intake_firstname']) : NULL;
+    $intake_lastname = !empty($_POST['intake_lastname']) ? trim($_POST['intake_lastname']) : NULL;
     $intake_middlein = !empty($_POST['intake_middlein']) ? trim($_POST['intake_middlein']) : NULL;
     $intake_dob = !empty($_POST['intake_dob']) ? trim($_POST['intake_dob']) : NULL;
     $intake_religion = !empty($_POST['intake_religion']) ? trim($_POST['intake_religion']) : NULL;
