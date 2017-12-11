@@ -83,6 +83,10 @@ class Database {
         return pg_get_result($this->conn);
     }
 
+    public function no_param_query($query) {
+        return $this->query($query, []);
+    }
+
     /**
      * Closes the database connection
      */

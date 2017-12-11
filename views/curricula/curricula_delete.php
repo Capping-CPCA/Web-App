@@ -24,7 +24,7 @@ $db->prepare("get_curr_classes",
     "SELECT * FROM curriculumclasses, classes".
     " WHERE curriculumid = $1".
     " AND classes.classid = curriculumclasses.classid".
-    " AND classes.df = 0".
+    " AND classes.df IS FALSE".
     " ORDER BY topicname");
 $result = $db->execute("get_curriculum", [$id]);
 
@@ -45,7 +45,7 @@ pg_free_result($result);
 
 # Archive data
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete']) && $canDelete) {
-    $deleteRes = $db->query("UPDATE curricula SET df = 1 WHERE curriculumid = $1", [$id]);
+    $deleteRes = $db->query("UPDATE curricula SET df = TRUE WHERE curriculumid = $1", [$id]);
     if ($deleteRes) {
         $success = true;
     } else {

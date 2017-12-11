@@ -46,35 +46,47 @@
 			<!-- Multiple Checkboxes -->
 			<div id="custom-reports-checkboxes" class="form-group row">
 				<label class="col-md-2 col-form-label" for="curricula[]"><b>Curricula</b></label>
-				<div class="col-md-4"><?php
-					if ($currs[0]["curriculumid"] !== NULL) {
-						for ($i=0; $i<count($currs); $i++) {
-							$currName = $currs[$i]["curriculumname"];
-							$currId = $currs[$i]["curriculumid"];
-							echo "<div class='checkbox'>
-								<label for='curricula-$i'>
-								<input type='checkbox' name='curricula[]' id='curricula-$i' value=\"$currId\">
-								$currName
-								</label>
-							</div>";
+				<div class="col-md-4">
+					<div>
+						<input type="button" class="btn" id="currSelectAll" value="Select All" onclick="onCurrSelectAll()">
+						<hr>
+					</div>
+					<?php
+						if ($currs[0]["curriculumid"] !== NULL) {
+							for ($i=0; $i<count($currs); $i++) {
+								$currName = $currs[$i]["curriculumname"];
+								$currId = $currs[$i]["curriculumid"];
+								echo "<div class='checkbox'>
+									<label for='curricula-$i'>
+									<input class='currCheckBox' type='checkbox' name='curricula[]' id='curricula-$i' value=\"$currId\">
+									$currName
+									</label>
+								</div>";
+							}
 						}
-					}
-				?></div>
+					?>
+				</div>
 			</div>
+			<br>
 			<!-- Multiple Checkboxes -->
 			<div class="form-group row">
 				<label class="col-md-2 col-form-label" for="race[]"><b>Race</b></label>
-				<div class="col-md-4"><?php
+				<div class="col-md-4">
+					<div>
+						<input type="button" class="btn" id="raceSelectAll" onclick="onRaceSelectAll()" value="Select All">
+						<hr>
+					</div>
+					<?php
 					for ($i=0; $i<count($races); $i++) {
 						$race = $races[$i]["unnest"];
 						echo "<div class='checkbox'>
 							<label for='race-$i'>
-							<input type='checkbox' name='race[]' id='race-$i' value=\"$race\">
+							<input class='raceCheckBox' type='checkbox' name='race[]' id='race-$i' value=\"$race\">
 							$race
 							</label>
 						</div>";
-					}
-				?></div>
+					} ?>
+				</div>
 			</div>
 			<!-- Multiple Checkboxes -->
 			<div class="form-group row">
@@ -115,7 +127,7 @@
 	</form>
 </div>
 <script>
-	const NUM_YEARS_BACK = 4;
+	const MIN_YEAR = 2016;
 	
 	window.onload = initPage;
 	
@@ -138,15 +150,15 @@
 			endElem.value = startElem.value;
 			startElem.max = startElem.value;
 			endElem.max = endElem.value;
-			year -= NUM_YEARS_BACK;
-			startDate.min = year + "-" + month + "-" + day;
-			endDate.min = year + "-" + month + "-" + day;
+			startDate.min = MIN_YEAR + "-" + month + "-" + day;
+			endDate.min = MIN_YEAR + "-" + month + "-" + day;
 		} else {
 			startElem.max = endElem.value;
 			endElem.min = startElem.value;
 			endElem.max = year + "-" + month + "-" + day;
-			year -= NUM_YEARS_BACK;
-			startElem.min = year + "-" + month + "-" + day;
+			startElem.min = MIN_YEAR + "-" + month + "-" + day;
+			minAgeChange()
+			maxAgeChange()
 		}
 	}
 	
@@ -196,6 +208,22 @@
 		var endElem = document.getElementById("endDate");
 		startElem.max = endElem.value;
 		if (startElem.value > startElem.max) startElem.value = startElem.max;
+	}
+	
+	function onRaceSelectAll() {
+		raceButton = document.getElementById("raceSelectAll");
+		raceBoxes = document.getElementsByClassName("raceCheckBox");
+		for (i = 0; i < raceBoxes.length; i++){
+			raceBoxes[i].checked = true;
+		}
+	}
+	
+	function onCurrSelectAll() {
+		currButton = document.getElementById("currSelectAll");
+		currBoxes = document.getElementsByClassName("currCheckBox");
+		for (i = 0; i < currBoxes.length; i++){
+			currBoxes[i].checked = true;
+		}
 	}
 
 	//Display tutorials for page

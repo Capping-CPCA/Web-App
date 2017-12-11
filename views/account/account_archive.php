@@ -19,9 +19,13 @@ global $db, $route, $params, $view;
 
 # Get employee id from the route parameters
 $employeeid = $params[1];
+# Get if user is a superuser
+$result = $db->query("SELECT superuserID FROM superusers WHERE superuserid = $1", [$employeeid]);
+$isSuperUser = pg_fetch_assoc($result);
 
-# Check if the person logged in has the permission to access this page
-if (!(hasRole(Role::Admin))) {
+# Checks if the user trying to edit their own account or if they are an admin/superuser
+if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
+    ($isSuperUser && !(hasRole(Role::Superuser)))) {
     header('Location: /dashboard');
     die();
 } else {

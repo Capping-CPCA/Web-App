@@ -102,7 +102,7 @@ function copyToClipboard(num) {
 
 
 <div class="page-wrapper" id="entireClass">
-    <a href="/back"><button class="btn btn-success"><i value="Back" class="fa fa-arrow-left"></i> Back</button></a>
+    <a href="/surveys"><button class="btn btn-success"><i value="Back" class="fa fa-arrow-left"></i> Back</button></a>
     <!--<div class="jumbotron form-wrapper mb-3">-->
 	<center>
 	<div class="container">
@@ -120,9 +120,10 @@ function copyToClipboard(num) {
 	
 	<?php
 		
-		$query = $db->query("SELECT participantname FROM surveys WHERE cast(starttime as text) LIKE '" . $_POST["Year"] . "-" . $_POST["Month"] . "-" . $_POST["Day"] . "%' and topicname = '" . $_POST["classes"] . "' ORDER BY participantname;", [null, null]);
+		$query = $db->query("SELECT participantname FROM surveys WHERE cast(starttime as text) LIKE '" . $_POST["Year"] . "-" . $_POST["Month"] . "-" . $_POST["Day"] . "%' and topicname = '" . $_POST["classes"] . "' ORDER BY participantname;", []);
 		$counter = 1;
 		$nameNum = 1;
+		
 		while ($line = pg_fetch_array($query, null, PGSQL_ASSOC)) {
 			foreach ($line as $col_value) {
 				echo ('
@@ -142,7 +143,8 @@ function copyToClipboard(num) {
 												
 												</div>
 												'); 
-				$query2 = $db->query("SELECT * FROM surveys WHERE participantname='$col_value' and cast(starttime as text) LIKE '" . $_POST["Year"] . "-" . $_POST["Month"] . "-" . $_POST["Day"] . "%' and topicname = '" . $_POST["classes"] . ";", [null, null]);
+												
+				$query2 = $db->query("SELECT * FROM surveys WHERE participantname='" . $col_value . "' and cast(starttime as text) LIKE '" . $_POST["Year"] . "-" . $_POST["Month"] . "-" . $_POST["Day"] . "%' and topicname = '" . $_POST["classes"] . "';", []);
 				//$result2 = pg_query($db_connection,$query2);
 				echo('
 					<div id="collapse' . $nameNum . '" class="collapse" role="tabpanel" aria-labelledby="heading' . $nameNum . '" data-parent="" >

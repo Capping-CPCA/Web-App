@@ -33,7 +33,7 @@ pg_free_result($result);
 
 # Archive data
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete'])) {
-    $deleteRes = $db->query("UPDATE classes SET df = 1 WHERE classid = $1", [$id]);
+    $deleteRes = $db->query("UPDATE classes SET df = TRUE WHERE classid = $1", [$id]);
     if ($deleteRes) {
         $success = true;
     } else {

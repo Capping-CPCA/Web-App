@@ -276,4 +276,18 @@ $(function() {
     if (tuts) {
         tutorials = Object.assign(tutorials, JSON.parse(tuts));
     }
+
+    $("form").on('submit', function(e) {
+        const $form = $(this);
+        if ($form.data('submitted') === true) {
+            e.preventDefault();
+        } else {
+            $form.data('submitted', true);
+        }
+    })
 });
+
+/* Attendance Historical Class View */
+function changeHiddenFormFieldValue(buttonNumber) {
+    document.getElementById("whichButton").value = buttonNumber;
+}

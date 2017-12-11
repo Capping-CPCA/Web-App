@@ -33,7 +33,7 @@ pg_free_result($result);
 
 $topics = $db->query("SELECT * FROM curriculumclasses, classes WHERE curriculumid = $1 ".
     "AND curriculumclasses.classid = classes.classid ".
-    "AND classes.df = 0 ORDER BY classes.topicname", [$id]);
+    "AND classes.df IS FALSE ORDER BY classes.topicname", [$id]);
 $curriculaName = $curricula['curriculumname'];
 $site = pg_fetch_assoc($db->query("SELECT * FROM sites WHERE sitename = $1", [$curriculaName]));
 
@@ -61,11 +61,11 @@ include('header.php');
         <div class="card-body d-flex justify-content-center flex-column">
             <h4>Information</h4>
             <div class="d-flex justify-content-center">
-                <div class="display-stack">
-                    <div class="display-top"><?= $site['sitetype'] ?></div>
-                    <div class="display-split"></div>
-                    <div class="display-bottom">Location</div>
-                </div>
+<!--                <div class="display-stack">-->
+<!--                    <div class="display-top">--><?//= $site['sitetype'] ?><!--</div>-->
+<!--                    <div class="display-split"></div>-->
+<!--                    <div class="display-bottom">Location</div>-->
+<!--                </div>-->
                 <div class="display-stack">
                     <div class="display-top"><?= $curricula['missnumber'] ?></div>
                     <div class="display-split"></div>
@@ -73,7 +73,7 @@ include('header.php');
                 </div>
             </div>
             <br />
-            <h4>Classes</h4>
+            <h4>Classes <small class="text-muted">(Total: <?= pg_num_rows($topics) ?>)</small></h4>
             <table class="table table-striped table-sm table-hover">
                 <tbody>
                     <?php

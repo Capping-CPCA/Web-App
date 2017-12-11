@@ -29,55 +29,63 @@
 	$maxAge = $_POST['maxAge'];
 	
 	//Build queries based on POST data
-	$dateQuery = "(participantclassattendance.date >= '$startDate' AND participantclassattendance.date <= '$endDate')";
+	$dateQuery = "(classattendancedetails.date::date >= '$startDate' AND classattendancedetails.date::date <= '$endDate')";
 	$currQuery = "";
 	
 	if (count($currs) > 0) {
-		$currQuery = "(participantclassattendance.curriculumid = '" . pg_escape_string($currs[0]) . "' ";
+		$currQuery = "(classattendancedetails.curriculumid = '" . pg_escape_string($currs[0]) . "' ";
 		for ($i = 1; $i < count($currs); $i++) {
-			$currQuery .= "OR participantclassattendance.curriculumid = '" . pg_escape_string($currs[$i]) . "' ";
+			$currQuery .= "OR classattendancedetails.curriculumid = '" . pg_escape_string($currs[$i]) . "' ";
 		}
 		$currQuery .= ")";
 	}
 	
 	$raceQuery = "";
 	if (count($races) > 0) {
-		$raceQuery = "(participants.race = '" . pg_escape_string($races[0]) . "' ";
+		$raceQuery = "(classattendancedetails.race = '" . pg_escape_string($races[0]) . "' ";
 		for ($i = 1; $i < count($races); $i++) {
-			$raceQuery .= "OR participants.race = '" . pg_escape_string($races[$i]) . "' ";
+			$raceQuery .= "OR classattendancedetails.race = '" . pg_escape_string($races[$i]) . "' ";
 		}
 		$raceQuery .= ")";
 	}
-	$ageQuery = "";
-	if ($minAge !== 'any') {
-		$ageQuery = "((date_part('year', AGE(participants.dateOfBirth)) >= $minAge) ";
-	}
-	if ($maxAge !== 'any') {
-		if ($minAge === 'any') {
-			$ageQuery = "(";
-		} else {
-			$ageQuery .= "AND ";
+	
+	if (count($races) > 0 && count($currs) > 0) {
+		$ageQuery = "";
+		if ($minAge !== 'any') {
+			$ageQuery = "((date_part('year', AGE(classattendancedetails.dateOfBirth)) >= $minAge) ";
 		}
-		$ageQuery .= "(date_part('year', AGE(participants.dateOfBirth)) <= $maxAge))";
+		if ($maxAge !== 'any') {
+			if ($minAge === 'any') {
+				$ageQuery = "(";
+			} else {
+				$ageQuery .= "AND ";
+			}
+			$ageQuery .= "(date_part('year', AGE(classattendancedetails.dateOfBirth)) <= $maxAge))";
+		} else {
+			if ($ageQuery !== "") $ageQuery .= ")";
+		}
+		
+		$totalWhere = "$dateQuery ";
+		if ($currQuery !== "") $totalWhere .= "AND $currQuery ";
+		if ($raceQuery !== "") $totalWhere .= "AND $raceQuery ";
+		if ($ageQuery !== "") $totalWhere .= "AND $ageQuery ";
+		$newWhere = $totalWhere . "AND classattendancedetails.isnew = TRUE;";
+		$totalWhere .= ";";
+		
+		$baseQuery = "SELECT COUNT(DISTINCT(classattendancedetails.participantid)) as participants
+					FROM classattendancedetails
+					WHERE ";
+		
+		
+		//Actually query database and store results to be displayed below
+		$totalRes = pg_fetch_result($db->query($baseQuery . $totalWhere, []), 0, 0);
+		$newRes = pg_fetch_result($db->query($baseQuery . $newWhere, []), 0, 0);
+		
 	} else {
-		if ($ageQuery !== "") $ageQuery .= ")";
+		$totalRes = 0;
+		$newRes = 0;
 	}
 	
-	$totalWhere = "$dateQuery ";
-	if ($currQuery !== "") $totalWhere .= "AND $currQuery ";
-	if ($raceQuery !== "") $totalWhere .= "AND $raceQuery ";
-	if ($ageQuery !== "") $totalWhere .= "AND $ageQuery ";
-	$newWhere = $totalWhere . "AND participantclassattendance.isnew = TRUE;";
-	$totalWhere .= ";";
-	
-	$baseQuery = "SELECT COUNT(DISTINCT(participants.participantid)) as Participants
-				FROM participants INNER JOIN participantclassattendance
-				ON participants.participantid = participantclassattendance.participantid
-				WHERE ";
-	
-	//Actually query database and store results to be displayed below
-	$totalRes = pg_fetch_result($db->query($baseQuery . $totalWhere, []), 0, 0);
-	$newRes = pg_fetch_result($db->query($baseQuery . $newWhere, []), 0, 0);
 	$duplRes = $totalRes - $newRes;
 	
 	//Get all the names of the curriculum selected, using their ids
@@ -113,34 +121,44 @@
 		<div align="center">
 			<?php
 			#Display the chosen curriculum
+			echo "<div><b>Curricula:</b> ";
 			if ($currNames[0]["curriculumname"] !== NULL) {
-				echo "<div><b>Curricula:</b> " . $currNames[0]["curriculumname"];
+				echo $currNames[0]["curriculumname"];
 				for ($i = 1; $i < count($currNames); $i++) {
 					echo ", " . $currNames[$i]["curriculumname"];
 				}
 				echo "</div>";
+			} else {
+				echo "None</div>";
 			}
 			
 			#Display the chosen races
+			echo "<div><b>Races:</b> ";
 			if (count($races) > 0) {
-				echo "<div><b>Races:</b> " . $races[0];
+				echo $races[0];
 				for ($i = 1; $i < count($races); $i++) {
 					echo ", " . $races[$i];
 				}
 				echo "</div>";
+			} else {
+				echo "None</div>";
 			}
 			
 			#Display the chosen ages
+			echo "<div><b>Age Range:</b> ";
 			if ($minAge !== 'any' || $maxAge !=='any') {
 				if ($minAge === $maxAge) {
-					echo "<div><b>Age Range:</b> " . $maxAge . "</div>";
+					echo  $maxAge;
 				} elseif ($minAge === 'any') {
-					echo "<div><b>Age Range:</b> " . $maxAge . " and below</div>";
+					echo $maxAge . " and below";
 				} elseif ($maxAge === 'any') {
-					echo "<div><b>Age Range:</b> " . $minAge . " and above</div>";
+					echo $minAge . " and above";
 				} else {
-					echo "<div><b>Age Range:</b> " . $minAge . " - " . $maxAge . "</div>";
+					echo $minAge . " - " . $maxAge;
 				}
+				echo "</div>";
+			} else {
+				echo "Any Age</div>";
 			}
 			?>
 		</div>

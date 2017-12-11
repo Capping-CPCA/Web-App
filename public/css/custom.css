@@ -107,7 +107,7 @@ html, body {
     font-size: 15px;
 }
 
-#account-settings.dropdown-item.text-secondary:active:focus {
+.settings-btn:active:focus {
     background-color: rgba(255,255,255,0.1)!important;
 }
 
@@ -342,7 +342,7 @@ footer {
     width: 100%;
     padding: 15px;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
 }
 
 .tutorial {
@@ -352,6 +352,10 @@ footer {
 #content-wrapper {
     flex: 1;
     width: 100%;
+}
+
+select.form-control {
+    height: 2.5rem!important;
 }
 
 /* Popover */
@@ -413,6 +417,12 @@ footer {
 .search-participants{
     width:70%;
 }
+.badge-success{
+	background-color:#5C629C!important;
+}
+.badge-primary{
+	background-color:#868E96!important;
+}
 .top-search-row{
     margin-top: 5%;
     z-index: 10000;
@@ -453,6 +463,11 @@ footer {
 
 .page-wrapper {
     flex: 1;
+}
+.alert-outline-success{
+    border-style: thin-solid;
+	border-color: #28A745;
+	color:#28A745;
 }
 
 /*Login*/
@@ -511,7 +526,7 @@ label[for=password] {
 }
 
 .display-stack .display-split {
-    border-top: 1px solid rgba(0,0,0,0.15);
+    border-top: 1.1px solid rgba(0,0,0,0.15);
     width: 100%;
 }
 
@@ -576,6 +591,22 @@ label[for=password] {
     font-size: 1.5rem;
 }
 
+/* start attendance project */
+
+.panel-heading h3 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: normal;
+    width: 75%;
+    padding-top: 8px;
+}
+.add-participant{
+	display:hidden;
+}
+
+/* end attendance project */
+
 /* Results for Live Search */
 .search-result:focus,
 .search-result:hover {
@@ -583,17 +614,18 @@ label[for=password] {
 	background-color:#5C629C;
 	color:white;
 }
-
-/* Referral Forms */
 .form-header {
     flex: 1;
     padding: 0.5rem 1rem 0.5rem 0;
     color: rgba(0,0,0,0.75);
     transition: font-weight 0.1s;
-    text-decoration: none !important;
+   text-decoration: none !important;
+}
+.edit-form{
+	background-color:lightgrey;
 }
 
-.form-header:hover {
+-.form-header:hover {
     color: #898EBB!important;
     color: rgba(0,0,0,0.20);
     font-weight: bold;
@@ -611,6 +643,13 @@ label[for=password] {
     display: none;
 }
 
+.custom-control-input:checked~.custom-control-indicator {
+    background-color: #5C629C;
+}
+
+.custom-control-input:checked~.custom-control-indicator:focus {
+    outline: none;
+}
 /*When printing, display all of the main-content div, and nothing else.*/
 @media print{
 	#main-content {

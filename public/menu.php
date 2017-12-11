@@ -24,7 +24,11 @@ function isActive($urls) {
 
 $active = [
     "referral-intake" => isActive(['/referral-form','/intake-packet','/self-referral-form']),
+<<<<<<< HEAD
     "class-activity" => isActive(['/record-attendance','/surveys']),
+=======
+    "class-activity" => isActive(['/attendance','/surveys']),
+>>>>>>> 91d93f8ced335881a66226e283910f2a22fbc9e3
     "curr-and-class" => isActive(['/curricula','/locations','/classes']),
     "reports" => isActive(['/monthly-reports','/quarterly-reports','/year-end-reports','/custom-reports'])
 ];
@@ -110,11 +114,15 @@ $active = [
             </a>
             <div class="collapse <?=!$active['class-activity']?'':'show'?>" id="ClassActivitySubMenu">
                 <ul class="flex-column pl-2 nav">
-                    <a class="nav-link text-secondary py-0 <?= active('/record-attendance') ?>" data-parent="#ClassActivity" href="<?= BASEURL.'/record-attendance' ?>">
-                        Record Attendance
+                    <a class="nav-link text-secondary py-0 <?= active('/attendance') ?>" data-parent="#ClassActivity" href="<?= BASEURL.'/attendance' ?>">
+                        Attendance
                     </a>
                     <a class="nav-link text-secondary py-0 <?= active('/surveys') ?>" data-parent="#ClassActivity" href="<?= BASEURL.'/surveys' ?>">
+<<<<<<< HEAD
                         View Survey Results
+=======
+                        Surveys
+>>>>>>> 91d93f8ced335881a66226e283910f2a22fbc9e3
                     </a>
                 </ul>
             </div>

@@ -31,16 +31,16 @@
 		$year = $_POST["year"];
 		$isHalf = $_POST["half"];
 		$half = ($isHalf === "true") ? "Semi-Annual" : "Annual";
-		$pWhere = "(date_part('year', participantclassattendance.date) = $year ";
+		$pWhere = "(date_part('year', classattendancedetails.date) = $year ";
 		if ($isHalf === "true") {
-			$pWhere .= "AND date_part('month', participantclassattendance.date) < 6 "; 
+			$pWhere .= "AND date_part('month', classattendancedetails.date) < 6 "; 
 		}
-		$pWhere .= "AND participantclassattendance.isnew = TRUE)";
-		$pQuery = "SELECT COUNT(DISTINCT(participantclassattendance.participantid)) FROM participantclassattendance WHERE $pWhere";
+		$pWhere .= "AND classattendancedetails.isnew = TRUE)";
+		$pQuery = "SELECT COUNT(DISTINCT(classattendancedetails.participantid)) FROM classattendancedetails WHERE $pWhere";
 		$pResult = pg_fetch_result($db->query($pQuery, []), 0, 0);
 		
-		$pIDQuery = "SELECT DISTINCT(participantclassattendance.participantid) FROM participantclassattendance WHERE $pWhere";
-		$formIDQuery = "SELECT DISTINCT(formid) FROM participantsformdetails WHERE participantid IN ($pIDQuery)";
+		$pIDQuery = "SELECT DISTINCT(classattendancedetails.participantid) FROM classattendancedetails WHERE $pWhere";
+		$formIDQuery = "SELECT DISTINCT(formid) FROM forms WHERE participantid IN ($pIDQuery)";
 		
 		$sBaseQuery = "SELECT COUNT(prestopicdiscussedscore) as topic, COUNT(preschildperspectivescore) as perspective,
 					COUNT(presotherparentsscore) as otherparents, COUNT(practiceinfoscore) as practice
@@ -74,9 +74,8 @@
 				</div>
 				<div class="col">
 					<div class="form-group">
-						<select class="form-control" name="year" id="year">
-				  <!-- Javascript below adds the options based on current year -->
-                  </select>
+						<input class="form-control" name="year" id="year" type="number">
+						<!-- Javascript below sets value and range based on current year -->
 					</div>
 				</div>
 			</div>
@@ -91,7 +90,7 @@
 	</div>
 	<div class="container" <?php if ($_SERVER['REQUEST_METHOD'] !== 'POST') echo "style='display: none;'"?>>
 		<div class="container py-3">
-			<h1 class="text-center" id="date_display"><?=$half . " " . $year?></h1>
+			<h1 class="text-center" id="date_display"><?php if ($half !== "") echo $half . " " . $year?></h1>
 		</div>
 		<div class="container py-3">
 			<table class="table table-active">
@@ -121,61 +120,61 @@
 				<tbody>
 					<tr>
 						<td scope="row">Have an increased knowledge of the topics</td>
-						<td>
+						<td align="center">
 							<?php if (count($sFavorResults) > 0) {
 							if ($sTotalResults["topic"] > 0) 
 								echo ($sFavorResults["topic"]/$sTotalResults["topic"])*100 . "%";
 						}?>
 						</td>
-						<td>
+						<td align="center">
 							<?php if (count($sFavorResults) > 0) echo $sFavorResults["topic"];?>
 						</td>
-						<td>
+						<td align="center">
 							<?php if (count($sTotalResults) > 0) echo $sTotalResults["topic"];?>
 						</td>
 					</tr>
 					<tr>
 						<td scope="row">Plan on using specific techniques discussed in class</td>
-						<td>
+						<td align="center">
 							<?php if (count($sFavorResults) > 0) {
 							if ($sTotalResults["practice"] > 0) 
 								echo ($sFavorResults["practice"]/$sTotalResults["practice"])*100 . "%";
 						}?>
 						</td>
-						<td>
+						<td align="center">
 							<?php if (count($sFavorResults) > 0) echo $sFavorResults["practice"];?>
 						</td>
-						<td>
+						<td align="center">
 							<?php if (count($sTotalResults) > 0) echo $sTotalResults["practice"];?>
 						</td>
 					</tr>
 					<tr>
 						<td scope="row">Realized other parents share the same concerns</td>
-						<td>
+						<td align="center">
 							<?php if (count($sFavorResults) > 0) {
 							if ($sTotalResults["otherparents"] > 0) 
 								echo ($sFavorResults["otherparents"]/$sTotalResults["otherparents"])*100 . "%";
 						}?>
 						</td>
-						<td>
+						<td align="center">
 							<?php if (count($sFavorResults) > 0) echo $sFavorResults["otherparents"];?>
 						</td>
-						<td>
+						<td align="center">
 							<?php if (count($sTotalResults) > 0) echo $sTotalResults["otherparents"];?>
 						</td>
 					</tr>
 					<tr>
 						<td scope="row">Understand children have different perspectives than they do</td>
-						<td>
+						<td align="center">
 							<?php if (count($sFavorResults) > 0) {
 							if ($sTotalResults["perspective"] > 0) 
 								echo ($sFavorResults["perspective"]/$sTotalResults["perspective"])*100 . "%";
 						}?>
 						</td>
-						<td>
+						<td align="center">
 							<?php if (count($sFavorResults) > 0) echo $sFavorResults["perspective"];?>
 						</td>
-						<td>
+						<td align="center">
 							<?php if (count($sTotalResults) > 0) echo $sTotalResults["perspective"];?>
 						</td>
 					</tr>
@@ -185,7 +184,7 @@
 	</div>
 </div>
 <script>
-	const NUM_YEARS_BACK = 4;
+	const MIN_YEAR = 2016;
 
 	window.onload = initPage;
 
@@ -194,12 +193,9 @@
 		var halfElem = document.getElementById("half");
 		var yearElem = document.getElementById("year");
 		var year = d.getFullYear();
-		for (i = 0; i <= NUM_YEARS_BACK; i++) {
-			var opt = document.createElement('option');
-			opt.value = year - i;
-			opt.innerHTML = year - i;
-			yearElem.appendChild(opt);
-		}
+		yearElem.min = MIN_YEAR;
+		yearElem.max = year;
+		yearElem.value = year;
 		display = document.getElementById("date_display").innerHTML;
 		if (display === "") {
 			var month = d.getMonth();
@@ -207,7 +203,7 @@
 		} else {
 			halfElem.selectedIndex = (display.toLowerCase().includes("semi")) ? 0 : 1;
 			var y = parseInt(display.substr(display.length - 4));
-			yearElem.selectedIndex = year - y;
+			yearElem.value = y;
 		}
 	}
 	$(function() {

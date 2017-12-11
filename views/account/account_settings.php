@@ -37,6 +37,10 @@ if (!empty($params) && $params[0] == 'modify') {
         header('Location: /dashboard');
         die();
     } else {
+        # Get if user is a superuser
+        $result = $db->query("SELECT superuserID FROM superusers WHERE superuserid = $1", [$employeeid]);
+        $isSuperUser = pg_fetch_assoc($result);
+
         $result = $db->query("SELECT people.firstName, people.middleInit, people.lastName, employees.email, employees.primaryPhone, employees.permissionLevel " .
             "FROM employees " .
             "LEFT JOIN people ON employees.employeeid = people.peopleid
@@ -72,11 +76,11 @@ if (!empty($params) && $params[0] == 'modify') {
                     <h4 class="modal-title" style="float: left;"><?= $firstname." ".$middleinit." ".$lastname ?></h4>
                     <div class="float-right" style="display: inline!important;">
                         <div class="float-right">
-                            <a href="/account-settings/modify/<?= implode('/', $params) ?>"><button class="btn btn-outline-secondary btn-sm">Edit</button></a>
+                            <?php if (($isSuperUser && hasRole(Role::Superuser))  ||  (!$isSuperUser && hasRole(Role::Admin))) { ?>
+                                <a href="/account-settings/modify/<?= implode('/', $params) ?>"><button class="btn btn-outline-secondary btn-sm">Edit</button></a>
                             <?php if ($employeeid != $_SESSION['employeeid']) { ?>
-
                                 <a href="/account-settings/delete/<?= implode('/', $params) ?>"><button class="btn btn-outline-danger btn-sm">Delete</button></a>
-                            <?php } ?>
+                            <?php } } ?>
                         </div>
                     </div>
                     </h4>
@@ -88,6 +92,7 @@ if (!empty($params) && $params[0] == 'modify') {
                         <?php if ($isFacilitator) {?>
                             <p class="account_languages"><b>Language(s): </b> <?=$primaryLang['lang']?> (Primary)<?php if ($secondaryLang) { foreach ($secondaryLang as $lang) { ?>, <?= $lang['lang']?> (Secondary) <?php } } ?></p>
                         <?php } ?>
+                        <p class="is_facilitator"><b>Facilitator:</b> <?= $isFacilitator ? 'Yes' : 'No' ?></p>
                         <p class="account_permission"><b>Type: </b><?= $permissionlevel ?></p>
                         <p class="participant_contact"><b>Contact: </b></p>
                         <div class="d-flex justify-content-center">
@@ -96,11 +101,13 @@ if (!empty($params) && $params[0] == 'modify') {
                                 <div class="display-split"></div>
                                 <div class="display-bottom">Email Address</div>
                             </div>
+                            <?php if ($primaryphone) { ?>
                             <div class="display-stack">
-                                <div class="display-top"><?= $primaryphone ?></div>
+                                <div class="display-top"><?= prettyPrintPhone($primaryphone)?></div>
                                 <div class="display-split"></div>
                                 <div class="display-bottom">Primary Phone</div>
                             </div>
+                            <?php } ?>
                         </div>
                     </div>
                     <br>

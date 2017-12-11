@@ -22,8 +22,13 @@ global $db, $route, $params, $view;
 
 $employeeid = $params[1];
 
+# Get if user is a superuser
+$result = $db->query("SELECT superuserID FROM superusers WHERE superuserid = $1", [$employeeid]);
+$isSuperUser = pg_fetch_assoc($result);
+
 # Checks if the user trying to edit their own account or if they are an admin/superuser
-if (($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) {
+if ((($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) ||
+        ($isSuperUser && !(hasRole(Role::Superuser)))) {
     header('Location: /dashboard');
     die();
 } else {
@@ -46,11 +51,6 @@ if (($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) {
     # Prepare query to get languages
     $db->prepare("get-languages", "SELECT languages.lang FROM languages ");
     $db->prepare("get-facilitator-languages", "SELECT lang " . "FROM facilitatorlanguage " . "WHERE facilitatorid = $1 AND level = $2");
-
-    # Get if user is a superuser
-    $result = $db->query("SELECT superuserID FROM superusers WHERE superuserid = $1", [$employeeid]);
-    $isSuperUser = pg_fetch_assoc($result);
-
 
     # Check if the user is a facilitator
     $db->prepare("get-is-facilitator", "SELECT facilitatorid " . "FROM facilitators WHERE facilitatorid = $1 AND df = $2");
@@ -111,7 +111,7 @@ if (($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) {
             $valid = false;
         }
 
-        if (empty($primaryphone) || !ctype_digit($primaryphone)) {
+        if (!empty($primaryphone) && !ctype_digit($primaryphone)) {
             $errors['$primaryphone'] = true;
             $errorMsg = "The employee phone number could not be updated.";
             $valid = false;
@@ -125,6 +125,8 @@ if (($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) {
                 if ($state != 0) {
                     $success = false;
                     $errorMsg = "The employee name could not be updated.";
+                } else if ($employeeid === $_SESSION['employeeid']) {
+                    $_SESSION['username'] = "$firstname $lastname";
                 }
             } else {
                 $success = false;
@@ -169,7 +171,7 @@ if (($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) {
                 }
             }
 
-            if (hasRole(Role::Admin)) {
+            if (hasRole(Role::Admin) && !$isSuperUser) {
                 $res4 = $db->query("UPDATE employees SET permissionlevel = $1 " .
                     "WHERE employeeid = $2", [$permissionlevel, $employeeid]);
                 if ($res4) {
@@ -307,16 +309,19 @@ if (($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) {
                                                   style='padding-left: 10px;'><?= $primaryLang['lang'] ?></span>
                                         </td>
                                     <?php } else { ?>
-                                        <td class="align-middle">
-                                            <span class="language-span" style='padding-left: 10px;'>User has no primary language</span>
+                                        <td class="align-middle" id="employee-primaryLanguage">
+                                            <span class="language-span" style='padding-left: 10px;'>No primary language</span>
                                         </td>
                                     <?php } ?>
                                     <td class="text-right align-middle">
                                         <select class="form-control" id="primaryLanguage-selector"
                                                 style="margin-left: 200px; height: 45px; width: 220px;">
+                                            <?php if ($languages) { ?>
                                             <option selected disabled>Choose a language...</option>
                                             <?php foreach ($languages as $language) { ?>
                                                 <option value="<?= $language['lang'] ?>"><?= $language['lang'] ?></option>
+                                            <?php } } else { ?>
+                                            <option selected disabled>No languages available</option>
                                             <?php } ?>
                                         </select>
                                     </td>
@@ -359,7 +364,7 @@ if (($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) {
                                                 <span class="secondaryLanguage language-span" id="no-secondary-lang"
                                                       style='padding-left: 10px;'>
                                                     <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-                                                    <i>User has no secondary languages</i>
+                                                    <i>No secondary languages</i>
                                                 </span>
                                         </td>
                                         <td class="text-right">
@@ -371,9 +376,12 @@ if (($_SESSION['employeeid'] != $employeeid) && (!(hasRole(Role::Admin)))) {
                                     <td class="text-right align-middle languages">
                                         <select class="form-control" id="secondaryLanguage-selector"
                                                 style="margin-left: 271px; height: 45px; width: 220px;">
-                                            <option selected disabled>Choose a language...</option>
-                                            <?php foreach ($languages as $language) { ?>
-                                                <option value="<?= $language['lang'] ?>"><?= $language['lang'] ?></option>
+                                            <?php if ($languages) { ?>
+                                                <option selected disabled>Choose a language...</option>
+                                                <?php foreach ($languages as $language) { ?>
+                                                    <option value="<?= $language['lang'] ?>"><?= $language['lang'] ?></option>
+                                                <?php } } else { ?>
+                                                <option selected disabled>No languages available</option>
                                             <?php } ?>
                                         </select>
                                     </td>

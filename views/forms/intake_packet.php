@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $intake_dob = !empty($_POST['intake_dob']) ? trim($_POST['intake_dob']) : NULL;
     $intake_religion = !empty($_POST['intake_religion']) ? trim($_POST['intake_religion']) : NULL;
     $intake_ethnicity = !empty($_POST['intake_ethnicity']) ? $_POST['intake_ethnicity'] : NULL;
+    $intake_sex = !empty($_POST['intake_sex']) ? $_POST['intake_sex'] : NULL;
     $intake_occupation = !empty($_POST['intake_occupation']) ? trim($_POST['intake_occupation']) : NULL;
     $intake_last_year_school = !empty($_POST['intake_last_year_school']) ? trim($_POST['intake_last_year_school']) : NULL;
     $intake_languages_spoken = !empty($_POST['intake_languages_spoken']) ? trim($_POST['intake_languages_spoken']) : NULL;
@@ -53,8 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $intake_street_name = NULL;
     }
 
-    $intake_state = !empty($_POST['intake_state']) ? $_POST['intake_state'] : NULL;
-    $intake_city = !empty($_POST['intake_city']) ? trim($_POST['intake_city']) : NULL;
+    $intake_state = !empty($_POST['intake_state']) ? $_POST['intake_state'] : "New York";
+    $intake_city = !empty($_POST['intake_city']) ? trim($_POST['intake_city']) : "Poughkeepsie";
     $intake_zip = !empty($_POST['intake_zip']) ? $_POST['intake_zip'] : 12601;
     $intake_phone_day = !empty($_POST['intake_phone_day']) ? trim($_POST['intake_phone_day']) : NULL;
     $leave_message_day = !empty($_POST['leave_message_day']) ? 1 : 0;
@@ -264,7 +265,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                       housenum := $5::INT,
                                       streetaddress := $6::TEXT,
                                       apartmentInfo := $7::TEXT,
-                                      zipcode := $8::INT,
+                                      zipcode := $8::VARCHAR(5),
                                       city := $9::TEXT,
                                       state := $10::STATES,
                                       occupation := $11::TEXT,
@@ -273,7 +274,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                       lastyearschool := $14::TEXT,
                                       hasdrugabusehist := $15::BOOLEAN,
                                       substanceabusedescr := $16::TEXT,
-                                      timeseparatedfromchildren := $17::TEXT,
+                                      timeSeparatedFromChildren := $17::TEXT,
                                       timeseparatedfrompartner := $18::TEXT,
                                       relationshiptootherparent := $19::TEXT,
                                       hasparentingpartnershiphistory := $20::BOOLEAN,
@@ -300,25 +301,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                       hasbeenarrested := $41::BOOLEAN,
                                       hasbeenconvicted := $42::BOOLEAN,
                                       reasonforarrestorconviction := $43::TEXT,
-                                      hasjailrecord := $44::BOOLEAN,
-                                      hasprisonrecord := $45::BOOLEAN,
-                                      offensejailprisonrec := $46::TEXT,
-                                      currentlyonparole := $47::BOOLEAN,
-                                      onparoleforwhatoffense := $48::TEXT,
+                                      hasJailPrisonRecord := $44::BOOLEAN,
+                                      offensejailprisonrec := $45::TEXT,
+                                      currentlyonparole := $46::BOOLEAN,
+                                      onparoleforwhatoffense := $47::TEXT,
+                                      lang := $48::TEXT,
                                       ptpmainformsigneddate := $49::DATE,
                                       ptpenrollmentsigneddate := $50::DATE,
-                                      ptpconstentreleaseformsigneddate := $51::DATE,
-                                      eID := $52::INT
-                                      );", [$pIDResult, $intake_dob, $intake_ethnicity, 'Male', $intake_street_num, $intake_street_name, $intake_intake_apt_info, $intake_zip, $intake_city, $intake_state,
+                                      familyMembersTakingClass := $51::BOOLEAN,
+                                      familyMemberNamesTakingClass := $52::TEXT,
+                                      ptpconstentreleaseformsigneddate := $53::DATE,
+                                      eID := $54::INT
+                                      );", [$pIDResult, $intake_dob, $intake_ethnicity, $intake_sex, $intake_street_num, $intake_street_name, $intake_intake_apt_info, $intake_zip, $intake_city, $intake_state,
                                             $intake_occupation, $intake_religion, $intake_handicap_medication, $intake_last_year_school, $drug_alcohol_abuse, $drug_alcohol_abuse_explain, $live_with_children_separated,
                                             $separated_length, $relationship, $parenting, $child_protective, $previous_child_protective, $mandated, $mandated_by, $reason_for_attendance, $class_participation, $parenting_opinion,
                                             $other_classes, $other_classes_where_when, $victim_of_abuse, $form_of_abuse, $abuse_therapy, $childhood_abuse_relating, $class_takeaway, $domestic_violence, $domestic_violence_discussed,
                                             $history_violence_family, $history_violence_nuclear, $protection_order, $protection_order_explain, $crime_arrested, $crime_convicted, $crime_explain,
-                                            $jail_prison_record, TRUE, $jail_prison_explain, $parole_probation, $parole_probation_explain, $datestamp, $datestamp, $datestamp, $eID]);
+                                            $jail_prison_record, $jail_prison_explain, $parole_probation, $parole_probation_explain, $intake_languages_spoken, $datestamp, $datestamp, $family_members_taking_class, $family_members, $datestamp, $eID]);
 
     if ($formID) {
         $state = pg_result_error_field($formID, PGSQL_DIAG_SQLSTATE);
         if ($state != 0) {
+            die(pg_result_error($formID));
             $_SESSION['form-error'] = true;
             $_SESSION['error-state'] = $state;
             header("Location: /form-success");
@@ -329,15 +333,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $formID = pg_fetch_result($formID, 0);
 
     // Inserts the day, evening, and emergency contact phone numbers into the FormPhoneNumbers table.
-    $dayPhoneResult = $db->query("INSERT INTO FormPhoneNumbers (formID, phoneNumber, phoneType)
-                                    VALUES ($1, $2, $3);", [$formID, $intake_phone_day, 'Daytime']);
+    if ($intake_phone_day !== NULL) {
+        $dayPhoneResult = $db->query("INSERT INTO FormPhoneNumbers (formID, phoneNumber, phoneType)
+                                    VALUES ($1, $2, $3);", [$formID, $intake_phone_day, 'Day']);
+        echo pg_result_error($dayPhoneResult);
+    }
 
-    $eveningPhoneResult = $db->query("INSERT INTO FormPhoneNumbers (formID, phoneNumber, phoneType)
+    if ($intake_phone_night !== NULL) {
+        $eveningPhoneResult = $db->query("INSERT INTO FormPhoneNumbers (formID, phoneNumber, phoneType)
                                     VALUES ($1, $2, $3);", [$formID, $intake_phone_night, 'Evening']);
+    }
 
-    $emergencyContact = $db->query("INSERT INTO FormPhoneNumbers (formID, phoneNumber, phoneType)
-                                    VALUES ($1, $2, $3);", [$formID, $contact_phone, 'Emergency Contact']);
-
+    if ($contact_phone !== NULL) {
+        $emergencyContact = $db->query("INSERT INTO FormPhoneNumbers (formID, phoneNumber, phoneType)
+                                    VALUES ($1, $2, $3);", [$formID, $contact_phone, 'Primary']);
+    }
 
     // Child stored procedures (handles entering multiple children for an intake packet).
     for($i = 1; $i <= 5; $i++){
@@ -394,9 +404,7 @@ include('header.php');
         <div class="container-fluid">
 
             <div class="dropdown">
-
-                <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
-
+                
                 <form id="intake_packet" action="/intake-packet" method="post" novalidate>
                     <div id="accordion" role="tablist" aria-multiselectable="true">
                         <br>
@@ -452,6 +460,24 @@ include('header.php');
                                                 <option value="" selected="selected" disabled="disabled">Choose one</option>
                                                 <?php
                                                 $res = $db->query("SELECT unnest(enum_range(NULL::race)) AS type", []);
+                                                while ($enumtype = pg_fetch_assoc($res)) {
+                                                    $t = $enumtype ['type'];
+                                                    ?>
+                                                    <option value="<?= $t ?>"><?= $t ?></option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-sm-2" for="intake_sex">Sex:</label>
+                                        <div class="col-sm-2">
+                                            <select class="form-control select_sex" name="intake_sex" id="intake_sex">
+                                                <option value="" selected="selected" disabled="disabled">Choose one</option>
+                                                <?php
+                                                $res = $db->query("SELECT unnest(enum_range(NULL::sex)) AS type", []);
                                                 while ($enumtype = pg_fetch_assoc($res)) {
                                                     $t = $enumtype ['type'];
                                                     ?>

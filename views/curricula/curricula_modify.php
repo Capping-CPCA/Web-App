@@ -23,7 +23,6 @@ $id = isset($params[1]) ? $params[1] : '';
 
 # Prepare SQL statements for later use
 $db->prepare("get_curriculum", "SELECT * FROM curricula WHERE curriculumid = $1");
-$db->prepare("get_site", "SELECT * FROM sites WHERE sitename = $1");
 
 // If editing, populate data into variables
 if ($isEdit) {
@@ -41,24 +40,17 @@ if ($isEdit) {
 
 # Store table columns in variable
 $name = isset($curricula) ? $curricula['curriculumname'] : '';
-$type = '';
-if (isset($curricula)) {
-    $site = pg_fetch_assoc($db->execute("get_site", [$name]));
-    $type = $site['sitetype'];
-}
 $miss = isset($curricula) ? $curricula['missnumber'] : '';
 
 # Used to track POST errors
 $errors = [
     "name" => false,
-    "type" => false,
     "miss" => false
 ];
 
 # Validate form information, display errors if needed
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = isset($_POST['name']) ? trim($_POST['name']) : $name;
-    $type = isset($_POST['type']) ? $_POST['type'] : $type;
     $miss = isset($_POST['miss']) ? $_POST['miss'] : $miss;
 
     $valid = true;
@@ -67,9 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors['name'] = true;
         $valid = false;
     }
-    if (empty($type)) {
-        $errors['type'] = true;
-    }
     if (!isValidNumber($miss, 0)) {
         $errors['miss'] = true;
         $valid = false;
@@ -77,19 +66,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($valid) {
         // Edit & Update
-        if ($isEdit && isset($site)) {
-            $siteName = $site['sitename'];
-            $res = $db->query("UPDATE sites SET sitename = $1, sitetype = $2 WHERE sitename = $3", [$name, $type, $siteName]); // update sitename
+        if ($isEdit) {
             $res = $db->query("UPDATE curricula SET curriculumname = $1, " .
                 "missnumber = $2 WHERE curriculumid = $3", [$name, $miss, $id]);
         }
         // Create
         else {
-            $res = $db->query("INSERT INTO sites (sitename, sitetype) VALUES ($1, $2)", [$name, $type]);
-            if ($res && pg_result_error_field($res, PGSQL_DIAG_SQLSTATE) == 0) {
-                $res = $db->query("INSERT INTO curricula (curriculumname, missnumber) VALUES ($1, $2) ;",
-                    [$name, $miss]);
-            }
+            $res = $db->query("INSERT INTO curricula (curriculumname, missnumber) VALUES ($1, $2) ;",
+                [$name, $miss]);
         }
 
         if ($res) {
@@ -142,6 +126,9 @@ include ('header.php');
             }
         }
         ?>
+        <?php if (isset($curricula)) { ?>
+            <h2 class="display-4 text-center" style="font-size: 34px"><?= $curricula['curriculumname'] ?></h2>
+        <?php } ?>
         <form class="form" method="post" action="<?= $_SERVER['REQUEST_URI'] ?>" novalidate>
             <h4>Information</h4>
             <div class="form-group">
@@ -153,24 +140,6 @@ include ('header.php');
                 </div>
             </div>
             <div class="form-group">
-                <label for="curriculum-type" class="<?= $errors['type'] ? 'text-danger' : '' ?>">Location</label>
-                <select type="text" class="form-control <?= $errors['type'] ? 'is-invalid' : '' ?>"
-                       id="curriculum-type" name="type" required>
-                    <?php
-                    $res = $db->query("SELECT unnest(enum_range(NULL::programtype)) AS type", []);
-                    while ($currtype = pg_fetch_assoc($res)) {
-                        $t = $currtype['type'];
-                        ?>
-                        <option value="<?= $t ?>" <?= $type == $t ? 'selected' : '' ?>><?= $t ?></option>
-                        <?php
-                    }
-                    ?>
-                </select>
-                <div class="invalid-feedback">
-                    Please select a curriculum location.
-                </div>
-            </div>
-            <div class="form-group">
                 <label for="curriculum-miss" class="<?= $errors['miss'] ? 'text-danger' : '' ?>">Maximum # of Missed Classes</label>
                 <input type="number" class="form-control <?= $errors['miss'] ? 'is-invalid' : '' ?>"
                        value="<?= $miss ?>" id="curriculum-miss" name="miss" required />
@@ -178,6 +147,10 @@ include ('header.php');
                     Please select a number 0 (zero) or greater.
                 </div>
             </div>
+            <?php if ($isEdit) { ?>
+                <h4>Classes</h4>
+                <a href="/curricula/classes/<?= $id ?>"><button type="button" class="btn btn-secondary">Click to Manage Classes</button></a>
+            <?php } ?>
             <div class="form-footer submit">
                 <button type="submit" class="btn cpca"><?= $isEdit ? 'Submit New Changes' : 'Add Curriculum' ?></button>
             </div>

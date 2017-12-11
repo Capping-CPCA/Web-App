@@ -45,10 +45,10 @@ if (!empty($params) && $params[0] == 'view') {
     $filter = "";
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $filter = isset($_POST['filter']) ? '%' . $_POST['filter'] . '%' : '%%';
-        $result = $db->query("SELECT * FROM classes WHERE df = 0 && LOWER(topicname) LIKE LOWER($1)".
+        $result = $db->query("SELECT * FROM classes WHERE df IS FALSE AND LOWER(topicname) LIKE LOWER($1)".
             " OR LOWER(description) LIKE LOWER($1) ORDER BY topicname", [$filter]);
     } else {
-        $result = $db->query("SELECT * FROM classes WHERE df = 0 ORDER BY topicname", []);
+        $result = $db->query("SELECT * FROM classes WHERE df IS FALSE ORDER BY topicname", []);
     }
 
     ?>
@@ -105,6 +105,15 @@ if (!empty($params) && $params[0] == 'view') {
                             </a>
                         <?php } ?>
                     </div>
+                </div>
+                <?php
+            }
+            if (pg_num_rows($result) == 0) {
+                ?>
+                <div class="w-100 d-flex flex-column justify-content-center text-center">
+                    <h3 class="display-3 text-secondary" style="font-size: 40px;"><i
+                                class="fa fa-exclamation-circle"></i></h3>
+                    <h3 class="display-3 text-secondary" style="font-size: 40px;">No Current Classes.</h3>
                 </div>
                 <?php
             }
