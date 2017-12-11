@@ -79,6 +79,10 @@ function disableReferralFields(){
     $('#collapse5').collapse('show');
 }
 
+function referralEditUpdates(){
+    $('.rembtn').addClass('hidden-field');
+}
+
 // Javascript validation for Initial Contact / Self-Referral form.
 function submitAllSelf(){
     formChanged = false;

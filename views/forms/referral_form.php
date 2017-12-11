@@ -75,6 +75,9 @@ if (isset($params[0]) && isset($params[1]) && isset($params[2])) {
     $ref_party_edit = $db->query("SELECT AgencyReferralInfo.reason FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
     $ref_party_result = pg_fetch_result($ref_party_edit, 0);
 
+    $ref_date_edit = $db->query("SELECT Forms.employeeSignedDate FROM Forms WHERE formID = $1;", [$referral_formID]);
+    $ref_date_result = pg_fetch_result($ref_date_edit, 0);
+
     $pers_reason_edit = $db->query("SELECT AgencyReferralInfo.reason FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
     $pers_reason_result = pg_fetch_result($pers_reason_edit, 0);
 
@@ -239,6 +242,46 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
     $family_race_5 = !empty($_POST['family_race_5']) ? trim($_POST['family_race_5']) : NULL;
     $family_relationship_5 = !empty($_POST['family_relationship_5']) ? trim($_POST['family_relationship_5']) : NULL;
 
+    $family_first_name_6 = !empty($_POST['family_first_name_6']) ? trim($_POST['family_first_name_6']) : NULL;
+    $family_last_name_6 = !empty($_POST['family_last_name_6']) ? trim($_POST['family_last_name_6']) : NULL;
+    $family_mi_6 = !empty($_POST['family_mi_6']) ? trim($_POST['family_mi_6']) : NULL;
+    $family_dob_6 = !empty($_POST['family_dob_6']) ? trim($_POST['family_dob_6']) : NULL;
+    $family_sex_6 = !empty($_POST['family_sex_6']) ? trim($_POST['family_sex_6']) : NULL;
+    $family_race_6 = !empty($_POST['family_race_6']) ? trim($_POST['family_race_6']) : NULL;
+    $family_relationship_6 = !empty($_POST['family_relationship_6']) ? trim($_POST['family_relationship_6']) : NULL;
+
+    $family_first_name_7 = !empty($_POST['family_first_name_7']) ? trim($_POST['family_first_name_7']) : NULL;
+    $family_last_name_7 = !empty($_POST['family_last_name_7']) ? trim($_POST['family_last_name_7']) : NULL;
+    $family_mi_7 = !empty($_POST['family_mi_7']) ? trim($_POST['family_mi_7']) : NULL;
+    $family_dob_7 = !empty($_POST['family_dob_7']) ? trim($_POST['family_dob_7']) : NULL;
+    $family_sex_7 = !empty($_POST['family_sex_7']) ? trim($_POST['family_sex_7']) : NULL;
+    $family_race_7 = !empty($_POST['family_race_7']) ? trim($_POST['family_race_7']) : NULL;
+    $family_relationship_7 = !empty($_POST['family_relationship_7']) ? trim($_POST['family_relationship_7']) : NULL;
+    $family_needs_7 = !empty($_POST['family_needs_7']) ? trim($_POST['family_needs_7']) : NULL;
+
+    $family_first_name_8 = !empty($_POST['family_first_name_8']) ? trim($_POST['family_first_name_8']) : NULL;
+    $family_last_name_8 = !empty($_POST['family_last_name_8']) ? trim($_POST['family_last_name_8']) : NULL;
+    $family_mi_8 = !empty($_POST['family_mi_8']) ? trim($_POST['family_mi_8']) : NULL;
+    $family_dob_8 = !empty($_POST['family_dob_8']) ? trim($_POST['family_dob_8']) : NULL;
+    $family_sex_8 = !empty($_POST['family_sex_8']) ? trim($_POST['family_sex_8']) : NULL;
+    $family_race_8 = !empty($_POST['family_race_8']) ? trim($_POST['family_race_8']) : NULL;
+    $family_relationship_8 = !empty($_POST['family_relationship_8']) ? trim($_POST['family_relationship_8']) : NULL;
+
+    $family_first_name_9 = !empty($_POST['family_first_name_9']) ? trim($_POST['family_first_name_9']) : NULL;
+    $family_last_name_9 = !empty($_POST['family_last_name_9']) ? trim($_POST['family_last_name_9']) : NULL;
+    $family_mi_9 = !empty($_POST['family_mi_9']) ? trim($_POST['family_mi_9']) : NULL;
+    $family_dob_9 = !empty($_POST['family_dob_9']) ? trim($_POST['family_dob_9']) : NULL;
+    $family_sex_9 = !empty($_POST['family_sex_9']) ? trim($_POST['family_sex_9']) : NULL;
+    $family_race_9 = !empty($_POST['family_race_9']) ? trim($_POST['family_race_9']) : NULL;
+    $family_relationship_9 = !empty($_POST['family_relationship_9']) ? trim($_POST['family_relationship_9']) : NULL;
+
+    $family_first_name_10 = !empty($_POST['family_first_name_10']) ? trim($_POST['family_first_name_10']) : NULL;
+    $family_last_name_10 = !empty($_POST['family_last_name_10']) ? trim($_POST['family_last_name_10']) : NULL;
+    $family_mi_10 = !empty($_POST['family_mi_10']) ? trim($_POST['family_mi_10']) : NULL;
+    $family_dob_10 = !empty($_POST['family_dob_10']) ? trim($_POST['family_dob_10']) : NULL;
+    $family_sex_10 = !empty($_POST['family_sex_10']) ? trim($_POST['family_sex_10']) : NULL;
+    $family_race_10 = !empty($_POST['family_race_10']) ? trim($_POST['family_race_10']) : NULL;
+    $family_relationship_10 = !empty($_POST['family_relationship_10']) ? trim($_POST['family_relationship_10']) : NULL;
 
     // Fourth Card (Additional Information)
     $chkSpecialEd = !empty($_POST['chkSpecialEd']) ? 1 : 0;
@@ -394,6 +437,13 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
                                                                 $comments,
                                                                 $params[2]]);
 
+        $editRefDate = $db->query("UPDATE 
+                                    Forms
+                                    SET
+                                    employeeSignedDate = $1
+                                    WHERE 
+                                    formID = $2;", [$ref_date, $params[2]]);
+
         // Household queries to check how many current household members there are and if we need to add more
         $household_edit = $db->query("SELECT COUNT (familymembersid)
                                                      FROM family
@@ -406,7 +456,7 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
                                                          WHERE family.formID = $1;", [$referral_formID]);
 
         // For loop based on how many household members were inputted into a particular form.
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
 
             // Create variable names for names of fields (JavaScript ids)
             $fam_first_name = "family_first_name_" . $i;
@@ -662,6 +712,13 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
                                                     $employeeID));
         $formID = pg_fetch_result($result, 0);
 
+        $updateRefDate = $db->query("UPDATE 
+                                    Forms
+                                    SET
+                                    employeeSignedDate = $1
+                                    WHERE 
+                                    formID = $2;", [$ref_date, $formID]);
+
         if ($result) {
             $state = pg_result_error_field($result, PGSQL_DIAG_SQLSTATE);
             if ($state != 0) {
@@ -758,7 +815,7 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         variables, checks to see whether it should run through based
         off of if the first or last name is set
                                                                         */
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             // Create variable names
             $fam_first_name = "family_first_name_" . $i;
             $fam_last_name = "family_last_name_" . $i;
@@ -1012,7 +1069,7 @@ include('header.php');
 
                                         <label class="col-form-label col-sm-2" for="ref_date">Date of Referral:</label>
                                         <div class="col-sm-2 col">
-                                            <input type="date" class="form-control" name="ref_date" id="ref_date">
+                                            <input type="date" class="form-control" name="ref_date" id="ref_date" value="<?= isset($ref_date_result) ? $ref_date_result : "" ?>">
                                         </div>
                                     </div>
                                     <br>
@@ -1172,7 +1229,7 @@ include('header.php');
 
                                     </div>
 
-                                    <div class="form-group agencybutton row controls">
+                                    <div class="form-group agencybutton rembtn row controls">
                                         <label class="col-sm-2 col-form-label">Remove Member:</label>
                                         <div class="col-sm-1">
                                             <button class="btn btn-default" type="button" id="btnDelMember" disabled="disabled"><span class="fa fa-minus"></span></button> <!-- every other dropdown on this form uses down arrows -->
@@ -1382,7 +1439,7 @@ include('header.php');
                                             <button class="btn btn-default" type="button" id="btnAddParty"><span class="fa fa-plus"></span></button>
                                         </div>
                                     </div>
-                                    <div class="form-group agencybutton row controls">
+                                    <div class="form-group agencybutton rembtn row controls">
                                         <label class="col-sm-2 col-form-label">Remove Party:</label>
                                         <div class="col-sm-1 col">
                                             <button class="btn btn-default" type="button" id="btnDelParty"><span class="fa fa-minus"></span></button>
@@ -1568,6 +1625,10 @@ include('header.php');
                 echo '<script type="text/javascript">',
                      'disableReferralFields();',
                      '</script>';
+            } else if(isset($params[0]) && $params[0] == "edit") {
+                echo '<script type="text/javascript">',
+                'referralEditUpdates();',
+                '</script>';
             }
             ?>
 

@@ -79,12 +79,15 @@ if (isset($params[0]) && isset($params[1]) && isset($params[2])) {
     $intake_phone_night_edit = $db->query("SELECT FormPhoneNumbers.phoneNumber FROM FormPhoneNumbers WHERE formID = $1 AND phoneType = 'Evening';", [$intake_formID]);
     $intake_phone_night_result = pg_fetch_result($intake_phone_night_edit, 0);
 
-    $contact_edit = $db->query("SELECT * FROM participantEmergencyContactInfo WHERE participantEmergencyContactInfo.intakeInformationID = $1;", [$intake_formID]);
+    $contact_edit = $db->query("SELECT * FROM emergencycontactdetail
+                                        INNER JOIN emergencycontacts ON emergencycontacts.emergencycontactid = emergencycontactdetail.emergencycontactid
+                                        INNER JOIN people ON people.peopleid = emergencycontactdetail.emergencycontactid
+                                        WHERE intakeinformationid = $1;", [$intake_formID]);
     $contact_result = pg_fetch_assoc($contact_edit);
+    $contact_firstname_result = $contact_result['firstname'];
+    $contact_lastname_result = $contact_result['lastname'];
     $contact_relationship_result = $contact_result['relationship'];
-
-    $contact_phone_edit = $db->query("SELECT FormPhoneNumbers.phoneNumber FROM FormPhoneNumbers WHERE formID = $1 AND phoneType = 'Primary';", [$intake_formID]);
-    $contact_phone_result = pg_fetch_result($contact_phone_edit, 0);
+    $contact_phone_result = $contact_result['primaryphone'];
 
     // Third Card (Participant Family Questions)
     $drug_alcohol_abuse_edit = $db->query("SELECT IntakePacketInfo.hasSubstanceAbuseHistory FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
@@ -255,6 +258,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $intake_phone_day = !empty($_POST['intake_phone_day']) ? phoneStrToNum($_POST['intake_phone_day']) : NULL;
     $intake_phone_night = !empty($_POST['intake_phone_night']) ? phoneStrToNum($_POST['intake_phone_night']) : NULL;
     // Emergency Contact
+    $contact_firstname = !empty($_POST['contact_firstname']) ? trim($_POST['contact_firstname']) : NULL;
+    $contact_lastname = !empty($_POST['contact_lastname']) ? trim($_POST['contact_lastname']) : NULL;
     $contact_relationship = !empty($_POST['contact_relationship']) ? $_POST['contact_relationship'] : NULL;
     $contact_phone = !empty($_POST['contact_phone']) ? phoneStrToNum($_POST['contact_phone']) : NULL;
 
@@ -303,6 +308,51 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $child_race_5 = !empty($_POST['child_race_5']) ? $_POST['child_race_5'] : NULL;
     $child_live_5 = !empty($_POST['child_live_5']) ? trim($_POST['child_live_5']) : NULL;
     $child_custody_5 = !empty($_POST['child_custody_5']) ? trim($_POST['child_custody_5']) : NULL;
+    //6th
+    $child_first_name_6 = !empty($_POST['child_first_name_6']) ? trim($_POST['child_first_name_6']) : NULL;
+    $child_last_name_6 = !empty($_POST['child_last_name_6']) ? trim($_POST['child_last_name_6']) : NULL;
+    $child_mi_6 = !empty($_POST['child_mi_6']) ? trim($_POST['child_mi_6']) : NULL;
+    $child_dob_6 = !empty($_POST['child_dob_6']) ? $_POST['child_dob_6'] : NULL;
+    $child_sex_6 = !empty($_POST['child_sex_6']) ? $_POST['child_sex_6'] : NULL;
+    $child_race_6 = !empty($_POST['child_race_6']) ? $_POST['child_race_6'] : NULL;
+    $child_live_6 = !empty($_POST['child_live_6']) ? trim($_POST['child_live_6']) : NULL;
+    $child_custody_6 = !empty($_POST['child_custody_6']) ? trim($_POST['child_custody_6']) : NULL;
+    // 7th Child Clone
+    $child_first_name_7 = !empty($_POST['child_first_name_7']) ? trim($_POST['child_first_name_7']) : NULL;
+    $child_last_name_7 = !empty($_POST['child_last_name_7']) ? trim($_POST['child_last_name_7']) : NULL;
+    $child_mi_7 = !empty($_POST['child_mi_7']) ? trim($_POST['child_mi_7']) : NULL;
+    $child_dob_7 = !empty($_POST['child_dob_7']) ? $_POST['child_dob_7'] : NULL;
+    $child_sex_7 = !empty($_POST['child_sex_7']) ? $_POST['child_sex_7'] : NULL;
+    $child_race_7 = !empty($_POST['child_race_7']) ? $_POST['child_race_7'] : NULL;
+    $child_live_7 = !empty($_POST['child_live_7']) ? trim($_POST['child_live_7']) : NULL;
+    $child_custody_7 = !empty($_POST['child_custody_7']) ? trim($_POST['child_custody_7']) : NULL;
+    // 8th Child Clone
+    $child_first_name_8 = !empty($_POST['child_first_name_8']) ? trim($_POST['child_first_name_8']) : NULL;
+    $child_last_name_8 = !empty($_POST['child_last_name_8']) ? trim($_POST['child_last_name_8']) : NULL;
+    $child_mi_8 = !empty($_POST['child_mi_8']) ? trim($_POST['child_mi_8']) : NULL;
+    $child_dob_8 = !empty($_POST['child_dob_8']) ? $_POST['child_dob_8'] : NULL;
+    $child_sex_8 = !empty($_POST['child_sex_8']) ? $_POST['child_sex_8'] : NULL;
+    $child_race_8 = !empty($_POST['child_race_8']) ? $_POST['child_race_8'] : NULL;
+    $child_live_8 = !empty($_POST['child_live_8']) ? trim($_POST['child_live_8']) : NULL;
+    $child_custody_8 = !empty($_POST['child_custody_8']) ? trim($_POST['child_custody_8']) : NULL;
+    // 9th Child Clone
+    $child_first_name_9 = !empty($_POST['child_first_name_9']) ? trim($_POST['child_first_name_9']) : NULL;
+    $child_last_name_9 = !empty($_POST['child_last_name_9']) ? trim($_POST['child_last_name_9']) : NULL;
+    $child_mi_9 = !empty($_POST['child_mi_9']) ? trim($_POST['child_mi_9']) : NULL;
+    $child_dob_9 = !empty($_POST['child_dob_9']) ? $_POST['child_dob_9'] : NULL;
+    $child_sex_9 = !empty($_POST['child_sex_9']) ? $_POST['child_sex_9'] : NULL;
+    $child_race_9 = !empty($_POST['child_race_9']) ? $_POST['child_race_9'] : NULL;
+    $child_live_9 = !empty($_POST['child_live_9']) ? trim($_POST['child_live_9']) : NULL;
+    $child_custody_9 = !empty($_POST['child_custody_9']) ? trim($_POST['child_custody_9']) : NULL;
+    // 10th Child Clone
+    $child_first_name_10 = !empty($_POST['child_first_name_10']) ? trim($_POST['child_first_name_10']) : NULL;
+    $child_last_name_10 = !empty($_POST['child_last_name_10']) ? trim($_POST['child_last_name_10']) : NULL;
+    $child_mi_10 = !empty($_POST['child_mi_10']) ? trim($_POST['child_mi_10']) : NULL;
+    $child_dob_10 = !empty($_POST['child_dob_10']) ? $_POST['child_dob_10'] : NULL;
+    $child_sex_10 = !empty($_POST['child_sex_10']) ? $_POST['child_sex_10'] : NULL;
+    $child_race_10 = !empty($_POST['child_race_10']) ? $_POST['child_race_10'] : NULL;
+    $child_live_10 = !empty($_POST['child_live_10']) ? trim($_POST['child_live_10']) : NULL;
+    $child_custody_10 = !empty($_POST['child_custody_10']) ? trim($_POST['child_custody_10']) : NULL;
 
     // Third Card (Participant Family Questions)
     if (!empty($_POST['drug_alcohol_abuse'])) {
@@ -510,6 +560,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     formID = $2 AND
                                     phoneType = $3;", [$contact_phone, $params[2], 'Primary']);
 
+        $emergencyContactInfo = $db->query("SELECT * FROM emergencycontactdetail
+                                        INNER JOIN emergencycontacts ON emergencycontacts.emergencycontactid = emergencycontactdetail.emergencycontactid
+                                        INNER JOIN people ON people.peopleid = emergencycontactdetail.emergencycontactid
+                                        WHERE intakeinformationid = $1;", [$params[2]]);
+
+        $emergencyResults = pg_fetch_assoc($emergencyContactInfo);
+        $emergencyContactPid = $emergencyResults['emergencycontactid'];
+        $contact_firstname_result = $emergencyResults['firstname'];
+        $contact_lastname_result = $emergencyResults['lastname'];
+
+        if ($contact_firstname !== NULL && $contact_lastname !== NULL && $contact_firstname_result == NULL && $contact_lastname_result == NULL) {
+            $newContact = $db->query("SELECT createEmergencyContact(
+                                            emerContactFName := $1::TEXT,
+                                            emerContactLName := $2::TEXT,
+                                            emerContactMiddleInit := $3::VARCHAR(1),
+                                            intInfoID := $4::INT,
+                                            rel := $5::relationship,
+                                            phon := $6::text
+                                            );", [$contact_firstname, $contact_lastname, NULL, $params[2], $contact_relationship, $contact_phone]);
+        } else {
+            $updateEmergencyContactName = $db->query("UPDATE
+                                    People
+                                    SET
+                                    firstName = $1,
+                                    lastName = $2,
+                                    middleInit = $3
+                                    WHERE 
+                                    peopleID = $4;", [$contact_firstname, $contact_lastname, NULL, $emergencyContactPid]);
+
+            $updateEmergencyContactInfo = $db->query("UPDATE 
+                                    EmergencyContacts
+                                    SET 
+                                    relationship = $1,
+                                    primaryPhone = $2
+                                    WHERE
+                                    emergencyContactID = $3;", [$contact_relationship, $contact_phone, $emergencyContactPid]);
+        }
+
         $updatePrimaryPhoneInsert = $db->query("INSERT INTO 
                                                   FormPhoneNumbers (formID, phoneNumber, phoneType)
                                                   SELECT $1, $2, $3
@@ -586,7 +674,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                             WHERE family.formID = $1;", [$formID]);
 
         // For loop based on how many children were inputted into a particular form.
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
 
             $chd_first_name = "child_first_name_" . $i;
             $chd_last_name = "child_last_name_" . $i;
@@ -657,8 +745,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Gets the participant ID related to the person who is filling out the form to associate it with the form ID.
     $pIDResult = checkForDuplicates($db, $intake_firstname, $intake_lastname, $intake_middlein);
 
-        echo $pIDResult;
-
         // Inserts the intake packet data into the database and associates the form with a participant ID.
         $formID = $db->query("SELECT registerParticipantIntake(
                                   intakeParticipantID := $1::INT,
@@ -723,7 +809,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $jail_prison_record, $jail_prison_explain, $parole_probation, $parole_probation_explain, $intake_languages_spoken, $datestamp, $datestamp, $family_members_taking_class, $family_members, $datestamp, $eID]);
 
 
-
         if ($formID) {
             $state = pg_result_error_field($formID, PGSQL_DIAG_SQLSTATE);
             if ($state != 0) {
@@ -735,8 +820,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         $formID = pg_fetch_result($formID, 0);
-
-        echo $formID;
 
         // Inserts the day, evening, and emergency contact phone numbers into the FormPhoneNumbers table.
         if ($intake_phone_day !== NULL) {
@@ -754,8 +837,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 VALUES ($1, $2, $3);", [$formID, $contact_phone, 'Primary']);
         }
 
+        if ($contact_firstname !== NULL && $contact_lastname !== NULL) {
+            $contact = $db->query("SELECT createEmergencyContact(
+                                            emerContactFName := $1::TEXT,
+                                            emerContactLName := $2::TEXT,
+                                            emerContactMiddleInit := $3::VARCHAR(1),
+                                            intInfoID := $4::INT,
+                                            rel := $5::relationship,
+                                            phon := $6::text
+                                            );", [$contact_firstname, $contact_lastname, NULL, $formID, $contact_relationship, $contact_phone]);
+        }
+
         // Child stored procedures (handles entering multiple children for an intake packet).
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             // Create variable names
             $chd_first_name = "child_first_name_" . $i;
             $chd_last_name = "child_last_name_" . $i;
@@ -997,6 +1091,22 @@ include('header.php');
                                     <h5>Emergency Contact</h5>
                                     <br>
                                     <div class="form-group row">
+                                        <label class="col-form-label col-sm-2" for="contact_firstname">Contact Name:</label>
+                                        <div class="col-sm-2 col">
+                                            <input type="text" class="form-control" id="contact_firstname" name="contact_firstname"
+                                                   value="<?= (isset($contact_firstname_result)) ? $contact_firstname_result : ""?>" placeholder="First name">
+                                            <div class="invalid-feedback">Enter first name</div>
+                                        </div>
+
+                                        <label class="col-form-label col-sm-0 sr-only" for="contact_lastname">Last Name:</label>
+                                        <div class="col-sm-2 col">
+                                            <input type="text" class="form-control" id="contact_lastname" name="contact_lastname"
+                                                   value="<?= (isset($contact_lastname_result)) ? $contact_lastname_result : ""?>" placeholder="Last name">
+                                            <div class="invalid-feedback">Enter last name</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
                                         <label class="col-sm-2 col-form-label col-3" for="contact_relationship">Relationship:</label>
                                         <div class="col-sm-2 col">
                                             <select class="form-control" name="contact_relationship" id="contact_relationship">
@@ -1006,7 +1116,7 @@ include('header.php');
                                                 while ($enumtype = pg_fetch_assoc($res)) {
                                                     $t = $enumtype ['type'];
                                                     ?>
-                                                    <option value="<?= $t ?>"><?= (isset($contact_relationship_result) && $contact_relationship_result == $t)  ? "selected" : "" ?><?= $t ?></option>
+                                                    <option value="<?= $t ?>" <?= (isset($contact_relationship_result) && $contact_relationship_result == $t)  ? "selected" : "" ?>><?= $t ?></option>
                                                     <?php
                                                 }
                                                 ?>
@@ -1139,7 +1249,7 @@ include('header.php');
                                         </div>
                                     </div>
 
-                                    <div class="form-group row childbutton controls">
+                                    <div class="form-group row childbutton delbtn controls">
                                         <label class="col-sm-2 col-form-label">Remove Child:</label>
                                         <div class="col-sm-1 col">
                                             <button class="btn btn-default" type="button" id="btnDelChild" disabled="disabled"><span class="fa fa-minus"></span></button>
@@ -1197,8 +1307,7 @@ include('header.php');
                                             <label class="form-control-label">Do you currently live with your child(ren)?</label>
                                         </div>
                                         <label class="custom-control custom-radio" for="live_with_children_yes">
-                                            <input  type="radio" id="live_with_children_yes" name="live_with_children" class="custom-control-input"
-                                                <?= (isset($params[1]) && !isset($live_with_children_separated_result)) ? "checked" : ""?> value="Yes">
+                                            <input  type="radio" id="live_with_children_yes" name="live_with_children" class="custom-control-input" value="Yes">
                                             <span class="custom-control-indicator"></span>
                                             <span class="custom-control-description">Yes</span>
                                         </label>
@@ -1231,8 +1340,7 @@ include('header.php');
                                             <span class="custom-control-description">Yes</span>
                                         </label>
                                         <label class="custom-control custom-radio" for="parent_separated_no">
-                                            <input type="radio" id="parent_separated_no" name="parent_separated" class="custom-control-input"
-                                                <?= (empty($separated_length_result) && isset($params[1])) ? "checked" : "" ?> value="No">
+                                            <input type="radio" id="parent_separated_no" name="parent_separated" class="custom-control-input" value="No">
                                             <span class="custom-control-indicator"></span>
                                             <span class="custom-control-description">No</span>
                                         </label>
@@ -1834,6 +1942,10 @@ include('header.php');
             if(isset($params[0]) && $params[0] == "view") {
                 echo '<script type="text/javascript">',
                 'disableIntakeFields();',
+                '</script>';
+            } else if (isset($params[0]) && $params[0] == "edit"){
+                echo '<script type="text/javascript">',
+                'intakeEditUpdates();',
                 '</script>';
             }
             ?>
