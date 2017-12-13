@@ -51,7 +51,7 @@ $router->add('/custom-reports-table', 'reports/custom_reports_table.php', 'Custo
 
 #Forms
 $router->add('/referral-form', 'forms/referral_form.php', 'Referral Form');
-$router->add('/self-referral-form', 'forms/self_referral_form.php', 'Initial Contact Form- Self-Referral');
+$router->add('/self-referral-form', 'forms/self_referral_form.php', 'Initial Contact Form');
 $router->add('/intake-packet', 'forms/intake_packet.php', 'Intake Packet');
 $router->add('/form-success', 'forms/form_success.php', 'Form Submitted');
 $router->add('/form-match', 'forms/form_match.php', 'Form Match');

@@ -638,6 +638,12 @@ label[for=password] {
 .col-form-label {
     text-align: right;
 }
+@media (max-width: 1200px) {
+    .col-form-label, .form-control-label,
+    .radio-group {
+        text-align: left!important;
+    }
+}
 
 /* Help */
 #help-section {
