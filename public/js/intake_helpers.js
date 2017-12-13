@@ -79,6 +79,10 @@ function disableIntakeFields(){
     $('#collapse4').collapse('show');
 }
 
+function intakeEditUpdates(){
+    $('.delbtn').addClass('hidden-field');
+}
+
 // Hides or displays the error message accordingly.
 function validationIntake(el){
     if (el.val().length !== 0) {
