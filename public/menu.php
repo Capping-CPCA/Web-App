@@ -29,6 +29,7 @@ $active = [
     "reports" => isActive(['/monthly-reports','/quarterly-reports','/year-end-reports','/custom-reports'])
 ];
 
+sessionTimeout(); 
 ?>
 <div class="side-menu">
     <nav class="nav flex-column flex-nowrap">
