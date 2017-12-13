@@ -1,4 +1,20 @@
 <?php
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * This page logs a user out of the system.
+ *
+ * The page has no content that is actually displayed
+ * to the user. It simply clears the session, resets
+ * cookies and cache, and then redirects to the login
+ * page.
+ *
+ * @author Jack Grzechowiak
+ * @author Vallie Joseph
+ * @copyright 2017 Marist College
+ * @version 1.3
+ * @since 0.1
+ */
 
 require_once('../config.php');
 global $params;

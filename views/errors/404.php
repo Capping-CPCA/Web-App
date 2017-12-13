@@ -1,4 +1,19 @@
 <?php
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Basic 404 page
+ *
+ * This page displays a 404 error if a page cannot be found.
+ * It does not throw the actual error it just displays that
+ * this error occurred to the user.
+ *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.1
+ * @since 0.1
+ */
+
 include('header.php');
 ?>
 
