@@ -19,9 +19,12 @@ global $params, $db;
 
 $id = $params[1];
 
-$db->prepare("get_curr_classes", "SELECT * FROM classes, curriculumclasses ".
-    "WHERE curriculumid = $1 AND classes.classid = curriculumclasses.classid ".
-    "AND classes.df IS FALSE");
+$db->prepare("get_curr_classes", "SELECT *
+    FROM classes, (SELECT *, row_number() over () as rn FROM curriculumclasses) as cc
+    WHERE cc.curriculumid = $1 
+          AND classes.classid = cc.classid
+          AND classes.df IS FALSE
+          ORDER BY cc.rn;");
 $db->prepare("get_other_classes",
     "SELECT * FROM classes WHERE classid NOT IN (" .
     "SELECT classid FROM curriculumclasses WHERE curriculumid = $1" .
