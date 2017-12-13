@@ -131,5 +131,4 @@ sessionTimeout();
             <?php } ?>
         <?php } ?>
     </nav>
-<!--    <a class="side-menu-welcome">Welcome, --><?//= $_SESSION["username"] ?><!--!</a>-->
 </div>

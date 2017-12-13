@@ -17,58 +17,59 @@ include('header.php');
 global $db, $params;
 $peopleid = $params[0];
 
-//All info related to class history
-$resultNotes = $db->query("	SELECT classes.topicname, date, curricula.curriculumname, participants.participantid, participants.dateofbirth, 
-							participants.race, people.firstname, people.lastname, people.middleinit 
-							FROM participants 
-							INNER JOIN people ON participants.participantid = people.peopleid  
-							INNER JOIN participantclassattendance ON participants.participantid = participantclassattendance.participantid 
-							INNER JOIN classes ON participantclassattendance.classid = classes.classid 
-							INNER JOIN curricula ON participantclassattendance.curriculumid = curricula.curriculumid 
-							INNER JOIN people AS pep ON participantclassattendance.participantid = pep.peopleid 
-							WHERE participants.participantid = $1 ORDER BY date DESC ", [$peopleid]);
-$notes = pg_fetch_assoc($resultNotes);
+// All info related to class history
+$resultNotes = $db->query("SELECT participants.participantid, participants.dateofbirth, 
+                            participants.race, people.firstname, people.lastname, people.middleinit, 
+                            classes.topicname, classoffering.date, curricula.curriculumname
+                            FROM participants 
+                            INNER JOIN people ON participants.participantid = people.peopleid  
+                            LEFT JOIN participantclassattendance ON people.peopleid  = participantclassattendance.participantid 
+                            LEFT JOIN classoffering ON participantclassattendance.date = classoffering.date
+                            LEFT JOIN classes ON classoffering.classid = classes.classid
+                            LEFT JOIN curricula ON classoffering.curriculumid =  curricula.curriculumid
+                            WHERE participants.participantid = $1 ORDER BY date DESC ", [$peopleid]);
+$notes = pg_fetch_all($resultNotes);
 
-//All info related to family
-$familyInfo = $db->query("	SELECT formid, participantid, people.firstname, people.lastname, people.middleinit, familymembers.familymemberid, familymembers.relationship, familymembers.dateofbirth, familymembers.race, 
-							familymembers.sex
-							FROM participants
-							INNER JOIN people ON participants.participantid = people.peopleid
-							LEFT JOIN forms ON participants.participantid = forms.participantid
-							LET JOIN family ON forms.formid = family.formsid
-							LEFT JOIN familymembers on familyinfo.familymemberid = familymembers.familymemberid
-							left JOIN people on familymembers.familymemberid = people.peopleid WHERE participantid = $1", [$peopleid]);
+// All info related to family
+$familyInfo = $db->query("SELECT firstname AS childFirst , lastname AS childLast , middleinit AS childM,
+                            relationship, dateofbirth,
+                            sex
+                            FROM people
+                            INNER JOIN familymembers ON people.peopleid = familymembers.familymemberid
+                            INNER JOIN family ON familymembers.familymemberid = family.familymembersid
+                            INNER JOIN forms ON forms.formid = family.formid
+                            WHERE participantid = $1", [$peopleid]);
 
-$familyResult = pg_fetch_assoc($familyInfo);
 
-//all info related to agency consent
-$agencyInfo = $db->query("	SELECT participants.participantid, people.middleinit, people.firstname, people.lastname, 
-							 participants.dateofbirth, participants.sex, participants.race, 
-							 contactagencymembers.agency, contactagencymembers.phone, contactagencymembers.email, 
-							 agencyreferral.hasagencyconsentform 
-							 FROM participants 
-							 INNER JOIN people ON participants.participantid = people.peopleid 
-							 LEFT JOIN forms ON participants.participantid = forms.formid 
-							 LEFT JOIN agencyreferral ON forms.formid = agencyreferral.agencyreferralid 
-							 LEFT JOIN contactagencyassociatedwithreferred ON agencyreferral.agencyreferralid = contactagencyassociatedwithreferred.agencyreferralid 
-							 LEFT JOIN contactagencymembers ON contactagencyassociatedwithreferred.contactagencyid = contactagencymembers.contactagencyid  
-							 WHERE participants.participantid = $1", [$peopleid]);
-$agencyResult = pg_fetch_assoc($agencyInfo);
+// Grab agency information
+$db->prepare("get-participant-agency-info","SELECT participants.*, agency, phone, email, 
+                            ismaincontact,
+                            hasagencyconsentform, hasmentalhealth,hasspecialneeds, hasmentalhealth,
+                            people.*
+                            FROM participants
+                            INNER JOIN people on participants.participantid = people.peopleid
+                            INNER JOIN forms ON participants.participantid = forms.participantid
+                            LEFT JOIN agencyreferral ON forms.formid = agencyreferral.agencyreferralid
+                            LEFT JOIN contactagencyassociatedwithreferred ON agencyreferral.agencyreferralid = contactagencyassociatedwithreferred.agencyreferralid
+                            LEFT JOIN contactagencymembers ON contactagencyassociatedwithreferred.contactagencyid = contactagencymembers.contactagencyid
+							 WHERE participants.participantid = $1");
+$result = $db->execute("get-participant-agency-info",[$peopleid]);
+$agencyResult = pg_fetch_assoc($result);
+extract($agencyResult);
 
-//grab address information
+// Grab address information
 $db->prepare("get-participant-addresses", "	SELECT * 
 											FROM participants
 											INNER JOIN people ON participants.participantid = people.peopleid
 											LEFT JOIN forms as fo ON participants.participantid = fo.participantid
 											LEFT JOIN addresses ON  fo.addressid = addresses.addressid
 											LEFT JOIN zipcodes ON zipcodes.zipcode =addresses.zipcode
-											WHERE participants.participantid = $1");
+											WHERE participants.participantid =  $1 ORDER BY employeesigneddate DESC LIMIT 1");
 $result = $db->execute("get-participant-addresses",[$peopleid]);
 $address = pg_fetch_assoc($result);
 extract($address);
-$addressid = $address['addressid'];
 
-//empty var for holding the edit/delete options; Based on role 
+// Empty var for holding the edit/delete options; Based on role 
 $buttonOptions = null;
 
 /**
@@ -88,10 +89,16 @@ function checkPhone($phoneType, $db, $peopleid){
 	if($result['phonenumber']== ""){
 		echo "<i>No number</i>";
 	}else{
-		echo $result['phonenumber'];
+        // Check to see if phone string is already pretty printed, if it is, display normally
+        if (strpos($result['phonenumber'], '(') !== false) {
+            echo $result['phonenumber'];
+        }else{
+            echo prettyPrintPhone($result['phonenumber']);
+        }
+		
 	}
 }
-//only displays the eidt button if the user is an admin
+// Only displays the edit button if the user is an admin
 if(hasRole(Role::Admin)){
 	$buttonOptions = "<a href='/ps-edit-participant/".$agencyResult['participantid']."'><button class='btn btn-outline-secondary ml-2 float-right'>Edit</button></a>";
 }
@@ -134,11 +141,10 @@ function status($timestamp, $activePeriod){
 				"class" => "badge badge-primary",
 				);
 	}
-	//Future TODO: Add condition for if the participant graduates 
 	return $statuses;
 }
 
-$statuses = status($notes['date'],40);
+$statuses = status($notes[0]['date'],40);
 
 /**
   * Simple function that checks to see if the value pulled is empty 
@@ -187,40 +193,32 @@ function checkSet($value){
 				
 				<div class="participant_detailed2 row pt-2">
 				<?php
-				while ($rowA = pg_fetch_assoc($agencyInfo)) {
+                
+               
 				?>
 					<div class="col-sm-4">
 					<b>Agency Name: </b>
 						<div> 
-							<?=$agency =($rowA['agency']=="" ? "<i>No records found</i>" : $rowA['agency'])?>
+							<?=$agency =($agencyResult['agency']=="" ? "<i>No records found</i>" : $agencyResult['agency'])?>
 						</div>
 					</div>
 					
 					<div class="col-sm-4">
 					<b>Agency Contact: </b> 
 					<div> 
-						Phone: 
-						<?=$phone = ($rowA['phone']=="" ? "<i>No records found</i>" :$rowA['phone'])?>
-						Email: 
-						<?=$email = ($rowA['email']=="" ? "<i>No records found</i>" :$rowA['email'])?>
+						<div>Phone: 
+						<?=$phone = ($agencyResult['phone']=="" ? "<i>No records found</i>" :prettyPrintPhone($agencyResult['phone']))?></div>
+						<div>Email: 
+						<?=$email = ($agencyResult['email']=="" ? "<i>No records found</i>" :$agencyResult['email'])?></div>
 					</div>
 					</div>
 					
 					<div class="col-sm-4">
 					<b>Consent to Agency: </b> 
 						<div>
-							<?=$consent = ($rowA['hasagencyconsentform'] =="f" || $rowA['hasagencyconsentform'] =="" ? "No" :" Yes")?>
+							<?=$consent = ($agencyResult['hasagencyconsentform'] =="f" || $agencyResult['hasagencyconsentform'] =="" ? "No" :" Yes")?>
 						</div>
 					</div>
-				<?php
-				}
-				?>
-				</div>
-				<div class="row">
-                <div class="participant_notes col-sm-12">
-					<div> <strong>Notes:</strong> </div>
-					None
-				</div>
 				</div>
 				<br>
                 <p class="participant_contact"><b>Contact: </b></p>
@@ -252,12 +250,16 @@ function checkSet($value){
 			<h4 class="thin-title">Address Information</h4>
             <hr>
 			<div class="addressholder pl-5">
-				<div class="addressline1">
-					<? $address['addressnumber']." ".$address['aptinfo']." ".ucwords($address['street']);?>
+            <div class="row">
+            <div class="addressline1">
+				<?= $aptinfo ." ". checkSet($addressnumber)." ".checkSet($street)?>
 				</div>
-				<div class="addressline2">
+            </div>
+            <div class="row">
+            <div class="addressline2">
 					<?= $address['city']." ".$address['state']." ".$address['zipcode'];?>
 				</div>
+            </div>
 			</div>
 					
 				</div>
@@ -273,15 +275,15 @@ function checkSet($value){
 				</tr>
 				
 				<?php 
-				#if query returns nothing, throw an error to the user
+				// If query returns nothing, throw message to the user
 				if(pg_num_rows($resultNotes) == 0){
-					echo " no classes found";
+					echo "<i> No Classes Found </i>";
 				}else{
-					while ($rowC = pg_fetch_assoc($resultNotes)) {
+					foreach($notes as $resultNotes){
 						echo 	"<tr>
-									<td>".$rowC['topicname']."</td>
-									<td>".$rowC['date']."</td>
-									<td>".$rowC['curriculumname']."</td>
+									<td>".$resultNotes['topicname']."</td>
+									<td>".$resultNotes['date']."</td>
+									<td>".$resultNotes['curriculumname']."</td>
 								</tr>";								
 					}
 				}
@@ -298,33 +300,28 @@ function checkSet($value){
 						<th>Sex</th>
 					</tr>			
 					<?php
-					#if query returns nothing, throw an error to the user
-					if(pg_num_rows($familyInfo) == 0){
-						echo "no family found";
-					}else{
-						while ($rowF = pg_fetch_assoc($familyInfo)) {
-							echo 	"<tr>".
-									"<td>".checkSet($rowF['lastname'])." ".$rowF['middleinit']." ".checkSet($rowF['lastname'])."</td>".
-									"<td>".checkSet($rowF['relationship'])."</td>".
-									"<td>".checkSet($rowF['dateofbirth'])."</td>".
-									"<td>".checkSet($rowF['sex'])."</td>".
-									"</tr>";
+                    // Display all family information
+                    $familyRow = pg_fetch_all($familyInfo);
+                    if(pg_num_rows($familyInfo) > 0){
+                    foreach($familyRow as $row){
 
-						}
-					}
+                        echo    "<tr>".
+                                    "<td>".ucwords(checkSet($row['childlast']).", ".checkSet($row['childfirst'])." ".$row['childm'])."</td>".
+                                    "<td>".checkSet($row['relationship'])."</td>".
+                                    "<td>".checkSet($row['dateofbirth'])."</td>".
+                                    "<td>".checkSet($row['sex'])."</td>".
+                                "</tr>";
+                    }
 
+                    }else{
+                    echo "<i> No Family Information Found </i>";
+                    }
 					?>
             </table>
         </div>
         <div class="card-footer text-center">
             <a href="/forms-view/<?= $params[0] ?>">
                 <button class="btn btn-outline-secondary">View Forms</button>
-            </a>
-            <a href="#">
-                <button class="btn btn-outline-secondary">View Attendence Record</button>
-            </a>
-            <a href="#">
-                <button class="btn btn-outline-secondary">View Current Assigned Curriculum</button>
             </a>
 
         </div>

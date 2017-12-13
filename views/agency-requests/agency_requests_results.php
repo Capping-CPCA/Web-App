@@ -85,7 +85,7 @@ include('header.php');
                                                 LEFT JOIN intakeinformation ON forms.formid = intakeinformation.intakeinformationid
                                                 LEFT JOIN agencyreferral ON forms.formid = agencyreferral.agencyreferralid
                                                 WHERE participants.participantid= $1",[$row['participantid']]);
-                        while($formResults  = pg_fetch_assoc($formInfo)){
+                        $formResults  = pg_fetch_assoc($formInfo);
                             ?>   
                             <div>
                                 <b>DOB: </b><?=checkEmpty($formResults['dateofbirth']);?> |  
@@ -93,7 +93,7 @@ include('header.php');
                                 <b>Sex: </b> <?=checkEmpty($formResults['sex']); ?>
                             </div>
                             <?php
-                        }
+                      
                         ?>
 					</li>
 				</ul>
