@@ -31,9 +31,12 @@ if (pg_num_rows($result) == 0) {
 $curricula = pg_fetch_assoc($result);
 pg_free_result($result);
 
-$topics = $db->query("SELECT * FROM curriculumclasses, classes WHERE curriculumid = $1 ".
-    "AND curriculumclasses.classid = classes.classid ".
-    "AND classes.df IS FALSE ORDER BY classes.topicname", [$id]);
+$topics = $db->query("SELECT *
+    FROM classes, (SELECT *, row_number() over () as rn FROM curriculumclasses) as cc
+    WHERE cc.curriculumid = $1 
+          AND classes.classid = cc.classid
+          AND classes.df IS FALSE
+          ORDER BY cc.rn;", [$id]);
 $curriculaName = $curricula['curriculumname'];
 $site = pg_fetch_assoc($db->query("SELECT * FROM sites WHERE sitename = $1", [$curriculaName]));
 
