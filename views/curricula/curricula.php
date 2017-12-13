@@ -88,10 +88,13 @@ if (!empty($params) && $params[0] == 'view') {
         <div class="d-flex flex-row justify-content-center flex-wrap">
             <?php
             while ($r = pg_fetch_assoc($result)) {
+                $curriculumname = $r['curriculumname'];
+                // Adds a zero-width space to break words after a forward slash
+                $curriculumname = str_replace('/', '/&#8203;', $curriculumname);
                 ?>
                 <div class="card text-center result-card">
                     <div class="card-body">
-                        <h4 class="card-title"><?= $r['curriculumname'] ?></h4>
+                        <h4 class="card-title"><?= $curriculumname ?></h4>
                     </div>
                     <div class="card-footer d-flex flex-row justify-content-center">
                         <a href="/curricula/view/<?= $r['curriculumid'] ?>">

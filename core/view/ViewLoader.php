@@ -1,7 +1,18 @@
 <?php
 
 /**
- * Class ViewLoader
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * View loader class to display pages.
+ *
+ * This class uses a simple load function to require a PHP
+ * page if it exists. If the page does not exists, a 404 error
+ * is thrown.
+ *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.1
+ * @since 0.1
  */
 class ViewLoader {
 

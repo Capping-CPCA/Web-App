@@ -86,10 +86,13 @@ if (!empty($params) && $params[0] == 'view') {
         <div class="d-flex flex-row justify-content-center flex-wrap">
             <?php
             while ($r = pg_fetch_assoc($result)) {
+                $topicname = $r['topicname'];
+                // Adds a zero-width space to break words after a forward slash
+                $topicname = str_replace('/', '/&#8203;', $topicname);
                 ?>
                 <div class="card text-center result-card">
                     <div class="card-body">
-                        <h4 class="card-title"><?= $r['topicname'] ?></h4>
+                        <h4 class="card-title"><?= $topicname ?></h4>
                         <h6 class="card-subtitle text-muted"><?= $r['description'] ?></h6>
                     </div>
                     <div class="card-footer d-flex flex-row justify-content-center">

@@ -236,11 +236,11 @@ function phoneStrToNum($phoneNum) {
 /**
  * Checks to see if there are any duplicate PID's in the db, then returns a pid if already existing
  * @param $db database object
- * @param $pers_firstname first name of participant in form input field
- * @param $pers_lastname last name of participant in form input field
- * @param $pers_middlein initial of middle name of participant in form input field
- * @reutnr participant id of new/duplicate participant 
-**/
+ * @param $pers_firstname string first name of participant in form input field
+ * @param $pers_lastname string last name of participant in form input field
+ * @param $pers_middlein string initial of middle name of participant in form input field
+ * @return string participant id of new/duplicate participant
+ **/
 function checkForDuplicates($db, $pers_firstname,$pers_lastname,$pers_middlein){
     if($_POST['selectedID'] != ""){
         return $pIDResult = $_POST['selectedID'];

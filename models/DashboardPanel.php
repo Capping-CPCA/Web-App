@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Template for the dashboard panels.
+ *
+ * This class allows simple construction and display
+ * of the dashboard panels present on the home page. Calling
+ * the <code>createPanel()</code> function displays the panel
+ * to the screen.
+ *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.1
+ * @since 0.1
+ */
 class DashboardPanel {
     var $link, $title, $subtitle, $img;
 
@@ -10,6 +25,9 @@ class DashboardPanel {
         $this->img = $img;
     }
 
+    /**
+     * Displays the panel
+     */
     function createPanel() { 
         echo
             "<a class='dashboard-panel justify-content-center d-flex flex-column align-self-stretch'" .

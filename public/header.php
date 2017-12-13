@@ -1,4 +1,19 @@
 <?php
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Template header to be used on top of each page.
+ *
+ * This PHP file contains everything that will be displayed in the
+ * header of the application. This includes the nav bar, menu,
+ * account buttons, JS, and CSS files.
+ *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.1
+ * @since 0.1
+ */
+
     global $route;
 
     $isLoggedIn = isset($_SESSION['username']);

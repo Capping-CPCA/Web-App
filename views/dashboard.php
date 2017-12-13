@@ -1,4 +1,20 @@
 <?php
+/**
+ * PEP Capping 2017 Algozzine's Class
+ *
+ * Main homepage containing dynamic dashboard panels.
+ *
+ * This page displays quick links in the form of panels
+ * and is the first page the user sees when logging into
+ * the system. It is made up of DashboardPanel objects
+ * and the panels depend on your current role.
+ *
+ * @author Jack Grzechowiak
+ * @copyright 2017 Marist College
+ * @version 0.1
+ * @since 0.1
+ */
+
 include_once('../models/DashboardPanel.php');
 $roleViews = [
     Role::User => [
