@@ -924,7 +924,7 @@ include('header.php');
                                         <label class="col-form-label col-sm-2 col-2" for="pers_address">Street Address:</label>
                                         <div class="col-sm-3 col">
                                             <input type="text" class="form-control" name="pers_address" id="pers_address"
-                                                   value="<?= $referral_street ?>" placeholder="Street address">
+                                                   value="<?= isset($referral_street) ? $referral_street : '' ?>" placeholder="Street address">
                                         </div>
                                         <label class="col-form-label col-sm-1 col-2" for="pers_apt_info">Apartment:</label>
                                         <div class="col-sm-2 col">
