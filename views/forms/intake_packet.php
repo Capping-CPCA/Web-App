@@ -832,46 +832,47 @@ include('header.php');
                                     <h5>Personal Information</h5>
                                     <br>
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="intake_firstname">Participant Name:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="intake_firstname">Participant Name:</label>
+
+                                        <div class="col-md-5 col-xl-2 col">
                                             <input type="text" class="form-control" id="intake_firstname" name="intake_firstname"
                                                    value="<?= (isset($intake_firstname_result)) ? $intake_firstname_result : ""?>" placeholder="First name" required>
                                             <div class="invalid-feedback">Enter first name</div>
                                         </div>
 
                                         <label class="col-form-label col-sm-0 sr-only" for="intake_lastname">Last Name:</label>
-                                        <div class="col-sm-2 col">
+                                        <div class="col-md-5 col-xl-2 col">
                                             <input type="text" class="form-control" id="intake_lastname" name="intake_lastname"
                                                    value="<?= (isset($intake_lastname_result)) ? $intake_lastname_result : ""?>" placeholder="Last name" required>
                                             <div class="invalid-feedback">Enter last name</div>
                                         </div>
 
                                         <label class="col-form-label col-sm-0 sr-only" for="intake_middlein">MInitial:</label>
-                                        <div class="col-sm-1 col">
+                                        <div class="col-md-2 col-xl-1 col">
                                             <input type="text" class="form-control" id="intake_middlein" name="intake_middlein"
                                                    value="<?= (isset($intake_middlein_result)) ? $intake_middlein_result : "" ?>" placeholder="Initial" maxlength="1">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="intake_dob">Date of Birth:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="intake_dob">Date of Birth:</label>
+                                        <div class="col-md-5 col-xl-2 col">
                                             <input type="date" class="form-control" id="intake_dob" name="intake_dob"
                                                    value="<?= (isset($intake_dob_result)) ? $intake_dob_result : "" ?>">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="intake_religion">Religion:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="intake_religion">Religion:</label>
+                                        <div class="col-md-5 col-xl-2 col">
                                             <input type="text" class="form-control" id="intake_religion" name="intake_religion"
                                                    value="<?= (isset($intake_religion_result)) ? $intake_religion_result : "" ?>" placeholder="Religion">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="intake_ethnicity">Race:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="intake_ethnicity">Race:</label>
+                                        <div class="col-md-5 col-xl-2 col">
                                             <select class="form-control select_sex" name="intake_ethnicity" id="intake_ethnicity">
                                                 <option value="" selected="selected">Choose one</option>
                                                 <?php
@@ -888,8 +889,8 @@ include('header.php');
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="intake_sex">Sex:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="intake_sex">Sex:</label>
+                                        <div class="col-md-5 col-xl-2 col">
                                             <select class="form-control select_sex" name="intake_sex" id="intake_sex">
                                                 <option value="" selected="selected">Choose one</option>
                                                 <?php
@@ -906,32 +907,32 @@ include('header.php');
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="intake_occupation">Occupation:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="intake_occupation">Occupation:</label>
+                                        <div class="col-md-5 col-xl-2 col">
                                             <input type="text" class="form-control" id="intake_occupation" name="intake_occupation"
                                                    value="<?= (isset($intake_occupation_result)) ? $intake_occupation_result : "" ?>" placeholder="Enter an occupation">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="intake_last_year_school">Last Year of School:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="intake_last_year_school">Last Year of School:</label>
+                                        <div class="col-md-5 col-xl-2 col">
                                             <input type="text" class="form-control" id="intake_last_year_school" name="intake_last_year_school"
                                                    value="<?= (isset($intake_last_year_school_result)) ? $intake_last_year_school_result : "" ?>" placeholder="example: 1988">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="intake_languages_spoken">Languages Spoken:</label>
-                                        <div class="col-sm-3 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="intake_languages_spoken">Languages Spoken:</label>
+                                        <div class="col-md-5 col-xl-2 col">
                                             <input type="text" class="form-control" id="intake_languages_spoken" name="intake_languages_spoken"
                                                    value="<?= (isset($intake_languages_spoken_result)) ? $intake_languages_spoken_result : "" ?>" placeholder="English, Spanish, etc...">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="handicap_medication">Handicap/Medication:</label>
-                                        <div class="col-sm-3 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="handicap_medication">Handicap/Medication:</label>
+                                        <div class="col-md-12 col-xl-4  col">
                                             <textarea style="resize: none;" class="form-control" rows=4 id="handicap_medication" name="handicap_medication" placeholder="Any handicapping conditions or medications"><?= (isset($intake_handicap_medication_result)) ? $intake_handicap_medication_result : "" ?></textarea>
                                         </div>
                                     </div>
@@ -939,21 +940,21 @@ include('header.php');
                                     <h5>Contact Information</h5>
                                     <br>
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="intake_address">Street Address:</label>
-                                        <div class="col-sm-3 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="intake_address">Street Address:</label>
+                                        <div class="col-md-5 col-xl-3 col">
                                             <input type="text" class="form-control" id="intake_address" name="intake_address"
                                                    value="<?= (isset($intake_street)) ? $intake_street : ""?>" placeholder="Street address">
                                         </div>
-                                        <label class="col-form-label col-sm-1" for="intake_apt_info">Apartment:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-md-12 col-xl-1 d-md-block" for="intake_apt_info">Apartment:</label>
+                                        <div class="col-md-5 col-xl-2 col">
                                             <input type="text" class="form-control" id="intake_apt_info" name="intake_apt_info"
                                                    value="<?= (isset($intake_intake_apt_info_result)) ? $intake_intake_apt_info_result : ""?>" placeholder="Apartment Information">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="intake_state">State:</label>
-                                        <div class="col-sm-3 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="intake_state">State:</label>
+                                        <div class="col-md-5 col-xl-3 col">
                                             <select class="form-control" id="intake_state" name="intake_state" >
                                                 <option value="" selected="selected">Choose a state</option>
                                                 <?php
@@ -968,32 +969,32 @@ include('header.php');
                                             </select>
                                         </div>
 
-                                        <label class="col-form-label col-sm-1 col-2" for="intake_city">City:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-md-12 col-xl-1 col-2 d-md-block" for="intake_city">City:</label>
+                                        <div class="col-md-5 col-xl-2 col">
                                             <input type="text" class="form-control" id="intake_city" name="intake_city"
                                                    value="<?= (isset($intake_city_result)) ? $intake_city_result : "" ?>" placeholder="City" data-error="Enter city.">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="intake_zip">ZIP:</label>
-                                        <div class="col-sm-1 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="intake_zip">ZIP:</label>
+                                        <div class="col-md-5 col-xl-1 col">
                                             <input type="text" class="form-control mask-zip" id="intake_zip" name="intake_zip"
                                                    value="<?= (isset($intake_zip_result)) ? $intake_zip_result : "" ?>" placeholder="Zip">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="intake_phone_day">Daytime Phone:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="intake_phone_day">Daytime Phone:</label>
+                                        <div class="col-md-5 col-xl-2 col">
                                             <input type="tel" class="form-control mask-phone feedback-icon" id="intake_phone_day" name="intake_phone_day"
                                                    value="<?= (isset($intake_phone_day_result)) ? $intake_phone_day_result : "" ?>" placeholder="(999) 999-9999">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="intake_phone_night">Evening Phone:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="intake_phone_night">Evening Phone:</label>
+                                        <div class="col-md-5 col-xl-2 col">
                                             <input type="tel" class="form-control mask-phone feedback-icon" id="intake_phone_night" name="intake_phone_night"
                                                    value="<?= (isset($intake_phone_night_result)) ? $intake_phone_night_result : "" ?>" placeholder="(999) 999-9999">
                                         </div>
@@ -1003,15 +1004,15 @@ include('header.php');
                                     <h5>Emergency Contact</h5>
                                     <br>
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="contact_firstname">Contact Name:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="contact_firstname">Contact Name:</label>
+                                        <div class="col-md-5 col-xl-2 col">
                                             <input type="text" class="form-control" id="contact_firstname" name="contact_firstname"
                                                    value="<?= (isset($contact_firstname_result)) ? $contact_firstname_result : ""?>" placeholder="First name">
                                             <div class="invalid-feedback">Enter first name</div>
                                         </div>
 
                                         <label class="col-form-label col-sm-0 sr-only" for="contact_lastname">Last Name:</label>
-                                        <div class="col-sm-2 col">
+                                        <div class="col-md-5 col-xl-2 col">
                                             <input type="text" class="form-control" id="contact_lastname" name="contact_lastname"
                                                    value="<?= (isset($contact_lastname_result)) ? $contact_lastname_result : ""?>" placeholder="Last name">
                                             <div class="invalid-feedback">Enter last name</div>
@@ -1019,8 +1020,8 @@ include('header.php');
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label col-3" for="contact_relationship">Relationship:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="contact_relationship">Relationship:</label>
+                                        <div class="col-md-5 col-xl-2 col">
                                             <select class="form-control" name="contact_relationship" id="contact_relationship">
                                                 <option value="" selected="selected">Choose one</option>
                                                 <?php
@@ -1037,8 +1038,8 @@ include('header.php');
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2 col-3" for="contact_phone">Phone Number:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-md-12 col-xl-2 d-md-block" for="contact_phone">Phone Number:</label>
+                                        <div class="col-md-5 col-xl-2 col">
                                             <input type="tel" class="form-control mask-phone feedback-icon" id="contact_phone" name="contact_phone"
                                                    value="<?= (isset($contact_phone_result)) ? $contact_phone_result : ""  ?>" placeholder="(999) 999-9999">
                                         </div>
@@ -1081,30 +1082,30 @@ include('header.php');
                                         <h5 class="heading-reference">Child 1</h5>
                                         <br>
                                         <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label label_fn">Child Name:</label>
-                                            <div class="col-sm-2 col">
+                                            <label class="col-form-label col-md-12 col-xl-2 d-md-block label_fn">Child Name:</label>
+                                            <div class="col-md-5 col-xl-2 col">
                                                 <input type="text" class="form-control input_fn" name="child_first_name_1" maxlength="255" placeholder="First name" id="child_first_name_1">
                                             </div>
                                             <label class="col-sm-0 col-form-label sr-only label_ln">Last Name:</label>
-                                            <div class="col-sm-2 col">
+                                            <div class="col-md-5 col-xl-2 col">
                                                 <input type="text" class="form-control input_ln" name="child_last_name_1" maxlength="255" placeholder="Last name" id="child_last_name_1">
                                             </div>
                                             <label class="col-sm-0 col-form-label sr-only label_mi">Middle Initial:</label>
-                                            <div class="col-sm-1 col">
+                                            <div class="col-md-2 col-xl-1 col">
                                                 <input type="text" class="form-control input_mi" name="child_mi_1" maxlength="1" placeholder="Initial" id="child_mi_1">
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label label_dob" for="child_dob_1">Date of Birth:</label>
-                                            <div class="col-sm-2 col">
+                                            <label class="col-form-label col-md-12 col-xl-2 d-md-block label_dob" for="child_dob_1">Date of Birth:</label>
+                                            <div class="col-md-5 col-xl-2 col">
                                                 <input type="date" class="form-control input_dob" name="child_dob_1" id="child_dob_1">
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label label_sex">Sex:</label>
-                                            <div class="col-sm-2 col">
+                                            <label class="col-form-label col-md-12 col-xl-2 d-md-block label_sex">Sex:</label>
+                                            <div class="col-md-5 col-xl-2 col">
                                                 <select class="form-control select_sex" name="child_sex_1" id="child_sex_1">
                                                     <option value="" selected="selected">Choose one</option>
                                                     <?php
@@ -1121,8 +1122,8 @@ include('header.php');
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label label_race">Race:</label>
-                                            <div class="col-sm-2 col">
+                                            <label class="col-form-label col-md-12 col-xl-2 d-md-block label_race">Race:</label>
+                                            <div class="col-md-5 col-xl-2 col">
                                                 <select class="form-control select_race" name="child_race_1" id="child_race_1">
                                                     <option value="" selected="selected">Choose one</option>
                                                     <?php
@@ -1139,15 +1140,15 @@ include('header.php');
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label label_live">Residence:</label>
-                                            <div class="col-sm-4 col">
+                                            <label class="col-form-label col-md-12 col-xl-2 d-md-block label_live">Residence:</label>
+                                            <div class="col-md-10 col-xl-4 col">
                                                 <input type="text" class="form-control input_live" name="child_live_1" placeholder="Where does this child live?" id="child_live_1">
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label label_custody">Custody:</label>
-                                            <div class="col-sm-4 col">
+                                            <label class="col-form-label col-md-12 col-xl-2 d-md-block label_custody">Custody:</label>
+                                            <div class="col-md-10 col-xl-4 col">
                                                 <input type="text" class="form-control input_custody" name="child_custody_1" placeholder="Who has custody of this child?" id="child_custody_1">
                                             </div>
                                         </div>
@@ -1155,14 +1156,14 @@ include('header.php');
                                     </div>
 
                                     <div class="form-group row childbutton controls">
-                                        <label class="col-sm-2 col-form-label">Add Child:</label>
+                                        <label class="col-md-2 col-xl-2 col-form-label">Add Child:</label>
                                         <div class="col-sm-1 col">
                                             <button class="btn btn-default" type="button" id="btnAddChild"><span class="fa fa-plus"></span></button>
                                         </div>
                                     </div>
 
                                     <div class="form-group row childbutton delbtn controls">
-                                        <label class="col-sm-2 col-form-label">Remove Child:</label>
+                                        <label class="col-md-2 col-xl-2 col-form-label">Remove Child:</label>
                                         <div class="col-sm-1 col">
                                             <button class="btn btn-default" type="button" id="btnDelChild" disabled="disabled"><span class="fa fa-minus"></span></button>
                                         </div>
@@ -1187,9 +1188,10 @@ include('header.php');
                                     <h5>Additional Participant Information</h5>
                                     <br>
                                     <div class="form-group radio-group row">
-                                        <div class="col-sm-4">
+                                        <div class="col-md-12 col-xl-4">
                                             <label class="form-control-label">Do you now, or have you ever had a problem with drug/alcohol abuse?</label>
                                         </div>
+                                        <div class="col-md-1 d-xl-none"></div>
                                         <label class="custom-control custom-radio" for="drug_alcohol_abuse_yes">
                                             <input type="radio" id="drug_alcohol_abuse_yes" name="drug_alcohol_abuse" class="custom-control-input"
                                                 <?= (isset($drug_alcohol_abuse_result) && $drug_alcohol_abuse_result == "t") ? "checked" : "" ?> value="Yes">
@@ -1206,8 +1208,10 @@ include('header.php');
                                     <!-- End Q: Drug/Alcohol Abuse -->
 
                                     <div class="form-group hidden-field row drug_alcohol_abuse_div_yes answer_yes">
-                                        <label class="col-form-label col-sm-2" for="drug_alcohol_abuse_explain">Please explain:</label>
-                                        <div class="col-sm-5">
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <label class="col-form-label col-md-11 col-xl-2" for="drug_alcohol_abuse_explain">Please explain:</label>
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <div class="col-xl-5 col-md-9">
                                             <input type="text" class="form-control" id="drug_alcohol_abuse_explain" name="drug_alcohol_abuse_explain"
                                                    value="<?= (isset($drug_alcohol_abuse_explain_result)) ? $drug_alcohol_abuse_explain_result : ""?>" placeholder="Please describe your past with drug/alcohol abuse">
                                         </div>
@@ -1215,9 +1219,10 @@ include('header.php');
 
                                     <!-- Begin Q: Live With Children -->
                                     <div class="form-group radio-group row">
-                                        <div class="col-sm-4">
+                                        <div class="col-xl-4 col-md-12">
                                             <label class="form-control-label">Do you currently live with your child(ren)?</label>
                                         </div>
+                                        <div class="col-md-1 d-xl-none"></div>
                                         <label class="custom-control custom-radio" for="live_with_children_yes">
                                             <input  type="radio" id="live_with_children_yes" name="live_with_children" class="custom-control-input"
                                                     <?= (isset($params[1]) && isset($live_with_children_separated_result) && $live_with_children_separated_result == '') ? "checked" : ""?> value="Yes">
@@ -1234,8 +1239,10 @@ include('header.php');
                                     <!-- End Q: Live With Children -->
 
                                     <div class="form-group hidden-field row live_with_children_div_no answer_no">
-                                        <label class="col-form-label col-sm-2" for="live_with_children_separated">Length of Separation:</label>
-                                        <div class="col-sm-5">
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <label class="col-form-label col-xl-2 col-md-11" for="live_with_children_separated">Length of Separation:</label>
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <div class="col-xl-5 col-md-9">
                                             <input type="text" class="form-control" id="live_with_children_separated" name="live_with_children_separated"
                                                    value="<?= (isset($live_with_children_separated_result) && $live_with_children_separated_result != '') ? $live_with_children_separated_result : ""?>" placeholder="For how long have you been separated from your child(ren)?">
                                         </div>
@@ -1243,9 +1250,10 @@ include('header.php');
 
                                     <!-- Begin Q: Separated With Children -->
                                     <div class="form-group radio-group row">
-                                        <div class="col-sm-4">
+                                        <div class="col-xl-4 col-md-12">
                                             <label class="form-control-label">Are you separated with your child(ren)'s other biological parent?</label>
                                         </div>
+                                        <div class="col-md-1 d-xl-none"></div>
                                         <label class="custom-control custom-radio" for="parent_separated_yes">
                                             <input  type="radio" id="parent_separated_yes" name="parent_separated" class="custom-control-input"
                                                 <?= (isset($separated_length_result) && !empty($separated_length_result) && isset($params[1])) ? "checked" : "" ?> value="Yes">
@@ -1262,16 +1270,20 @@ include('header.php');
                                     <!-- End Q: Separated With Children-->
 
                                     <div class="form-group hidden-field row parent_separated_div_yes answer_yes">
-                                        <label class="col-form-label col-sm-2" for="separated_length">Please explain:</label>
-                                        <div class="col-sm-5">
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <label class="col-form-label col-xl-2 col-md-11" for="separated_length">Please explain:</label>
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <div class="col-xl-5 col-md-9">
                                             <input type="text" class="form-control" id="separated_length" name="separated_length"
                                                    value="<?= (isset($separated_length_result)) ? $separated_length_result : ""?>" placeholder="For how long have you been separated?">
                                         </div>
                                     </div>
 
                                     <div  class="form-group hidden-field row parent_separated_div_yes answer_yes">
-                                        <label class="col-form-label col-sm-2" for="relationship">Relationship status:</label>
-                                        <div class="col-sm-5">
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <label class="col-form-label col-xl-2 col-md-11" for="relationship">Relationship status:</label>
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <div class="col-xl-5 col-md-9">
                                             <input type="text" class="form-control" id="relationship" name="relationship"
                                                    value="<?= (isset($relationship_result)) ? $relationship_result : ""?>" placeholder="What is your relationship like?">
                                         </div>
@@ -1279,9 +1291,10 @@ include('header.php');
 
                                     <!-- Begin Q: Parent Together -->
                                     <div class="form-group radio-group row">
-                                        <div class="col-sm-4">
+                                        <div class="col-xl-4 col-md-12">
                                             <label class="form-control-label">Have you and your child(ren)'s parent been able to parent together?</label>
                                         </div>
+                                        <div class="col-md-1 d-xl-none"></div>
                                         <label class="custom-control custom-radio" for="parenting_yes">
                                             <input  type="radio" id="parenting_yes" name="parenting" class="custom-control-input"
                                                 <?= (isset($parenting_result) && $parenting_result == "t") ? "checked" : "" ?> value="Yes">
@@ -1299,9 +1312,10 @@ include('header.php');
 
                                     <!-- Begin Q: Currently involved CPS -->
                                     <div class="form-group radio-group row">
-                                        <div class="col-sm-4">
+                                        <div class="col-xl-4 col-md-12">
                                             <label class="form-control-label">Are you involved with Child Protective Services?</label>
                                         </div>
+                                        <div class="col-md-1 d-xl-none"></div>
                                         <label class="custom-control custom-radio" for="child_protective_yes">
                                             <input  type="radio" id="child_protective_yes" name="child_protective" class="custom-control-input"
                                                 <?= (isset($child_protective_result) && $child_protective_result == "t") ? "checked" : "" ?> value="Yes">
@@ -1319,9 +1333,10 @@ include('header.php');
 
                                     <!-- Begin Q: Previously involved CPS -->
                                     <div class="form-group radio-group row">
-                                        <div class="col-sm-4">
+                                        <div class="col-xl-4 col-md-12">
                                             <label class="form-control-label">Have you previously been involved with Child Protective Services?</label>
                                         </div>
+                                        <div class="col-md-1 d-xl-none"></div>
                                         <label class="custom-control custom-radio" for="previous_child_protective_yes">
                                             <input  type="radio" id="previous_child_protective_yes" name="previous_child_protective" class="custom-control-input"
                                                 <?= (isset($previous_child_protective_result) && $previous_child_protective_result == 1) ? "checked" : "" ?> value="Yes">
@@ -1339,9 +1354,10 @@ include('header.php');
 
                                     <!-- Begin Q: Mandated To Take Class -->
                                     <div class="form-group radio-group row">
-                                        <div class="col-sm-4">
+                                        <div class="col-xl-4 col-md-12">
                                             <label class="form-control-label">Have you been mandated to take this class?</label>
                                         </div>
+                                        <div class="col-md-1 d-xl-none"></div>
                                         <label class="custom-control custom-radio" for="mandated_yes">
                                             <input  type="radio" id="mandated_yes" name="mandated" class="custom-control-input"
                                                 <?= (isset($mandated_result) && $mandated_result == "t") ? "checked" : "" ?> value="Yes">
@@ -1358,16 +1374,20 @@ include('header.php');
                                     <!-- End Q: Mandated To Take Class -->
 
                                     <div  class="form-group hidden-field row mandated_div_yes answer_yes">
-                                        <label class="col-form-label col-sm-2" for="mandated_by">Mandated by:</label>
-                                        <div class="col-sm-5">
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <label class="col-form-label col-xl-2 col-md-11" for="mandated_by">Mandated by:</label>
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <div class="col-xl-5 col-md-9">
                                             <input type="text" class="form-control" id="mandated_by" name="mandated_by"
                                                    value="<?= (isset($mandated_by_result)) ? $mandated_by_result : "" ?>" placeholder="Who mandated you?">
                                         </div>
                                     </div>
 
                                     <div  class="form-group hidden-field row mandated_div_yes answer_yes">
-                                        <label class="col-form-label col-sm-2" for="reason_mandated">Mandate Reason:</label>
-                                        <div class="col-sm-5">
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <label class="col-form-label col-xl-2 col-md-11" for="reason_mandated">Mandate Reason:</label>
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <div class="col-xl-5 col-md-9">
                                             <input type="text" class="form-control" id="reason_mandated" name="reason_mandated"
                                                    value="<?= (isset($mandated_result) && $mandated_result == "t" && isset($reason_for_taking_class_result))
                                                             ? $reason_for_taking_class_result
@@ -1376,8 +1396,10 @@ include('header.php');
                                     </div>
 
                                     <div class="form-group hidden-field row mandated_div_no answer_no">
-                                        <label class="col-form-label col-sm-2" for="reason_for_taking_class">Reason For Taking Class:</label>
-                                        <div class="col-sm-5">
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <label class="col-form-label col-xl-2 col-md-11" for="reason_for_taking_class">Reason For Taking Class:</label>
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <div class="col-xl-5 col-md-9">
                                             <input type="text" class="form-control" id="reason_for_taking_class"
                                                    value="<?= (isset($mandated_result) && $mandated_result == "f" && isset($reason_for_taking_class_result))
                                                             ? $reason_for_taking_class_result
@@ -1387,9 +1409,10 @@ include('header.php');
 
                                     <!-- Begin Q: Other Parenting Classes -->
                                     <div class="form-group radio-group row">
-                                        <div class="col-sm-4">
+                                        <div class="col-xl-4 col-md-12">
                                             <label class="form-control-label">Have you attended any other parenting classes?</label>
                                         </div>
+                                        <div class="col-md-1 d-xl-none"></div>
                                         <label class="custom-control custom-radio" for="other_classes_yes">
                                             <input  type="radio" id="other_classes_yes" name="other_classes" class="custom-control-input"
                                                 <?= (isset($other_classes_result) && $other_classes_result == "t") ? "checked" : "" ?> value="Yes">
@@ -1406,8 +1429,10 @@ include('header.php');
                                     <!-- End Q: Other Parenting Classes -->
 
                                     <div  class="form-group hidden-field row other_classes_div_yes answer_yes">
-                                        <label class="col-form-label col-sm-2" for="other_classes_where_when">Please explain:</label>
-                                        <div class="col-sm-5">
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <label class="col-form-label col-xl-2 col-md-11" for="other_classes_where_when">Please explain:</label>
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <div class="col-xl-5 col-md-9">
                                             <input type="text" class="form-control" id="other_classes_where_when" name="other_classes_where_when"
                                                    value="<?= (isset($other_classes_where_when_result)) ? $other_classes_where_when_result : "" ?>" placeholder="Where did you take classes and how long ago?">
                                         </div>
@@ -1415,9 +1440,10 @@ include('header.php');
 
                                     <!-- Begin Q: The Victim Of Abuse Or Neglect -->
                                     <div class="form-group radio-group row">
-                                        <div class="col-sm-4">
+                                        <div class="col-xl-4 col-md-12">
                                             <label class="form-control-label">Were you the victim of abuse or neglect in your own childhood?</label>
                                         </div>
+                                        <div class="col-md-1 d-xl-none"></div>
                                         <label class="custom-control custom-radio" for="victim_of_abuse_yes">
                                             <input  type="radio" id="victim_of_abuse_yes" name="victim_of_abuse" class="custom-control-input"
                                                 <?= (isset($victim_of_abuse_result) && $victim_of_abuse_result == "t") ? "checked" : "" ?> value="Yes">
@@ -1434,8 +1460,10 @@ include('header.php');
                                     <!-- End Q: The Victim Of Abuse Or Neglect -->
 
                                     <div  class="form-group hidden-field row victim_of_abuse_div_yes answer_yes">
-                                        <label class="col-form-label col-sm-2" for="form_of_abuse">Please explain:</label>
-                                        <div class="col-sm-5">
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <label class="col-form-label col-xl-2 col-md-11" for="form_of_abuse">Please explain:</label>
+                                        <div class="col-md-1 d-xl-none"></div>
+                                        <div class="col-xl-5 col-md-9">
                                             <input type="text" class="form-control" id="form_of_abuse" name="form_of_abuse"
                                                    value="<?= (isset($form_of_abuse_result)) ? $form_of_abuse_result : ""?>" placeholder="What form of abuse did you take?">
                                         </div>
@@ -1443,9 +1471,10 @@ include('header.php');
 
                                     <!-- Begin Q: Abuse In Therapy -->
                                     <div class="form-group radio-group row">
-                                        <div class="col-sm-4">
+                                        <div class="col-xl-4 col-md-12">
                                             <label class="form-control-label">Did you ever deal with your abuse in therapy?</label>
                                         </div>
+                                        <div class="col-md-1 d-xl-none"></div>
                                         <label class="custom-control custom-radio" for="abuse_therapy_yes">
                                             <input  type="radio" id="abuse_therapy_yes" name="abuse_therapy" class="custom-control-input"
                                                 <?= (isset($abuse_therapy_result) && $abuse_therapy_result == "t") ? "checked" : "" ?> value="Yes">
@@ -1463,9 +1492,10 @@ include('header.php');
 
                                     <!-- Begin Q: Issues Relating To Your Childhood Abuse -->
                                     <div class="form-group radio-group row">
-                                        <div class="col-sm-4">
+                                        <div class="col-xl-4 col-md-12">
                                             <label class="form-control-label">Do you feel you still have some issues relating to childhood abuse?</label>
                                         </div>
+                                        <div class="col-md-1 d-xl-none"></div>
                                         <label class="custom-control custom-radio" for="childhood_abuse_relating_yes">
                                             <input  type="radio" id="childhood_abuse_relating_yes" name="childhood_abuse_relating" class="custom-control-input"
                                                 <?= (isset($childhood_abuse_relating_result) && $childhood_abuse_relating_result == true) ? "checked" : "" ?> value="Yes">
@@ -1487,10 +1517,10 @@ include('header.php');
 
                                     <!-- Begin Class Participation -->
                                     <div class="row">
-                                        <label class="col-form-label col-sm-12 col-12" for="class_participation" style="text-align: left">What do you need from this class to feel safe and fully participate?</label>
+                                        <label class="col-form-label col-xl-12 col-md-12 col-12" for="class_participation" style="text-align: left">What do you need from this class to feel safe and fully participate?</label>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-sm-8 col-8">
+                                        <div class="col-xl-8 col-md-10 col-8">
                                             <input type="text" class="form-control" id="class_participation" name="class_participation"
                                                    value="<?= (isset($class_participation_result)) ? $class_participation_result : "" ?>" placeholder="Please explain...">
                                         </div>
@@ -1499,11 +1529,11 @@ include('header.php');
 
                                     <!-- Begin Parenting -->
                                     <div class="row">
-                                        <label class="col-form-label col-sm-12 col-12" for="parenting_opinion" style="text-align: left;">What behaviors would keep you from voicing your opinion on your parenting style?</label>
+                                        <label class="col-form-label col-xl-12 col-md-12 col-12" for="parenting_opinion" style="text-align: left;">What behaviors would keep you from voicing your opinion on your parenting style?</label>
                                     </div>
                                     <div class="form-group row">
 
-                                        <div class="col-sm-8 col-8">
+                                        <div class="col-xl-8 col-md-10 col-8">
                                             <input type="text" class="form-control" id="parenting_opinion" name="parenting_opinion"
                                                    value="<?= (isset($parenting_opinion_result)) ? $parenting_opinion_result : "" ?>" placeholder="Please explain...">
                                         </div>
@@ -1512,10 +1542,10 @@ include('header.php');
 
                                     <!-- Begin Class Takeaway -->
                                     <div class="row">
-                                        <label class="col-form-label col-sm-12 col-12" for="class_takeaway" style="text-align: left;">What is the most important thing you would like to learn from this class?</label>
+                                        <label class="col-form-label col-xl-12 col-md-12 col-12" for="class_takeaway" style="text-align: left;">What is the most important thing you would like to learn from this class?</label>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-sm-8 col-8">
+                                        <div class="col-xl-8 col-md-10 col-8">
                                             <input type="text" class="form-control" id="class_takeaway" name="class_takeaway"
                                                    value="<?= (isset($class_takeaway_result)) ? $class_takeaway_result : "" ?>" placeholder="Please explain...">
                                         </div>
@@ -1541,9 +1571,10 @@ include('header.php');
                                 <br>
                                 <!-- Begin Q: Domestic Violence -->
                                 <div class="form-group radio-group row">
-                                    <div class="col-sm-4">
+                                    <div class="col-xl-4 col-md-12">
                                         <label class="form-control-label">Have you ever had any involvement with domestic violence?</label>
                                     </div>
+                                    <div class="col-md-1 d-xl-none"></div>
                                     <label class="custom-control custom-radio" for="domestic_violence_yes">
                                         <input  type="radio" id="domestic_violence_yes" name="domestic_violence" class="custom-control-input"
                                             <?= (isset($domestic_violence_result) && $domestic_violence_result == "t") ? "checked" : "" ?> value="Yes">
@@ -1560,9 +1591,11 @@ include('header.php');
                                 <!-- End Q: Domestic Violence -->
 
                                 <div  style="margin-right: 20%" class="form-group hidden-field radio-group row domestic_violence_div_yes answer_yes">
-                                    <div class="col-sm-4">
+                                    <div class="col-md-1 d-xl-none"></div>
+                                    <div class="col-xl-4 col-md-11">
                                         <label class="form-control-label">Have you discussed it with someone?</label>
                                     </div>
+                                    <div class="col-md-2 d-xl-none"></div>
                                     <label class="custom-control custom-radio" for="domestic_violence_discussed_yes">
                                         <input  type="radio" id="domestic_violence_discussed_yes" name="domestic_violence_discussed" class="custom-control-input"
                                                 <?= (isset($domestic_violence_discussed_result) && $domestic_violence_discussed_result == true) ? "checked" : "" ?> value="Yes">
@@ -1579,9 +1612,10 @@ include('header.php');
 
                                 <!-- Begin Q: History Of Family Violence -->
                                 <div class="form-group radio-group row">
-                                    <div class="col-sm-4">
+                                    <div class="col-xl-4 col-md-12">
                                         <label class="form-control-label">Is there any history of violence in your family of origin?</label>
                                     </div>
+                                    <div class="col-md-1 d-xl-none"></div>
                                     <label class="custom-control custom-radio" for="history_violence_family_yes">
                                         <input  type="radio" id="history_violence_family_yes" name="history_violence_family" class="custom-control-input"
                                             <?= (isset($history_violence_family_result) && $history_violence_family_result == "t") ? "checked" : "" ?> value="Yes">
@@ -1599,9 +1633,10 @@ include('header.php');
 
                                 <!-- Begin Q: Nuclear Family Violence -->
                                 <div class="form-group radio-group row">
-                                    <div class="col-sm-4">
+                                    <div class="col-xl-4 col-md-12">
                                         <label class="form-control-label">Is there any history of violence in your nuclear family?</label>
                                     </div>
+                                    <div class="col-md-1 d-xl-none"></div>
                                     <label class="custom-control custom-radio" for="history_violence_nuclear_yes">
                                         <input  type="radio" id="history_violence_nuclear_yes" name="history_violence_nuclear" class="custom-control-input"
                                             <?= (isset($history_violence_nuclear_result) && $history_violence_nuclear_result == "t") ? "checked" : "" ?> value="Yes">
@@ -1619,9 +1654,10 @@ include('header.php');
 
                                 <!-- Begin Q: Protection Orders -->
                                 <div class="form-group radio-group row">
-                                    <div class="col-sm-4">
+                                    <div class="col-xl-4 col-md-12">
                                         <label class="form-control-label">Are there any orders of protection involved?</label>
                                     </div>
+                                    <div class="col-md-1 d-xl-none"></div>
                                     <label class="custom-control custom-radio" for="protection_order_yes">
                                         <input  type="radio" id="protection_order_yes" name="protection_order" class="custom-control-input"
                                             <?= (isset($protection_order_result) && $protection_order_result == "t") ? "checked" : "" ?> value="Yes">
@@ -1638,8 +1674,10 @@ include('header.php');
                                 <!-- End Q: Protection Orders-->
 
                                 <div  class="form-group hidden-field row protection_order_div_yes answer_yes">
-                                    <label class="col-form-label col-sm-2" for="protection_order_explain">Please explain:</label>
-                                    <div class="col-sm-5">
+                                    <div class="col-md-1 d-xl-none"></div>
+                                    <label class="col-form-label col-xl-2 col-md-11" for="protection_order_explain">Please explain:</label>
+                                    <div class="col-md-1 d-xl-none"></div>
+                                    <div class="col-xl-5 col-md-9">
                                         <input type="text" class="form-control" id="protection_order_explain" name="protection_order_explain"
                                                value="<?= (isset($protection_order_explain_result)) ? $protection_order_explain_result : "" ?>" placeholder="Why and who are they against?">
                                     </div>
@@ -1647,9 +1685,10 @@ include('header.php');
 
                                 <!-- Begin Q: Arrested For A Crime -->
                                 <div class="form-group radio-group row">
-                                    <div class="col-sm-4">
+                                    <div class="col-xl-4 col-md-12">
                                         <label class="form-control-label">Have you ever been arrested for a crime?</label>
                                     </div>
+                                    <div class="col-md-1 d-xl-none"></div>
                                     <label class="custom-control custom-radio" for="crime_arrested_yes">
                                         <input  type="radio" id="crime_arrested_yes" name="crime_arrested" class="custom-control-input"
                                             <?= (isset($crime_arrested_result) && $crime_arrested_result == "t") ? "checked" : "" ?> value="Yes">
@@ -1667,9 +1706,10 @@ include('header.php');
 
                                 <!-- Begin Q: Convicted For A Crime -->
                                 <div class="form-group radio-group row">
-                                    <div class="col-sm-4">
+                                    <div class="col-xl-4 col-md-12">
                                         <label class="form-control-label">Have you ever been convicted for a crime?</label>
                                     </div>
+                                    <div class="col-md-1 d-xl-none"></div>
                                     <label class="custom-control custom-radio" for="crime_convicted_yes">
                                         <input  type="radio" id="crime_convicted_yes" name="crime_convicted" class="custom-control-input"
                                             <?= (isset($crime_convicted_result) && $crime_convicted_result == "t") ? "checked" : "" ?> value="Yes">
@@ -1686,8 +1726,10 @@ include('header.php');
                                 <!-- End Q: Convicted For A Crime -->
 
                                 <div  class="form-group hidden-field row crime_convicted_div_yes answer_yes">
-                                    <label class="col-form-label col-sm-2" for="crime_explain">Please explain:</label>
-                                    <div class="col-sm-5">
+                                    <div class="col-md-1 d-xl-none"></div>
+                                    <label class="col-form-label col-xl-2 col-md-11" for="crime_explain">Please explain:</label>
+                                    <div class="col-md-1 d-xl-none"></div>
+                                    <div class="col-xl-5 col-md-9">
                                         <input type="text" class="form-control" id="crime_explain" name="crime_explain"
                                                value="<?= (isset($crime_explain_result)) ? $crime_explain_result : "" ?>" placeholder="Please provide an explanation">
                                     </div>
@@ -1695,9 +1737,10 @@ include('header.php');
 
                                 <!-- Begin Q: Jail Or Prison Record -->
                                 <div class="form-group radio-group row">
-                                    <div class="col-sm-4">
+                                    <div class="col-xl-4 col-md-12">
                                         <label class="form-control-label">Do you have a jail and/or prison record?</label>
                                     </div>
+                                    <div class="col-md-1 d-xl-none"></div>
                                     <label class="custom-control custom-radio" for="jail_prison_record_yes">
                                         <input  type="radio" id="jail_prison_record_yes" name="jail_prison_record" class="custom-control-input"
                                             <?= (isset($jail_prison_record_result) && $jail_prison_record_result == "t") ? "checked" : "" ?> value="Yes">
@@ -1714,8 +1757,10 @@ include('header.php');
                                 <!-- End Q: Jail Or Prison Record -->
 
                                 <div  class="form-group hidden-field row jail_prison_record_div_yes answer_yes">
-                                    <label class="col-form-label col-sm-2" for="jail_prison_explain">Please explain:</label>
-                                    <div class="col-sm-5">
+                                    <div class="col-md-1 d-xl-none"></div>
+                                    <label class="col-form-label col-xl-2 col-md-11" for="jail_prison_explain">Please explain:</label>
+                                    <div class="col-md-1 d-xl-none"></div>
+                                    <div class="col-xl-5 col-md-9">
                                         <input type="text" class="form-control" id="jail_prison_explain" name="jail_prison_explain"
                                                value="<?= (isset($jail_prison_explain_result)) ? $jail_prison_explain_result : "" ?>" placeholder="When were you in jail/prison and for what offense?">
                                     </div>
@@ -1723,9 +1768,10 @@ include('header.php');
 
                                 <!-- Begin Q: Parole Or Probation -->
                                 <div class="form-group radio-group row">
-                                    <div class="col-sm-4">
+                                    <div class="col-xl-4 col-md-12">
                                         <label class="form-control-label">Are you currently on parole or probation?</label>
                                     </div>
+                                    <div class="col-md-1 d-xl-none"></div>
                                     <label class="custom-control custom-radio" for="parole_probation_yes">
                                         <input  type="radio" id="parole_probation_yes" name="parole_probation" class="custom-control-input"
                                             <?= (isset($parole_probation_result) && $parole_probation_result == "t") ? "checked" : "" ?> value="Yes">
@@ -1742,8 +1788,10 @@ include('header.php');
                                 <!-- End Q: Parole Or Probation -->
 
                                 <div  class="form-group hidden-field row parole_probation_div_yes answer_yes">
-                                    <label class="col-form-label col-sm-2" for="parole_probation_explain">Please explain:</label>
-                                    <div class="col-sm-5">
+                                    <div class="col-md-1 d-xl-none"></div>
+                                    <label class="col-form-label col-xl-2 col-md-11" for="parole_probation_explain">Please explain:</label>
+                                    <div class="col-md-1 d-xl-none"></div>
+                                    <div class="col-xl-5 col-md-9">
                                         <input type="text" class="form-control" id="parole_probation_explain" name="parole_probation_explain"
                                                value="<?= (isset($parole_probation_explain_result)) ? $parole_probation_explain_result : "" ?>" placeholder="For what offense?">
                                     </div>
@@ -1751,9 +1799,10 @@ include('header.php');
 
                                 <!-- Begin Q: Other Family Members Attending Class-->
                                 <div class="form-group radio-group row">
-                                    <div class="col-sm-4">
+                                    <div class="col-xl-4 col-md-12">
                                         <label class="form-control-label">Are there any other members of your family taking a parenting class with this agency?</label>
                                     </div>
+                                    <div class="col-md-1 d-xl-none"></div>
                                     <label class="custom-control custom-radio" for="family_members_taking_class_yes">
                                         <input  type="radio" id="family_members_taking_class_yes" name="family_members_taking_class" class="custom-control-input"
                                             <?= (isset($family_members_taking_class_result) && $family_members_taking_class_result == "t") ? "checked" : "" ?> value="Yes">
@@ -1770,8 +1819,10 @@ include('header.php');
                                 <!-- End Q: Other Family Members Attending Class -->
 
                                 <div  class="form-group hidden-field row family_members_taking_class_div_yes answer_yes">
-                                    <label class="col-form-label col-sm-2" for="family_members">Family Members:</label>
-                                    <div class="col-sm-5">
+                                    <div class="col-md-1 d-xl-none"></div>
+                                    <label class="col-form-label col-xl-2 col-md-11" for="family_members">Family Members:</label>
+                                    <div class="col-md-1 d-xl-none"></div>
+                                    <div class="col-xl-5 col-md-9">
                                         <input type="text" class="form-control" id="family_members" name="family_members"
                                                value="<?= (isset($family_members_result)) ? $family_members_result : "" ?>" placeholder="Please list their name(s)">
                                     </div>

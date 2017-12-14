@@ -314,38 +314,38 @@ include('header.php');
                                     <h5>Personal Information</h5>
                                     <br>
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="self_pers_firstname">Participant Name:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-xl-2 col-md-12" for="self_pers_firstname">Participant Name:</label>
+                                        <div class="col-xl-2 col-md-5 col">
                                             <input type="text" class="form-control" id="self_pers_firstname" name="self_pers_firstname"
                                                    value="<?= (isset($self_pers_firstname_result)) ? $self_pers_firstname_result : "" ?>" placeholder="First name" required>
                                             <div id="fname_error" class="invalid-feedback">Enter first name</div>
                                         </div>
 
                                         <label class="col-form-label col-sm-0 sr-only" for="self_pers_lastname">Last Name:</label>
-                                        <div class="col-sm-2 col">
+                                        <div class="col-xl-2 col-md-5 col">
                                             <input type="text" class="form-control" id="self_pers_lastname" name="self_pers_lastname"
                                                    value="<?= (isset($self_pers_lastname_result)) ? $self_pers_lastname_result : "" ?>" placeholder="Last name" required>
                                             <div id="lname_error" class="invalid-feedback">Enter last name</div>
                                         </div>
 
                                         <label class="col-form-label col-sm-0 sr-only" for="self_pers_middlein">MInitial:</label>
-                                        <div class="col-sm-1 col">
+                                        <div class="col-xl-1 col-md-2 col">
                                             <input type="text" class="form-control" id="self_pers_middlein" name="self_pers_middlein"
                                                    value="<?= (isset($self_pers_middlein_result)) ? $self_pers_middlein_result : ""?>" placeholder="Initial" maxlength="1">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="self_pers_dob">Date of Birth:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-xl-2 col-md-12" for="self_pers_dob">Date of Birth:</label>
+                                        <div class="col-xl-2 col-md-5 col">
                                             <input type="date" class="form-control" id="self_pers_dob" name="self_pers_dob"
                                                    value="<?= (isset($self_pers_dob_result)) ? $self_pers_dob_result : "" ?>">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="self_pers_race">Race:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-xl-2 col-md-12" for="self_pers_race">Race:</label>
+                                        <div class="col-xl-2 col-md-5 col">
                                             <select class="form-control select_sex" name="self_pers_race" id="intake_ethnicity">
                                                 <option value="" selected="selected">Choose one</option>
                                                 <?php
@@ -362,8 +362,8 @@ include('header.php');
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="self_pers_sex">Sex:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-xl-2 col-md-12" for="self_pers_sex">Sex:</label>
+                                        <div class="col-xl-2 col-md-5 col">
                                             <select class="form-control select_sex" name="self_pers_sex" id="intake_ethnicity">
                                                 <option value="" selected="selected">Choose one</option>
                                                 <?php
@@ -382,22 +382,22 @@ include('header.php');
                                     <h5>Contact Information</h5>
                                     <br>
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2 col-2" for="self_pers_address">Street Address:</label>
-                                        <div class="col-sm-3 col">
+                                        <label class="col-form-label col-xl-2 col-md-12 col-2" for="self_pers_address">Street Address:</label>
+                                        <div class="col-xl-3 col-md-5 col">
                                             <input type="text" class="form-control" id="self_pers_address" name="self_pers_address"
                                                    value="<?= (isset($self_pers_street_name_result)) ? $self_pers_street_num_result . " " . $self_pers_street_name_result : "" ?>" placeholder="Street address">
                                         </div>
 
-                                        <label class="col-form-label col-sm-1 col-2" for="self_apt_info">Apartment:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-xl-1 col-md-12 col-2" for="self_apt_info">Apartment:</label>
+                                        <div class="col-xl-2 col-md-5 col">
                                             <input type="text" class="form-control" id="self_apt_info" name="self_apt_info"
                                                    value="<?= (isset($self_apt_info_result)) ? $self_apt_info_result : "" ?>" placeholder="Apartment Information">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="self_pers_state">State:</label>
-                                        <div class="col-sm-3 col">
+                                        <label class="col-form-label col-xl-2 col-md-12" for="self_pers_state">State:</label>
+                                        <div class="col-xl-3 col-md-5 col">
                                             <select class="form-control" id="self_pers_state" name="self_pers_state" >
                                                 <option value="" selected="selected">Choose a state</option>
                                                 <?php
@@ -412,24 +412,24 @@ include('header.php');
                                             </select>
                                         </div>
 
-                                        <label class="col-form-label col-sm-1 col-2" for="self_pers_city">City:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-xl-1 col-md-12 col-2" for="self_pers_city">City:</label>
+                                        <div class="col-xl-2 col-md-5 col">
                                             <input type="text" class="form-control" id="self_pers_city" name="self_pers_city"
                                                    value="<?= (isset($self_pers_city_result)) ? $self_pers_city_result : ""?>" placeholder="City">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="self_pers_zip">ZIP:</label>
-                                        <div class="col-sm-1 col">
+                                        <label class="col-form-label col-xl-2 col-md-12" for="self_pers_zip">ZIP:</label>
+                                        <div class="col-xl-1 col-md-5 col">
                                             <input type="text" class="form-control mask-zip" id="self_pers_zip" name="self_pers_zip"
                                                    value="<?= (isset($self_pers_zip_result)) ? $self_pers_zip_result : ""?>" placeholder="Zip">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2" for="self_pers_phone">Phone Number:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-xl-2 col-md-12" for="self_pers_phone">Phone Number:</label>
+                                        <div class="col-xl-2 col-md-5 col">
                                             <input type="tel" class="form-control mask-phone feedback-icon" id="self_pers_phone" name="self_pers_phone"
                                                    value="<?= (isset($self_pers_phone_result)) ? $self_pers_phone_result : ""?>" placeholder="(999) 999-9999">
                                         </div>
@@ -453,9 +453,10 @@ include('header.php');
 
                                     <!-- Begin Q: Involvement with CPS/Protective/Foster Care -->
                                     <div class="form-group radio-group row">
-                                        <div class="col-sm-4">
+                                        <div class="col-xl-4 col-md-12">
                                             <label class="form-control-label"> Do you have any involvement with CPS/Protective/Foster Care?</label>
                                         </div>
+                                        <div class="col-md-1 d-xl-none"></div>
                                         <label class="custom-control custom-radio" for="self_involvement_yes">
                                             <input class="custom-control-input" type="radio" id="self_involvement_yes" name="self_involvement"
                                                 <?= (isset($self_involvement_result) && $self_involvement_result == "t") ? "checked" : "" ?> value="Yes">
@@ -473,9 +474,10 @@ include('header.php');
 
                                     <!-- Begin Q: PEP classes in past -->
                                     <div class="form-group radio-group row">
-                                        <div class="col-sm-4">
+                                        <div class="col-xl-4 col-md-12">
                                             <label class="form-control-label"> Have you attended PEP parenting classes in the past?</label>
                                         </div>
+                                        <div class="col-md-1 d-xl-none"></div>
                                         <label class="custom-control custom-radio" for="self_attended_yes">
                                             <input class="custom-control-input" type="radio" id="self_attended_yes" name="self_attended"
                                                 <?php echo (isset($self_attended_result) && $self_attended_result === "t") ? "checked" : "" ?> value="Yes">
@@ -494,16 +496,16 @@ include('header.php');
                                     <br>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2 col-3" for="self_ref_source">Referral Source:</label>
-                                        <div class="col-sm-2 col">
+                                        <label class="col-form-label col-xl-2 col-md-12 col-3" for="self_ref_source">Referral Source:</label>
+                                        <div class="col-xl-2 col-md-5 col">
                                             <input type="text" class="form-control" id="self_ref_source" name="self_ref_source"
                                                    value="<?= (isset($self_ref_source_result)) ? $self_ref_source_result : "" ?>" placeholder="Referral Source">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-form-label col-sm-2 col-3" for="reason">Reason for attendance:</label>
-                                        <div class="col-sm-3 col">
+                                        <label class="col-form-label col-xl-2 col-md-12 col-3" for="reason">Reason for attendance:</label>
+                                        <div class="col-xl-3 col-md-10 col">
                                             <textarea style="resize: none;" class="form-control" rows=4 id="reason" name="reason" placeholder="Reason for attending classes"><?= (isset($reason_result)) ? $reason_result : "" ?></textarea>
                                         </div>
                                     </div>
@@ -526,44 +528,44 @@ include('header.php');
                                 <br>
 
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-2" for="self_office_firstCall">Date of First Call:</label>
-                                    <div class="col-sm-2 col">
+                                    <label class="col-form-label col-xl-2 col-md-12" for="self_office_firstCall">Date of First Call:</label>
+                                    <div class="col-xl-2 col-md-5 col">
                                         <input type="date" class="form-control" id="self_office_firstCall" name="self_office_firstCall"
                                                value="<?= (isset($self_office_firstCall_result)) ? $self_office_firstCall_result : "" ?>">
                                     </div>
 
-                                    <label class="col-form-label col-sm-2" for="self_office_returnedCall">Returned Call:</label>
-                                    <div class="col-sm-2 col">
+                                    <label class="col-form-label col-xl-2 col-md-12" for="self_office_returnedCall">Returned Call:</label>
+                                    <div class="col-xl-2 col-md-5 col">
                                         <input type="date" class="form-control" id="self_office_returnedCall" name="self_office_returnedCall"
                                                value="<?= (isset($self_office_returnedCall_result)) ? $self_office_returnedCall_result : "" ?>">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-2" for="self_tentative_start">Tentative Start Date:</label>
-                                    <div class="col-sm-2 col">
+                                    <label class="col-form-label col-xl-2 col-md-12" for="self_tentative_start">Tentative Start Date:</label>
+                                    <div class="col-xl-2 col-md-5 col">
                                         <input type="date" class="form-control" id="self_tentative_start" name="self_tentative_start"
                                                value="<?= (isset($self_tentative_start_result)) ? $self_tentative_start_result : "" ?>">
                                     </div>
 
-                                    <label class="col-form-label col-sm-2" for="self_letter_mailed">Letter Mailed:</label>
-                                    <div class="col-sm-2 col">
+                                    <label class="col-form-label col-xl-2 col-md-12" for="self_letter_mailed">Letter Mailed:</label>
+                                    <div class="col-xl-2 col-md-5 col">
                                         <input type="date" class="form-control" id="self_letter_mailed" name="self_letter_mailed"
                                                value="<?= (isset($self_letter_mailed_result)) ? $self_letter_mailed_result : "" ?>">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 col-3" for="self_assigned_to">Class Assigned to:</label>
-                                    <div class="col-sm-2 col">
+                                    <label class="col-form-label col-xl-2 col-md-12 col-3" for="self_assigned_to">Class Assigned to:</label>
+                                    <div class="col-xl-2 col-md-5 col">
                                         <input type="text" class="form-control" id="self_assigned_to" name="self_assigned_to"
                                                value="<?= (isset($self_assigned_to_result)) ? $self_assigned_to_result : "" ?>" placeholder="Program">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-2 col-auto" for="notes">Notes:</label>
-                                    <div class="col-sm-3 col">
+                                    <label class="col-form-label col-xl-2 col-md-12 col-auto" for="notes">Notes:</label>
+                                    <div class="col-xl-3 col-md-10 col">
                                         <textarea style="resize: none;" class="form-control" rows=5 id="notes" name="notes" placeholder="Enter any notes here"><?= (isset($notes_result)) ? $notes_result : "" ?></textarea>
                                     </div>
                                 </div>
