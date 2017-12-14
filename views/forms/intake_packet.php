@@ -22,56 +22,81 @@ if (isset($params[0]) && isset($params[1]) && isset($params[2])) {
 
     // SELECT FROM VIEWS TO POPULATE FIELDS
     // First Card (Participant Information)
-    $intake_firstname_edit = $db->query("SELECT IntakePacketInfo.firstname FROM IntakePacketInfo WHERE peopleID = $1;", [$peopleid]);
-    $intake_firstname_result = pg_fetch_result($intake_firstname_edit, 0);
+    $intake_packet_edit = $db->query("SELECT * FROM intakepacketinfo WHERE peopleid = $1", [$peopleid]);
+    if (pg_num_rows($intake_packet_edit) > 0) {
+        $intake_packet_info = pg_fetch_assoc($intake_packet_edit);
 
-    $intake_lastname_edit = $db->query("SELECT IntakePacketInfo.lastName FROM IntakePacketInfo WHERE peopleID = $1;", [$peopleid]);
-    $intake_lastname_result = pg_fetch_result($intake_lastname_edit, 0);
+        # personal information
+        $intake_firstname_result            = $intake_packet_info['firstname'];
+        $intake_lastname_result             = $intake_packet_info['lastname'];
+        $intake_middlein_result             = $intake_packet_info['middleinit'];
+        $intake_dob_result                  = $intake_packet_info['pdob'];
+        $intake_religion_result             = $intake_packet_info['religion'];
+        $intake_ethnicity_result            = $intake_packet_info['prace'];
+        $intake_sex_result                  = $intake_packet_info['psex'];
+        $intake_occupation_result           = $intake_packet_info['occupation'];
+        $intake_last_year_school_result     = $intake_packet_info['lastyearofschoolcompleted'];
+        $intake_languages_spoken_result     = $intake_packet_info['language'];
+        $intake_handicap_medication_result  = $intake_packet_info['handicapsormedication'];
 
-    $intake_middlein_edit = $db->query("SELECT IntakePacketInfo.middleInit FROM IntakePacketInfo WHERE peopleID = $1;", [$peopleid]);
-    $intake_middlein_result = pg_fetch_result($intake_middlein_edit, 0);
+        # contact information
+        $intake_address_id = $intake_packet_info['addressid'];
+        $intake_address_result = $db->query("SELECT * FROM addresses WHERE addressid = $1", [$intake_address_id]);
+        if (pg_num_rows($intake_address_result) > 0) {
+            $intake_addr_info = pg_fetch_assoc($intake_address_result);
+            $intake_street_num_result = $intake_addr_info['addressnumber'];
+            $intake_street_name_result = $intake_addr_info['street'];
+            $intake_street = (empty($intake_street_num_result) ? '' : $intake_street_num_result . ' ') .
+                (empty($intake_street_name_result) ? '' : $intake_street_name_result);
+            $intake_zip_result = $intake_addr_info['zipcode'];
+            $intake_intake_apt_info_result = $intake_addr_info['aptinfo'];
 
-    $intake_dob_edit = $db->query("SELECT IntakePacketInfo.PDoB FROM IntakePacketInfo WHERE peopleID = $1;", [$peopleid]);
-    $intake_dob_result = pg_fetch_result($intake_dob_edit, 0);
+            # zip
+            $intake_zip_res = $db->query("SELECT * FROM zipcodes WHERE zipcode = $1", [$intake_zip_result]);
+            $intake_zip_info = pg_fetch_assoc($intake_zip_res);
+            $intake_state_result = $intake_zip_info['state'];
+            $intake_city_result = $intake_zip_info['city'];
+        }
 
-    $intake_religion_edit = $db->query("SELECT IntakePacketInfo.religion FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $intake_religion_result = pg_fetch_result($intake_religion_edit, 0);
+        # additional participant information
+        $drug_alcohol_abuse_result              = $intake_packet_info['hassubstanceabusehistory'];
+        $drug_alcohol_abuse_explain_result      = $intake_packet_info['substanceabusedescription'];
+        $live_with_children_separated_result    = $intake_packet_info['timeseparatedfromchildren'];
+        $separated_length_result                = $intake_packet_info['timeseparatedfrompartner'];
+        $relationship_result                    = $intake_packet_info['relationshiptootherparent'];
+        $parenting_result                       = $intake_packet_info['hasparentingpartnershiphistory'];
+        $child_protective_result                = $intake_packet_info['hasinvolvementcps'];
+        $previous_child_protective_result       = $intake_packet_info['previouslyinvolvedwithcps'];
+        $mandated_result                        = $intake_packet_info['ismandatedtotakeclass'];
+        $mandated_by_result                     = $intake_packet_info['mandatedbywhom'];
+        $reason_for_taking_class_result         = $intake_packet_info['reasonforattendence'];
+        $other_classes_result                   = $intake_packet_info['attendedotherparentingclasses'];
+        $other_classes_where_when_result        = $intake_packet_info['previousclassinfo'];
+        $victim_of_abuse_result                 = $intake_packet_info['wasvictim'];
+        $form_of_abuse_result                   = $intake_packet_info['formofchildhoodabuse'];
+        $abuse_therapy_result                   = $intake_packet_info['hashadtherapy'];
+        $childhood_abuse_relating_result        = $intake_packet_info['feelstillhasissuesfromchildabuse'];
+        $class_participation_result             = $intake_packet_info['safeparticipate'];
+        $parenting_opinion_result               = $intake_packet_info['preventativebehaviors'];
+        $class_takeaway_result                  = $intake_packet_info['mostimportantliketolearn'];
 
-    $intake_ethnicity_edit = $db->query("SELECT IntakePacketInfo.PRace FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $intake_ethnicity_result = pg_fetch_result($intake_ethnicity_edit, 0);
-
-    $intake_sex_edit = $db->query("SELECT IntakePacketInfo.PSex FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $intake_sex_result = pg_fetch_result($intake_sex_edit, 0);
-
-    $intake_occupation_edit = $db->query("SELECT IntakePacketInfo.occupation FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $intake_occupation_result = pg_fetch_result($intake_occupation_edit, 0);
-
-    $intake_last_year_school_edit = $db->query("SELECT IntakePacketInfo.lastYearOfSchoolCompleted FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $intake_last_year_school_result = pg_fetch_result($intake_last_year_school_edit, 0);
-
-    $intake_languages_spoken_edit = $db->query("SELECT IntakePacketInfo.language FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $intake_languages_spoken_result = pg_fetch_result($intake_languages_spoken_edit, 0);
-
-    $intake_handicap_medication_edit = $db->query("SELECT IntakePacketInfo.handicapsOrMedication FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $intake_handicap_medication_result = pg_fetch_result($intake_handicap_medication_edit, 0);
-
-    $intake_street_num_edit = $db->query("SELECT Addresses.addressNumber FROM Addresses WHERE addressID = $1;", [$intake_formID]);
-    $intake_street_num_edit = pg_fetch_result($intake_street_num_edit, 0);
-
-    $intake_street_name_edit = $db->query("SELECT Addresses.street FROM Addresses WHERE addressID = $1;", [$intake_formID]);
-    $intake_street_name_result = pg_fetch_result($intake_street_name_edit, 0);
-
-    $intake_zip_edit = $db->query("SELECT Addresses.zipCode FROM Addresses WHERE addressID = $1;", [$intake_formID]);
-    $intake_zip_result = pg_fetch_result($intake_zip_edit, 0);
-
-    $intake_state_edit = $db->query("SELECT ZipCodes.state FROM ZipCodes WHERE zipCode = $1;", [$intake_zip_result]);
-    $intake_state_result = pg_fetch_result($intake_state_edit, 0);
-
-    $intake_city_edit = $db->query("SELECT ZipCodes.city FROM ZipCodes WHERE zipCode = $1;", [$intake_zip_result]);
-    $intake_city_result = pg_fetch_result($intake_city_edit, 0);
-
-    $intake_intake_apt_info_edit = $db->query("SELECT Addresses.aptinfo FROM Addresses WHERE addressID = $1;", [$intake_formID]);
-    $intake_intake_apt_info_result = pg_fetch_result($intake_intake_apt_info_edit, 0);
+        # participant history questions
+        $domestic_violence_result               = $intake_packet_info['hasdomesticviolencehistory'];
+        $domestic_violence_discussed_result     = $intake_packet_info['hasdiscusseddomesticviolence'];
+        $history_violence_family_result         = $intake_packet_info['hashistoryofviolenceinoriginfamily'];
+        $history_violence_nuclear_result        = $intake_packet_info['hashistoryofviolenceinnuclearfamily'];
+        $protection_order_result                = $intake_packet_info['ordersofprotectioninvolved'];
+        $protection_order_explain_result        = $intake_packet_info['reasonforordersofprotection'];
+        $crime_arrested_result                  = $intake_packet_info['hasbeenarrested'];
+        $crime_convicted_result                 = $intake_packet_info['hasbeenconvicted'];
+        $crime_explain_result                   = $intake_packet_info['reasonforarrestorconviction'];
+        $jail_prison_record_result              = $intake_packet_info['hasjailorprisonrecord'];
+        $jail_prison_explain_result             = $intake_packet_info['offenseforjailorprison'];
+        $parole_probation_result                = $intake_packet_info['currentlyonparole'];
+        $parole_probation_explain_result        = $intake_packet_info['onparoleforwhatoffense'];
+        $family_members_taking_class_result     = $intake_packet_info['otherfamilytakingclass'];
+        $family_members_result                  = $intake_packet_info['familymemberstakingclass'];
+    }
 
     $intake_phone_day_edit = $db->query("SELECT FormPhoneNumbers.phoneNumber FROM FormPhoneNumbers WHERE formID = $1 AND phoneType = 'Day';", [$intake_formID]);
     $intake_phone_day_result = pg_fetch_result($intake_phone_day_edit, 0);
@@ -88,119 +113,6 @@ if (isset($params[0]) && isset($params[1]) && isset($params[2])) {
     $contact_lastname_result = $contact_result['lastname'];
     $contact_relationship_result = $contact_result['relationship'];
     $contact_phone_result = $contact_result['primaryphone'];
-
-    // Third Card (Participant Family Questions)
-    $drug_alcohol_abuse_edit = $db->query("SELECT IntakePacketInfo.hasSubstanceAbuseHistory FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $drug_alcohol_abuse_result = pg_fetch_result($drug_alcohol_abuse_edit, 0);
-
-    $drug_alcohol_abuse_explain_edit = $db->query("SELECT IntakePacketInfo.substanceAbuseDescription FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $drug_alcohol_abuse_explain_result = pg_fetch_result($drug_alcohol_abuse_explain_edit, 0);
-
-    $live_with_children_separated_edit = $db->query("SELECT IntakePacketInfo.timeSeparatedFromChildren FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $live_with_children_separated_result = pg_fetch_result($live_with_children_separated_edit, 0);
-
-    $parent_separated_edit = $db->query("SELECT IntakePacketInfo.timeSeparatedFromChildren FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $parent_separated_result = pg_fetch_result($parent_separated_edit, 0);
-
-    $separated_length_edit = $db->query("SELECT IntakePacketInfo.timeseparatedfrompartner FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $separated_length_result = pg_fetch_result($separated_length_edit, 0);
-
-    $relationship_edit = $db->query("SELECT IntakePacketInfo.relationshipToOtherParent FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $relationship_result = pg_fetch_result($relationship_edit, 0);
-
-    $parenting_edit = $db->query("SELECT IntakePacketInfo.hasParentingPartnershipHistory FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $parenting_result = pg_fetch_result($parenting_edit, 0);
-
-    $child_protective_edit = $db->query("SELECT IntakePacketInfo.hasInvolvementCPS FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $child_protective_result = pg_fetch_result($child_protective_edit, 0);
-
-    $previous_child_protective_edit = $db->query("SELECT IntakePacketInfo.previouslyInvolvedWithCPS FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $previous_child_protective_result = pg_fetch_result($previous_child_protective_edit, 0);
-
-    $mandated_edit = $db->query("SELECT IntakePacketInfo.isMandatedToTakeClass FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $mandated_result = pg_fetch_result($mandated_edit, 0);
-
-    $mandated_by_edit = $db->query("SELECT IntakePacketInfo.mandatedByWhom FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $mandated_by_result = pg_fetch_result($mandated_by_edit, 0);
-
-    // TODO: Mandate reason field needs to be added. (Not in stored procedure)
-
-    $reason_for_taking_class_edit = $db->query("SELECT IntakePacketInfo.reasonForAttendence FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $reason_for_taking_class_result = pg_fetch_result($reason_for_taking_class_edit, 0);
-
-    $other_classes_edit = $db->query("SELECT IntakePacketInfo.attendedOtherParentingClasses FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $other_classes_result = pg_fetch_result($other_classes_edit, 0);
-
-    $other_classes_where_when_edit = $db->query("SELECT IntakePacketInfo.previousClassInfo FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $other_classes_where_when_result = pg_fetch_result($other_classes_where_when_edit, 0);
-
-    $victim_of_abuse_edit = $db->query("SELECT IntakePacketInfo.wasVictim FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $victim_of_abuse_result = pg_fetch_result($victim_of_abuse_edit, 0);
-
-    $form_of_abuse_edit = $db->query("SELECT IntakePacketInfo.formOfChildhoodAbuse FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $form_of_abuse_result = pg_fetch_result($form_of_abuse_edit, 0);
-
-    $abuse_therapy_edit = $db->query("SELECT IntakePacketInfo.hasHadTherapy FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $abuse_therapy_result = pg_fetch_result($abuse_therapy_edit, 0);
-
-    $childhood_abuse_relating_edit = $db->query("SELECT IntakePacketInfo.feelStillHasIssuesFromChildAbuse FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $childhood_abuse_relating_result = pg_fetch_result($childhood_abuse_relating_edit, 0);
-
-    $class_participation_edit = $db->query("SELECT IntakePacketInfo.safeParticipate FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $class_participation_result = pg_fetch_result($class_participation_edit, 0);
-
-    $parenting_opinion_edit = $db->query("SELECT IntakePacketInfo.preventativeBehaviors FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $parenting_opinion_result = pg_fetch_result($parenting_opinion_edit, 0);
-
-    $class_takeaway_edit = $db->query("SELECT IntakePacketInfo.mostImportantLikeToLearn FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $class_takeaway_result = pg_fetch_result($class_takeaway_edit, 0);
-
-    // Fourth Card (Participant History Questions)
-    $domestic_violence_edit = $db->query("SELECT IntakePacketInfo.hasDomesticViolenceHistory FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $domestic_violence_result = pg_fetch_result($domestic_violence_edit, 0);
-
-    $domestic_violence_discussed_edit = $db->query("SELECT hasdiscusseddomesticviolence FROM IntakeInformation WHERE intakeInformationID = $1;", [$intake_formID]);
-    $domestic_violence_discussed_result = pg_fetch_result($domestic_violence_discussed_edit, 0);
-
-    $history_violence_family_edit = $db->query("SELECT IntakePacketInfo.hasHistoryOfViolenceInOriginFamily FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $history_violence_family_result = pg_fetch_result($history_violence_family_edit, 0);
-
-    $history_violence_nuclear_edit = $db->query("SELECT IntakePacketInfo.hasHistoryOfViolenceInNuclearFamily FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $history_violence_nuclear_result = pg_fetch_result($history_violence_nuclear_edit, 0);
-
-    $protection_order_edit = $db->query("SELECT IntakePacketInfo.ordersOfProtectionInvolved FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $protection_order_result = pg_fetch_result($protection_order_edit, 0);
-
-    $protection_order_explain_edit = $db->query("SELECT IntakePacketInfo.reasonForOrdersOfProtection FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $protection_order_explain_result = pg_fetch_result($protection_order_explain_edit, 0);
-
-    $crime_arrested_edit = $db->query("SELECT IntakePacketInfo.hasBeenArrested FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $crime_arrested_result = pg_fetch_result($crime_arrested_edit, 0);
-
-    $crime_convicted_edit = $db->query("SELECT IntakePacketInfo.hasBeenConvicted FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $crime_convicted_result = pg_fetch_result($crime_convicted_edit, 0);
-
-    $crime_explain_edit = $db->query("SELECT IntakePacketInfo.reasonforarrestorconviction FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $crime_explain_result = pg_fetch_result($crime_explain_edit, 0);
-
-    $jail_prison_record_edit = $db->query("SELECT IntakePacketInfo.hasJailOrPrisonRecord FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $jail_prison_record_result = pg_fetch_result($jail_prison_record_edit, 0);
-
-    $jail_prison_explain_edit = $db->query("SELECT IntakePacketInfo.offenseForJailOrPrison FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $jail_prison_explain_result = pg_fetch_result($jail_prison_explain_edit, 0);
-
-    $parole_probation_edit = $db->query("SELECT IntakePacketInfo.currentlyOnParole FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $parole_probation_result = pg_fetch_result($parole_probation_edit, 0);
-
-    $parole_probation_explain_edit = $db->query("SELECT IntakePacketInfo.onParoleForWhatOffense FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $parole_probation_explain_result = pg_fetch_result($parole_probation_explain_edit, 0);
-
-    $family_members_taking_class_edit = $db->query("SELECT IntakePacketInfo.otherFamilyTakingClass FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $family_members_taking_class_result = pg_fetch_result($family_members_taking_class_edit, 0);
-
-    $family_members_edit = $db->query("SELECT IntakePacketInfo.familyMembersTakingClass FROM IntakePacketInfo WHERE intakeinformationid = $1;", [$intake_formID]);
-    $family_members_result = pg_fetch_result($family_members_edit, 0);
-
 
     // END OF VIEW QUERIES
 
@@ -366,14 +278,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $live_with_children = NULL;
     }
-    $live_with_children_separated = !empty($_POST['live_with_children_separated']) ? trim($_POST['live_with_children_separated']) : NULL;
+    $live_with_children_separated = !empty($_POST['live_with_children_separated']) && !$live_with_children ? trim($_POST['live_with_children_separated']) : '';
     if (!empty($_POST['parent_separated'])) {
         $parent_separated = $_POST['parent_separated'] === "Yes" ? 1 : 0;
     } else {
         $parent_separated = NULL;
     }
-    $separated_length = !empty($_POST['separated_length']) ? trim($_POST['separated_length']) : NULL;
-    $relationship = !empty($_POST['relationship']) ? trim($_POST['relationship']) : NULL;
+    $separated_length = !empty($_POST['separated_length']) && $parent_separated ? trim($_POST['separated_length']) : (!$parent_separated ? '' : NULL);
+    $relationship = !empty($_POST['relationship']) && $parent_separated ? trim($_POST['relationship']) : (!$parent_separated ? '' : NULL);
     if (!empty($_POST['parenting'])) {
         $parenting = $_POST['parenting'] === "Yes" ? 1 : 0;
     } else {
@@ -523,7 +435,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     street = $3,
                                     zipCode = $4
                                     WHERE
-                                    addressID = $5;", [$intake_street_num, $intake_intake_apt_info, $intake_street_name, $intake_zip, $params[2]]);
+                                    addressID = $5;", [$intake_street_num, $intake_intake_apt_info, $intake_street_name, $intake_zip, $intake_address_id]);
 
 
         $updateDayPhoneResult = $db->query("UPDATE 
@@ -1030,7 +942,7 @@ include('header.php');
                                         <label class="col-form-label col-sm-2" for="intake_address">Street Address:</label>
                                         <div class="col-sm-3 col">
                                             <input type="text" class="form-control" id="intake_address" name="intake_address"
-                                                   value="<?= (isset($intake_street_name_result)) ? $intake_street_name_result : ""?>" placeholder="Street address">
+                                                   value="<?= (isset($intake_street)) ? $intake_street : ""?>" placeholder="Street address">
                                         </div>
                                         <label class="col-form-label col-sm-1" for="intake_apt_info">Apartment:</label>
                                         <div class="col-sm-2 col">
@@ -1307,13 +1219,14 @@ include('header.php');
                                             <label class="form-control-label">Do you currently live with your child(ren)?</label>
                                         </div>
                                         <label class="custom-control custom-radio" for="live_with_children_yes">
-                                            <input  type="radio" id="live_with_children_yes" name="live_with_children" class="custom-control-input" value="Yes">
+                                            <input  type="radio" id="live_with_children_yes" name="live_with_children" class="custom-control-input"
+                                                    <?= (isset($params[1]) && isset($live_with_children_separated_result) && $live_with_children_separated_result == '') ? "checked" : ""?> value="Yes">
                                             <span class="custom-control-indicator"></span>
                                             <span class="custom-control-description">Yes</span>
                                         </label>
                                         <label class="custom-control custom-radio" for="live_with_children_no">
                                             <input type="radio" id="live_with_children_no" name="live_with_children" class="custom-control-input"
-                                                <?= (isset($params[1]) && isset($live_with_children_separated_result)) ? "checked" : ""?> value="No">
+                                                <?= (isset($params[1]) && isset($live_with_children_separated_result) && $live_with_children_separated_result != '') ? "checked" : ""?> value="No">
                                             <span class="custom-control-indicator"></span>
                                             <span class="custom-control-description">No</span>
                                         </label>
@@ -1324,7 +1237,7 @@ include('header.php');
                                         <label class="col-form-label col-sm-2" for="live_with_children_separated">Length of Separation:</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="live_with_children_separated" name="live_with_children_separated"
-                                                   value="<?= (isset($live_with_children_separated_result)) ? $live_with_children_separated_result : ""?>" placeholder="For how long have you been separated from your child(ren)?">
+                                                   value="<?= (isset($live_with_children_separated_result) && $live_with_children_separated_result != '') ? $live_with_children_separated_result : ""?>" placeholder="For how long have you been separated from your child(ren)?">
                                         </div>
                                     </div>
 
@@ -1335,12 +1248,13 @@ include('header.php');
                                         </div>
                                         <label class="custom-control custom-radio" for="parent_separated_yes">
                                             <input  type="radio" id="parent_separated_yes" name="parent_separated" class="custom-control-input"
-                                                <?= (!empty($separated_length_result) && isset($params[1])) ? "checked" : "" ?> value="Yes">
+                                                <?= (isset($separated_length_result) && !empty($separated_length_result) && isset($params[1])) ? "checked" : "" ?> value="Yes">
                                             <span class="custom-control-indicator"></span>
                                             <span class="custom-control-description">Yes</span>
                                         </label>
                                         <label class="custom-control custom-radio" for="parent_separated_no">
-                                            <input type="radio" id="parent_separated_no" name="parent_separated" class="custom-control-input" value="No">
+                                            <input type="radio" id="parent_separated_no" name="parent_separated" class="custom-control-input"
+                                                   <?= (isset($separated_length_result) && empty($separated_length_result) && isset($params[1])) ? "checked" : "" ?> value="No">
                                             <span class="custom-control-indicator"></span>
                                             <span class="custom-control-description">No</span>
                                         </label>
@@ -1454,7 +1368,10 @@ include('header.php');
                                     <div  class="form-group hidden-field row mandated_div_yes answer_yes">
                                         <label class="col-form-label col-sm-2" for="reason_mandated">Mandate Reason:</label>
                                         <div class="col-sm-5">
-                                            <input type="text" class="form-control" id="reason_mandated" name="reason_mandated" value="" placeholder="Reason you were mandated (be specific)">
+                                            <input type="text" class="form-control" id="reason_mandated" name="reason_mandated"
+                                                   value="<?= (isset($mandated_result) && $mandated_result == "t" && isset($reason_for_taking_class_result))
+                                                            ? $reason_for_taking_class_result
+                                                            : "" ?>" placeholder="Reason you were mandated (be specific)">
                                         </div>
                                     </div>
 
@@ -1462,7 +1379,9 @@ include('header.php');
                                         <label class="col-form-label col-sm-2" for="reason_for_taking_class">Reason For Taking Class:</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control" id="reason_for_taking_class"
-                                                   value="<?= (isset($reason_for_taking_class_result)) ? $reason_for_taking_class_result : "" ?>" name="reason_for_taking_class" placeholder="Please explain...">
+                                                   value="<?= (isset($mandated_result) && $mandated_result == "f" && isset($reason_for_taking_class_result))
+                                                            ? $reason_for_taking_class_result
+                                                            : "" ?>" name="reason_for_taking_class" placeholder="Please explain...">
                                         </div>
                                     </div>
 

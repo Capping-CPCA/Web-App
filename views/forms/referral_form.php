@@ -24,93 +24,45 @@ if (isset($params[0]) && isset($params[1]) && isset($params[2])) {
     $referral_formID = $params[2];
 
     // SELECT FROM VIEWS TO POPULATE FIELDS
-    // First Card (Participant Information)
-    $pers_firstname_edit = $db->query("SELECT AgencyReferralInfo.firstName FROM AgencyReferralInfo WHERE peopleID = $1;", [$peopleid]);
-    $pers_firstname_result = pg_fetch_result($pers_firstname_edit, 0);
+    $referral_res = $db->query("SELECT * FROM agencyreferralinfo WHERE peopleid = $1", [$peopleid]);
+    $referral_info = pg_fetch_assoc($referral_res);
 
-    $pers_lastname_edit = $db->query("SELECT AgencyReferralInfo.lastName FROM AgencyReferralInfo WHERE peopleID = $1;", [$peopleid]);
-    $pers_lastname_result = pg_fetch_result($pers_lastname_edit, 0);
+    # Personal Information
+    $pers_firstname_result  = $referral_info['firstname'];
+    $pers_lastname_result   = $referral_info['lastname'];
+    $pers_middlein_result   = $referral_info['middleinit'];
+    $pers_dob_result        = $referral_info['pdob'];
+    $pers_race_result       = $referral_info['prace'];
+    $pers_sex_result        = $referral_info['psex'];
 
-    $pers_middlein_edit = $db->query("SELECT AgencyReferralInfo.middleInit FROM AgencyReferralInfo WHERE peopleID = $1;", [$peopleid]);
-    $pers_middlein_result = pg_fetch_result($pers_middlein_edit, 0);
+    # Contact Information
+    $pers_address_id = $referral_info['addressid'];
+    $addr_res = $db->query("SELECT * FROM addresses WHERE addressid = $1", [$pers_address_id]);
+    $addr_result = pg_fetch_assoc($addr_res);
 
-    $pers_dob_edit = $db->query("SELECT AgencyReferralInfo.PDoB FROM AgencyReferralInfo WHERE peopleID = $1;", [$peopleid]);
-    $pers_dob_result = pg_fetch_result($pers_dob_edit, 0);
+    $pers_street_num_result = trim($addr_result['addressnumber']);
+    $pers_street_name_result = trim($addr_result['street']);
+    $referral_street = (empty($pers_street_num_result) ? '' : $pers_street_num_result . ' ') .
+        (empty($pers_street_name_result) ? '' : $pers_street_name_result);
+    $pers_zip_result = $addr_result['zipcode'];
+    $pers_apt_info_result = $addr_result['aptinfo'];
 
-    $pers_race_edit = $db->query("SELECT AgencyReferralInfo.PRace FROM AgencyReferralInfo WHERE peopleID = $1;", [$peopleid]);
-    $pers_race_result = pg_fetch_result($pers_race_edit, 0);
+    $zip = $db->query("SELECT * FROM zipcodes WHERE zipcode = $1", [$pers_zip_result]);
+    $zip_result = pg_fetch_assoc($zip);
 
-    $pers_sex_edit = $db->query("SELECT AgencyReferralInfo.PSex FROM AgencyReferralInfo WHERE peopleID = $1;", [$peopleid]);
-    $pers_sex_result = pg_fetch_result($pers_sex_edit, 0);
-
-    $pers_street_num_edit = $db->query("SELECT Addresses.addressNumber FROM Addresses WHERE addressID = $1;", [$referral_formID]);
-    $pers_street_num_result = pg_fetch_result($pers_street_num_edit, 0);
-
-    $pers_street_name_edit = $db->query("SELECT Addresses.street FROM Addresses WHERE addressID = $1;", [$referral_formID]);
-    $pers_street_name_result = pg_fetch_result($pers_street_name_edit, 0);
-
-    $pers_zip_edit = $db->query("SELECT Addresses.zipCode FROM Addresses WHERE addressID = $1;", [$referral_formID]);
-    $pers_zip_result = pg_fetch_result($pers_zip_edit, 0);
-
-    $pers_state_edit = $db->query("SELECT ZipCodes.state FROM ZipCodes WHERE zipCode = $1;", [$pers_zip_result]);
-    $pers_state_result = pg_fetch_result($pers_state_edit, 0);
-
-    $pers_city_edit = $db->query("SELECT ZipCodes.city FROM ZipCodes WHERE zipCode = $1;", [$pers_zip_result]);
-    $pers_city_result = pg_fetch_result($pers_city_edit, 0);
-
-    $pers_apt_info_edit = $db->query("SELECT Addresses.aptinfo FROM Addresses WHERE addressID = $1;", [$referral_formID]);
-    $pers_apt_info_result = pg_fetch_result($pers_apt_info_edit, 0);
+    $pers_state_result  = $zip_result['state'];
+    $pers_city_result   = $zip_result['city'];
 
     $pers_primphone_edit = $db->query("SELECT FormPhoneNumbers.phoneNumber FROM FormPhoneNumbers WHERE formID = $1 AND phoneType = 'Primary';", [$referral_formID]);
     $pers_primphone_result = pg_fetch_result($pers_primphone_edit, 0);
 
-
     $pers_secphone_edit = $db->query("SELECT FormPhoneNumbers.phoneNumber FROM FormPhoneNumbers WHERE formID = $1 AND phoneType = 'Secondary';", [$referral_formID]);
     $pers_secphone_result = pg_fetch_result($pers_secphone_edit, 0);
 
-    $pers_reason_edit = $db->query("SELECT AgencyReferralInfo.reason FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $pers_reason_result = pg_fetch_result($pers_reason_edit, 0);
+    $pers_reason_result = $referral_info['reason'];
 
-    // Second Card (Referring Party Information)
-    $ref_party_edit = $db->query("SELECT AgencyReferralInfo.reason FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $ref_party_result = pg_fetch_result($ref_party_edit, 0);
-
-    $ref_date_edit = $db->query("SELECT Forms.employeeSignedDate FROM Forms WHERE formID = $1;", [$referral_formID]);
-    $ref_date_result = pg_fetch_result($ref_date_edit, 0);
-
-    $pers_reason_edit = $db->query("SELECT AgencyReferralInfo.reason FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $pers_reason_result = pg_fetch_result($pers_reason_edit, 0);
-
-    // Fourth Card (Additional Information)
-    $chkSpecialEd_edit = $db->query("SELECT AgencyReferralInfo.hasSpecialNeeds FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $chkSpecialEd_result = pg_fetch_result($chkSpecialEd_edit, 0);
-
-    $chkCPS_edit = $db->query("SELECT AgencyReferralInfo.hasInvolvementCPS FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $chkCPS_result = pg_fetch_result($chkCPS_edit, 0);
-
-    $chkSubAbuse_edit = $db->query("SELECT AgencyReferralInfo.hasSubstanceAbuseHistory FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $chkSubAbuse_result = pg_fetch_result($chkSubAbuse_edit, 0);
-
-    $chkMental_edit = $db->query("SELECT AgencyReferralInfo.hasMentalHealth FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $chkMental_result = pg_fetch_result($chkMental_edit, 0);
-
-    $chkPreg_edit = $db->query("SELECT AgencyReferralInfo.isPregnant FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $chkPreg_result = pg_fetch_result($chkPreg_edit, 0);
-
-    $chkIQ_edit = $db->query("SELECT AgencyReferralInfo.hasIQDoc FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $chkIQ_result = pg_fetch_result($chkIQ_edit, 0);
-
-    $chkViolence_edit = $db->query("SELECT AgencyReferralInfo.hasDomesticViolenceHistory FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $chkViolence_result = pg_fetch_result($chkViolence_edit, 0);
-
-    $chkReside_edit = $db->query("SELECT AgencyReferralInfo.childrenLiveWithIndividual FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $chkReside_result = pg_fetch_result($chkReside_edit, 0);
-
-    $chkSigned_edit = $db->query("SELECT AgencyReferralInfo.hasAgencyConsentForm FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $chkSigned_result = pg_fetch_result($chkSigned_edit, 0);
-
-    $additional_info_edit = $db->query("SELECT AgencyReferralInfo.additionalInfo FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $additional_info_result = pg_fetch_result($additional_info_edit, 0);
+    # Referring Party Information
+    $ref_date_result = $referral_info['employeesigneddate'];
 
     $main_agency_edit = $db->query("SELECT peopleid, agency, phone, email, firstname, lastname, ismaincontact FROM contactagencymembers
                                                INNER JOIN People ON people.peopleid = contactagencymembers.contactagencyID
@@ -119,29 +71,32 @@ if (isset($params[0]) && isset($params[1]) && isset($params[2])) {
                                                AND isMainContact = TRUE;", [$referral_formID]);
     $main_agency_result = pg_fetch_assoc($main_agency_edit);
 
-    $ref_party_result = $main_agency_result['agency'];
-    $ref_firstname_result = $main_agency_result['firstname'];
-    $ref_lastname_result = $main_agency_result['lastname'];
-    $ref_phone_result = $main_agency_result['phone'];
-    $ref_email_result = $main_agency_result['email'];
+    $ref_party_result       = $main_agency_result['agency'];
+    $ref_firstname_result   = $main_agency_result['firstname'];
+    $ref_lastname_result    = $main_agency_result['lastname'];
+    $ref_phone_result       = $main_agency_result['phone'];
+    $ref_email_result       = $main_agency_result['email'];
 
+    # Additional Information
+    $chkSpecialEd_result    = $referral_info['hasspecialneeds'];
+    $chkCPS_result          = $referral_info['hasinvolvementcps'];
+    $chkSubAbuse_result     = $referral_info['hassubstanceabusehistory'];
+    $chkMental_result       = $referral_info['hasmentalhealth'];
+    $chkPreg_result         = $referral_info['ispregnant'];
+    $chkIQ_result           = $referral_info['hasiqdoc'];
+    $chkViolence_result     = $referral_info['hasdomesticviolencehistory'];
+    $chkReside_result       = $referral_info['childrenlivewithindividual'];
+    $chkSigned_result       = $referral_info['hasagencyconsentform'];
+    $additional_info_result = $referral_info['additionalinfo'];
 
-    // Fifth Card (Office Information)
-    $office_contact_date_edit = $db->query("SELECT AgencyReferralInfo.dateFirstContact FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $office_contact_date_result = pg_fetch_result($office_contact_date_edit, 0);
+    # Office Information
+    $office_contact_date_result = $referral_info['datefirstcontact'];
+    $office_means_result        = $referral_info['meansofcontact'];
+    $office_initial_date_result = $referral_info['dateofinitialmeet'];
+    $office_initial_date_result = explode(" ", $office_initial_date_result)[0];
+    $office_location_result     = $referral_info['location'];
+    $comments_result            = $referral_info['comments'];
 
-    $office_means_edit = $db->query("SELECT AgencyReferralInfo.meansOfContact FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $office_means_result = pg_fetch_result($office_means_edit, 0);
-
-    $office_initial_date_edit = $db->query("SELECT AgencyReferralInfo.dateOfInitialMeet FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $office_initial_date_result = explode(" ", pg_fetch_result($office_initial_date_edit, 0));
-    $office_initial_date_result = $office_initial_date_result[0];
-
-    $office_location_edit = $db->query("SELECT AgencyReferralInfo.ARLocation FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $office_location_result = pg_fetch_result($office_location_edit, 0);
-
-    $comments_edit = $db->query("SELECT AgencyReferralInfo.comments FROM AgencyReferralInfo WHERE formID = $1;", [$referral_formID]);
-    $comments_result = pg_fetch_result($comments_edit, 0);
     // END OF VIEW QUERIES
 
 
@@ -156,7 +111,7 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
     $form_type = "agency referral";
 
     // First card (Participant Information)
-   $pers_firstname = !empty($_POST['pers_firstname']) ? (trim($_POST['pers_firstname'])) : NULL;
+    $pers_firstname = !empty($_POST['pers_firstname']) ? (trim($_POST['pers_firstname'])) : NULL;
     $pers_lastname = !empty($_POST['pers_lastname']) ? (trim($_POST['pers_lastname'])) : NULL;
     $pers_middlein = !empty($_POST['pers_middlein']) ? trim($_POST['pers_middlein']) : NULL;
     $pers_dob = !empty($_POST['pers_dob']) ? trim($_POST['pers_dob']) : NULL;
@@ -368,7 +323,7 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
                                     street = $3,
                                     zipCode = $4
                                     WHERE
-                                    addressID = $5;", [$pers_address_num, $pers_apartment_info, $pers_address_street, $pers_zip, $params[2]]);
+                                    addressID = $5;", [$pers_address_num, $pers_apartment_info, $pers_address_street, $pers_zip, $pers_address_id]);
 
 
         $updatePrimaryPhoneResult = $db->query("UPDATE 
@@ -969,10 +924,7 @@ include('header.php');
                                         <label class="col-form-label col-sm-2 col-2" for="pers_address">Street Address:</label>
                                         <div class="col-sm-3 col">
                                             <input type="text" class="form-control" name="pers_address" id="pers_address"
-                                                   value="<?php if(isset($pers_street_num_result) && isset($pers_street_name_result))
-                                                                    echo $pers_street_num_result . " " . $pers_street_name_result;
-                                                                else if (!isset($pers_street_num_result) && isset($pers_street_name_result))
-                                                                    echo $pers_street_name_result; ?>" placeholder="Street address">
+                                                   value="<?= $referral_street ?>" placeholder="Street address">
                                         </div>
                                         <label class="col-form-label col-sm-1 col-2" for="pers_apt_info">Apartment:</label>
                                         <div class="col-sm-2 col">

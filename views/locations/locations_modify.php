@@ -24,6 +24,8 @@ $sitename = rawurldecode(implode('/', $params));
 
 # Prepare SQL statements for later use
 $db->prepare("get_site", "SELECT * FROM sites WHERE sitename = $1");
+$db->prepare("get_addr", "SELECT * FROM addresses WHERE addressid = $1");
+$db->prepare("get_zip", "SELECT * FROM zipcodes WHERE zipcode = $1");
 
 // If editing, populate data into variables
 if ($isEdit) {
@@ -37,15 +39,43 @@ if ($isEdit) {
 
     $site = pg_fetch_assoc($result);
     pg_free_result($result);
+
+    # Address
+    $id = $site['addressid'];
+    $result = $db->execute("get_addr", [$id]);
+    if (pg_num_rows($result) > 0) {
+        $address = pg_fetch_assoc($result);
+    }
+    pg_free_result($result);
+
+    # Zip
+    if (isset($address)) {
+        $zip = $address['zipcode'];
+        $result = $db->execute("get_zip", [$zip]);
+        if (pg_num_rows($result) > 0) {
+            $zipcode = pg_fetch_assoc($result);
+        }
+        pg_free_result($result);
+    }
 }
 
 $name = isset($site) ? htmlentities($site['sitename']) : '';
 $type = isset($site) ? htmlentities($site['sitetype']) : '';
+$street_address = isset($address) ? htmlentities(trim($address['addressnumber'] . ' ' . $address['street'])) : '';
+$apartment = isset($address) ? htmlentities(trim($address['aptinfo'])) : '';
+$city = isset($zipcode) ? htmlentities(trim($zipcode['city'])) : '';
+$state = isset($zipcode) ? htmlentities($zipcode['state']) : '';
+$zip = isset($zipcode) ? htmlentities($zipcode['zipcode']) : '';
 
 # Used to track POST errors
 $errors = [
     "name" => false,
-    "type" => false
+    "type" => false,
+    "address" => false,
+    "apt" => false,
+    "city" => false,
+    "state" => false,
+    "zip" => false
 ];
 
 # Validate form information, display errors if needed
@@ -53,6 +83,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $oldName = $name;
     $name = isset($_POST['name']) ? htmlentities($_POST['name']) : $name;
     $type = isset($_POST['type']) ? htmlentities($_POST['type']) : $type;
+    $street_address = isset($_POST['addr']) ? htmlentities($_POST['addr']) : $street_address;
+    $apartment = isset($_POST['apt']) ? htmlentities($_POST['apt']) : $apartment;
+    $city = isset($_POST['city']) ? htmlentities($_POST['city']) : $city;
+    $state = isset($_POST['state']) ? htmlentities($_POST['state']) : $state;
+    $zip = isset($_POST['zip']) ? htmlentities($_POST['zip']) : $zip;
+
+    // Logic for parsing the address into the address number and street name.
+    $street_num = NULL;
+    $street_name = NULL;
+
+    if ($street_address !== '') {
+        $address_info = explode(" ", $street_address);
+
+        // Loop to parse through the address array
+        for ($i = 0; $i < sizeOf($address_info); $i++) {
+            if ($i === 0) {
+                if ($address_info[$i] !== "") {
+                    if (is_numeric($address_info[$i])) {
+                        $street_num = $address_info[$i];
+                    } else {
+                        $street_name .= " ".$address_info[$i];
+                    }
+                }
+            } else {
+                $street_name .= $address_info[$i] . " ";
+            }
+        }
+    }
 
     $valid = true;
 
@@ -67,10 +125,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($valid) {
         if ($isEdit) {
-            $res = $db->query("UPDATE sites SET sitetype = $1 ".
-                "WHERE sitename = $2", [$type,$oldName]);
+            $res = $db->query("SELECT zipCodeSafeInsert($1::VARCHAR, $2::TEXT, $3::STATES)", [$zip, $city, $state]);
+            $id = $address['addressid'];
+            $res = $db->query("INSERT INTO Addresses(addressNumber, street, aptInfo, zipCode) VALUES ($1, $2, $3, $4) RETURNING addressid", [
+                $street_num, $street_name, $apartment, $zip
+            ]);
+            $addrID = pg_fetch_assoc($res)['addressid'];
+            $res = $db->query("UPDATE sites SET sitetype = $1, addressid = $3 ".
+                "WHERE sitename = $2", [$type,$oldName,$addrID]);
+            $res = $db->query("DELETE FROM addresses WHERE addressid = $1", [$id]);
         } else {
-            $res = $db->query("INSERT INTO sites VALUES ($1, $2)", [$name,$type]);
+            $res = $db->query("SELECT zipCodeSafeInsert($1::VARCHAR, $2::TEXT, $3::STATES)", [$zip, $city, $state]);
+            $res = $db->query("INSERT INTO Addresses(addressNumber, street, aptInfo, zipCode) VALUES ($1, $2, $3, $4) RETURNING addressid", [
+                    $street_num, $street_name, $apartment, $zip
+            ]);
+            $id = pg_fetch_assoc($res)['addressid'];
+            $res = $db->query("INSERT INTO sites VALUES ($1, $2, $3)", [$name,$type,$id]);
         }
 
         if ($res) {
@@ -146,6 +216,68 @@ include ('header.php');
                 </select>
                 <div class="invalid-feedback">
                     Invalid characters found in description.
+                </div>
+            </div>
+
+            <br />
+            <h4>Address</h4>
+            <div class="row">
+                <!-- Street Address -->
+                <div class="form-group col-9">
+                    <label for="addr" class="<?= $errors['address'] ? 'text-danger' : '' ?>">Street Address</label>
+                    <input type="text" class="form-control <?= $errors['address'] ? 'is-invalid' : '' ?>"
+                           value="<?= $street_address ?>" id="addr" name="addr" />
+                    <div class="invalid-feedback">
+                        Invalid characters found in address.
+                    </div>
+                </div>
+                <!-- Apt Number -->
+                <div class="form-group col-3">
+                    <label for="apt" class="<?= $errors['apt'] ? 'text-danger' : '' ?>">Apartment</label>
+                    <input type="text" class="form-control <?= $errors['apt'] ? 'is-invalid' : '' ?>"
+                           value="<?= $apartment ?>" id="apt" name="apt"/>
+                    <div class="invalid-feedback">
+                        Invalid characters found in apartment name.
+                    </div>
+                </div>
+            </div>
+
+            <!-- City -->
+            <div class="form-group">
+                <label for="city" class="<?= $errors['city'] ? 'text-danger' : '' ?>">City</label>
+                <input type="text" class="form-control <?= $errors['city'] ? 'is-invalid' : '' ?>"
+                       value="<?= $city ?>" id="city" name="city"/>
+                <div class="invalid-feedback">
+                    Invalid characters found in city name.
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- State -->
+                <div class="form-group col-9">
+                    <label for="state" class="<?= $errors['state'] ? 'text-danger' : '' ?>">State</label>
+                    <select class="form-control" id="state" name="state" >
+                        <option value="" selected="selected">Choose a state</option>
+                        <?php
+                        $res = $db->query("SELECT unnest(enum_range(NULL::states)) AS type", []);
+                        while ($enumtype = pg_fetch_assoc($res)) {
+                            $t = $enumtype ['type'];
+                            ?>
+                            <option value="<?= $t ?>" <?= (isset($state) && $state == $t) ? "selected" : "" ?>><?= $t ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <!-- Zip -->
+                <div class="form-group col-3">
+                    <label for="zip" class="<?= $errors['zip'] ? 'text-danger' : '' ?>">ZIP</label>
+                    <input type="text" class="form-control mask-zip <?= $errors['zip'] ? 'is-invalid' : '' ?>"
+                           value="<?= $zip ?>" id="zip" name="zip"/>
+                    <div class="invalid-feedback">
+                        Invalid characters found in zip code.
+                    </div>
                 </div>
             </div>
             <div class="form-footer submit">

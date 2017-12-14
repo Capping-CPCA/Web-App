@@ -46,11 +46,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete'])) {
         if ($success) {
             $deleteRes = $db->query("DELETE FROM facilitatorclassattendance WHERE sitename = $1", [$sitename]);
             $success = $deleteRes && pg_result_error_field($deleteRes, PGSQL_DIAG_SQLSTATE) == 0;
+        }
 
-            if ($success) {
-                $deleteRes = $db->query("DELETE FROM sites WHERE sitename = $1", [$sitename]);
-                $success = $deleteRes && pg_result_error_field($deleteRes, PGSQL_DIAG_SQLSTATE) == 0;
-            }
+        if ($success) {
+            $deleteRes = $db->query("DELETE FROM classoffering WHERE sitename = $1", [$sitename]);
+            $success = $deleteRes && pg_result_error_field($deleteRes, PGSQL_DIAG_SQLSTATE) == 0;
+        }
+
+        if ($success) {
+            $deleteRes = $db->query("DELETE FROM sites WHERE sitename = $1", [$sitename]);
+            $success = $deleteRes && pg_result_error_field($deleteRes, PGSQL_DIAG_SQLSTATE) == 0;
+        }
+
+        if ($success) {
+            $id = $site['addressid'];
+            $deleteRes = $db->query("DELETE FROM addresses WHERE addressid = $1", [$id]);
+            $success = $deleteRes && pg_result_error_field($deleteRes, PGSQL_DIAG_SQLSTATE) == 0;
         }
 
         $note['title'] = ($success ? 'Success!' : 'Error!');
