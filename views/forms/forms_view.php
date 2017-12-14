@@ -73,7 +73,7 @@ include('header.php');
                 foreach ($selfReferral as $sr) { ?>
                     <div class="card text-center result-card">
                         <div class="card-body">
-                            <h4 class="card-title">Self-Referral</h4>
+                            <h4 class="card-title">Initial Contact</h4>
                             <h6 class="card-subtitle text-muted"> <?= $sr['employeesigneddate'] ?></h6>
                         </div>
                         <div class="card-footer d-flex flex-row justify-content-center">

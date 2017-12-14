@@ -39,7 +39,7 @@ global $params, $route, $view;
                 if ($form_type == "agency referral") {
                     echo '<p>Would you like to <a id="submit_again_link" href="/referral-form" class="alert-link">submit another agency referral form?</a></p>';
                 } else if ($form_type == "self referral") {
-                    echo '<p>Would you like to <a id="submit_again_link" href="/self-referral-form" class="alert-link">submit another self-referral form?</a></p>';
+                    echo '<p>Would you like to <a id="submit_again_link" href="/self-referral-form" class="alert-link">submit another initial contact form?</a></p>';
                 } else if ($form_type == "intake packet") {
                     echo '<p>Would you like to <a id="submit_again_link" href="/intake-packet" class="alert-link">submit another intake packet?</a></p>';
                 }

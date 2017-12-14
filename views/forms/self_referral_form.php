@@ -27,72 +27,48 @@ if (isset($params[0]) && isset($params[1]) && isset($params[2])) {
     // SELECT FROM VIEWS TO POPULATE FIELDS
     $self_referral_view = $db->query("SELECT * FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
     $self_referral_view_result = pg_fetch_assoc($self_referral_view);
-    // First Card (Participant Information)
+
+    # Participant Information
     $self_pers_firstname_result = $self_referral_view_result['firstname'];
-    $self_pers_lastname_result = $self_referral_view_result['lastname'];
-    $self_pers_middlein_result = $self_referral_view_result['middleinit'];
+    $self_pers_lastname_result  = $self_referral_view_result['lastname'];
+    $self_pers_middlein_result  = $self_referral_view_result['middleinit'];
+    $self_pers_dob_result       = $self_referral_view_result['pdob'];
+    $self_pers_race_result      = $self_referral_view_result['prace'];
+    $self_pers_sex_result       = $self_referral_view_result['psex'];
 
-    $self_pers_dob_edit = $db->query("SELECT SelfReferralInfo.PDoB FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
-    $self_pers_dob_result = pg_fetch_result($self_pers_dob_edit, 0);
+    # Contact Information
+    $self_pers_address_id = $self_referral_view_result['addressid'];
+    $addr_res = $db->query("SELECT * FROM addresses WHERE addressid = $1", [$self_pers_address_id]);
+    $addr_result = pg_fetch_assoc($addr_res);
 
-    $self_pers_race_edit = $db->query("SELECT SelfReferralInfo.PRace FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
-    $self_pers_race_result = pg_fetch_result($self_pers_race_edit, 0);
+    $self_pers_street_num_result    = $addr_result['addressnumber'];
+    $self_pers_street_name_result   = $addr_result['street'];
+    $self_pers_zip_result           = $addr_result['zipcode'];
+    $self_apt_info_result           = $addr_result['aptinfo'];
 
-    $self_pers_sex_edit = $db->query("SELECT SelfReferralInfo.PSex FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
-    $self_pers_sex_result = pg_fetch_result($self_pers_sex_edit, 0);
+    $zip = $db->query("SELECT * FROM zipcodes WHERE zipcode = $1", [$self_pers_zip_result]);
+    $zip_result = pg_fetch_assoc($zip);
 
-    $self_pers_street_num_edit = $db->query("SELECT Addresses.addressNumber FROM Addresses WHERE addressID = $1;", [$formID]);
-    $self_pers_street_num_result = pg_fetch_result($self_pers_street_num_edit, 0);
-
-    $self_pers_street_name_edit = $db->query("SELECT Addresses.street FROM Addresses WHERE addressID = $1;", [$formID]);
-    $self_pers_street_name_result = pg_fetch_result($self_pers_street_name_edit, 0);
-
-    $self_pers_zip_edit = $db->query("SELECT Addresses.zipCode FROM Addresses WHERE addressID = $1;", [$formID]);
-    $self_pers_zip_result = pg_fetch_result($self_pers_zip_edit, 0);
-
-    $self_pers_state_edit = $db->query("SELECT ZipCodes.state FROM ZipCodes WHERE zipCode = $1;", [$self_pers_zip_result]);
-    $self_pers_state_result = pg_fetch_result($self_pers_state_edit, 0);
-
-    $self_pers_city_edit = $db->query("SELECT ZipCodes.city FROM ZipCodes WHERE zipCode = $1;", [$self_pers_zip_result]);
-    $self_pers_city_result = pg_fetch_result($self_pers_city_edit, 0);
-
-    $self_apt_info_edit = $db->query("SELECT Addresses.aptinfo FROM Addresses WHERE addressID = $1;", [$formID]);
-    $self_apt_info_result = pg_fetch_result($self_apt_info_edit, 0);
+    $self_pers_state_result = $zip_result['state'];
+    $self_pers_city_result  = $zip_result['city'];
 
     $self_pers_phone_edit = $db->query("SELECT FormPhoneNumbers.phoneNumber FROM FormPhoneNumbers WHERE formID = $1 AND phoneType = 'Primary';", [$formID]);
     $self_pers_phone_result = pg_fetch_result($self_pers_phone_edit, 0);
 
-    // Second Card (Additional Information)
-    $self_involvement_edit = $db->query("SELECT SelfReferralInfo.hasInvolvementCPS FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
-    $self_involvement_result = pg_fetch_result($self_involvement_edit, 0);
+    # Additional Information
+    $self_involvement_result    = $self_referral_view_result['hasinvolvementcps'];
+    $self_attended_result       = $self_referral_view_result['hasattendedpep'];
+    $self_ref_source_result     = $self_referral_view_result['referralsource'];
+    $reason_result              = $self_referral_view_result['reasonattendingpep'];
 
-    $self_attended_edit = $db->query("SELECT SelfReferralInfo.hasAttendedPEP FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
-    $self_attended_result = pg_fetch_result($self_attended_edit, 0);
+    # Office Information
+    $self_office_firstCall_result       = $self_referral_view_result['datefirstcall'];
+    $self_office_returnedCall_result    = $self_referral_view_result['returnclientcalldate'];
+    $self_tentative_start_result        = $self_referral_view_result['tentativestartdate'];
+    $self_letter_mailed_result          = $self_referral_view_result['introlettermaileddate'];
+    $self_assigned_to_result            = $self_referral_view_result['classassignedto'];
+    $notes_result                       = $self_referral_view_result['notes'];
 
-    $self_ref_source_edit = $db->query("SELECT SelfReferralInfo.referralSource FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
-    $self_ref_source_result = pg_fetch_result($self_ref_source_edit, 0);
-
-    $reason_edit = $db->query("SELECT SelfReferralInfo.reasonAttendingPEP FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
-    $reason_result = pg_fetch_result($reason_edit, 0);
-
-    // Third Card (Office Information)
-    $self_office_firstCall_edit = $db->query("SELECT SelfReferralInfo.dateFirstCall FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
-    $self_office_firstCall_result = pg_fetch_result($self_office_firstCall_edit, 0);
-
-    $self_office_returnedCall_edit = $db->query("SELECT SelfReferralInfo.returnClientCallDate FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
-    $self_office_returnedCall_result = pg_fetch_result($self_office_returnedCall_edit, 0);
-
-    $self_tentative_start_edit = $db->query("SELECT SelfReferralInfo.tentativeStartDate FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
-    $self_tentative_start_result = pg_fetch_result($self_tentative_start_edit, 0);
-
-    $self_letter_mailed_edit = $db->query("SELECT SelfReferralInfo.introLetterMailedDate FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
-    $self_letter_mailed_result = pg_fetch_result($self_letter_mailed_edit, 0);
-
-    $self_assigned_to_edit = $db->query("SELECT SelfReferralInfo.classAssignedTo FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
-    $self_assigned_to_result = pg_fetch_result($self_assigned_to_edit, 0);
-
-    $notes_edit = $db->query("SELECT SelfReferralInfo.notes FROM SelfReferralInfo WHERE formID = $1;", [$formID]);
-    $notes_result = pg_fetch_result($notes_edit, 0);
     // END OF VIEW QUERIES
 }
 
@@ -204,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     street = $3,
                                     zipCode = $4
                                     WHERE
-                                    addressID = $5;", [$self_pers_street_num, $self_apt_info, $self_pers_street_name, $self_pers_zip, $fID]);
+                                    addressID = $5;", [$self_pers_street_num, $self_apt_info, $self_pers_street_name, $self_pers_zip, $self_pers_address_id]);
 
         $updatePhoneResult = $db->query("UPDATE 
                                     FormPhoneNumbers

@@ -31,6 +31,30 @@ if (pg_num_rows($result) == 0) {
 $site = pg_fetch_assoc($result);
 pg_free_result($result);
 
+# Address
+$id = $site['addressid'];
+$result = $db->query("SELECT * FROM addresses WHERE addressid = $1", [$id]);
+if (pg_num_rows($result) == 1) {
+    $address = pg_fetch_assoc($result);
+    $zip = $address['zipcode'];
+}
+pg_free_result($result);
+
+if (isset($zip)) {
+    $result = $db->query("SELECT * FROM zipcodes WHERE zipcode = $1", [$zip]);
+    if (pg_num_rows($result) > 0) {
+        $zipcode = pg_fetch_assoc($result);
+    }
+    pg_free_result($result);
+}
+
+$full_address = (isset($address['addressnumber']) ? ($address['addressnumber'].' ') : '') .
+    (isset($address['street']) ? $address['street'] : '');
+
+if (isset($zip)) {
+    $location = $zipcode['city'] . ' ' . $zipcode['state'] . ' ' . $zipcode['zipcode'];
+}
+
 include('header.php');
 ?>
     <div style="width: 100%">
@@ -53,6 +77,13 @@ include('header.php');
                         <div class="display-split"></div>
                         <div class="display-bottom">Location Type</div>
                     </div>
+                </div>
+
+                <h4>Address</h4>
+                <div class="ml-2">
+                    <p class="mb-1"><b>Street: </b><?= empty($full_address) ? 'Not specified' : $full_address ?></p>
+                    <p class="mb-1"><b>Apartment: </b><?= empty($address['aptinfo']) ? 'Not specified' : $address['aptinfo'] ?></p>
+                    <p class="mb-1"><b>Location: </b><?= isset($location) ? $location : 'Not specified'  ?></p>
                 </div>
             </div>
         </div>
