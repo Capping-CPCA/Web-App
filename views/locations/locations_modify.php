@@ -126,14 +126,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($valid) {
         if ($isEdit) {
             $res = $db->query("SELECT zipCodeSafeInsert($1::VARCHAR, $2::TEXT, $3::STATES)", [$zip, $city, $state]);
-            $id = $address['addressid'];
+            $id = isset($address) ? $address['addressid'] : -1; // -1 means address doesn't exist
             $res = $db->query("INSERT INTO Addresses(addressNumber, street, aptInfo, zipCode) VALUES ($1, $2, $3, $4) RETURNING addressid", [
                 $street_num, $street_name, $apartment, $zip
             ]);
             $addrID = pg_fetch_assoc($res)['addressid'];
             $res = $db->query("UPDATE sites SET sitetype = $1, addressid = $3 ".
                 "WHERE sitename = $2", [$type,$oldName,$addrID]);
-            $res = $db->query("DELETE FROM addresses WHERE addressid = $1", [$id]);
+            if ($id !== -1) {
+                $res = $db->query("DELETE FROM addresses WHERE addressid = $1", [$id]);
+            }
         } else {
             $res = $db->query("SELECT zipCodeSafeInsert($1::VARCHAR, $2::TEXT, $3::STATES)", [$zip, $city, $state]);
             $res = $db->query("INSERT INTO Addresses(addressNumber, street, aptInfo, zipCode) VALUES ($1, $2, $3, $4) RETURNING addressid", [
