@@ -53,7 +53,7 @@ include('header.php');
 		</div>
     <div class="form-wrapper card view-card">
         <h4 class="card-header text-left">
-            <?= $curricula['curriculumname'] ?>
+            <?= htmlentities($curriculaName) ?>
             <?php if (hasRole(Role::Coordinator)) { ?>
                 <div class="float-right">
                     <a href="/curricula/edit/<?= $id ?>"><button class="btn btn-outline-secondary btn-sm">Edit</button></a>
@@ -83,7 +83,7 @@ include('header.php');
                     while($class = pg_fetch_assoc($topics)) {
                         ?>
                         <tr>
-                            <td class="pl-2 align-middle"><?= $class['topicname'] ?></td>
+                            <td class="pl-2 align-middle"><?= htmlentities($class['topicname']) ?></td>
                             <td class="pr-2 text-right">
                                 <a href="/classes/view/<?= $class['classid'] ?>">
                                     <button class="btn btn-outline-secondary btn-sm">View</button>

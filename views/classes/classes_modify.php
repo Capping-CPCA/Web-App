@@ -48,8 +48,8 @@ $errors = [
 
 # Validate form information, display errors if needed
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = isset($_POST['name']) ? htmlentities(trim($_POST['name'])) : $name;
-    $desc = isset($_POST['desc']) ? htmlentities(trim($_POST['desc'])) : $desc;
+    $name = isset($_POST['name']) ? html_entity_decode(trim($_POST['name'])) : $name;
+    $desc = isset($_POST['desc']) ? html_entity_decode(trim($_POST['desc'])) : $desc;
 
     $valid = true;
 

@@ -20,7 +20,7 @@ $isEdit = $params[0] == 'edit';
 array_shift($params);
 
 # Get site name from params
-$sitename = rawurldecode(implode('/', $params));
+$sitename = urldecode(rawurldecode(implode('/', $params)));
 
 # Prepare SQL statements for later use
 $db->prepare("get_site", "SELECT * FROM sites WHERE sitename = $1");
@@ -80,14 +80,14 @@ $errors = [
 
 # Validate form information, display errors if needed
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $oldName = $name;
-    $name = isset($_POST['name']) ? htmlentities($_POST['name']) : $name;
-    $type = isset($_POST['type']) ? htmlentities($_POST['type']) : $type;
-    $street_address = isset($_POST['addr']) ? htmlentities($_POST['addr']) : $street_address;
-    $apartment = isset($_POST['apt']) ? htmlentities($_POST['apt']) : $apartment;
-    $city = isset($_POST['city']) ? htmlentities($_POST['city']) : $city;
-    $state = isset($_POST['state']) ? htmlentities($_POST['state']) : $state;
-    $zip = isset($_POST['zip']) ? htmlentities($_POST['zip']) : $zip;
+    $oldName = html_entity_decode($name);
+    $name = isset($_POST['name']) ? html_entity_decode($_POST['name']) : $name;
+    $type = isset($_POST['type']) ? html_entity_decode($_POST['type']) : $type;
+    $street_address = isset($_POST['addr']) ? html_entity_decode($_POST['addr']) : $street_address;
+    $apartment = isset($_POST['apt']) ? html_entity_decode($_POST['apt']) : $apartment;
+    $city = isset($_POST['city']) ? html_entity_decode($_POST['city']) : $city;
+    $state = isset($_POST['state']) ? html_entity_decode($_POST['state']) : $state;
+    $zip = isset($_POST['zip']) ? html_entity_decode($_POST['zip']) : $zip;
 
     // Logic for parsing the address into the address number and street name.
     $street_num = NULL;
@@ -155,6 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $errorMsg = "Location with name \"$name\" already exists.";
                 }
                 $errorState = $state;
+                die(pg_result_error($res));
             }
         } else {
             $success = false;

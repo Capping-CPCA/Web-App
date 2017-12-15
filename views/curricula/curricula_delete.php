@@ -48,16 +48,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete'])) {
 }
 
 include('header.php');
+
+$curriculaName = htmlentities($curricula['curriculumname']);
+
 ?>
 
 <div class="page-wrapper">
     <form class="card warning-card" method="post" action="<?= $_SERVER['REQUEST_URI'] ?>">
         <h4 class="card-header card-title">
-            <?= $curricula['curriculumname'] ?>
+            <?= $curriculaName ?>
         </h4>
         <div class="card-body">
             <?php
-                echo "You are about to delete curriculum \"". $curricula['curriculumname'] . "\". Are you sure you want to delete this curriculum?";
+                echo "You are about to delete curriculum \"". $curriculaName . "\". Are you sure you want to delete this curriculum?";
             ?>
         </div>
         <div class="card-footer text-right">

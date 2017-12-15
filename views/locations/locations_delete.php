@@ -19,7 +19,7 @@ global $params, $db;
 array_shift($params);
 
 # Get site name from params
-$sitename = rawurldecode(implode('/', $params));
+$sitename = urldecode(rawurldecode(implode('/', $params)));
 
 $db->prepare("get_site", "SELECT * FROM sites WHERE sitename = $1");
 $result = $db->execute("get_site", [$sitename]);
@@ -79,12 +79,12 @@ include('header.php');
     <div class="page-wrapper">
         <form class="card warning-card" method="post" action="<?= $_SERVER['REQUEST_URI'] ?>">
             <h4 class="card-header card-title">
-                <?= $site['sitename'] ?>
+                <?= htmlentities($site['sitename']) ?>
             </h4>
             <div class="card-body">
                 <?php
                 if ($notConnected) {
-                    echo "You are about to delete location \"" . $site['sitename'] . "\". Are you sure ".
+                    echo "You are about to delete location \"" . htmlentities($site['sitename']) . "\". Are you sure ".
                         "you want to delete this location?";
                 } else if (hasRole(Role::Superuser)) {
                     echo "This location is currently being used for attendance. Fully deleting this location will also delete the ".

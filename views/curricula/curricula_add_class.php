@@ -34,6 +34,7 @@ $topics = $db->execute("get_curr_classes", [$id]);
 $allTopics = $db->execute("get_other_classes", [$id]);
 
 $curriculum = pg_fetch_assoc($db->query("SELECT * FROM curricula WHERE curriculumid = $1", [$id]));
+$curriculumName = htmlentities($curriculum['curriculumname']);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $classId = isset($_POST['class']) ? $_POST['class'] : '';
@@ -139,16 +140,17 @@ include('header.php');
 <div class="page-wrapper">
     <?php if(isset($confirmDelete) && isset($classId)) {
         $class = pg_fetch_assoc($db->query("SELECT * FROM classes WHERE classid = $1", [$classId]));
+        $topicName = $class['topicname'];
         ?>
 
         <!-- Confirms remove class when class is referenced by attendance -->
         <form class="card warning-card" method="post" action="<?= $_SERVER['REQUEST_URI'] ?>">
             <h4 class="card-header card-title">
-                <?= $curriculum['curriculumname'] . ' - ' . $class['topicname'] ?>
+                <?= $curriculumName . ' - ' . $topicName ?>
             </h4>
             <div class="card-body">
-                The class "<?= $class['topicname'] ?>" is currently being used for attendance. Removing this class
-                from curriculum "<?= $curriculum['curriculumname'] ?>" will also remove any attendance for this
+                The class "<?= $topicName ?>" is currently being used for attendance. Removing this class
+                from curriculum "<?= $curriculumName ?>" will also remove any attendance for this
                 class in the curriculum.
                 <br /><br />
                 Are you sure you want to continue?
@@ -170,7 +172,7 @@ include('header.php');
                 $notification->display();
             }
             ?>
-            <h2 class="display-4 text-center" style="font-size: 34px"><?= $curriculum['curriculumname'] ?></h2>
+            <h2 class="display-4 text-center" style="font-size: 34px"><?= $curriculumName ?></h2>
             <form class="form" method="post" action="<?= $_SERVER['REQUEST_URI'] ?>" novalidate>
                 <h4>Add New Class</h4>
                 <select id="class-selector" class="form-control" name="class" required>
@@ -178,7 +180,7 @@ include('header.php');
                     <?php
                     while ($t = pg_fetch_assoc($allTopics)) {
                         ?>
-                        <option value="<?= $t['classid'] ?>"><?= $t['topicname'] ?></option>
+                        <option value="<?= $t['classid'] ?>"><?= htmlentities($t['topicname']) ?></option>
                         <?php
                     }
                     pg_free_result($allTopics);
@@ -196,7 +198,7 @@ include('header.php');
                     ?>
                     <tr>
                         <td class="align-middle">
-                            <span><?= $class['topicname'] ?></span>
+                            <span><?= htmlentities($class['topicname']) ?></span>
                         </td>
                         <td class="text-right">
                             <form class="mb-0" method="post" action="<?= $_SERVER['REQUEST_URI'] ?>">
