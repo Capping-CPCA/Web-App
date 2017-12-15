@@ -77,7 +77,7 @@ if (!empty($params) && $params[0] == 'view') {
         <div class="d-flex flex-row justify-content-center flex-wrap">
             <?php
             while ($r = pg_fetch_assoc($result)) {
-                $sitename = $r['sitename'];
+                $sitename = htmlentities($r['sitename']);
                 // Adds a zero-width space to break words after a forward slash
                 $sitename = str_replace('/', '/&#8203;', $sitename);
                 ?>
@@ -87,14 +87,14 @@ if (!empty($params) && $params[0] == 'view') {
                         <h6 class="card-subtitle text-muted"><?= $r['sitetype'] ?></h6>
                     </div>
                     <div class="card-footer d-flex flex-row justify-content-center">
-                        <a href="/locations/view/<?= $r['sitename'] ?>">
+                        <a href="/locations/view/<?= urlencode($r['sitename']) ?>">
                             <button class="btn btn-outline-secondary btn-sm ml-2">View</button>
                         </a>
                         <?php if (hasRole(Role::Coordinator)) { ?>
-                            <a href="/locations/edit/<?= $r['sitename'] ?>">
+                            <a href="/locations/edit/<?= urlencode($r['sitename']) ?>">
                                 <button class="btn btn-outline-secondary btn-sm ml-2">Edit</button>
                             </a>
-                            <a href="/locations/delete/<?= $r['sitename'] ?>">
+                            <a href="/locations/delete/<?= urlencode($r['sitename']) ?>">
                                 <button class="btn btn-outline-danger btn-sm ml-2">Delete</button>
                             </a>
                         <?php } ?>

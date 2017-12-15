@@ -88,7 +88,7 @@ if (!empty($params) && $params[0] == 'view') {
         <div class="d-flex flex-row justify-content-center flex-wrap">
             <?php
             while ($r = pg_fetch_assoc($result)) {
-                $curriculumname = $r['curriculumname'];
+                $curriculumname = htmlentities($r['curriculumname']);
                 // Adds a zero-width space to break words after a forward slash
                 $curriculumname = str_replace('/', '/&#8203;', $curriculumname);
                 ?>

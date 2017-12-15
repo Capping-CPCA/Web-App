@@ -44,7 +44,7 @@ include('header.php');
 		</div>
     <div class="form-wrapper card view-card">
         <h4 class="card-header text-left">
-            <?php echo $class['topicname'] . ($class['df'] == 'f' ? '' : ' <span class="badge badge-secondary">Deleted</span>') ?>
+            <?= htmlentities($class['topicname']) . ($class['df'] == 'f' ? '' : ' <span class="badge badge-secondary">Deleted</span>') ?>
             <?php if (hasRole(Role::Coordinator) && $class['df'] == 'f') { ?>
                 <div class="float-right">
                     <a href="/classes/edit/<?= $id ?>"><button class="btn btn-outline-secondary btn-sm">Edit</button></a>
@@ -55,7 +55,7 @@ include('header.php');
         <div class="card-body d-flex justify-content-center flex-column">
             <h4>Description</h4>
             <div class="d-flex justify-content-center">
-                <?= !empty($class['description']) ? $class['description'] : '<span class="font-italic">No Description</span>' ?>
+                <?= !empty($class['description']) ? htmlentities($class['description']) : '<span class="font-italic">No Description</span>' ?>
             </div>
             <br />
             <h4>Curricula</h4>

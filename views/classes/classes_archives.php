@@ -110,7 +110,7 @@ include('header.php');
             if (isset($confirmDelete) && $confirmDelete && isset($class)) {
 
                 $c = pg_fetch_assoc($db->query("SELECT topicname FROM classes WHERE classid = $1", [$class]));
-                $className = $c['topicname'];
+                $className = htmlentities($c['topicname']);
 
                 ?>
                 <form class="card warning-card" method="post" action="/classes/archive">
@@ -141,8 +141,8 @@ include('header.php');
                     ?>
                     <div class="card text-center result-card">
                         <div class="card-body">
-                            <h4 class="card-title"><?= $r['topicname'] ?></h4>
-                            <h6 class="card-subtitle text-muted"><?= $r['description'] ?></h6>
+                            <h4 class="card-title"><?= htmlentities($r['topicname']) ?></h4>
+                            <h6 class="card-subtitle text-muted"><?= htmlentities($r['description']) ?></h6>
                         </div>
                         <div class="card-footer d-flex flex-row justify-content-center">
                             <a>

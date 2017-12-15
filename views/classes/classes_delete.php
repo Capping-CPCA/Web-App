@@ -53,10 +53,10 @@ include('header.php');
     <div class="page-wrapper">
         <form class="card warning-card" method="post" action="<?= $_SERVER['REQUEST_URI'] ?>">
             <h4 class="card-header card-title">
-                <?= $class['topicname'] ?>
+                <?= htmlentities($class['topicname']) ?>
             </h4>
             <div class="card-body">
-                You are about to delete class "<?= $class['topicname'] ?>". Are you sure
+                You are about to delete class "<?= htmlentities($class['topicname']) ?>". Are you sure
                 you want to delete this class?
             </div>
             <div class="card-footer text-right">

@@ -50,8 +50,8 @@ $errors = [
 
 # Validate form information, display errors if needed
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = isset($_POST['name']) ? htmlentities(trim($_POST['name'])) : $name;
-    $miss = isset($_POST['miss']) ? htmlentities($_POST['miss']) : $miss;
+    $name = isset($_POST['name']) ? html_entity_decode(trim($_POST['name'])) : $name;
+    $miss = isset($_POST['miss']) ? html_entity_decode($_POST['miss']) : $miss;
 
     $valid = true;
 
@@ -127,7 +127,7 @@ include ('header.php');
         }
         ?>
         <?php if (isset($curricula)) { ?>
-            <h2 class="display-4 text-center" style="font-size: 34px"><?= $curricula['curriculumname'] ?></h2>
+            <h2 class="display-4 text-center" style="font-size: 34px"><?= htmlentities($curricula['curriculumname']) ?></h2>
         <?php } ?>
         <form class="form" method="post" action="<?= $_SERVER['REQUEST_URI'] ?>" novalidate>
             <h4>Information</h4>

@@ -120,10 +120,11 @@ include('header.php');
             // Confirm Full Delete
             if (isset($confirmDelete) && $confirmDelete && isset($curriculumId)) {
                 $curriculum = pg_fetch_assoc($db->query("SELECT * FROM curricula WHERE curriculumid = $1", [$curriculumId]));
+                $curriculumName = htmlentities($curriculum['curriculumname']);
                 ?>
                 <form class="card warning-card" method="post" action="/curricula/archive">
                     <h4 class="card-header card-title">
-                        <?= $curriculum['curriculumname'] ?>
+                        <?= $curriculumName ?>
                     </h4>
                     <div class="card-body">
                         <?php
@@ -131,7 +132,7 @@ include('header.php');
                             echo "This curriculum is currently being used for attendance. Fully deleting this curriculum will also delete the ".
                                 "attendance for this curriculum.<br /><br />Are you sure you want to continue?";
                         } else {
-                            echo "You are about to fully delete curriculum \"".$curriculum['curriculumname']."\". Are you sure you want to fully delete this curriculum?";
+                            echo "You are about to fully delete curriculum \"".$curriculumName."\". Are you sure you want to fully delete this curriculum?";
                         }
                         ?>
                     </div>
@@ -148,7 +149,7 @@ include('header.php');
                     ?>
                     <div class="card text-center result-card">
                         <div class="card-body">
-                            <h4 class="card-title"><?= $r['curriculumname'] ?></h4>
+                            <h4 class="card-title"><?= htmlentities($r['curriculumname']) ?></h4>
                         </div>
                         <div class="card-footer d-flex flex-row justify-content-center">
                             <a>

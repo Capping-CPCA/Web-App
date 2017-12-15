@@ -18,13 +18,13 @@ global $params, $db;
 array_shift($params);
 
 # Get topic name from params
-$sitename = rawurldecode(implode('/', $params));
+$sitename = urldecode(rawurldecode(implode('/', $params)));
 
 $result = $db->query("SELECT * FROM sites WHERE sitename = $1", [$sitename]);
 
 # If no results, class doesn't exist, redirect
 if (pg_num_rows($result) == 0) {
-    header('Location: /classes');
+    header('Location: /locations');
     die();
 }
 
@@ -50,9 +50,11 @@ if (isset($zip)) {
 
 $full_address = (isset($address['addressnumber']) ? ($address['addressnumber'].' ') : '') .
     (isset($address['street']) ? $address['street'] : '');
+$full_address = htmlentities($full_address);
 
 if (isset($zip)) {
     $location = $zipcode['city'] . ' ' . $zipcode['state'] . ' ' . $zipcode['zipcode'];
+    $location = htmlentities($location);
 }
 
 include('header.php');
@@ -61,7 +63,7 @@ include('header.php');
         <button class="cpca btn" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
         <div class="form-wrapper card view-card">
             <h4 class="card-header text-left">
-                <?= $site['sitename'] ?>
+                <?= htmlentities($site['sitename']) ?>
                 <?php if (hasRole(Role::Coordinator)) { ?>
                     <div class="float-right">
                         <a href="/locations/edit/<?= implode('/', $params) ?>"><button class="btn btn-outline-secondary btn-sm">Edit</button></a>
@@ -82,7 +84,7 @@ include('header.php');
                 <h4>Address</h4>
                 <div class="ml-2">
                     <p class="mb-1"><b>Street: </b><?= empty($full_address) ? 'Not specified' : $full_address ?></p>
-                    <p class="mb-1"><b>Apartment: </b><?= empty($address['aptinfo']) ? 'Not specified' : $address['aptinfo'] ?></p>
+                    <p class="mb-1"><b>Apartment: </b><?= empty($address['aptinfo']) ? 'Not specified' : htmlentities($address['aptinfo']) ?></p>
                     <p class="mb-1"><b>Location: </b><?= isset($location) ? $location : 'Not specified'  ?></p>
                 </div>
             </div>
