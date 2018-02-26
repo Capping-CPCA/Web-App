@@ -79,7 +79,7 @@ function formatSQLDate($sqlDate) {
     }
 
     $convertDate = DateTime::createFromFormat('Y-m-d H:i:s.u', $sqlDateString);
-    $formattedDate = $convertDate->format('l, F jS g:i A');
+    $formattedDate = $convertDate->format('l, F jS Y g:i A');
 
     return $formattedDate;
 }
