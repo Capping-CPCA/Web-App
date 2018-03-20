@@ -323,7 +323,9 @@ function checkSet($value){
             <a href="/forms-view/<?= $params[0] ?>">
                 <button class="btn btn-outline-secondary">View Forms</button>
             </a>
-
+            <a href="/report-card/<?= $agencyResult['participantid'] ?>">
+                <button class="btn btn-outline-secondary">View Attendance</button>
+            </a>
         </div>
     </div>
 </div>

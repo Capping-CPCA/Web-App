@@ -13,7 +13,8 @@
  * @since 1.1
  */
 
-global $db;
+global $db, $params;
+$peopleid = rawurldecode(implode('/', $params));
 
 require ('shared_queries.php');
 
@@ -153,7 +154,7 @@ include('header.php');
         <div class="jumbotron form-wrapper mb-3">
             <h2 class="display-4 text-center" style="font-size: 34px">Class Information</h2>
 
-            <form action="attendance-form" method="post">
+            <form action="<?= strlen($peopleid) === 0 ? "attendance-form" : "/report-card-new-entry/" . $peopleid?>" method="post">
                 <div class="form-group">
                     <label for="site">Location</label>
                     <select id="site" class="form-control" name="site" onchange="">
@@ -243,11 +244,19 @@ include('header.php');
                 <input type = "hidden" id="topic-id" name="topic-id" value="" />
                 <input type = "hidden" id="curr-id" name="curr-id" value="" />
 
+                <?php if (strlen($peopleid) === 0) { ?>
                 <fieldset disabled="disabled" id="sub">
                     <div class="form-footer submit">
                         <button type="submit" class="btn cpca">Create Attendance Sheet</button>
                     </div>
                 </fieldset>
+                <?php } else { ?>
+                <fieldset disabled="disabled" id="sub">
+                    <div class="form-footer submit">
+                        <button type="submit" class="btn cpca">Next</button>
+                    </div>
+                </fieldset>
+                <?php } ?>
 
 
             </form>
