@@ -77,7 +77,7 @@ include('header.php');
     <div class="w-100" style="height: fit-content;">
         <?php
         // Displays a notification if modification was not successful
-        if ($errorMsg) {
+        if (isset($errorMsg)) {
             $notification = new Notification("Error", $errorMsg, "danger");
             $notification->display();
         }
@@ -133,7 +133,7 @@ include('header.php');
     <script>
         $(function () {
             // If the participant is not new, click no on the "is new?" button
-            <?php if ($isnew == 'f') { ?>
+            <?php if ($isnew == 't') { ?>
             document.getElementById("is-new").click();
             <?php } else { ?>
             document.getElementById("is-not-new").click();
