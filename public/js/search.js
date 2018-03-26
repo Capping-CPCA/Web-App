@@ -23,7 +23,6 @@
 
     $( ".dynamic-search" ).keypress(function() {
         userSearch=$(".dynamic-search").val();
-        console.log(userSearch);
         $(".list-group-item:not(:contains("+userSearch+"))").hide();
         $(".list-group-item:contains("+userSearch+")").show();
     });

@@ -17,7 +17,7 @@ global $db;
 
 require("attendance_utilities.php");
 
-
+unset($_SESSION['serializedInfo']);
 $peopleid = $_SESSION['employeeid'];
 
 $classN = null;
@@ -75,7 +75,32 @@ $queryClassInformation = "select * " .
 
 $result = $db->no_param_query($queryClassInformation);
 
+// Format date for query
+$classDate = new DateTime($class_date);
+$date = $classDate->format('Y-m-d');
+$time = $classDate->format('g:i A');
+$dateTime = $classDate->format('Y-m-d H:i:s');
 
+// Format attendance info array for editing class
+$r = $db->query("SELECT * FROM facilitatorclassattendance WHERE date = $1 AND sitename = $2", [$dateTime,  escape_apostrophe($site_name)]);
+$facilitator = pg_fetch_assoc($r);
+$r = $db->query("SELECT * FROM classoffering WHERE date = $1 AND sitename = $2", [$dateTime, escape_apostrophe($site_name)]);
+$classOffering = pg_fetch_assoc($r);
+
+$attendanceInfo = [
+        'site' => $site_name,
+        'curr' => $class_curriculum,
+        'classes' => $class_topic,
+        'lang' => $classOffering['lang'],
+        'facilitator-name' => $facilitator_name,
+        'date-input' => $date,
+        'time-input' => $time,
+        'facilitator' => $facilitator['facilitatorid'],
+        'topic-id' => $classOffering['classid'],
+        'curr-id' => $classOffering['curriculumid']
+];
+$_SESSION['editClass'] = true;
+$_SESSION['attendance-info'] = $attendanceInfo;
 include('header.php');
 
 ?>
@@ -116,7 +141,7 @@ include('header.php');
                             echo "<td>{$row['numchildren']}</td>";
                             echo "<td>{$row['comments']}</td>";
                             //convert boolean to string
-                            $tf = ($row['isnew'] == 't') ? $tf = "yes" : $tf = "no";
+                            $tf = ($row['isnew'] == 't') ? $tf = "Yes" : $tf = "No";
                             echo "<td>{$tf}</td>";
                             echo "<td>{$row['race']}</td>";
                             echo "<td>{$row['sex']}</td>";
@@ -136,6 +161,7 @@ include('header.php');
         <div class="text-center" style="margin-bottom: 20px; margin-top: 15px;">
             <?php
             //historicalLookup
+            echo "<a href='/edit-class-info' class='mr-2'><button type='button' class='btn btn-outline-secondary'>Edit Class Attendance</button></a>";
             echo "<a href='/historical-class-search' class='mr-2'><button type=\"button\" class=\"btn cpca\">New Search</button></a>";
             echo "<a href='/attendance'><button type=\"button\" class=\"btn btn-outline-secondary\">Back To Dashboard</button></a>";
             ?>

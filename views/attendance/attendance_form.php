@@ -33,9 +33,8 @@ if(isset($_SESSION['edit-participant-details-num'])) {
 
 /* Begin set class details */
 // Attendance has already started being recorded and we are not coming from edit class information page
-if (isset($_SESSION['attendance-info']) && !isset($_POST['fromEditClassInfo'])) {
+if (isset($_SESSION['attendance-info'])) {
     $attendanceInfo = $_SESSION['attendance-info'];
-
     $selected_class = $attendanceInfo['classes'];
     $selected_curr = $attendanceInfo['curr'];
     $selected_date = $attendanceInfo['date-input'];
@@ -242,21 +241,38 @@ if(isset($_SESSION['serializedInfo'])) {
 //no session information set, populate class attendance recommendations
 //else grab information from the db and format it into the associative array format
 else {
-    //how many weeks ago do we want in our participant recommendations
-    $threeWeeksAgo = date_subtraction('22 days');
+    if (isset($_SESSION['old-info'])) {
+        $oldInfo = $_SESSION['old-info'];
 
-    //participant recommendations for attendance form
-    $fullQuery = "SELECT * FROM classattendancedetails " .
-        "WHERE curriculumid = $1 " .
-        "AND sitename = $2 " .
-        "AND facilitatorid = $3 " .
-        "AND date >= $4 " .
-        "ORDER BY date DESC;";
+        // Make timestamp into correct format
+        $timestamp = makeTimestamp($oldInfo['date-input'], $oldInfo['time-input']);
+        $classDate = new DateTime($timestamp);
+        $dateTime = $classDate->format('Y-m-d H:i:s');
 
-    //query the view
-    $get_participants = $db->query($fullQuery,
-        [$selected_curr_id, $selected_site, $selected_facilitator, $threeWeeksAgo]);
+        $fullQuery = "SELECT * FROM classattendancedetails " .
+            "WHERE curriculumid = $1 " .
+            "AND sitename = $2 " .
+            "AND date = $3";
 
+        //query the view
+        $get_participants = $db->query($fullQuery,
+            [$oldInfo['curr-id'], $oldInfo['site'], $dateTime]);
+    } else {
+        //how many weeks ago do we want in our participant recommendations
+        $threeWeeksAgo = date_subtraction('22 days');
+
+        //participant recommendations for attendance form
+        $fullQuery = "SELECT * FROM classattendancedetails " .
+            "WHERE curriculumid = $1 " .
+            "AND sitename = $2 " .
+            "AND facilitatorid = $3 " .
+            "AND date >= $4 " .
+            "ORDER BY date DESC;";
+
+        //query the view
+        $get_participants = $db->query($fullQuery,
+            [$selected_curr_id, $selected_site, $selected_facilitator, $threeWeeksAgo]);
+    }
     $addedPIDs = array();
 
     //look through the records to see if this person was added before
@@ -282,9 +298,9 @@ else {
                 "zip"           => $row['zipcode'],
                 "numChildren"   => $row['numchildren'],
                 "race"          => null,
-                "comments"      => null,
+                "comments"      => isset($row['comments']) ? $row['comments'] : null,
                 "present"       => false,
-                "isNew"         => false, //isNew field from DB
+                "isNew"         => isset($row['isnew']) ? $row['isnew'] : false, //isNew field from DB
                 //people who haven't completed the intake forms and just filled out info in the "no intake form" section
                 "firstClass"    => false,
                 "sex"           => $row['sex']
@@ -321,7 +337,7 @@ include('header.php');
                 <h6 class="text-center text-secondary" style="font-weight: 200;"><?= "Class Time: $display_time - $display_date" ?></h6>
                 <div class="flex-row">
                     <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-link" style="text-align: center;" onclick="editClassDetails()">Edit Class Details</button>
+                        <button type="button" class="btn btn-link" style="text-align: center;" onclick="oldInfoDetails()">Edit Class Details</button>
                     </div>
                 </div>
                 <br />
@@ -622,7 +638,7 @@ include('header.php');
         /**
          * set the form action to direct to edit class info
          */
-        function editClassDetails(){
+        function oldInfoDetails(){
             setFormAction('edit-class-info');
             document.getElementById(pageFormName).submit();
         }

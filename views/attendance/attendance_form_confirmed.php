@@ -21,11 +21,16 @@ require ('shared_queries.php');
 
 $success = true;
 $errorMsg = "";
+$duplicate = false;
 
 //kill the page if we don't have any information
 if(!isset($_SESSION['serializedInfo']) && !isset($_SESSION['attendance-info'])) {
     header("Location: /new-class");
     die(); //slow and painful
+}
+
+if (array_key_exists('duplicate', $_POST)) {
+    $duplicate = true;
 }
 
 //get the class information
@@ -70,28 +75,27 @@ $timestamp = makeTimestamp($selected_date, $selected_time);
 
 //validate class offering - ensure there is no duplicate class offering
 {
-    $duplicateClassOfferingQuery = "SELECT * FROM ClassOffering " .
-        "WHERE date = '{$timestamp}' and siteName = '{$escaped_site_name}'; ";
-
-    $resultsClassOfferingMatch = $db->no_param_query($duplicateClassOfferingQuery);
-
-    //matched a class so we have a duplicate class
-    if(pg_num_rows($resultsClassOfferingMatch) > 0){
-        include('header.php');
-
-        echo "<div class=\"container\">";
+    if ($duplicate != true) {
+        $duplicateClassOfferingQuery = "SELECT * FROM ClassOffering " .
+            "WHERE date = '{$timestamp}' and siteName = '{$escaped_site_name}'; ";
+        $resultsClassOfferingMatch = $db->no_param_query($duplicateClassOfferingQuery);
+        //matched a class so we have a duplicate class
+        if (pg_num_rows($resultsClassOfferingMatch) > 0) {
+            include('header.php');
+            echo "<div class=\"container\">";
             echo "<div class=\"card\">";
-                echo "<div class=\"card-block p-2\">";
-                    echo "<h4>Error: Duplicate Class Offering.</h4>";
-
-                    $errorTime = formatSQLDateShort($timestamp);
-                    echo "<p>There is already a class recorded at the site {$selected_site} at the time {$errorTime}. Please Edit The Class Information.</p>";
-                    echo "<a href='/edit-class-info'><button type=\"button\" class=\"btn btn-outline-secondary\">Edit Class Information</button></a>";
-                echo "</div>";
+            echo "<div class=\"card-block p-2\" align=\"center\">";
+            echo "<h4>Error: Duplicate Class Offering.</h4>";
+            $errorTime = formatSQLDateShort($timestamp);
+            echo "<p>There is already a class recorded at the site {$selected_site} at the time {$errorTime}. If this is a mistake, please edit the class information. Otherwise, click continue if you are adding more participants.</p>";
+            echo "<div><a href=\"/edit-class-info\" style=\"display: inline-block; margin-right: 10px;\"><button type=\"button\" class=\"btn btn-outline-secondary\">Edit Class Information</button></a>";
+            echo "<form action=\"/attendance-form-confirmed\" method=\"post\" style=\"display: inline-block;\"><input type=\"hidden\" name=\"duplicate\"><button type=\"submit\" class=\"btn cpca\">Continue</button></form></div>";
             echo "</div>";
-        echo "</div>";
-        include ('footer.php');
-        die();
+            echo "</div>";
+            echo "</div>";
+            include('footer.php');
+            die();
+        }
     }
 }
 
@@ -151,46 +155,77 @@ for($i = 0; $i < count($attendanceInfo); $i++) {
     }
 }
 
-//create one classOffering entry
-$classOfferingQuery =
-    "INSERT INTO classoffering(ClassID, CurriculumID, date, siteName, lang) " .
-    "VALUES ( " .
-    "{$selected_topic_id}, " .
-    "{$selected_curr_num}, " .
-    "'{$timestamp}', " . //declared above
-    "'{$escaped_site_name}', " .
-    "'{$selected_lang}'" .
-    ");";
+if ($duplicate != true) {
+    // check if we edited the class details
+    if (isset($_SESSION['old-info'])) {
+        $oldInfo = $_SESSION['old-info'];
+        unset($_SESSION['old-info']);
+        $oldEscapedSiteName = escape_apostrophe($oldInfo['site']);
+        $oldTimestamp = makeTimestamp($oldInfo['date-input'], $oldInfo['time-input']);
+        $checkForOldClass = "SELECT * FROM ClassOffering " .
+            "WHERE date = '{$oldTimestamp}' and siteName = '{$oldEscapedSiteName}'; ";
+        $oldClassExists = $db->no_param_query($checkForOldClass);
+    }
 
-$res = $db -> no_param_query($classOfferingQuery);
-$state = pg_result_error_field($res, PGSQL_DIAG_SQLSTATE);
-if ($res && $state != 0) {
-    $success = false;
-    $errorMsg .= "Could not create class offering [$state]. ";
+    // check if we are updating a class
+    if (isset($oldClassExists) && pg_num_rows($oldClassExists) > 0) {
+        $res = $db->query("SELECT classOfferingUpdate(
+            date := $1::TIMESTAMP,
+            siteName := $2::TEXT,
+            newClassID := $3::INT,
+            newCurriculumID := $4::INT,
+            newDate := $5::TIMESTAMP,
+            newSiteName := $6::TEXT,
+            newLang := $7::TEXT)",
+            [makeTimestamp($oldInfo['date-input'], $oldInfo['time-input']),
+                $oldInfo['site'],
+                $selected_topic_id,
+                $selected_curr_num,
+                $timestamp,
+                $escaped_site_name,
+                $selected_lang]);
+    } else {
+        //create one classOffering entry
+        $classOfferingQuery =
+            "INSERT INTO classoffering(ClassID, CurriculumID, date, siteName, lang) " .
+            "VALUES ( " .
+            "{$selected_topic_id}, " .
+            "{$selected_curr_num}, " .
+            "'{$timestamp}', " . //declared above
+            "'{$escaped_site_name}', " .
+            "'{$selected_lang}'" .
+            ");";
+        $res = $db->no_param_query($classOfferingQuery);
+    }
+    $state = pg_result_error_field($res, PGSQL_DIAG_SQLSTATE);
+    if ($res && $state != 0) {
+        $success = false;
+        $errorMsg .= "Could not create class offering [$state]. ";
+    }
+
+    if (!isset($oldClassExists) && !pg_num_rows($oldClassExists) > 0) {
+        //create one facilitatorClassAttendance entry
+        $facilitatorClassAttendanceQuery =
+            "INSERT INTO facilitatorclassattendance( " .
+            "date, " .
+            "facilitatorID, " .
+            "siteName " .
+            ") " .
+
+            "VALUES (" .
+            "'{$timestamp}', " .
+            "{$selected_facilitator}, " .
+            "'{$escaped_site_name}' " .
+            ");";
+
+        $res = $db->no_param_query($facilitatorClassAttendanceQuery);
+        $state = pg_result_error_field($res, PGSQL_DIAG_SQLSTATE);
+        if ($res && $state != 0) {
+            $success = false;
+            $errorMsg .= "Could not create facilitator class attendance [$state]. ";
+        }
+    }
 }
-
-
-//create one facilitatorClassAttendance entry
-$facilitatorClassAttendanceQuery =
-    "INSERT INTO facilitatorclassattendance( " .
-    "date, " .
-    "facilitatorID, " .
-    "siteName " .
-    ") " .
-
-    "VALUES (" .
-    "'{$timestamp}', " .
-    "{$selected_facilitator}, " .
-    "'{$escaped_site_name}' " .
-    ");";
-
-$res = $db -> no_param_query($facilitatorClassAttendanceQuery);
-$state = pg_result_error_field($res, PGSQL_DIAG_SQLSTATE);
-if ($res && $state != 0) {
-    $success = false;
-    $errorMsg .= "Could not create facilitator class attendance [$state]. ";
-}
-
 
 //loop through participants and create many participantClassAttendance entries
 for($i = 0; $i < count($attendanceInfo); $i++) {
@@ -211,27 +246,38 @@ for($i = 0; $i < count($attendanceInfo); $i++) {
         //sanitize string for DB input
         $escaped_comments = sanitizeString($db->conn, $attendanceInfo[$i]['comments']);
 
-        $insertClassAttendanceQuery =
-            "INSERT INTO participantclassattendance( " .
-            "date, ".
-            "participantID, " .
-            "siteName, ".
-            "comments, ".
-            "numChildren, ".
-            "isNew, " .
-            "zipCode " .
-            ") " .
-            "VALUES(" .
-            "'{$timestamp}', ".
-            "{$attendanceInfo[$i]['pid']}, " .
-            "'{$escaped_site_name}', " .
-            "'{$escaped_comments}', " .
-            " {$numChildrenValue}, " .
-            "'{$tfString}',  ".
-            "{$zipCodeValue} " .
-            "); ";
-
-        $res = $db->no_param_query($insertClassAttendanceQuery);
+        // If class existed already, check if participant attendance existed
+        if ($duplicate == true || (isset($oldClassExists) && pg_num_rows($oldClassExists) > 0)) {
+            $id = $attendanceInfo[$i]['pid'];
+            $checkForParticipantRecord = "SELECT * FROM participantclassattendance " .
+                "WHERE date = '{$timestamp}' and siteName = '{$escaped_site_name}' and participantid = '{$id}'; ";
+            $recordExists = $db->no_param_query($checkForParticipantRecord);
+        }
+        if (isset($recordExists) && pg_num_rows($recordExists) > 0) {
+            $res = $db->query("UPDATE participantclassattendance SET comments = $1, numchildren = $2, isnew = $3, zipcode = $4 " .
+                "WHERE participantid = $5 AND sitename = $6 AND date = $7", [$escaped_comments, $numChildrenValue, $tfString, $zipCodeValue, $attendanceInfo[$i]['pid'], $escaped_site_name, $timestamp]);
+        } else {
+            $insertClassAttendanceQuery =
+                "INSERT INTO participantclassattendance( " .
+                "date, " .
+                "participantID, " .
+                "siteName, " .
+                "comments, " .
+                "numChildren, " .
+                "isNew, " .
+                "zipCode " .
+                ") " .
+                "VALUES(" .
+                "'{$timestamp}', " .
+                "{$attendanceInfo[$i]['pid']}, " .
+                "'{$escaped_site_name}', " .
+                "'{$escaped_comments}', " .
+                " {$numChildrenValue}, " .
+                "'{$tfString}',  " .
+                "{$zipCodeValue} " .
+                "); ";
+            $res = $db->no_param_query($insertClassAttendanceQuery);
+        }
         $state = pg_result_error_field($res, PGSQL_DIAG_SQLSTATE);
         if ($res && $state != 0) {
             $success = false;
@@ -244,11 +290,26 @@ for($i = 0; $i < count($attendanceInfo); $i++) {
 include('header.php');
 
 ?>
-
     <div class="container">
 
         <div class="card">
             <div class="card-block p-2">
+                <div class="modal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Warning: Duplicate Class Offering</h5>
+                            </div>
+                            <div class="modal-body">
+                                <p>There is already a class recorded at the site {$selected_site} at the time {$errorTime}. If this is a mistake, please edit the class information. Otherwise, if you are trying to add more participants, please click continue.</p>
+                                <a href='/edit-class-info'><button type="button" class="btn btn-outline-secondary">Edit Class Information</button></a>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-cpca" data-dismiss="modal">Continue</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <?php
                 if($success){
                     echo "<h4 class=\"card-title\" style=\"text-align: center;\"><i class=\"fa fa-thumbs-up\" aria-hidden=\"true\" style=\"color:green;\"></i> Success!</h4>";
