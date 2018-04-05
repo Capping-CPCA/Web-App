@@ -31,7 +31,7 @@ $result_facilitators = $db->execute('shared_query_facilitators',[]);
 
 //previous inputs
 $attendanceInfo = $_SESSION['attendance-info'];
-
+$_SESSION['old-info'] = $attendanceInfo;
 $selected_class = $attendanceInfo['classes'];
 $selected_curr = $attendanceInfo['curr'];
 $selected_date = $attendanceInfo['date-input'];
@@ -41,7 +41,7 @@ $selected_lang = $attendanceInfo['lang'];
 $selected_facilitator = $attendanceInfo['facilitator'];
 $selected_topic_id = $attendanceInfo['topic-id'];
 $selected_curr_id = $attendanceInfo['curr-id'];
-
+unset($_SESSION['attendance-info']);
 //only update class info if coming from attendance sheet (if duplicate classOffering can come from confirmed page)
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     updateSessionClassInformation();
@@ -141,9 +141,8 @@ include('header.php');
          */
         function createTime(hour, minute, amORpm){
             var option = document.createElement('OPTION');
-
             //set current set time as the time selected
-            if((hour + ":" + minute + " " + amORpm) === "<?php echo $selected_time; ?>" ){
+            if((hour + ":" + minute + " " + amORpm) === "<?=$selected_time?>" ){
                 option.setAttribute('selected','selected');
             }
             option.innerHTML = (hour + ":" + minute + " " + amORpm).toString();

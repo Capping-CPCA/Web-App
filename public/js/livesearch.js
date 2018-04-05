@@ -52,7 +52,6 @@ function setMethod(method){
 	if(methods != null){
 		return this;
 	}
-	console.log("The method was not set correctly");
 	return false;
 }
 

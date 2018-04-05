@@ -20,19 +20,12 @@ include ('header.php');
         var tempInput = document.createElement("textarea");
         tempInput.style = "position: absolute; left: -1000px; top: -1000px";
         tempInput.value = document.querySelector("#testCopy" + num).innerText;
-        console.log(tempInput.value);
         document.body.appendChild(tempInput);
         tempInput.select();
         document.execCommand("copy");
         document.body.removeChild(tempInput);
         
         alert("Individual has been copied successfully!");
-        //var dummyContent = document.querySelector("#testCopy" + num).innerText;
-        
-        
-        //var dummy = $('<input>').val(dummyContent).appendTo('body').select();
-        //document.execCommand('Copy', false, null);
-        //console.log(dummyContent);
     }    
  
     function copyClassToClipboard() {
@@ -40,19 +33,10 @@ include ('header.php');
         var tempInput = document.createElement("textarea");
         tempInput.style = "position: absolute; left: -1000px; top: -1000px";
         tempInput.value = document.querySelector("#entireClass").innerText.replace("Back", "");
-        console.log(tempInput.value);
         document.body.appendChild(tempInput);
         tempInput.select();
         document.execCommand("copy");
         document.body.removeChild(tempInput);
-        
-        
-        //var dummyContent = document.querySelector("#testCopy" + num).innerText;
-        
-        
-        //var dummy = $('<input>').val(dummyContent).appendTo('body').select();
-        //document.execCommand('Copy', false, null);
-        //console.log(dummyContent);
     }    
       
     function expand() {
